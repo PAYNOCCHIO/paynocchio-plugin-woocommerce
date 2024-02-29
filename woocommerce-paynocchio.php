@@ -42,6 +42,18 @@ define( 'WOOCOMMERCE_PAYNOCCHIO_VERSION', '1.0.0' );
  */
 define( 'WOOCOMMERCE_PAYNOCCHIO_ACTIVATION_PAGE_SLUG', 'paynocchio-activation' );
 
+if ( ! defined( 'WOOCOMMERCE_PAYNOCCHIO_PAGE_FILE' ) ) {
+    define( 'WOOCOMMERCE_PAYNOCCHIO_PAGE_FILE', __FILE__ );
+}
+
+if ( ! defined( 'WOOCOMMERCE_PAYNOCCHIO_PATH' ) ) {
+    define( 'WOOCOMMERCE_PAYNOCCHIO_PATH', plugin_dir_path( WOOCOMMERCE_PAYNOCCHIO_PAGE_FILE ) );
+}
+
+if ( ! defined( 'WOOCOMMERCE_PAYNOCCHIO_BASENAME' ) ) {
+    define( 'WOOCOMMERCE_PAYNOCCHIO_BASENAME', plugin_basename( WOOCOMMERCE_PAYNOCCHIO_PAGE_FILE ) );
+}
+
 /**
  * The code that runs during plugin activation.
  * This action is documented in includes/class-woocommerce-paynocchio-activator.php
