@@ -39,7 +39,7 @@ class Woocommerce_Paynocchio_Payment_Gateway extends WC_Payment_Gateway {
         }*/
 
         // further check of SSL if you want
-        add_action( 'admin_notices', array( $this,	'do_ssl_check' ) );
+        //add_action( 'admin_notices', array( $this,	'do_ssl_check' ) );
 
         // Save settings
         if ( is_admin() ) {
