@@ -49,7 +49,7 @@ class Woocommerce_Paynocchio_Activator {
                     'post_name'      => strtolower(str_replace(' ', '-', trim(WOOCOMMERCE_PAYNOCCHIO_ACTIVATION_PAGE_SLUG))),
                     'post_status'    => 'publish',
                     //'post_content'   =>  include( WP_PLUGIN_DIR.'/'.plugin_dir_path(WOOCOMMERCE_PAYNOCCHIO_BASENAME) . 'views/paynocchio-activation-page-content.php')
-                    'post_content'   =>  'Hello world'
+                    'post_content'   =>  '[paynocchio_activation_block]'
             ,
                     'post_type'      => 'page',
                 )

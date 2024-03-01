@@ -23,7 +23,7 @@ class Woocommerce_Paynocchio_Payment_Gateway extends WC_Payment_Gateway {
         $this->has_fields = true;
 
         // support default form with credit card
-        $this->supports = array( 'default_credit_card_form' );
+        $this->supports = array( 'product' );
 
         // setting defines
         $this->init_form_fields();
@@ -33,22 +33,33 @@ class Woocommerce_Paynocchio_Payment_Gateway extends WC_Payment_Gateway {
 
         $this->testmode = 'yes' === $this->get_option( 'testmode' );
 
+
+        $this->title       = $this->get_option( 'title' );
+
+        $this->enabled     = $this->get_option( 'enabled' );
+
+        $this->description     = $this->get_option( 'description' );
+
         // Turn these settings into variables we can use
         /*foreach ( $this->settings as $setting_key => $value ) {
             $this->$setting_key = $value;
         }*/
 
         // further check of SSL if you want
-        //add_action( 'admin_notices', array( $this,	'do_ssl_check' ) );
+        add_action( 'admin_notices', array( $this,	'do_ssl_check' ) );
 
         // Save settings
         if ( is_admin() ) {
             add_action( 'woocommerce_update_options_payment_gateways_' . $this->id, array( $this, 'process_admin_options' ) );
         }
+
+        add_action( 'woocommerce_api_paynocchio', array( $this, 'webhook' ) );
+
     } // Here is the  End __construct()
 
     // administration fields for specific Gateway
     public function init_form_fields() {
+
         $this->form_fields = array(
             'enabled' => array(
                 'title'		=> __( 'Enable / Disable', 'paynocchio' ),
@@ -79,13 +90,14 @@ class Woocommerce_Paynocchio_Payment_Gateway extends WC_Payment_Gateway {
                 'type'		=> 'password',
                 'desc_tip'	=> __( 'This is the Transaction Key provided by Paynocchio when you signed up for an account.', 'paynocchio' ),
             ),
-            'environment' => array(
+            'testmode' => array(
                 'title'		=> __( 'Paynocchio Test Mode', 'paynocchio' ),
                 'label'		=> __( 'Enable Test Mode', 'paynocchio' ),
                 'type'		=> 'checkbox',
                 'description' => __( 'This is the test mode of gateway.', 'paynocchio' ),
                 'default'	=> 'no',
-            )
+            ),
+
         );
     }
 
@@ -95,11 +107,8 @@ class Woocommerce_Paynocchio_Payment_Gateway extends WC_Payment_Gateway {
 
         $customer_order = new WC_Order( $order_id );
 
-        // checking for transiction
-        $environment = ( $this->environment == "yes" ) ? 'TRUE' : 'FALSE';
-
         // Decide which URL to post to
-        $environment_url = ( "FALSE" == $environment )
+        $environment_url = $this->testmode
             ? 'https://secure.Paynocchio/gateway/transact.dll'
             : 'https://test.Paynocchio/gateway/transact.dll';
 
@@ -120,7 +129,7 @@ class Woocommerce_Paynocchio_Payment_Gateway extends WC_Payment_Gateway {
 
             "x_type"               	=> 'AUTH_CAPTURE',
             "x_invoice_num"        	=> str_replace( "#", "", $customer_order->get_order_number() ),
-            "x_test_request"       	=> $environment,
+            "x_test_request"       	=> $this->testmode,
             "x_delim_char"         	=> '|',
             "x_encap_char"         	=> '',
             "x_delim_data"         	=> "TRUE",
@@ -207,7 +216,28 @@ class Woocommerce_Paynocchio_Payment_Gateway extends WC_Payment_Gateway {
 
     // Validate fields
     public function validate_fields() {
-        return true;
+        return false;
+    }
+
+    /**
+     * You will need it if you want your custom credit card form, Step 4 is about it
+     */
+    public function payment_fields() {
+
+        /*
+         * Display description above form
+         * */
+        if( $this->description ) {
+            // you can instructions for test mode, I mean test card numbers etc.
+            if( $this->testmode ) {
+                $this->description .= '<p style="color:#1db954;font-weight:bold">TEST MODE ENABLED.</p>';
+            }
+            // display the description with <p> tags etc.
+            echo wpautop( wp_kses_post( $this->description ) );
+        }
+
+        echo do_shortcode('[paynocchio_activation_block]');
+
     }
 
     public function do_ssl_check() {

@@ -77,6 +77,7 @@ class Woocommerce_Paynocchio {
 		$this->load_dependencies();
 		$this->set_locale();
 		$this->add_gateway();
+		$this->add_shortcodes();
 		$this->define_admin_hooks();
 		$this->define_public_hooks();
 
@@ -126,6 +127,10 @@ class Woocommerce_Paynocchio {
 		 * side of the site.
 		 */
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/class-woocommerce-paynocchio-public.php';
+		/**
+		 * Shortcodes
+		 */
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-woocommerce-paynocchio-shortcodes.php';
 
 		$this->loader = new Woocommerce_Paynocchio_Loader();
 
@@ -134,7 +139,7 @@ class Woocommerce_Paynocchio {
 	/**
 	 * Define the locale for this plugin for internationalization.
 	 *
-	 * Uses the Woocommerce_Paynocchio_i18n class in order to set the domain and to register the hook
+	 * Uses the Woocommerce_Paynocchio_Add_Gateway class in order to set the domain and to register the hook
 	 * with WordPress.
 	 *
 	 * @since    1.0.0
@@ -145,6 +150,20 @@ class Woocommerce_Paynocchio {
 	    $add_gateway = new Woocommerce_Paynocchio_Add_Gateway();
 
 		$this->loader->add_action( 'plugins_loaded', $add_gateway, 'add_woocommerce_gateway' );
+
+	}
+	/**
+	 * Add shortcodes
+	 *
+	 * Uses the Woocommerce_Paynocchio_i18n class in order to set the domain and to register the hook
+	 * with WordPress.
+	 *
+	 * @since    1.0.0
+	 * @access   private
+	 */
+	private function add_shortcodes() {
+
+        add_shortcode( 'paynocchio_activation_block', [ 'Woocommerce_Paynocchio_Shortcodes', 'paynocchio_activation_block' ] );
 
 	}
 
