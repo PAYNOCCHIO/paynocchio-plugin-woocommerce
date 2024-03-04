@@ -100,4 +100,24 @@ class Woocommerce_Paynocchio_Public {
 
 	}
 
+	/**
+	 * Register the Ajax Login script.
+	 *
+	 * @since    1.0.0
+	 */
+	public function ajax_login_init() {
+
+            wp_register_script('ajax-login-script', plugin_dir_url( __FILE__ ) . '/js/ajax-login-script.js', [] );
+            wp_enqueue_script('ajax-login-script');
+
+            wp_localize_script( 'ajax-login-script', 'ajax_login_object', array(
+                'ajaxurl' => admin_url( 'admin-ajax.php' ),
+                'redirecturl' => $_SERVER['REQUEST_URI'],
+                'loadingmessage' => __('Loading')
+            ));
+
+            add_action( 'wp_ajax_nopriv_ajaxlogin', 'ajax_login' );
+
+	}
+
 }

@@ -71,13 +71,13 @@ class Woocommerce_Paynocchio_Payment_Gateway extends WC_Payment_Gateway {
                 'title'		=> __( 'Title', 'paynocchio' ),
                 'type'		=> 'text',
                 'desc_tip'	=> __( 'Payment title of checkout process.', 'paynocchio' ),
-                'default'	=> __( 'Credit card', 'paynocchio' ),
+                'default'	=> __( 'Paynocchio pay', 'paynocchio' ),
             ),
             'description' => array(
                 'title'		=> __( 'Description', 'paynocchio' ),
                 'type'		=> 'textarea',
                 'desc_tip'	=> __( 'Payment title of checkout process.', 'paynocchio' ),
-                'default'	=> __( 'Successfully payment through credit card.', 'paynocchio' ),
+                'default'	=> __( 'Successfully payment through Paynocchio.', 'paynocchio' ),
                 'css'		=> 'max-width:450px;'
             ),
             'api_login' => array(
@@ -236,7 +236,7 @@ class Woocommerce_Paynocchio_Payment_Gateway extends WC_Payment_Gateway {
             echo wpautop( wp_kses_post( $this->description ) );
         }
 
-        if ( !is_user_logged_in() && get_option('users_can_register') ) {
+        if ( !is_user_logged_in() ) {
             echo do_shortcode('[paynocchio_registration_block]');
         } else {
             echo do_shortcode('[paynocchio_activation_block]');

@@ -57,6 +57,15 @@ class Woocommerce_Paynocchio {
 	 */
 	protected $version;
 
+    /**
+     * Is current user logged in?
+     *
+     * @since    1.0.0
+     * @access   protected
+     * @var      boolean    $is_user_logged_in    Check current user.
+     */
+    private  $is_user_logged_in;
+
 	/**
 	 * Define the core functionality of the plugin.
 	 *
@@ -74,14 +83,21 @@ class Woocommerce_Paynocchio {
 		}
 		$this->plugin_name = 'woocommerce-paynocchio';
 
+		$this->init();
 		$this->load_dependencies();
 		$this->set_locale();
 		$this->add_gateway();
 		$this->add_shortcodes();
 		$this->define_admin_hooks();
 		$this->define_public_hooks();
-
 	}
+
+	private function init()
+    {
+        add_action('init', function(){
+            $this->is_user_logged_in = is_user_logged_in();
+        });
+    }
 
 	/**
 	 * Load the required dependencies for this plugin.
@@ -213,6 +229,11 @@ class Woocommerce_Paynocchio {
 
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_styles' );
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_scripts' );
+        if(!$this->is_user_logged_in) {
+            $this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'ajax_login_init' );
+
+        }
+
 
 	}
 
