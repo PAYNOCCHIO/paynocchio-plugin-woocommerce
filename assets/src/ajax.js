@@ -3,7 +3,6 @@
 
     $(document).ready(function() {
 
-
         jQuery(document).on( "updated_checkout", function(){
 
             $('#place_order').addClass('disabled');

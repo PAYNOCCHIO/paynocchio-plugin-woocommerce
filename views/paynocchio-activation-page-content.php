@@ -49,5 +49,6 @@ if (!defined('ABSPATH')) {
     <div class="pl-10 pb-6">
         <p class="text-gray-300">I agree to <a href="#" class="text-gray-400">Kopybara Terms & Conditions</a> and <a href="#" class="text-gray-400">rules of Kopybara.Pay Priority program</a> </p>
     </div>
+
 </section>
 <?php

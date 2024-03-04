@@ -5,7 +5,7 @@ if (!defined('ABSPATH')) {
 ?>
 
 <section class="paynocchio">
-    <div id="paynocchio_auth_block" class="max-w-4xl mx-auto">
+    <div id="paynocchio_auth_block" class="cfps-max-w-4xl cfps-mx-auto">
         <h2 class="h2 mb-0">Please login or register before contunue.</h2>
         <div id="paynocchio_login_form">
             <label for="paynocchio_login_username">Логин</label>

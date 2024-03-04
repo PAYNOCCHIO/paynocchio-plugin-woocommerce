@@ -34,11 +34,11 @@ class Woocommerce_Paynocchio_Payment_Gateway extends WC_Payment_Gateway {
         $this->testmode = 'yes' === $this->get_option( 'testmode' );
 
 
-        $this->title       = $this->get_option( 'title' );
+        $this->title = $this->get_option( 'title' );
 
-        $this->enabled     = $this->get_option( 'enabled' );
+        $this->enabled = $this->get_option( 'enabled' );
 
-        $this->description     = $this->get_option( 'description' );
+        $this->description = $this->get_option( 'description' );
 
         // Turn these settings into variables we can use
         /*foreach ( $this->settings as $setting_key => $value ) {
