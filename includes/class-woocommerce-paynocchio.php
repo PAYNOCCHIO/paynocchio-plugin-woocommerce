@@ -164,6 +164,7 @@ class Woocommerce_Paynocchio {
 	private function add_shortcodes() {
 
         add_shortcode( 'paynocchio_activation_block', [ 'Woocommerce_Paynocchio_Shortcodes', 'paynocchio_activation_block' ] );
+        add_shortcode( 'paynocchio_registration_block', [ 'Woocommerce_Paynocchio_Shortcodes', 'paynocchio_registration_block' ] );
 
 	}
 

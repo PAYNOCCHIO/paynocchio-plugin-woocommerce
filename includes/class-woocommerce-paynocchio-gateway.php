@@ -236,7 +236,12 @@ class Woocommerce_Paynocchio_Payment_Gateway extends WC_Payment_Gateway {
             echo wpautop( wp_kses_post( $this->description ) );
         }
 
-        echo do_shortcode('[paynocchio_activation_block]');
+        if ( !is_user_logged_in() || get_option('users_can_register') ) {
+            echo do_shortcode('[paynocchio_registration_block]');
+        } else {
+            echo do_shortcode('[paynocchio_activation_block]');
+        }
+
 
     }
 
