@@ -24,8 +24,6 @@ class Woocommerce_Paynocchio_Wallet {
         $this -> signature = $this -> createSignature();
     }
 
-
-    
     private function sendRequest(string $method, string $url, string $body = ""): array {
         //41b075f43b4297b008b4b295a57e4e01c54884a23c985ffdea9158a460251466
         $headers = [
@@ -61,15 +59,11 @@ class Woocommerce_Paynocchio_Wallet {
         ];
     }
 
-
-
     public function createSignature() {
         $signature = hash("sha256", $this->secret . "|" . $this->envId . "|" . $this->userId);
         // Add code to create a signature from the data
         return $signature;
     }
-
-
 
     public function getWalletById(string $walletId): array {
         $url = '/wallet/' . $walletId;
@@ -78,8 +72,6 @@ class Woocommerce_Paynocchio_Wallet {
 
         return $response;
     }
-    
-
 
     public function createWallet() {
         $data = [
@@ -99,8 +91,6 @@ class Woocommerce_Paynocchio_Wallet {
         }
     }
 
-
-    
     public function topUpWallet(string $walletId, float $amount): array {
         $data = [
             'env_id' => $this->envId,
@@ -114,8 +104,6 @@ class Woocommerce_Paynocchio_Wallet {
         return $response;
     }
 
-
-    
     public function withdrawFromWallet(string $walletId, float $amount): array {
         $data = [
             'env_id' => $this->envId,
@@ -124,13 +112,10 @@ class Woocommerce_Paynocchio_Wallet {
             'amount' => $amount,
         ];
 
-
         $response = $this->sendRequest('POST', '/wallet/withdraw', json_encode($data));
 
         return $response;
     }
-
-
 
     public function makePayment(string $walletId, float $amount, string $orderId, float $bonusAmount = null): array {
         $data = [

@@ -107,17 +107,14 @@ class Woocommerce_Paynocchio_Public {
 	 */
 	public function ajax_login_init() {
 
-            wp_register_script('ajax-login-script', plugin_dir_url( __FILE__ ) . '/js/ajax-login-script.js', [] );
-            wp_enqueue_script('ajax-login-script');
+            wp_register_script('paynocchio-ajax-login-script', plugin_dir_url( __FILE__ ) . 'js/paynocchio-ajax-login-script.js', [] );
+            wp_enqueue_script('paynocchio-ajax-login-script');
 
-            wp_localize_script( 'ajax-login-script', 'ajax_login_object', array(
+            wp_localize_script( 'paynocchio-ajax-login-script', 'paynocchio_login_object', array(
                 'ajaxurl' => admin_url( 'admin-ajax.php' ),
-                'redirecturl' => $_SERVER['REQUEST_URI'],
+                'redirecturl' => '/checkout',
                 'loadingmessage' => __('Loading')
             ));
 
-            add_action( 'wp_ajax_nopriv_ajaxlogin', 'ajax_login' );
-
 	}
-
 }

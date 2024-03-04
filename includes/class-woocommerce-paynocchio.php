@@ -231,11 +231,30 @@ class Woocommerce_Paynocchio {
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_scripts' );
         if(!$this->is_user_logged_in) {
             $this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'ajax_login_init' );
+            add_action( 'wp_ajax_nopriv_paynocchio_ajax_login', [$this, 'paynocchio_ajax_login']);
+        }
+	}
 
+    public function paynocchio_ajax_login()
+    {
+        $nonce = isset( $_POST['ajax-login-nonce'] ) ? sanitize_text_field( $_POST['ajax-login-nonce'] ) : '';
+
+        if ( ! wp_verify_nonce( $nonce, 'ajax-login-nonce' ) ) {
+            wp_send_json( array(
+                'status'  => 'error',
+                'title'   => 'Error',
+                'message' => 'Nonce verification failed',
+            ) );
+            wp_die();
         }
 
-
-	}
+        wp_send_json( array(
+            'status'  => 'success',
+            'title'   => 'Success',
+            'message' => 'Success.',
+        ) );
+        wp_die();
+    }
 
 	/**
 	 * Run the loader to execute all of the hooks with WordPress.
