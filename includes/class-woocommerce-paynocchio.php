@@ -316,7 +316,10 @@ class Woocommerce_Paynocchio {
         if(!get_user_meta($this->user->ID, 'paynocchio_uuid')) {
             $uuid = wp_generate_uuid4();
             add_user_meta($this->user->ID, 'paynocchio_uuid', $uuid, true);
-            $wallet = new Woocommerce_Paynocchio_Wallet($uuid);
+        }
+
+        if(!get_user_meta($this->user->ID, 'paynoccio_wallet')) {
+            $wallet = new Woocommerce_Paynocchio_Wallet($this->get_uuid());
             add_user_meta($this->user->ID, 'paynoccio_wallet', $wallet->createWallet(), true);
         }
 
@@ -324,7 +327,7 @@ class Woocommerce_Paynocchio {
             'status'  => 'success',
             'title'   => 'Success',
             'message' => 'Success.',
-            'uuid' => $this->get_uuid(),
+            'response' => $wallet->createWallet(),
         ) );
         wp_die();
     }

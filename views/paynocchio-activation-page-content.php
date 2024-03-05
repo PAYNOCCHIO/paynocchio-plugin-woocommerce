@@ -42,13 +42,19 @@ if (!defined('ABSPATH')) {
                 <p class="cfps-text-base">Our AI will generate your individual unique map design for you.</p>
             </div>
         </div>
+        <?php if (!get_user_meta(get_current_user_id(), 'paynoccio_wallet')) { ?>
         <div class="cfps-flex cfps-justify-center cfps-mb-10">
             <button id="paynocchio_activation_button" type="button" class="cfps-btn-primary">Activate Kopybara.Pay</button>
             <?php wp_nonce_field( 'paynocchio_ajax_activation', 'ajax-activation-nonce' ); ?>
+        </div>
+        <?php } else { ?>
+            <div class="cfps-flex cfps-justify-center cfps-mb-10">
+                <a href="/" class="cfps-btn-primary">Go to my Wallet</a>
+            </div>
+        <?php } ?>
+        <div class="cfps-pl-10 cfps-pb-6 cfps-text-center">
+            <p class="cfps-text-slate-500">I agree to <a href="#" class="cfps-text-slate-500 cfps-underline">Kopybara Terms & Conditions</a> and <a href="#" class="cfps-text-slate-500 cfps-underline">rules of Kopybara.Pay Priority program</a> </p>
+        </div>
     </div>
-    <div class="cfps-pl-10 cfps-pb-6 cfps-text-center">
-        <p class="cfps-text-slate-500">I agree to <a href="#" class="cfps-text-slate-500 cfps-underline">Kopybara Terms & Conditions</a> and <a href="#" class="cfps-text-slate-500 cfps-underline">rules of Kopybara.Pay Priority program</a> </p>
-    </div>
-
 </section>
 <?php

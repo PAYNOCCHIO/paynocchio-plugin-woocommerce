@@ -17,8 +17,8 @@ class Woocommerce_Paynocchio_Wallet {
 
     public function __construct($userId) {
         $this->base_url = "https://wallet.stage.paynocchio.com"; 
-        $this->secret = "47f6587d-a147-43b1-946b-de5dfb9bd6a5";
-        $this->env = "17b9e735-2af8-4b38-821e-c2f67ef988ed";
+        $this->secret = "8c0ce6db-4a1b-4fcd-8fa8-cb51bbef7261";
+        $this->env = "2985465d-ce65-4257-8937-367e5c094432";
         $this->userId = $userId;
 
         $this -> signature = $this -> createSignature();
