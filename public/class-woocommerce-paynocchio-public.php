@@ -107,7 +107,7 @@ class Woocommerce_Paynocchio_Public {
 	 */
 	public function ajax_login_init() {
 
-            wp_register_script('paynocchio-ajax-login-script', plugin_dir_url( WOOCOMMERCE_PAYNOCCHIO_BASENAME ) . 'dist/ajax.js', [] );
+            wp_register_script('paynocchio-ajax-login-script', plugin_dir_url( WOOCOMMERCE_PAYNOCCHIO_BASENAME ) . 'dist/ajax_login.js', [] );
             wp_enqueue_script('paynocchio-ajax-login-script');
 
             wp_localize_script( 'paynocchio-ajax-login-script', 'paynocchio_login_object', array(

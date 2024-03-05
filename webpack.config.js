@@ -7,7 +7,7 @@ module.exports = {
     entry: {
         public: './assets/src/public.js',
         admin: './assets/src/admin.js',
-        ajax: './assets/src/ajax.js',
+        ajax_login: './assets/src/ajax-login.js',
         ajax_activation: './assets/src/ajax-activation.js',
     },
     module: {

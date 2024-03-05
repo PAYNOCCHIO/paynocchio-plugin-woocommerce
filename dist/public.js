@@ -16,7 +16,7 @@
   \******************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _public_css__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./public.css */ \"./assets/src/public.css\");\n\n\n(( $ ) => {\n\n    jQuery(document).on( \"updated_checkout\", function() {\n        $('.form-toggle-a').click(() => {\n            $('#paynocchio_auth_block > div.visible').fadeOut('fast',function() {\n                $('#paynocchio_auth_block > div:not(.visible)').fadeIn('fast');\n                $('#paynocchio_auth_block > div').toggleClass('visible');\n            });\n        });\n\n        function getParameterByName(name, url = window.location.href) {\n            name = name.replace(/[\\[\\]]/g, '\\\\$&');\n            var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),\n                results = regex.exec(url);\n            if (!results) return null;\n            if (!results[2]) return '';\n            return decodeURIComponent(results[2].replace(/\\+/g, ' '));\n        }\n\n        var ans = getParameterByName('ans');\n\n        if (ans) {\n            $('.woocommerce-notices-wrapper:first-child').append('<div class=\"woocommerce-message\" role=\"alert\">Registration complete. Please check your email, then visit this page again.</div>')\n        }\n    });\n\n\n})( jQuery );\n\n\n//# sourceURL=webpack://contest/./assets/src/public.js?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _public_css__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./public.css */ \"./assets/src/public.css\");\n\n\n\n\n//# sourceURL=webpack://contest/./assets/src/public.js?");
 
 /***/ }),
 
