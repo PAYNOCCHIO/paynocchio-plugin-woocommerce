@@ -8,6 +8,7 @@ module.exports = {
         public: './assets/src/public.js',
         admin: './assets/src/admin.js',
         ajax: './assets/src/ajax.js',
+        ajax_activation: './assets/src/ajax-activation.js',
     },
     module: {
         rules: [

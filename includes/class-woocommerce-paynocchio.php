@@ -66,6 +66,15 @@ class Woocommerce_Paynocchio {
      */
     private  $is_user_logged_in;
 
+    /**
+     * Current user object
+     *
+     * @since    1.0.0
+     * @access   protected
+     * @var      $user   Current user.
+     */
+    private $user;
+
 	/**
 	 * Define the core functionality of the plugin.
 	 *
@@ -96,6 +105,9 @@ class Woocommerce_Paynocchio {
     {
         add_action('init', function(){
             $this->is_user_logged_in = is_user_logged_in();
+            if($this->is_user_logged_in) {
+                $this->user = wp_get_current_user();
+            }
         });
     }
 
@@ -228,13 +240,24 @@ class Woocommerce_Paynocchio {
 		$plugin_public = new Woocommerce_Paynocchio_Public( $this->get_plugin_name(), $this->get_version() );
 
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_styles' );
+
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_scripts' );
+
         if(!$this->is_user_logged_in) {
             $this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'ajax_login_init' );
             add_action( 'wp_ajax_nopriv_paynocchio_ajax_login', [$this, 'paynocchio_ajax_login']);
         }
+
+        $this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'ajax_activation_init' );
+        add_action( 'wp_ajax_paynocchio_ajax_activation', [$this, 'paynocchio_ajax_activation']);
+        add_action( 'wp_ajax_nopriv_paynocchio_ajax_activation', [$this, 'paynocchio_ajax_activation']);
 	}
 
+    /**
+     * Handle Registration and Login forms.
+     *
+     * @since    1.0.0
+     */
     public function paynocchio_ajax_login()
     {
         $nonce = isset( $_POST['ajax-login-nonce'] ) ? sanitize_text_field( $_POST['ajax-login-nonce'] ) : '';
@@ -252,6 +275,38 @@ class Woocommerce_Paynocchio {
             'status'  => 'success',
             'title'   => 'Success',
             'message' => 'Success.',
+        ) );
+        wp_die();
+    }
+
+    /**
+     * Handle Creation of the UUID
+     *
+     * @since    1.0.0
+     */
+    public function paynocchio_ajax_activation()
+    {
+        $nonce = isset( $_POST['ajax-activation-nonce'] ) ? sanitize_text_field( $_POST['ajax-activation-nonce'] ) : '';
+
+        if ( ! wp_verify_nonce( $nonce, 'paynocchio_ajax_activation' ) ) {
+            wp_send_json( array(
+                'status'  => 'error',
+                'title'   => 'Error',
+                'message' => 'Nonce verification failed',
+            ) );
+            wp_die();
+        }
+
+        if(!get_user_meta($this->user->ID, 'uuid')) {
+            $uuid = wp_generate_uuid4();
+            add_user_meta($this->user->ID, 'uuid', $uuid, true);
+        }
+
+        wp_send_json( array(
+            'status'  => 'success',
+            'title'   => 'Success',
+            'message' => 'Success.',
+            'uuid' => $this->get_uuid(),
         ) );
         wp_die();
     }
@@ -294,6 +349,16 @@ class Woocommerce_Paynocchio {
 	 */
 	public function get_version() {
 		return $this->version;
+	}
+
+	/**
+	 * Retrieve the current User UUID.
+	 *
+	 * @since     1.0.0
+	 * @return    string    The UUID.
+	 */
+	public function get_uuid() {
+		return get_user_meta($this->user->ID, 'uuid');
 	}
 
 }

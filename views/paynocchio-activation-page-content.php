@@ -44,6 +44,11 @@ if (!defined('ABSPATH')) {
         </div>
         <div class="cfps-flex cfps-justify-center cfps-mb-10">
             <button id="paynocchio_activation_button" type="button" class="cfps-btn-primary">Activate Kopybara.Pay</button>
+        <div class="cfps-flex cfps-justify-center cfps-mb-10">
+            <button id="paynocchio_activation_button" type="button" class="cfps-btn-primary cfps-text-2xl cfps-px-3 cfps-py-2">
+                Activate Kopybara.Pay
+            </button>
+            <?php wp_nonce_field( 'paynocchio_ajax_activation', 'ajax-activation-nonce' ); ?>
         </div>
     </div>
     <div class="cfps-pl-10 cfps-pb-6 cfps-text-center">
