@@ -75,6 +75,15 @@ class Woocommerce_Paynocchio {
      */
     private $user;
 
+    /**
+     * Current user Paynocchio Wallet
+     *
+     * @since    1.0.0
+     * @access   protected
+     * @var      $wallet  Woocommerce_Paynocchio_Wallet instanse.
+     */
+    private $wallet;
+
 	/**
 	 * Define the core functionality of the plugin.
 	 *
@@ -150,15 +159,22 @@ class Woocommerce_Paynocchio {
 		 * The class responsible for defining Paynocchio Wocommerce payment Gateway.
 		 */
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-woocommerce-add-gateway.php';
+
 		/**
 		 * The class responsible for defining all actions that occur in the public-facing
 		 * side of the site.
 		 */
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/class-woocommerce-paynocchio-public.php';
+
 		/**
 		 * Shortcodes
 		 */
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-woocommerce-paynocchio-shortcodes.php';
+
+		/**
+		 * Paynocchio Wallet Class
+		 */
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-woocommerce-paynocchio-wallet.php';
 
 		$this->loader = new Woocommerce_Paynocchio_Loader();
 
@@ -297,9 +313,11 @@ class Woocommerce_Paynocchio {
             wp_die();
         }
 
-        if(!get_user_meta($this->user->ID, 'uuid')) {
+        if(!get_user_meta($this->user->ID, 'paynocchio_uuid')) {
             $uuid = wp_generate_uuid4();
-            add_user_meta($this->user->ID, 'uuid', $uuid, true);
+            add_user_meta($this->user->ID, 'paynocchio_uuid', $uuid, true);
+            $wallet = new Woocommerce_Paynocchio_Wallet($uuid);
+            add_user_meta($this->user->ID, 'paynoccio_wallet', $wallet->createWallet(), true);
         }
 
         wp_send_json( array(
@@ -358,7 +376,17 @@ class Woocommerce_Paynocchio {
 	 * @return    string    The UUID.
 	 */
 	public function get_uuid() {
-		return get_user_meta($this->user->ID, 'uuid');
+		return get_user_meta($this->user->ID, 'paynocchio_uuid');
+	}
+
+	/**
+	 * Retrieve the current User UUID.
+	 *
+	 * @since     1.0.0
+	 * @return    string    The UUID.
+	 */
+	public function get_wallet() {
+		return $this->wallet;
 	}
 
 }
