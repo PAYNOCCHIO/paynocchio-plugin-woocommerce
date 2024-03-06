@@ -2,7 +2,11 @@
 
 class Woocommerce_Paynocchio_Payment_Gateway extends WC_Payment_Gateway {
 
-    private $testmode;
+    private bool $testmode;
+    private string $environment_uuid;
+    private string $currency_uuid;
+    private string $type_uuid;
+    private string $status_uuid;
 
     function __construct() {
 
@@ -39,6 +43,14 @@ class Woocommerce_Paynocchio_Payment_Gateway extends WC_Payment_Gateway {
         $this->enabled = $this->get_option( 'enabled' );
 
         $this->description = $this->get_option( 'description' );
+
+        $this->environment_uuid = $this->get_option( 'environment_uuid' );
+
+        $this->currency_uuid = $this->get_option( 'currency_uuid' );
+
+        $this->type_uuid = $this->get_option( 'type_uuid' );
+        
+        $this->status_uuid = $this->get_option( 'status_uuid' );
 
         // Turn these settings into variables we can use
         /*foreach ( $this->settings as $setting_key => $value ) {
@@ -80,15 +92,16 @@ class Woocommerce_Paynocchio_Payment_Gateway extends WC_Payment_Gateway {
                 'default'	=> __( 'Successfully payment through Paynocchio.', 'paynocchio' ),
                 'css'		=> 'max-width:450px;'
             ),
-            'api_login' => array(
-                'title'		=> __( 'Paynocchio API Login', 'paynocchio' ),
+            'base_url' => array(
+                'title'		=> __( 'Paynocchio base url', 'paynocchio' ),
                 'type'		=> 'text',
-                'desc_tip'	=> __( 'This is the API Login provided by Paynocchio when you signed up for an account.', 'paynocchio' ),
+                'desc_tip'	=> __( 'This is the base url provided by Paynocchio when you signed up for an account.', 'paynocchio' ),
+                'default'   => 'https://wallet.stage.paynocchio.com'
             ),
-            'trans_key' => array(
-                'title'		=> __( 'Paynocchio Transaction Key', 'paynocchio' ),
-                'type'		=> 'password',
-                'desc_tip'	=> __( 'This is the Transaction Key provided by Paynocchio when you signed up for an account.', 'paynocchio' ),
+            'environment_uuid' => array(
+                'title'		=> __( 'Paynocchio Environment UUID', 'paynocchio' ),
+                'type'		=> 'text',
+                'desc_tip'	=> __( 'This is the environment_uuid provided by Paynocchio when you signed up for an account.', 'paynocchio' ),
             ),
             'testmode' => array(
                 'title'		=> __( 'Paynocchio Test Mode', 'paynocchio' ),

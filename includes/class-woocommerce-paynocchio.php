@@ -67,13 +67,14 @@ class Woocommerce_Paynocchio {
     private  $is_user_logged_in;
 
     /**
-     * Current user object
+     * Current User id
      *
      * @since    1.0.0
      * @access   protected
-     * @var      $user   Current user.
+     * @var      $user_id
      */
-    private $user;
+
+    public $user_id;
 
     /**
      * Current user Paynocchio Wallet
@@ -115,7 +116,7 @@ class Woocommerce_Paynocchio {
         add_action('init', function(){
             $this->is_user_logged_in = is_user_logged_in();
             if($this->is_user_logged_in) {
-                $this->user = wp_get_current_user();
+                $this->user_id = $this->get_user_id();
             }
         });
     }
@@ -274,32 +275,6 @@ class Woocommerce_Paynocchio {
 	}
 
     /**
-     * Handle Registration and Login forms.
-     *
-     * @since    1.0.0
-     */
-    public function paynocchio_ajax_login()
-    {
-        $nonce = isset( $_POST['ajax-login-nonce'] ) ? sanitize_text_field( $_POST['ajax-login-nonce'] ) : '';
-
-        if ( ! wp_verify_nonce( $nonce, 'ajax-login-nonce' ) ) {
-            wp_send_json( array(
-                'status'  => 'error',
-                'title'   => 'Error',
-                'message' => 'Nonce verification failed',
-            ) );
-            wp_die();
-        }
-
-        wp_send_json( array(
-            'status'  => 'success',
-            'title'   => 'Success',
-            'message' => 'Success.',
-        ) );
-        wp_die();
-    }
-
-    /**
      * Handle Creation of the UUID
      *
      * @since    1.0.0
@@ -317,21 +292,21 @@ class Woocommerce_Paynocchio {
             wp_die();
         }
 
-        if(!get_user_meta($this->user->ID, PAYNOCCHIO_USER_UUID_KEY)) {
-            $user_uuid = wp_generate_uuid4();
-            add_user_meta($this->user->ID, PAYNOCCHIO_USER_UUID_KEY, $user_uuid, true);
-        }
+        $this->set_uuid();
+            /*
 
-        if(!get_user_meta($this->user->ID, 'paynoccio_wallet')) {
-            $wallet = new Woocommerce_Paynocchio_Wallet($this->get_uuid());
-            add_user_meta($this->user->ID, 'paynoccio_wallet', $wallet->createWallet(), true);
-        }
+             if(!get_user_meta($this->user->ID, 'paynoccio_wallet')) {
+                 $wallet = new Woocommerce_Paynocchio_Wallet($this->get_uuid());
+                 $wallet_response = $wallet->createWallet();
+                 add_user_meta($this->user->ID, 'paynoccio_wallet', $wallet_response, true);
+             }*/
 
         wp_send_json( array(
             'status'  => 'success',
             'title'   => 'Success',
             'message' => 'Success.',
-            'response' => $wallet->createWallet(),
+            //'response' => $wallet_response,
+            'user_id' => $this->user_id,
         ) );
         wp_die();
     }
@@ -395,5 +370,29 @@ class Woocommerce_Paynocchio {
 	public function get_wallet() {
 		return $this->wallet;
 	}
+
+    /**
+     * Setter for User meta
+     *
+     * @since     1.0.0
+     * @return    void
+     */
+    public function set_uuid () {
+	    if(!get_user_meta($this->user_id, 'user_uuid')){
+            $uuid = wp_generate_uuid4();
+            add_user_meta($this->user_id, 'user_uuid', $uuid, true);
+        }
+    }
+
+    /**
+     * User ID getter
+     *
+     * @since     1.0.0
+     * @return    int
+     */
+    public function get_user_id(): int
+    {
+        return get_current_user_id();
+    }
 
 }
