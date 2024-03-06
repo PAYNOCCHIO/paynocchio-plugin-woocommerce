@@ -53,5 +53,20 @@ class Woocommerce_Paynocchio_Activator {
                 )
             );
         }
+
+        if(!get_page_by_path(WOOCOMMERCE_PAYNOCCHIO_ACCOUNT_PAGE_SLUG)) {
+            $page = wp_insert_post(
+                array(
+                    'comment_status' => 'close',
+                    'ping_status'    => 'close',
+                    'post_author'    => 1,
+                    'post_title'     => 'Kopybara.Account',
+                    'post_name'      => strtolower(str_replace(' ', '-', trim(WOOCOMMERCE_PAYNOCCHIO_ACCOUNT_PAGE_SLUG))),
+                    'post_status'    => 'publish',
+                    'post_content'   =>  '[paynocchio_account_page]',
+                    'post_type'      => 'page',
+                )
+            );
+        }
 	}
 }

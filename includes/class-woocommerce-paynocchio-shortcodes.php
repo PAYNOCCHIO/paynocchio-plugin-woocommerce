@@ -17,4 +17,10 @@ class Woocommerce_Paynocchio_Shortcodes {
         require(WOOCOMMERCE_PAYNOCCHIO_PATH . 'views/paynocchio-registration-block.php');
         return ob_get_clean();
     }
+
+    static function paynocchio_account_page() {
+        ob_start();
+        require(WOOCOMMERCE_PAYNOCCHIO_PATH . 'views/paynocchio-account-page.php');
+        return ob_get_clean();
+    }
 }
