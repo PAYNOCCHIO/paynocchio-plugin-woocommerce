@@ -20,7 +20,7 @@
         const ans = getParameterByName('ans');
 
         if (ans) {
-            $('.woocommerce-notices-wrapper:first-child').append('<div class="woocommerce-message" role="alert">Registration complete. Please check your email, then visit this page again.</div>')
+            $('.woocommerce-notices-wrapper:first-child').prepend('<div class="woocommerce-message" role="alert">Registration complete. Please check your email, then visit this page again.</div>')
         }
     });
 

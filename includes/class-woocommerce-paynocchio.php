@@ -244,6 +244,8 @@ class Woocommerce_Paynocchio {
 
 	}
 
+
+
 	/**
 	 * Register all of the hooks related to the public-facing functionality
 	 * of the plugin.
@@ -267,7 +269,11 @@ class Woocommerce_Paynocchio {
         $this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'ajax_activation_init' );
         add_action( 'wp_ajax_paynocchio_ajax_activation', [$this, 'paynocchio_ajax_activation']);
         add_action( 'wp_ajax_nopriv_paynocchio_ajax_activation', [$this, 'paynocchio_ajax_activation']);
+
+        add_action( 'user_register', [$this, 'set_uuid']);
 	}
+
+
 
     /**
      * Handle Registration and Login forms.
@@ -391,5 +397,12 @@ class Woocommerce_Paynocchio {
 	public function get_wallet() {
 		return $this->wallet;
 	}
+
+    public function set_uuid () {
+        $uuid = wp_generate_uuid4();
+        $userid = get_current_user_id();
+        //add_user_meta($this->user->ID, 'uuid', $uuid, true);
+        add_user_meta($userid, 'uuid', $uuid, true);
+    }
 
 }

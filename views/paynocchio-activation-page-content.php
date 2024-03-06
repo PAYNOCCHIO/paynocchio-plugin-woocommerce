@@ -44,7 +44,21 @@ if (!defined('ABSPATH')) {
         </div>
         <?php if (!get_user_meta(get_current_user_id(), 'paynoccio_wallet')) { ?>
         <div class="cfps-flex cfps-justify-center cfps-mb-10">
-            <button id="paynocchio_activation_button" type="button" class="cfps-btn-primary">Activate Kopybara.Pay</button>
+            <?php
+              /*  if ($plugin->get_uuid()) {
+                    echo '<a class="cfps-btn-primary" href="#">Kopybara.Pay account</a>';
+                } else {
+                    echo '<button id="paynocchio_activation_button" type="button" class="cfps-btn-primary">Activate Kopybara.Pay</button>';
+                }*/
+
+           /* if($plugin->get_uuid()) {
+             echo '123';
+            }*/
+
+          //  print_r ($plugin->get_uuid(get_current_user_id()));
+
+          print_r( get_user_meta(get_current_user_id(), 'uuid', true) );
+            ?>
             <?php wp_nonce_field( 'paynocchio_ajax_activation', 'ajax-activation-nonce' ); ?>
         </div>
         <?php } else { ?>
