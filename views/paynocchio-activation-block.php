@@ -31,7 +31,7 @@ if (!defined('ABSPATH')) {
                 <img src="<?php echo plugin_dir_url( WOOCOMMERCE_PAYNOCCHIO_BASENAME ) . 'assets/img/icon_coupon.svg' ?>" alt="" />
             </div>
             <div>
-                <h2 class="cfps-h2 cfps-mb-0">Pay with bonuses</h2>
+                <h2 class="cfps-h2 cfps-mb-0 paynocchio-tab-selector">Pay with bonuses</h2>
                 <p class="cfps-text-base">Make 5 purchases and get 500 bonuses that can be spent on flights.</p>
             </div>
             <div>
@@ -57,10 +57,13 @@ if (!defined('ABSPATH')) {
                 <p class="cfps-text-slate-500">I agree to <a href="#" class="cfps-text-slate-500 cfps-underline">Kopybara Terms & Conditions</a> and <a href="#" class="cfps-text-slate-500 cfps-underline">rules of Kopybara.Pay Priority program</a> </p>
             </div>
         <?php } else { ?>
-            <div class="cfps-flex cfps-justify-center cfps-mb-10">
-                <a href="/wp-login.php" class="cfps-btn-primary">Please login before proceed</a>
-            </div>
-
+            <?php
+            $register_redirect = $attr['register_redirect'] ?? '';
+            $login_redirect = $attr['login_redirect'] ?? '';
+            echo do_shortcode('[paynocchio_registration_block 
+            register_redirect="'.$register_redirect.'" 
+            login_redirect="'.$login_redirect.'"]');
+            ?>
         <?php } ?>
     </div>
 </section>

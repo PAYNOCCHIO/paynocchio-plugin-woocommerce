@@ -12,11 +12,11 @@ if (!defined('ABSPATH')) {
             <form name="loginform" id="paynocchio_loginform" action="<?php bloginfo('url') ?>/wp-login.php" method="post">
                 <div class="row">
                     <div class="col">
-                        <label for="log">Login</label><br />
+                        <label for="log">Login</label>
                         <input type="text" name="log" class="paynocchio_input" id="paynocchio_user_login" />
                     </div>
                     <div class="col">
-                        <label for="pwd">Password</label><br />
+                        <label for="pwd">Password</label>
                         <input type="password" name="pwd" class="paynocchio_input" id="paynocchio_user_pass" />
                     </div>
                 </div>
@@ -25,7 +25,7 @@ if (!defined('ABSPATH')) {
                 </p>
                 <p class="row">
                     <input type="submit" name="wp-submit" id="paynocchio_wp-submit" class="paynocchio_button" value="Log in" />
-                    <input type="hidden" name="redirect_to" value="<?php bloginfo('url') ?>/checkout#payment_method_paynocchio" />
+                    <input type="hidden" name="redirect_to" value="<?php bloginfo('url') ?><?php echo $attr['login_redirect'] ?? ''; ?>" />
                     <input type="hidden" name="cfps_cookie" value="1" />
                 </p>
             </form>
@@ -48,7 +48,7 @@ if (!defined('ABSPATH')) {
                 <p id="reg_passmail" class="row">
                     Registration confirmation will be emailed to you.
                 </p>
-                <input type="hidden" name="redirect_to" value="<?php bloginfo('url') ?>/checkout?ans=checkemail">
+                <input type="hidden" name="redirect_to" value="<?php bloginfo('url') ?><?php echo $attr['register_redirect'] ?? ''; ?>">
                 <p class="submit row">
                     <input type="submit" name="wp-submit" id="wp-submit" class="paynocchio_button" value="Register">
                 </p>

@@ -15,7 +15,7 @@
 }
 
 #paynocchio_auth_block .row {
-   @apply cfps-mb-4 cfps-flex;
+   @apply cfps-flex cfps-gap-x-6 cfps-mb-4;
 }
 
 #paynocchio_auth_block .row:last-child {
@@ -23,7 +23,7 @@
 }
 
 #paynocchio_auth_block .col {
-    @apply cfps-inline-block;
+    @apply cfps-flex cfps-flex-col cfps-w-1/2;
 }
 
 #paynocchio_auth_block .paynocchio_input {

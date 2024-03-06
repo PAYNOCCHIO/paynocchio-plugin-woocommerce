@@ -640,12 +640,16 @@ video {
 #paynocchio_auth_block .row {
   margin-bottom: 1rem;
   display: flex;
+  -moz-column-gap: 1.5rem;
+       column-gap: 1.5rem;
 }
 #paynocchio_auth_block .row:last-child {
   margin-bottom: 0px;
 }
 #paynocchio_auth_block .col {
-  display: inline-block;
+  display: flex;
+  width: 50%;
+  flex-direction: column;
 }
 #paynocchio_auth_block .paynocchio_input {
   border-radius: 0.5rem;

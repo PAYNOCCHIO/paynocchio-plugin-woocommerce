@@ -6,13 +6,13 @@
 
 class Woocommerce_Paynocchio_Shortcodes {
 
-    static function paynocchio_activation_block() {
+    static function paynocchio_activation_block($attr) {
         ob_start();
-        require(WOOCOMMERCE_PAYNOCCHIO_PATH . 'views/paynocchio-activation-page-content.php');
+        require(WOOCOMMERCE_PAYNOCCHIO_PATH . 'views/paynocchio-activation-block.php');
         return ob_get_clean();
     }
 
-    static function paynocchio_registration_block() {
+    static function paynocchio_registration_block($attr) {
         ob_start();
         require(WOOCOMMERCE_PAYNOCCHIO_PATH . 'views/paynocchio-registration-block.php');
         return ob_get_clean();

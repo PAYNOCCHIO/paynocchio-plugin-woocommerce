@@ -35,12 +35,13 @@ if ( ! defined( 'WPINC' ) ) {
  * Start at version 1.0.0 and use SemVer - https://semver.org
  * Rename this for your plugin and update it as you release new versions.
  */
-define( 'WOOCOMMERCE_PAYNOCCHIO_VERSION', '1.0.0' );
+const WOOCOMMERCE_PAYNOCCHIO_VERSION = '1.0.0';
 
 /**
  * Paynocchio page activation slug
  */
-define( 'WOOCOMMERCE_PAYNOCCHIO_ACTIVATION_PAGE_SLUG', 'paynocchio-activation' );
+const WOOCOMMERCE_PAYNOCCHIO_ACTIVATION_PAGE_SLUG = 'paynocchio-activation';
+const WOOCOMMERCE_PAYNOCCHIO_ACCOUNT_PAGE_SLUG = 'paynocchio-account-page';
 
 /**
  * Paynocchio params names

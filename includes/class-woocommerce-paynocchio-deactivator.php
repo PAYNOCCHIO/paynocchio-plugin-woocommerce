@@ -34,6 +34,16 @@ class Woocommerce_Paynocchio_Deactivator {
 	    $activation_page = get_page_by_path(WOOCOMMERCE_PAYNOCCHIO_ACTIVATION_PAGE_SLUG);
         wp_delete_post($activation_page->ID, true);
 
+        // TODO: Delete all users meta
+
+        if(get_user_meta(get_current_user_id(), PAYNOCCHIO_USER_UUID_KEY)) {
+            delete_user_meta(get_current_user_id(), PAYNOCCHIO_USER_UUID_KEY);
+        }
+
+        if(get_user_meta(get_current_user_id(), 'paynocchio_wallet_id')) {
+            delete_user_meta(get_current_user_id(), 'paynocchio_wallet_id');
+        }
+
 	}
 
 }
