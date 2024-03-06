@@ -102,7 +102,7 @@
 }
 
 .paynocchio-tab-selector {
-    @apply cfps-flex cfps-justify-start cfps-px-4 cfps-max-w-5xl cfps-mx-auto;
+    @apply cfps-flex cfps-justify-start cfps-max-w-5xl cfps-mx-auto;
 }
 
 .paynocchio-tab-selector a {
@@ -114,11 +114,10 @@
 }
 
 .paynocchio_tabs {
-    @apply cfps-bg-slate-100 cfps-p-8;
+    @apply cfps-bg-slate-100 cfps-p-8 cfps-pt-1 cfps-rounded-lg cfps-m-4 cfps-mt-0;
 }
 
-.paynocchio-tab-body,
-.paynocchio-consents {
+.paynocchio-tab-body {
     @apply cfps-hidden;
 }
 
@@ -131,5 +130,51 @@
 }
 
 .paynocchio-profile-block {
-    @apply cfps-rounded-lg cfps-p-8 cfps-max-w-5xl cfps-mx-auto cfps-mt-4;
+    @apply cfps-rounded-lg cfps-p-8 cfps-max-w-5xl cfps-mx-auto cfps-mt-8 cfps-drop-shadow cfps-bg-white;
+}
+
+.paynocchio-profile-block h2 {
+    @apply cfps-font-bold cfps-text-xl cfps-mb-8;
+}
+
+.paynocchio-blue-badge {
+    @apply !cfps-bg-blue-500;
+}
+
+.paynocchio-blue-badge > div {
+    @apply cfps-font-bold cfps-text-2xl cfps-text-white;
+}
+
+.paynocchio .btn-back {
+    @apply cfps-cursor-pointer;
+}
+
+
+
+.paynocchio-actions-btns {
+    @apply cfps-flex cfps-flex-row cfps-justify-between cfps-items-center cfps-gap-x-2;
+}
+
+.btn-gray {
+    @apply cfps-rounded-lg cfps-px-4 cfps-py-2 cfps-bg-gray-100;
+}
+
+.btn-blue {
+    @apply cfps-rounded-lg cfps-px-4 cfps-py-2 cfps-bg-blue-500 !cfps-text-white;
+}
+
+.history-list {
+    @apply cfps-flex cfps-flex-col;
+}
+
+.history-item {
+    @apply cfps-p-2 cfps-grid cfps-grid-cols-[1fr_100px] ;
+}
+
+.history-item:not(:last-child) {
+    @apply cfps-border-b cfps-border-gray-200;
+}
+
+.history-amount {
+    @apply cfps-text-right cfps-font-semibold;
 }
