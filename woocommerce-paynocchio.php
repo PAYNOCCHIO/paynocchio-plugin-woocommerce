@@ -42,6 +42,11 @@ define( 'WOOCOMMERCE_PAYNOCCHIO_VERSION', '1.0.0' );
  */
 define( 'WOOCOMMERCE_PAYNOCCHIO_ACTIVATION_PAGE_SLUG', 'paynocchio-activation' );
 
+/**
+ * Paynocchio user UUID tag
+ */
+define('PAYNOCCHIO_USER_UUID_KEY', 'user_uuid');
+
 if ( ! defined( 'WOOCOMMERCE_PAYNOCCHIO_PAGE_FILE' ) ) {
     define( 'WOOCOMMERCE_PAYNOCCHIO_PAGE_FILE', __FILE__ );
 }
