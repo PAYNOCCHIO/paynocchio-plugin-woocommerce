@@ -16,16 +16,20 @@ class Woocommerce_Paynocchio_Wallet {
     private $walletId;
 
     public function __construct($userId) {
-        $this->base_url = "https://wallet.stage.paynocchio.com"; 
-        $this->secret = "8c0ce6db-4a1b-4fcd-8fa8-cb51bbef7261";
-        $this->env = "2985465d-ce65-4257-8937-367e5c094432";
+        $this->base_url = get_option( 'woocommerce_paynocchio_settings')['base_url'];
+        $this->secret = get_option( 'woocommerce_paynocchio_settings')[PAYNOCCHIO_SECRET_KEY];
+        $this->env = get_option( 'woocommerce_paynocchio_settings')[PAYNOCCHIO_ENV_KEY];
         $this->userId = $userId;
 
-        $this -> signature = $this -> createSignature();
+        $this->signature = $this->createSignature();
+    }
+
+    public function getSignature()
+    {
+        return $this->signature;
     }
 
     private function sendRequest(string $method, string $url, string $body = ""): array {
-        //41b075f43b4297b008b4b295a57e4e01c54884a23c985ffdea9158a460251466
         $headers = [
             'X-Wallet-Signature' => $this->signature,
         ];
@@ -45,13 +49,9 @@ class Woocommerce_Paynocchio_Wallet {
         curl_setopt($ch, CURLOPT_STDERR, $streamVerboseHandle);
 
         $response = curl_exec($ch);
-        // print_r($response);
-        // print_r(curl_getinfo($ch,CURLINFO_HEADER_OUT));
-        // exit; 
         
         $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
         curl_close($ch);
-        
 
         return [
             'status_code' => $httpCode,
@@ -75,11 +75,11 @@ class Woocommerce_Paynocchio_Wallet {
 
     public function createWallet() {
         $data = [
-            'env_id' => $this -> envId,
-            'user_id' => $this -> userId,
-            'currency_uuid' => "970d83de-1dce-47bd-a45b-bb92bf6df964",
-            'type_uuid' => "93ac9017-4960-41bf-be6d-aa123884451d",
-            'status_uuid' => "ae1b841f-2e56-4fb9-a935-2064304f8639",
+            'env_id' => $this->envId,
+            'user_id' => $this->userId,
+            'currency_uuid' => get_option( 'woocommerce_paynocchio_settings')[PAYNOCCHIO_CURRENCY_KEY],
+            'type_uuid' => get_option( 'woocommerce_paynocchio_settings')[PAYNOCCHIO_TYPE_KEY],
+            'status_uuid' => get_option( 'woocommerce_paynocchio_settings')[PAYNOCCHIO_STATUS_KEY],
         ];
 
         $response = $this->sendRequest('POST', '/wallet/', json_encode($data));
@@ -87,7 +87,7 @@ class Woocommerce_Paynocchio_Wallet {
         if($response['status_code'] === 201) {
             return true;
         } else {
-            return $response;
+            return $data;
         }
     }
 

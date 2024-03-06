@@ -3,10 +3,6 @@
 class Woocommerce_Paynocchio_Payment_Gateway extends WC_Payment_Gateway {
 
     private bool $testmode;
-    private string $environment_uuid;
-    private string $currency_uuid;
-    private string $type_uuid;
-    private string $status_uuid;
 
     function __construct() {
 
@@ -37,25 +33,9 @@ class Woocommerce_Paynocchio_Payment_Gateway extends WC_Payment_Gateway {
 
         $this->testmode = 'yes' === $this->get_option( 'testmode' );
 
-
-        $this->title = $this->get_option( 'title' );
-
         $this->enabled = $this->get_option( 'enabled' );
 
         $this->description = $this->get_option( 'description' );
-
-        $this->environment_uuid = $this->get_option( 'environment_uuid' );
-
-        $this->currency_uuid = $this->get_option( 'currency_uuid' );
-
-        $this->type_uuid = $this->get_option( 'type_uuid' );
-        
-        $this->status_uuid = $this->get_option( 'status_uuid' );
-
-        // Turn these settings into variables we can use
-        /*foreach ( $this->settings as $setting_key => $value ) {
-            $this->$setting_key = $value;
-        }*/
 
         // further check of SSL if you want
         add_action( 'admin_notices', array( $this,	'do_ssl_check' ) );
@@ -98,10 +78,30 @@ class Woocommerce_Paynocchio_Payment_Gateway extends WC_Payment_Gateway {
                 'desc_tip'	=> __( 'This is the base url provided by Paynocchio when you signed up for an account.', 'paynocchio' ),
                 'default'   => 'https://wallet.stage.paynocchio.com'
             ),
-            'environment_uuid' => array(
+            PAYNOCCHIO_ENV_KEY => array(
                 'title'		=> __( 'Paynocchio Environment UUID', 'paynocchio' ),
                 'type'		=> 'text',
                 'desc_tip'	=> __( 'This is the environment_uuid provided by Paynocchio when you signed up for an account.', 'paynocchio' ),
+            ),
+            PAYNOCCHIO_SECRET_KEY => array(
+                'title'		=> __( 'Paynocchio Secret UUID', 'paynocchio' ),
+                'type'		=> 'text',
+                'desc_tip'	=> __( 'This is the Secret UUID provided by Paynocchio when you signed up for an account.', 'paynocchio' ),
+            ),
+            PAYNOCCHIO_CURRENCY_KEY => array(
+                'title'		=> __( 'Paynocchio Currency UUID', 'paynocchio' ),
+                'type'		=> 'text',
+                'desc_tip'	=> __( 'This is the currency UUID provided by Paynocchio when you signed up for an account.', 'paynocchio' ),
+            ),
+            PAYNOCCHIO_TYPE_KEY => array(
+                'title'		=> __( 'Paynocchio Type UUID', 'paynocchio' ),
+                'type'		=> 'text',
+                'desc_tip'	=> __( 'This is the Type UUID provided by Paynocchio when you signed up for an account.', 'paynocchio' ),
+            ),
+            PAYNOCCHIO_STATUS_KEY => array(
+                'title'		=> __( 'Paynocchio Status UUID', 'paynocchio' ),
+                'type'		=> 'text',
+                'desc_tip'	=> __( 'This is the Status UUID provided by Paynocchio when you signed up for an account.', 'paynocchio' ),
             ),
             'testmode' => array(
                 'title'		=> __( 'Paynocchio Test Mode', 'paynocchio' ),

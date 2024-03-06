@@ -43,14 +43,14 @@ define( 'WOOCOMMERCE_PAYNOCCHIO_VERSION', '1.0.0' );
 define( 'WOOCOMMERCE_PAYNOCCHIO_ACTIVATION_PAGE_SLUG', 'paynocchio-activation' );
 
 /**
- * Paynocchio account page slug
+ * Paynocchio params names
  */
-define( 'WOOCOMMERCE_PAYNOCCHIO_ACCOUNT_PAGE_SLUG', 'paynocchio-account' );
-
-/**
- * Paynocchio user UUID tag
- */
-define('PAYNOCCHIO_USER_UUID_KEY', 'user_uuid');
+const PAYNOCCHIO_USER_UUID_KEY = 'user_uuid';
+const PAYNOCCHIO_ENV_KEY = 'environment_uuid';
+const PAYNOCCHIO_CURRENCY_KEY = 'currency_uuid';
+const PAYNOCCHIO_TYPE_KEY = 'type_uuid';
+const PAYNOCCHIO_STATUS_KEY = 'status_uuid';
+const PAYNOCCHIO_SECRET_KEY = 'secret_uuid';
 
 if ( ! defined( 'WOOCOMMERCE_PAYNOCCHIO_PAGE_FILE' ) ) {
     define( 'WOOCOMMERCE_PAYNOCCHIO_PAGE_FILE', __FILE__ );
