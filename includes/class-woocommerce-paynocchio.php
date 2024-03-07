@@ -357,7 +357,7 @@ class Woocommerce_Paynocchio {
 	 * @return    string    The UUID.
 	 */
 	public function get_uuid() {
-		return get_user_meta($this->user_id, PAYNOCCHIO_USER_UUID_KEY);
+		return get_user_meta($this->user_id, PAYNOCCHIO_USER_UUID_KEY, true);
 	}
 
 	/**
