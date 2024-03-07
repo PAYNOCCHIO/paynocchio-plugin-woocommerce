@@ -178,3 +178,38 @@
 .history-amount {
     @apply cfps-text-right cfps-font-semibold;
 }
+
+
+.paynocchio-card-container {
+    @apply cfps-flex cfps-justify-center;
+}
+
+.paynocchio-card-face,
+.paynocchio-card-back {
+    @apply cfps-relative cfps-hidden;
+}
+
+.paynocchio-card-face.visible,
+.paynocchio-card-back.visible {
+    @apply cfps-inline-block;
+}
+
+.card-toggle {
+    @apply cfps-absolute cfps-w-full cfps-h-full cfps-z-10 cfps-top-0 cfps-left-0;
+}
+
+.paynocchio-balance-bonuses {
+    @apply cfps-absolute cfps-flex cfps-flex-row cfps-items-center cfps-text-white cfps-gap-x-8 cfps-text-xl cfps-z-20 cfps-top-[27%] cfps-left-[7%];
+}
+
+.paynocchio-balance-bonuses .amount {
+    @apply cfps-text-3xl;
+}
+
+.paynocchio-card-number-mask {
+    @apply cfps-absolute cfps-text-white cfps-text-xl cfps-z-20 cfps-bottom-[7%] cfps-left-[7%];
+}
+
+.paynocchio-card-number {
+    @apply cfps-absolute cfps-text-white cfps-text-2xl cfps-flex cfps-flex-row cfps-gap-x-6 cfps-z-20 cfps-top-[50%] cfps-left-[7%];
+}

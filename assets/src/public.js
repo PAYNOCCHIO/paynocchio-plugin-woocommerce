@@ -2,13 +2,10 @@ import './public.css';
 
 (( $ ) => {
     $(document).ready(function() {
-        $("a.tab-switcher").click(function() {
-            console.log('switch');
+        $('a.tab-switcher').click(function() {
             let link = $(this);
             let id = link.get(0).id;
             id = id.replace('_toggle','');
-
-            console.log(id);
 
             let elem = jQuery('.paynocchio-' + id + '-body');
             if (!elem.hasClass('visible')) {
@@ -20,4 +17,14 @@ import './public.css';
             }
         });
     });
+
+    $(document).ready(function() {
+        $("a.card-toggle").click(function () {
+            $('.paynocchio-card-container .visible').fadeOut('fast',function() {
+                $('.paynocchio-card-container > div').toggleClass('visible');
+                $('.paynocchio-card-container .visible').fadeIn('fast');
+            })
+        })
+    })
+
 })(jQuery);
