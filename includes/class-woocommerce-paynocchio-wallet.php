@@ -86,7 +86,7 @@ class Woocommerce_Paynocchio_Wallet {
 
         if($response['status_code'] === 201) {
             $json = json_decode($response['response']);
-            return $json->uuid;
+            return json_encode(['status'=> 'success', 'wallet' => $json->uuid,]);
         } else {
             return json_encode($response);
         }

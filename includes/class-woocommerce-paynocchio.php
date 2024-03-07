@@ -298,15 +298,15 @@ class Woocommerce_Paynocchio {
          if(!get_user_meta($this->user_id, 'paynoccio_wallet')) {
              $wallet = new Woocommerce_Paynocchio_Wallet($this->get_uuid());
              $wallet_response = $wallet->createWallet();
-             //add_user_meta($this->user_id, 'paynoccio_wallet', $wallet_response, true);
+             $json_response = json_decode($wallet_response);
+             if($json_response->status === 'success') {
+                 add_user_meta($this->user_id, 'paynoccio_wallet', $json_response->wallet, true);
+             }
          }
 
-        wp_send_json( array(
-            //'status'  => 'success',
-            //'title'   => 'Success',
-            //'message' => 'Success.',
-            'response' => $wallet_response,
-        ) );
+         if($json_response->status === 'success') {
+             wp_send_json_success();
+         }
         wp_die();
     }
 
