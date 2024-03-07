@@ -26,28 +26,32 @@ class Woocommerce_Paynocchio_Wallet {
 
     private function sendRequest(string $method, string $url, string $body = ""): array {
         $headers = [
-            'X-Wallet-Signature' => $this->signature,
-            'X-API-KEY' => 'X-API-KEY'
+            'X-Wallet-Signature:'. $this->signature,
+            'X-API-KEY: X-API-KEY',
+            'Content-Type: application/json'
         ];
-        // print_r($this->signature); exit;
 
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_HEADER, true);
-        curl_setopt($ch, CURLOPT_URL, $this->base_url . $url);
-        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $method);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $body);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_VERBOSE, true);
-        curl_setopt($ch, CURLINFO_HEADER_OUT, true);
+        $curl = curl_init();
 
-        $streamVerboseHandle = fopen('php://temp', 'w+');
-        curl_setopt($ch, CURLOPT_STDERR, $streamVerboseHandle);
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => $this->base_url . $url,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => '',
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => $method,
+            CURLOPT_POSTFIELDS => $body,
+            CURLOPT_USERAGENT => 'Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; .NET CLR 1.1.4322)',
+            CURLOPT_HTTPHEADER => $headers,
+        ));
 
-        $response = curl_exec($ch);
+        $response = curl_exec($curl);
+        $httpCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
 
-        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-        curl_close($ch);
+
+        curl_close($curl);
 
         return [
             'status_code' => $httpCode,
@@ -71,19 +75,20 @@ class Woocommerce_Paynocchio_Wallet {
 
     public function createWallet() {
         $data = [
-            'env_id' => $this->envId,
-            'user_id' => $this->userId,
-            'currency_uuid' => get_option( 'woocommerce_paynocchio_settings')[PAYNOCCHIO_CURRENCY_KEY],
-            'type_uuid' => get_option( 'woocommerce_paynocchio_settings')[PAYNOCCHIO_TYPE_KEY],
-            'status_uuid' => get_option( 'woocommerce_paynocchio_settings')[PAYNOCCHIO_STATUS_KEY],
+            PAYNOCCHIO_ENV_KEY => $this->envId,
+            PAYNOCCHIO_USER_UUID_KEY => $this->userId,
+            PAYNOCCHIO_CURRENCY_KEY => get_option( 'woocommerce_paynocchio_settings')[PAYNOCCHIO_CURRENCY_KEY],
+            PAYNOCCHIO_TYPE_KEY => get_option( 'woocommerce_paynocchio_settings')[PAYNOCCHIO_TYPE_KEY],
+            PAYNOCCHIO_STATUS_KEY => get_option( 'woocommerce_paynocchio_settings')[PAYNOCCHIO_STATUS_KEY],
         ];
 
-        $response = $this->sendRequest('POST', '/wallet/', json_encode($data));
+        $response = $this->sendRequest('POST', '/wallet/', json_encode($data, JSON_UNESCAPED_SLASHES));
 
         if($response['status_code'] === 201) {
-            return true;
+            $json = json_decode($response['response']);
+            return $json->uuid;
         } else {
-            return $response;
+            return json_encode($response);
         }
     }
 

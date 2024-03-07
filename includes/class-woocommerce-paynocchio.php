@@ -302,9 +302,9 @@ class Woocommerce_Paynocchio {
          }
 
         wp_send_json( array(
-            'status'  => 'success',
-            'title'   => 'Success',
-            'message' => 'Success.',
+            //'status'  => 'success',
+            //'title'   => 'Success',
+            //'message' => 'Success.',
             'response' => $wallet_response,
         ) );
         wp_die();
