@@ -16,9 +16,8 @@
                     'ajax-activation-nonce': $('#ajax-activation-nonce').val(),
                 },
                 success: function(data){
-                    console.log(data)
-                    if (data){
-                        //document.location.href = data.redirecturl;
+                    if (data.success){
+                        document.location.href = '/paynocchio-account-page';
                     }
                 }
             });

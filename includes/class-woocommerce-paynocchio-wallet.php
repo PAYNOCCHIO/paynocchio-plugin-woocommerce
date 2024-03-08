@@ -66,7 +66,7 @@ class Woocommerce_Paynocchio_Wallet {
     }
 
     public function getWalletById(string $walletId): array {
-        $url = '/wallet/' . $walletId;
+        $url = '/wallet/' . $walletId . '/' . $this->envId;
 
         $response = $this->sendRequest('GET', $url);
 

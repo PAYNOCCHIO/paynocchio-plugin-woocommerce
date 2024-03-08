@@ -20,6 +20,7 @@
 
         $('.form-toggle-a').click(() => toggleVisibility('#paynocchio_auth_block'));
 
+        // WOOCOMMERCE CHECKOUT SCRIPT
         $(document).on( "updated_checkout", function() {
             $('.form-toggle-a').click(() => toggleVisibility('#paynocchio_auth_block'));
 
@@ -28,6 +29,27 @@
             if (ans) {
                 $('.woocommerce-notices-wrapper:first-child').prepend('<div class="woocommerce-message" role="alert">Registration complete. Please check your email, then visit this page again.</div>')
             }
+
+            const activation_button = $("#paynocchio_activation_button");
+
+            activation_button.click(() => {
+
+                $.ajax({
+                    url: paynocchio_activation_object.ajaxurl,
+                    type: 'POST',
+                    data: {
+                        'action': 'paynocchio_ajax_activation',
+                        'source': window.location.pathname,
+                        'ajax-activation-nonce': $('#ajax-activation-nonce').val(),
+                    },
+                    success: function(data){
+                        if (data.success){
+                            document.location.reload();
+                        }
+                    }
+                });
+            })
+
         });
     })
 
