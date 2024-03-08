@@ -6,7 +6,7 @@ if (!defined('ABSPATH')) {
 
 <?php
     global $woocommerce;
-    $amount = floatval( preg_replace( '#[^\d.]#', '', $woocommerce->cart->get_cart_total() ) );
+    $amount = WC()->cart->cart_contents_total;
 
 
     $current_user = wp_get_current_user();
@@ -25,15 +25,19 @@ if (!defined('ABSPATH')) {
             </div>
         </a>
     </div>
-    <div class="wallet cfps-flex cfps-flex-row cfps-items-center">
-        <div class="cfps-flex cfps-flex-row cfps-items-center cfps-pr-2 cfps-mr-2 cfps-border-r cfps-border-slate-300 cfps-gap-x-2">
-            <img src="<?php echo plugin_dir_url( WOOCOMMERCE_PAYNOCCHIO_BASENAME ) . 'assets/img/wallet.png' ?>" class="!cfps-h-[25px] cfps-w-auto"/>
-            <p class="cfps-font-semibold">$<?php echo $wallet_bal; ?></p>
-            <a href="#" title="Add money" alt="Add money" class="cfps-bg-slate-300 cfps-rounded-3xl cfps-w-6 cfps-h-6 cfps-leading-6 cfps-text-center cfps-block cfps-ml-2">+</a>
+
+    <?php if (is_user_logged_in() && get_user_meta(get_current_user_id(), 'paynoccio_wallet')) { ?>
+
+        <div class="wallet cfps-flex cfps-flex-row cfps-items-center">
+            <div class="cfps-flex cfps-flex-row cfps-items-center cfps-pr-2 cfps-mr-2 cfps-border-r cfps-border-slate-300 cfps-gap-x-2">
+                <img src="<?php echo plugin_dir_url( WOOCOMMERCE_PAYNOCCHIO_BASENAME ) . 'assets/img/wallet.png' ?>" class="!cfps-h-[25px] cfps-w-auto"/>
+                <p class="cfps-font-semibold">$<?php echo $wallet_bal; ?></p>
+                <a href="#" title="Add money" alt="Add money" class="cfps-bg-slate-300 cfps-rounded-3xl cfps-w-6 cfps-h-6 cfps-leading-6 cfps-text-center cfps-block cfps-ml-2">+</a>
+            </div>
+            <div class="cfps-flex cfps-flex-row cfps-items-center cfps-gap-x-2">
+                <p>Bonus:</p>
+                <p class="cfps-font-semibold"><?php echo $wallet_bon; ?></p>
+            </div>
         </div>
-        <div class="cfps-flex cfps-flex-row cfps-items-center cfps-gap-x-2">
-            <p>Bonus:</p>
-            <p class="cfps-font-semibold"><?php echo $wallet_bon; ?></p>
-        </div>
-    </div>
+    } ?>
 </div>
