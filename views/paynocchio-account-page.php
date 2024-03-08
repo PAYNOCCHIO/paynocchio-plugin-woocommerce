@@ -7,10 +7,14 @@ if (!defined('ABSPATH')) {
 <?php
     $current_user = wp_get_current_user();
     $user_paynocchio_wallet_id = get_user_meta($current_user->ID, 'paynoccio_wallet', true);
-    $user_paynocchio_wallet = new Woocommerce_Paynocchio_Wallet($current_user->ID);
-    //print_r($user_paynocchio_wallet->getWalletById($user_paynocchio_wallet_id));
-    $wallet_bal = 0;
-    $wallet_bon = 100;
+    $paynocchio_wallet = new Woocommerce_Paynocchio_Wallet($current_user->ID);
+    $json_response = $paynocchio_wallet->getWalletBalance($user_paynocchio_wallet_id);
+    $user_paynocchio_wallet = $paynocchio_wallet->getWalletById($user_paynocchio_wallet_id);
+    if($user_paynocchio_wallet['status_code'] === 200) {
+        $wallet_balance = $json_response['balance'];
+        $wallet_bonuses = $json_response['bonuses'];
+    }
+
     $wallet_pan = 2243123434652243;
 ?>
 
