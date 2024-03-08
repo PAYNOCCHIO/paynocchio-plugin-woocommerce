@@ -8,7 +8,7 @@ if (!defined('ABSPATH')) {
     $current_user = wp_get_current_user();
     $user_paynocchio_wallet_id = get_user_meta($current_user->ID, 'paynoccio_wallet', true);
     $user_paynocchio_wallet = new Woocommerce_Paynocchio_Wallet($current_user->ID);
-    print_r($user_paynocchio_wallet->getWalletById($user_paynocchio_wallet_id));
+    //print_r($user_paynocchio_wallet->getWalletById($user_paynocchio_wallet_id));
     $wallet_bal = 0;
     $wallet_bon = 100;
     $wallet_pan = 2243123434652243;
