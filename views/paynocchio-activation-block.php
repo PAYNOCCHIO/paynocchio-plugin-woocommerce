@@ -51,7 +51,6 @@ if (!defined('ABSPATH')) {
                 </div>
             <?php } else { ?>
                 <div class="paynocchio-profile-block paynocchio-blue-badge">
-                    <p>This block will hide if no wallet, currently present for tests</p>
                     <div class="cfps-grid cfps-grid-cols-[1fr_100px_200px_35px] cfps-gap-x-6">
                         <div>
                             Kopybara.Pay

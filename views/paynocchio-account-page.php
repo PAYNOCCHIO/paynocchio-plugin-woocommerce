@@ -8,7 +8,7 @@ if (!defined('ABSPATH')) {
     $current_user = wp_get_current_user();
     $user_paynocchio_wallet_id = get_user_meta($current_user->ID, 'paynoccio_wallet', true);
     $user_paynocchio_wallet = new Woocommerce_Paynocchio_Wallet($current_user->ID);
-    //print_r($user_paynocchio_wallet->getWalletById($user_paynocchio_wallet_id));
+    print_r($user_paynocchio_wallet->getWalletById($user_paynocchio_wallet_id));
     $wallet_bal = 0;
     $wallet_bon = 100;
     $wallet_pan = 2243123434652243;
@@ -77,7 +77,6 @@ if (!defined('ABSPATH')) {
 
 
                 <div class="paynocchio-profile-block paynocchio-blue-badge">
-                    <p>This block will hide if no wallet, currently present for tests</p>
                     <div class="cfps-grid cfps-grid-cols-[1fr_100px_200px_35px] cfps-gap-x-6">
                         <div>
                             Kopybara.Pay

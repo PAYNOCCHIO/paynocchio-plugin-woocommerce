@@ -33,7 +33,7 @@
             const activation_button = $("#paynocchio_activation_button");
 
             activation_button.click(() => {
-
+console.log('click')
                 $.ajax({
                     url: paynocchio_activation_object.ajaxurl,
                     type: 'POST',
