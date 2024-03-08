@@ -19,6 +19,10 @@ if (!defined('ABSPATH')) {
         <div class="paynocchio-embleme">
             <img src="<?php echo plugin_dir_url( WOOCOMMERCE_PAYNOCCHIO_BASENAME ) . 'assets/img/kopybara-logo.png' ?>" />
         </div>
+
+
+
+    <?php if (is_user_logged_in()) { ?>
         <div class="paynocchio-profile-info">
             <div class="paynocchio-profile-img">
                 <img src="<?php echo plugin_dir_url( WOOCOMMERCE_PAYNOCCHIO_BASENAME ) . 'assets/img/profile.png' ?>" />
@@ -205,6 +209,9 @@ if (!defined('ABSPATH')) {
             </div>
 
         </div>
+    <?php } else {
+        echo do_shortcode('[paynocchio_registration_block]');
+    } ?>
 
         <div class="paynocchio-consents">
             <p class="cfps-text-slate-500">I agree to <a href="#" class="cfps-text-slate-500 cfps-underline">Kopybara Terms & Conditions</a> and <a href="#" class="cfps-text-slate-500 cfps-underline">rules of Kopybara.Pay Priority program</a> </p>
