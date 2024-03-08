@@ -65,7 +65,7 @@ class Woocommerce_Paynocchio_Wallet {
         return $signature;
     }
 
-    public function getWalletById(string $walletId) {
+    public function getWalletById(string $walletId): array {
         $url = '/wallet/' . $walletId . '?environment_uuid=' . $this->envId;
 
         $response = $this->sendRequest('GET', $url);
@@ -138,7 +138,6 @@ class Woocommerce_Paynocchio_Wallet {
     }
 
 
-
     public function getOrdersList(string $orderId, array $filters = []): array {
         $url = '/orders/' . $orderId;
 
@@ -169,6 +168,19 @@ class Woocommerce_Paynocchio_Wallet {
         $response = $this->sendRequest('GET', $url);
 
         return $response;
+    }
+
+    public function getWalletBalance(string $walletId): array
+    {
+        $user_paynocchio_wallet = $this->getWalletById($walletId);
+        if($user_paynocchio_wallet['status_code'] === 200) {
+            $json_response = json_decode($user_paynocchio_wallet['response']);
+            return [
+                'balance' => $json_response->balance->current,
+                'bonuses' => $json_response->rewarding_balance,
+            ];
+
+        }
     }
 
 }
