@@ -2,6 +2,10 @@ import './public.css';
 
 (( $ ) => {
 
+    /**
+     * Function to make block visibility work
+     * @param blockClass
+     */
     const toggleVisibility = (blockClass) => {
         $(`${blockClass} > div.visible`).fadeOut('fast',function() {
             $(`${blockClass} > div:not(.visible)`).fadeIn('fast');
@@ -9,6 +13,11 @@ import './public.css';
         });
     }
 
+    /**
+     * Wallet Activation function
+     * @param evt
+     * @param path
+     */
     const activateWallet = (evt, path) => {
         $(evt.target).addClass('cfps-disabled')
 
@@ -32,6 +41,11 @@ import './public.css';
             });
     }
 
+    const setBalance = (balance, bonus) => {
+        $('.paynocchio-balance-value').css('--value', balance);
+        $('.paynocchio-bonus-value').css('--value', bonus);
+    }
+
     function getParameterByName(name, url = window.location.href) {
         name = name.replace(/[\[\]]/g, '\\$&');
         const regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
@@ -44,7 +58,9 @@ import './public.css';
     $(document).ready(function() {
         //READY START
 
-        $("#paynocchio_activation_button").click((evt) => activateWallet(evt, '/paynocchio-account-page'))
+        const activationButton = $("#paynocchio_activation_button");
+
+        activationButton.click((evt) => activateWallet(evt, '/paynocchio-account-page'))
 
         $('a.tab-switcher').click(function() {
             let link = $(this);
@@ -61,30 +77,33 @@ import './public.css';
             }
         });
 
-        $("a.card-toggle").click(function () {
-            $('.paynocchio-card-container .visible').fadeOut('fast',function() {
-                $('.paynocchio-card-container > div').toggleClass('visible');
-                $('.paynocchio-card-container .visible').fadeIn('fast');
-            });
+        $('a.card-toggle').click(() => toggleVisibility('.paynocchio-card-container'));
+
+        $('.form-toggle-a').click(() => toggleVisibility('#paynocchio_auth_block'));
+
+        setBalance(200, 300)
+        setTimeout(() => {
+            setInterval(() => {
+                setBalance(parseInt($('.paynocchio-balance-value').css('--value')) + 10, parseInt($('.paynocchio-bonus-value').css('--value')) + 20)
+            }, 5000)
+        }, 2000)
+
+        // WOOCOMMERCE CHECKOUT SCRIPT
+        $(document).on( "updated_checkout", function() {
+
+            $('.form-toggle-a').click(() => toggleVisibility('#paynocchio_auth_block'));
+
+            const ans = getParameterByName('ans');
+
+            if (ans) {
+                $('.woocommerce-notices-wrapper:first-child').prepend('<div class="woocommerce-message" role="alert">Registration complete. Please check your email, then visit this page again.</div>')
+            }
+
+            activationButton.click((evt) => activateWallet(evt))
+
         });
-
-        $('.form-toggle-a').click(() => toggleVisibility('#paynocchio_auth_block'));
+        // WOOCOMMERCE CHECKOUT SCRIPT END
         //READY END
-    });
-
-
-    // WOOCOMMERCE CHECKOUT SCRIPT
-    $(document).on( "updated_checkout", function() {
-        $('.form-toggle-a').click(() => toggleVisibility('#paynocchio_auth_block'));
-
-        const ans = getParameterByName('ans');
-
-        if (ans) {
-            $('.woocommerce-notices-wrapper:first-child').prepend('<div class="woocommerce-message" role="alert">Registration complete. Please check your email, then visit this page again.</div>')
-        }
-
-        $("#paynocchio_activation_button").click(() => activateWallet())
-
     });
 
 })(jQuery);

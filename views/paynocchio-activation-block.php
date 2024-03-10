@@ -2,6 +2,8 @@
 if (!defined('ABSPATH')) {
     die;
 }
+
+$wallet_bal = 0;
 ?>
 
 <section class="paynocchio">
@@ -64,9 +66,10 @@ if (!defined('ABSPATH')) {
                             Kopybara.Pay
                         </div>
                         <div>
-                            $0                        </div>
+                            $<span class="paynocchio-balance-value"></span>
+                        </div>
                         <div>
-                            100 bonuses
+                            <span class="paynocchio-bonus-value"></span> bonuses
                         </div>
                         <a class="tab-switcher cfps-cursor-pointer" id="wallet_toggle">
                             <img decoding="async" src="https://woocommerce-1172929-4352337.cloudwaysapps.com/wp-content/plugins/woocommerce-paynocchio/assets/img/arr_r.png">

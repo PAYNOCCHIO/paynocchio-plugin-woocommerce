@@ -507,9 +507,6 @@ video {
   margin-top: 2.5rem;
   margin-bottom: 2.5rem;
 }
-.-cfps-ml-1 {
-  margin-left: -0.25rem;
-}
 .cfps-mb-0 {
   margin-bottom: 0px;
 }
@@ -522,23 +519,20 @@ video {
 .cfps-ml-2 {
   margin-left: 0.5rem;
 }
+.cfps-ml-4 {
+  margin-left: 1rem;
+}
 .cfps-mr-1 {
   margin-right: 0.25rem;
 }
 .cfps-mr-2 {
   margin-right: 0.5rem;
 }
-.cfps-mr-3 {
-  margin-right: 0.75rem;
-}
 .cfps-mr-4 {
   margin-right: 1rem;
 }
 .cfps-mt-8 {
   margin-top: 2rem;
-}
-.cfps-ml-4 {
-  margin-left: 1rem;
 }
 .cfps-block {
   display: block;
@@ -1062,6 +1056,42 @@ video {
   line-height: 2rem;
   --tw-text-opacity: 1;
   color: rgb(255 255 255 / var(--tw-text-opacity));
+}
+/**
+Numbers animation
+ */
+@property --value {
+    syntax: "<number>";
+    initial-value: 0;
+    inherits: false;
+}
+@property --num {
+    syntax: "<number>";
+    initial-value: 0;
+    inherits: false;
+}
+@property --v1 {
+    syntax: "<integer>";
+    initial-value: 0;
+    inherits: false;
+}
+@property --v2 {
+    syntax: "<integer>";
+    initial-value: 0;
+    inherits: false;
+}
+.paynocchio-numbers {
+    transition: --value 1s;
+    --num: var(--value);
+    --v1: max(var(--num) - 0.5, 0);
+    --v2: max((var(--num) - var(--v1)) - 0.5, 0);
+    counter-reset: v1 var(--v1) v2 var(--v2);
+}
+.paynocchio-numbers::before {
+    content: counter(v1) "." counter(v2, decimal-leading-zero);
+}
+.paynocchio-bonus-value::before {
+    content: counter(v1);
 }
 @media (min-width: 1024px) {
 

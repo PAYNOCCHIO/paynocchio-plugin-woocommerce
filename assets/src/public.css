@@ -215,3 +215,44 @@
 .paynocchio-card-number {
     @apply cfps-absolute cfps-text-white cfps-text-2xl cfps-flex cfps-flex-row cfps-gap-x-6 cfps-z-20 cfps-top-[50%] cfps-left-[7%];
 }
+
+
+/**
+Numbers animation
+ */
+
+@property --value {
+    syntax: "<number>";
+    initial-value: 0;
+    inherits: false;
+}
+@property --num {
+    syntax: "<number>";
+    initial-value: 0;
+    inherits: false;
+}
+@property --v1 {
+    syntax: "<integer>";
+    initial-value: 0;
+    inherits: false;
+}
+@property --v2 {
+    syntax: "<integer>";
+    initial-value: 0;
+    inherits: false;
+}
+
+.paynocchio-numbers {
+    transition: --value 1s;
+    --num: var(--value);
+    --v1: max(var(--num) - 0.5, 0);
+    --v2: max((var(--num) - var(--v1)) - 0.5, 0);
+    counter-reset: v1 var(--v1) v2 var(--v2);
+}
+.paynocchio-numbers::before {
+    content: counter(v1) "." counter(v2, decimal-leading-zero);
+}
+
+.paynocchio-bonus-value::before {
+    content: counter(v1);
+}
