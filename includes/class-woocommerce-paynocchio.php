@@ -263,16 +263,12 @@ class Woocommerce_Paynocchio {
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_styles' );
 
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_scripts' );
-
-            $this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'ajax_login_init' );
-            add_action( 'wp_ajax_nopriv_paynocchio_ajax_login', [$this, 'paynocchio_ajax_login']);
-
-
-        $this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'ajax_activation_init' );
+        add_action( 'wp_ajax_nopriv_paynocchio_ajax_login', [$this, 'paynocchio_ajax_login']);
         add_action( 'wp_ajax_paynocchio_ajax_activation', [$this, 'paynocchio_ajax_activation']);
         add_action( 'wp_ajax_nopriv_paynocchio_ajax_activation', [$this, 'paynocchio_ajax_activation']);
-
-       // add_action( 'user_register', [$this, 'set_user_uuid']);
+        //$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'ajax_login_init' );
+        //$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'ajax_activation_init' );
+        // add_action( 'user_register', [$this, 'set_user_uuid']);
 	}
 
     /**
