@@ -7,8 +7,26 @@
  * If you are looking for production-ready output files, see mode: "production" (https://webpack.js.org/configuration/mode/).
  */
 /******/ (() => { // webpackBootstrap
-/******/ 	"use strict";
+/******/ 	var __webpack_modules__ = ({
+
+/***/ "./assets/src/ajax-login.js":
+/*!**********************************!*\
+  !*** ./assets/src/ajax-login.js ***!
+  \**********************************/
+/***/ (() => {
+
+eval("(( $ ) => {\r\n\r\n    $(document).ready(() => {\r\n\r\n        const toggleVisibility = (blockClass) => {\r\n            $(`${blockClass} > div.visible`).fadeOut('fast',function() {\r\n                $(`${blockClass} > div:not(.visible)`).fadeIn('fast');\r\n                $(`${blockClass} > div`).toggleClass('visible');\r\n            });\r\n        }\r\n\r\n        function getParameterByName(name, url = window.location.href) {\r\n            name = name.replace(/[\\[\\]]/g, '\\\\$&');\r\n            const regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),\r\n                results = regex.exec(url);\r\n            if (!results) return null;\r\n            if (!results[2]) return '';\r\n            return decodeURIComponent(results[2].replace(/\\+/g, ' '));\r\n        }\r\n\r\n        $('.form-toggle-a').click(() => toggleVisibility('#paynocchio_auth_block'));\r\n\r\n        // WOOCOMMERCE CHECKOUT SCRIPT\r\n        $(document).on( \"updated_checkout\", function() {\r\n            $('.form-toggle-a').click(() => toggleVisibility('#paynocchio_auth_block'));\r\n\r\n            const ans = getParameterByName('ans');\r\n\r\n            if (ans) {\r\n                $('.woocommerce-notices-wrapper:first-child').prepend('<div class=\"woocommerce-message\" role=\"alert\">Registration complete. Please check your email, then visit this page again.</div>')\r\n            }\r\n\r\n            const activation_button = $(\"#paynocchio_activation_button\");\r\n\r\n            activation_button.click(() => {\r\nconsole.log('click')\r\n                $.ajax({\r\n                    url: paynocchio_activation_object.ajaxurl,\r\n                    type: 'POST',\r\n                    data: {\r\n                        'action': 'paynocchio_ajax_activation',\r\n                        'source': window.location.pathname,\r\n                        'ajax-activation-nonce': $('#ajax-activation-nonce').val(),\r\n                    },\r\n                    success: function(data){\r\n                        if (data.success){\r\n                            document.location.reload();\r\n                        }\r\n                    }\r\n                });\r\n            })\r\n\r\n        });\r\n    })\r\n\r\n})( jQuery );\n\n//# sourceURL=webpack://contest/./assets/src/ajax-login.js?");
+
+/***/ })
+
+/******/ 	});
+/************************************************************************/
 /******/ 	
+/******/ 	// startup
+/******/ 	// Load entry module and return exports
+/******/ 	// This entry module can't be inlined because the eval devtool is used.
+/******/ 	var __webpack_exports__ = {};
+/******/ 	__webpack_modules__["./assets/src/ajax-login.js"]();
 /******/ 	
 /******/ })()
 ;
