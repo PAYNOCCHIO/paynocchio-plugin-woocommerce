@@ -1,33 +1,31 @@
 import './public.css';
 
-import Ws from './ws'
 import Modal from './modal'
 
 (( $ ) => {
 
     const createWebSocket = (wallet) => {
-        let ws = new WebSocket(`wss://wallet.stage.paynocchio.com/ws/wallet-socket/${wallet.uuid}`);
+        let ws = new WebSocket(`wss://wallet.stage.paynocchio.com/ws/wallet-socket/${wallet}`);
 
         ws.onmessage = function(event) {
             const data = JSON.parse(JSON.parse(event.data));
-            console.log(data)
-            updateBalance(data.number, data.balance.current / 10000, data.rewarding_balance);
+            setBalance(data.balance.current / 10000, data.rewarding_balance)
         };
         ws.onopen = function(event) {
-            console.log("WebSocket connection opened for wallet:", wallet.user_uuid);
             let event_map = {
                 "event": "get_wallet",
             }
-            console.log(event_map)
             ws.send(JSON.stringify(event_map));
         };
         ws.onclose = function(event) {
-            console.log("WebSocket connection closed for wallet:", wallet.user_uuid);
+            console.log('closed');
         };
-        ws.onerror = function(event) {
-            console.error("WebSocket error for wallet:", wallet.user_uuid, event);
+        ws.onerror = function(error) {
+            console.error(error);
         };
     }
+
+    createWebSocket('872ee190-6075-4081-91f2-5a38240c2240');
 
     /**
      * Function to make block visibility work
@@ -98,7 +96,18 @@ import Modal from './modal'
                 $(`#${evt.target.id} .cfps-spinner`).addClass('cfps-hidden');
                 $(evt.target).removeClass('cfps-disabled')
             });
-    }/**
+    }
+
+    const setBalance = (balance, bonus) => {
+        $('.paynocchio-balance-value').text(balance / 10000);
+        $('.paynocchio-bonus-value').text(bonus);
+        /*
+        $('.paynocchio-balance-value').css('--value', balance);
+        $('.paynocchio-bonus-value').css('--value', bonus);
+        */
+    }
+
+    /**
      * Wallet Balance checker
      */
     const walletBalanceChecker = () => {
@@ -109,19 +118,10 @@ import Modal from './modal'
                 'action': 'paynocchio_ajax_check_balance',
             },
             success: function(data){
-                    setBalance(data.response.balance, data.response.bonuses)
+                setBalance(data.response.balance, data.response.bonuses)
             }
         })
             .error((error) => console.log(error))
-    }
-
-    const setBalance = (balance, bonus) => {
-        $('.paynocchio-balance-value').text(balance);
-        $('.paynocchio-bonus-value').text(bonus);
-        /*
-        $('.paynocchio-balance-value').css('--value', balance);
-        $('.paynocchio-bonus-value').css('--value', bonus);
-        */
     }
 
     function getParameterByName(name, url = window.location.href) {
@@ -136,6 +136,7 @@ import Modal from './modal'
     $(document).ready(function() {
         //READY START
         Modal.initElements();
+
         const activationButton = $("#paynocchio_activation_button");
         const topUpButton = $("#top_up_button");
 
@@ -161,27 +162,10 @@ import Modal from './modal'
 
         $('.form-toggle-a').click(() => toggleVisibility('#paynocchio_auth_block'));
 
-        walletBalanceChecker()
-
-        setInterval(() => {
-            walletBalanceChecker()
-        }, 5000)
-
-
-
-
-        window.wsSingleton = new Ws("wss://wallet.stage.paynocchio.com/ws/wallet-socket/872ee190-6075-4081-91f2-5a38240c2240")
-
-        window.wsSingleton.clientPromise
-            .then( wsClient =>{
-                wsClient.send(JSON.stringify({"event":"get_wallet"}));
-                wsClient.onmessage(data => console.log(data))
-            })
-            .catch(error => console.log(error))
-
-
         // WOOCOMMERCE CHECKOUT SCRIPT
         $(document).on( "updated_checkout", function() {
+
+            walletBalanceChecker()
 
             $('.form-toggle-a').click(() => toggleVisibility('#paynocchio_auth_block'));
 

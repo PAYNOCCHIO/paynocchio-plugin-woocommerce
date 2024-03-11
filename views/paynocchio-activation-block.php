@@ -8,8 +8,6 @@ $wallet_bal = 0;
 
 <section class="paynocchio">
     <div class="article-body cfps-max-w-4xl cfps-mx-auto">
-        <?php if(is_user_logged_in()) { ?>
-            <?php if (!get_user_meta(get_current_user_id(), 'paynoccio_wallet')) { ?>
         <div class="cfps-mb-10 lg:cfps-mb-20">
             <img
                     class="cfps-block !cfps-mx-auto"
@@ -46,7 +44,8 @@ $wallet_bal = 0;
                 <p class="cfps-text-base">Our AI will generate your individual unique map design for you.</p>
             </div>
         </div>
-
+        <?php if(is_user_logged_in()) { ?>
+            <?php if (!get_user_meta(get_current_user_id(), 'paynoccio_wallet')) { ?>
                 <div class="cfps-flex cfps-justify-center cfps-mb-10">
                     <button id="paynocchio_activation_button"
                             type="button"
@@ -60,24 +59,8 @@ $wallet_bal = 0;
                     <?php wp_nonce_field( 'paynocchio_ajax_activation', 'ajax-activation-nonce' ); ?>
                 </div>
             <?php } else { ?>
-                <div class="paynocchio-profile-block paynocchio-blue-badge">
-                    <div class="cfps-grid cfps-grid-cols-[1fr_100px_200px_35px] cfps-gap-x-6">
-                        <div>
-                            Kopybara.Pay
-                        </div>
-                        <div>
-                            $<span class="paynocchio-balance-value"></span>
-                        </div>
-                        <div>
-                            <span class="paynocchio-bonus-value"></span> bonuses
-                        </div>
-                        <a class="tab-switcher cfps-cursor-pointer" id="wallet_toggle">
-                            <img decoding="async" src="https://woocommerce-1172929-4352337.cloudwaysapps.com/wp-content/plugins/woocommerce-paynocchio/assets/img/arr_r.png">
-                        </a>
-                    </div>
-                </div>
                 <div class="cfps-flex cfps-justify-center cfps-my-10">
-                    <a href="/<?php echo WOOCOMMERCE_PAYNOCCHIO_ACCOUNT_PAGE_SLUG; ?>" class="cfps-btn-primary">Go to my Wallet</a>
+                    <a href="/<?php echo WOOCOMMERCE_PAYNOCCHIO_ACCOUNT_PAGE_SLUG; ?>" class="cfps-btn-primary">Go to Kopybara.Pay</a>
                 </div>
             <?php } ?>
 

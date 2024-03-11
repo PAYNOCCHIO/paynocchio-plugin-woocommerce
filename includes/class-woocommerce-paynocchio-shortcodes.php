@@ -24,6 +24,12 @@ class Woocommerce_Paynocchio_Shortcodes {
         return ob_get_clean();
     }
 
+    static function paynocchio_payment_widget() {
+        ob_start();
+        require(WOOCOMMERCE_PAYNOCCHIO_PATH . 'views/paynocchio-payment-widget.php');
+        return ob_get_clean();
+    }
+
     static function paynocchio_cart_wallet_widget() {
         ob_start();
         require(WOOCOMMERCE_PAYNOCCHIO_PATH . 'views/paynocchio-cart-wallet-widget.php');
