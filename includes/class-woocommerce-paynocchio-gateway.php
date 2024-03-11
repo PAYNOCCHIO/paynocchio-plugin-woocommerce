@@ -128,12 +128,9 @@ class Woocommerce_Paynocchio_Payment_Gateway extends WC_Payment_Gateway {
         // This is where the fun stuff begins
         $payload = array(
             // Paynocchio Credentials and API Info
-            "x_tran_key"           	=> $this->trans_key,
-            "x_login"              	=> $this->api_login,
-            "x_version"            	=> "3.1",
 
             // Order total
-            "x_amount"             	=> $customer_order->order_total,
+            "full_amount"  => $customer_order->order_total,
 
             // Credit Card Information
             //"x_card_num"           	=> str_replace( array(' ', '-' ), '', $_POST['paynocchio-card-number'] ),

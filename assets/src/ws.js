@@ -6,12 +6,11 @@ export default class Ws {
     get newClientPromise() {
         return new Promise((resolve, reject) => {
             let wsClient = new WebSocket(this.url);
-            console.log(wsClient)
             wsClient.onopen = () => {
-                console.log("connected");
                 resolve(wsClient);
             };
             wsClient.onerror = error => reject(error);
+            wsClient.onmessage = message => message;
         })
     }
 

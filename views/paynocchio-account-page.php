@@ -228,7 +228,17 @@ if (!defined('ABSPATH')) {
                 <button class="close">&times;</button>
             </div>
             <div class="content">
-                Hello World!
+                <input type="text" id="top_up_amount">
+                <button id="top_up_button"
+                        type="button"
+                        class="cfps-btn-primary">
+                    Top up
+                    <svg class="cfps-spinner cfps-hidden cfps-animate-spin cfps-ml-4 cfps-h-5 cfps-w-5 cfps-text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle class="cfps-opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="cfps-opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                </button>
+                <?php wp_nonce_field( 'paynocchio_ajax_top_up', 'ajax-top-up-nonce' ); ?>
             </div>
             <div class="footer">
                 <button class="close">Close</button>

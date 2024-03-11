@@ -220,7 +220,7 @@
 /**
 Numbers animation
  */
-
+/*
 @property --value {
     syntax: "<number>";
     initial-value: 0;
@@ -255,7 +255,7 @@ Numbers animation
 
 .paynocchio-bonus-value::before {
     content: counter(v1);
-}
+}*/
 
 .modal {
     width: 100%;

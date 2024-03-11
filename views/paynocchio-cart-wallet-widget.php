@@ -6,20 +6,19 @@ if (!defined('ABSPATH')) {
 
 <?php
     global $woocommerce;
-    $amount = floatval( preg_replace( '#[^\d.]#', '', $woocommerce->cart->get_cart_total() ) );
-
-
-    $current_user = wp_get_current_user();
-    $wallet_pan = 2243123434652243;
-
+    $amount = WC()->cart->cart_contents_total;
 ?>
 
 <div class="paynocchio-cart-wallet-widget cfps-bg-slate-100 cfps-p-2 cfps-rounded-lg cfps-flex cfps-flex-row cfps-items-center">
     <div class="cart">
         <a href="<?php echo wc_get_checkout_url(); ?>" alt="Checkout" title="Checkout">
-            <div class="cfps-flex cfps-flex-row cfps-items-center cfps-pr-2 cfps-mr-2 cfps-border-r cfps-border-slate-300">
+            <div class="cfps-flex cfps-flex-row cfps-items-center">
                 <img src="<?php echo plugin_dir_url( WOOCOMMERCE_PAYNOCCHIO_BASENAME ) . 'assets/img/cart.png' ?>" class="!cfps-h-[25px] cfps-w-auto cfps-mr-2"/>
-                <p class="cfps-font-semibold">$<?php echo $amount; ?></p>
+                <?php if (!is_user_logged_in()) { ?>
+                    <p>Your cart: <span class="cfps-font-semibold">$<?php echo $amount; ?></span></p>
+                <?php } else { ?>
+                    <p class="cfps-font-semibold">$<?php echo $amount; ?></p>
+                <?php } ?>
             </div>
         </a>
     </div>
