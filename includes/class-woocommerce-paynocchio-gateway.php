@@ -136,9 +136,9 @@ class Woocommerce_Paynocchio_Payment_Gateway extends WC_Payment_Gateway {
             "x_amount"             	=> $customer_order->order_total,
 
             // Credit Card Information
-            "x_card_num"           	=> str_replace( array(' ', '-' ), '', $_POST['paynocchio-card-number'] ),
-            "x_card_code"          	=> ( isset( $_POST['paynocchio-card-cvc'] ) ) ? $_POST['paynocchio-card-cvc'] : '',
-            "x_exp_date"           	=> str_replace( array( '/', ' '), '', $_POST['paynocchio-card-expiry'] ),
+            //"x_card_num"           	=> str_replace( array(' ', '-' ), '', $_POST['paynocchio-card-number'] ),
+            //"x_card_code"          	=> ( isset( $_POST['paynocchio-card-cvc'] ) ) ? $_POST['paynocchio-card-cvc'] : '',
+            //"x_exp_date"           	=> str_replace( array( '/', ' '), '', $_POST['paynocchio-card-expiry'] ),
 
             "x_type"               	=> 'AUTH_CAPTURE',
             "x_invoice_num"        	=> str_replace( "#", "", $customer_order->get_order_number() ),
@@ -147,7 +147,7 @@ class Woocommerce_Paynocchio_Payment_Gateway extends WC_Payment_Gateway {
             "x_encap_char"         	=> '',
             "x_delim_data"         	=> "TRUE",
             "x_relay_response"     	=> "FALSE",
-            "x_method"             	=> "CC",
+            "x_method"             	=> "Paynocchio",
 
             // Billing Information
             "x_first_name"         	=> $customer_order->billing_first_name,

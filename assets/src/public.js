@@ -1,5 +1,8 @@
 import './public.css';
 
+import Ws from './ws'
+import Modal from './modal'
+
 (( $ ) => {
 
     /**
@@ -57,7 +60,7 @@ import './public.css';
 
     $(document).ready(function() {
         //READY START
-
+        Modal.initElements();
         const activationButton = $("#paynocchio_activation_button");
 
         activationButton.click((evt) => activateWallet(evt, '/paynocchio-account-page'))
@@ -87,6 +90,18 @@ import './public.css';
                 setBalance(parseInt($('.paynocchio-balance-value').css('--value')) + 10, parseInt($('.paynocchio-bonus-value').css('--value')) + 20)
             }, 5000)
         }, 2000)
+
+
+
+        window.wsSingleton = new Ws("wss://wallet.stage.paynocchio.com/ws/wallet-socket/872ee190-6075-4081-91f2-5a38240c2240")
+
+        window.wsSingleton.clientPromise
+            .then( wsClient =>{
+                wsClient.send({"event":"get_wallet"});
+                console.log('sended')
+            })
+            .catch(error => console.log(error))
+
 
         // WOOCOMMERCE CHECKOUT SCRIPT
         $(document).on( "updated_checkout", function() {
