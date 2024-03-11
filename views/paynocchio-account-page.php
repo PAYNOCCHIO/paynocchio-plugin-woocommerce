@@ -220,6 +220,21 @@ if (!defined('ABSPATH')) {
             <p class="cfps-text-slate-500">I agree to <a href="#" class="cfps-text-slate-500 cfps-underline">Kopybara Terms & Conditions</a> and <a href="#" class="cfps-text-slate-500 cfps-underline">rules of Kopybara.Pay Priority program</a> </p>
         </div>
     </div>
+    <a href="#" data-modal=".myModal">Open Modal</a>
+    <div class="modal myModal">
+        <div class="container">
+            <div class="header">
+                <h1>My Modal</h1>
+                <button class="close">&times;</button>
+            </div>
+            <div class="content">
+                Hello World!
+            </div>
+            <div class="footer">
+                <button class="close">Close</button>
+            </div>
+        </div>
+    </div>
 </section>
 
 <?php
