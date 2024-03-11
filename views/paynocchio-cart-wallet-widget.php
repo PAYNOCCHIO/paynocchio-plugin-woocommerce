@@ -7,17 +7,6 @@ if (!defined('ABSPATH')) {
 <?php
     global $woocommerce;
     $amount = WC()->cart->cart_contents_total;
-
-    if (is_user_logged_in()) {
-        $current_user = wp_get_current_user();
-        $user_paynocchio_wallet_id = get_user_meta($current_user->ID, 'paynoccio_wallet', true);
-        $user_paynocchio_wallet = new Woocommerce_Paynocchio_Wallet($current_user->ID);
-        $wallet_bal_bon = $user_paynocchio_wallet->getWalletBalance($user_paynocchio_wallet_id);
-
-        $wallet_bal = $wallet_bal_bon['balance'];
-        $wallet_bon = $wallet_bal_bon['bonuses'];
-        $wallet_pan = $wallet_bal_bon['number'];
-    };
 ?>
 
 <div class="paynocchio-cart-wallet-widget cfps-bg-slate-100 cfps-p-2 cfps-rounded-lg cfps-flex cfps-flex-row cfps-items-center">
@@ -34,17 +23,15 @@ if (!defined('ABSPATH')) {
         </a>
     </div>
 
-    <?php if (is_user_logged_in() && get_user_meta(get_current_user_id(), 'paynoccio_wallet')) { ?>
-        <div class="wallet cfps-flex cfps-flex-row cfps-items-center cfps-pl-2 cfps-ml-2 cfps-border-l cfps-border-slate-300">
-            <div class="cfps-flex cfps-flex-row cfps-items-center cfps-pr-2 cfps-mr-2 cfps-border-r cfps-border-slate-300 cfps-gap-x-2">
-                <img src="<?php echo plugin_dir_url( WOOCOMMERCE_PAYNOCCHIO_BASENAME ) . 'assets/img/wallet.png' ?>" class="!cfps-h-[25px] cfps-w-auto"/>
-                <p class="cfps-font-semibold">$<?php echo $wallet_bal; ?></p>
-                <a href="#" title="Add money" alt="Add money" class="cfps-bg-slate-300 cfps-rounded-3xl cfps-w-6 cfps-h-6 cfps-leading-6 cfps-text-center cfps-block cfps-ml-2">+</a>
-            </div>
-            <div class="cfps-flex cfps-flex-row cfps-items-center cfps-gap-x-2">
-                <p>Bonus:</p>
-                <p class="cfps-font-semibold"><?php echo $wallet_bon; ?></p>
-            </div>
+    <div class="wallet cfps-flex cfps-flex-row cfps-items-center">
+        <div class="cfps-flex cfps-flex-row cfps-items-center cfps-pr-2 cfps-mr-2 cfps-border-r cfps-border-slate-300 cfps-gap-x-2">
+            <img src="<?php echo plugin_dir_url( WOOCOMMERCE_PAYNOCCHIO_BASENAME ) . 'assets/img/wallet.png' ?>" class="!cfps-h-[25px] cfps-w-auto"/>
+            <p class="cfps-font-semibold">$<span class="paynocchio-numbers paynocchio-balance-value"></span></p>
+            <a href="#" title="Add money" alt="Add money" class="cfps-bg-slate-300 cfps-rounded-3xl cfps-w-6 cfps-h-6 cfps-leading-6 cfps-text-center cfps-block cfps-ml-2">+</a>
         </div>
-   <?php } ?>
+        <div class="cfps-flex cfps-flex-row cfps-items-center cfps-gap-x-2">
+            <p>Bonus:</p>
+            <p class="cfps-font-semibold"><span class="paynocchio-numbers paynocchio-bonus-value"></span></p>
+        </div>
+    </div>
 </div>

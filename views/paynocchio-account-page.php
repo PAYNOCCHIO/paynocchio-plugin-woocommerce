@@ -22,6 +22,9 @@ if (is_user_logged_in()) {
         <div class="paynocchio-embleme">
             <img src="<?php echo plugin_dir_url( WOOCOMMERCE_PAYNOCCHIO_BASENAME ) . 'assets/img/kopybara-logo.png' ?>" />
         </div>
+
+
+
     <?php if (is_user_logged_in()) { ?>
         <div class="paynocchio-profile-info">
             <div class="paynocchio-profile-img">
@@ -76,22 +79,7 @@ if (is_user_logged_in()) {
                 <?php } ?>
 
 
-                <div class="paynocchio-profile-block paynocchio-blue-badge">
-                    <div class="cfps-grid cfps-grid-cols-[1fr_100px_200px_35px] cfps-gap-x-6">
-                        <div>
-                            Kopybara.Pay
-                        </div>
-                        <div>
-                            $<?php echo $wallet_bal; ?>
-                        </div>
-                        <div>
-                            <?php echo $wallet_bon; ?> bonuses
-                        </div>
-                        <a class="tab-switcher cfps-cursor-pointer" id="wallet_toggle">
-                            <img src="<?php echo plugin_dir_url( WOOCOMMERCE_PAYNOCCHIO_BASENAME ) . 'assets/img/arr_r.png' ?>" />
-                        </a>
-                    </div>
-                </div>
+                <?php echo do_shortcode('[paynocchio_payment_widget]'); ?>
 
                 <div class="paynocchio-profile-block">
                     <h2 class="cfps-font-bold cfps-text-xl cfps-mb-4">Personal Info</h2>
@@ -133,7 +121,7 @@ if (is_user_logged_in()) {
                                         Balance
                                     </div>
                                     <div class="amount">
-                                        $<?php echo $wallet_bal; ?>
+                                        $<?php echo $wallet_balance ?? ''; ?>
                                     </div>
                                 </div>
                                 <div class="paynocchio-bonuses">
@@ -141,7 +129,7 @@ if (is_user_logged_in()) {
                                         Bonuses
                                     </div>
                                     <div class="amount">
-                                        <?php echo $wallet_bon; ?>
+                                        <?php echo $wallet_bonuses ?? ''; ?>
                                     </div>
                                 </div>
                             </div>
@@ -224,7 +212,17 @@ if (is_user_logged_in()) {
                 <button class="close">&times;</button>
             </div>
             <div class="content">
-                Hello World!
+                <input type="text" id="top_up_amount">
+                <button id="top_up_button"
+                        type="button"
+                        class="cfps-btn-primary">
+                    Top up
+                    <svg class="cfps-spinner cfps-hidden cfps-animate-spin cfps-ml-4 cfps-h-5 cfps-w-5 cfps-text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle class="cfps-opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="cfps-opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                </button>
+                <?php wp_nonce_field( 'paynocchio_ajax_top_up', 'ajax-top-up-nonce' ); ?>
             </div>
             <div class="footer">
                 <button class="close">Close</button>

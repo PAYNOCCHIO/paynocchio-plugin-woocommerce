@@ -128,12 +128,9 @@ class Woocommerce_Paynocchio_Payment_Gateway extends WC_Payment_Gateway {
         // This is where the fun stuff begins
         $payload = array(
             // Paynocchio Credentials and API Info
-            "x_tran_key"           	=> $this->trans_key,
-            "x_login"              	=> $this->api_login,
-            "x_version"            	=> "3.1",
 
             // Order total
-            "x_amount"             	=> $customer_order->order_total,
+            "full_amount"  => $customer_order->order_total,
 
             // Credit Card Information
             //"x_card_num"           	=> str_replace( array(' ', '-' ), '', $_POST['paynocchio-card-number'] ),
@@ -249,7 +246,17 @@ class Woocommerce_Paynocchio_Payment_Gateway extends WC_Payment_Gateway {
             echo wpautop( wp_kses_post( $this->description ) );
         }
 
-        echo do_shortcode('[paynocchio_activation_block register_redirect="/checkout?ans=checkemail" login_redirect="/checkout#payment_method_paynocchio"]');
+        if(is_user_logged_in()) {
+            if (!get_user_meta(get_current_user_id(), 'paynoccio_wallet')) {
+                echo do_shortcode('[paynocchio_activation_block register_redirect="/checkout?ans=checkemail" login_redirect="/checkout#payment_method_paynocchio"]');
+            } else {
+                echo do_shortcode('[paynocchio_payment_widget]');
+            }
+        } else {
+            echo do_shortcode('[paynocchio_registration_block 
+            register_redirect="/checkout?ans=checkemail" 
+            login_redirect="/checkout#payment_method_paynocchio"]');
+        }
 
 
     }

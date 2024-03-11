@@ -94,22 +94,23 @@ class Woocommerce_Paynocchio_Wallet {
 
     public function topUpWallet(string $walletId, float $amount): array {
         $data = [
-            'env_id' => $this->envId,
-            'user_id' => $this->userId,
-            'wallet_id' => $walletId,
+            PAYNOCCHIO_ENV_KEY => $this->envId,
+            PAYNOCCHIO_USER_UUID_KEY => $this->userId,
+            PAYNOCCHIO_WALLET_KEY => $walletId,
+            "currency" => "USD",
             'amount' => $amount,
         ];
 
-        $response = $this->sendRequest('POST', '/wallet/topup', json_encode($data));
+        $response = $this->sendRequest('POST', '/operation/topup', json_encode($data));
 
         return $response;
     }
 
     public function withdrawFromWallet(string $walletId, float $amount): array {
         $data = [
-            'env_id' => $this->envId,
-            'user_id' => $this->userId,
-            'wallet_id' => $walletId,
+            PAYNOCCHIO_ENV_KEY => $this->envId,
+            PAYNOCCHIO_USER_UUID_KEY => $this->userId,
+            PAYNOCCHIO_WALLET_KEY => $walletId,
             'amount' => $amount,
         ];
 
@@ -120,9 +121,9 @@ class Woocommerce_Paynocchio_Wallet {
 
     public function makePayment(string $walletId, float $amount, string $orderId, float $bonusAmount = null): array {
         $data = [
-            'env_id' => $this->envId,
-            'user_id' => $this->userId,
-            'wallet_id' => $walletId,
+            PAYNOCCHIO_ENV_KEY => $this->envId,
+            PAYNOCCHIO_USER_UUID_KEY => $this->userId,
+            PAYNOCCHIO_WALLET_KEY => $walletId,
             'amount' => $amount,
             'order_id' => $orderId,
         ];
@@ -142,9 +143,9 @@ class Woocommerce_Paynocchio_Wallet {
         $url = '/orders/' . $orderId;
 
         $queryParams = [
-            'env_id' => $this->envId,
-            'user_id' => $this->userId,
-            'wallet_id' => $this->walletId,
+            PAYNOCCHIO_ENV_KEY => $this->envId,
+            PAYNOCCHIO_USER_UUID_KEY => $this->userId,
+            PAYNOCCHIO_WALLET_KEY => $this->walletId,
             // Add other filters from the $filters array
         ];
 

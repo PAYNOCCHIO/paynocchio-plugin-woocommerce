@@ -49,6 +49,7 @@ const WOOCOMMERCE_PAYNOCCHIO_ACCOUNT_PAGE_SLUG = 'paynocchio-account';
 const PAYNOCCHIO_USER_UUID_KEY = 'user_uuid';
 const PAYNOCCHIO_ENV_KEY = 'environment_uuid';
 const PAYNOCCHIO_CURRENCY_KEY = 'currency_uuid';
+const PAYNOCCHIO_WALLET_KEY = 'wallet_uuid';
 const PAYNOCCHIO_TYPE_KEY = 'type_uuid';
 const PAYNOCCHIO_STATUS_KEY = 'status_uuid';
 const PAYNOCCHIO_SECRET_KEY = 'secret_uuid';
