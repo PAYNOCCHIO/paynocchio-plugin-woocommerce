@@ -205,15 +205,15 @@ if (!defined('ABSPATH')) {
             <p class="cfps-text-slate-500">I agree to <a href="#" class="cfps-text-slate-500 cfps-underline">Kopybara Terms & Conditions</a> and <a href="#" class="cfps-text-slate-500 cfps-underline">rules of Kopybara.Pay Priority program</a> </p>
         </div>
     </div>
-    <a href="#" data-modal=".myModal">Open Modal</a>
-    <div class="modal myModal">
+    <a href="#" data-modal=".topUpModal">Open Modal</a>
+    <div class="modal topUpModal">
         <div class="container">
             <div class="header">
                 <h1>My Modal</h1>
                 <button class="close">&times;</button>
             </div>
             <div class="content">
-                <input type="text" id="top_up_amount">
+                <input type="number" step="0,01" id="top_up_amount">
                 <button id="top_up_button"
                         type="button"
                         class="cfps-btn-primary">
@@ -223,6 +223,7 @@ if (!defined('ABSPATH')) {
                         <path class="cfps-opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                     </svg>
                 </button>
+                <div class="message"></div>
                 <?php wp_nonce_field( 'paynocchio_ajax_top_up', 'ajax-top-up-nonce' ); ?>
             </div>
             <div class="footer">

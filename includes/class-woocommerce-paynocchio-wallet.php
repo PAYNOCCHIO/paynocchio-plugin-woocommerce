@@ -119,12 +119,14 @@ class Woocommerce_Paynocchio_Wallet {
         return $response;
     }
 
-    public function makePayment(string $walletId, float $amount, string $orderId, float $bonusAmount = null): array {
+    public function makePayment(string $walletId, float $fullAmount, float $amount, string $orderId, float $bonusAmount = null): array {
         $data = [
             PAYNOCCHIO_ENV_KEY => $this->envId,
             PAYNOCCHIO_USER_UUID_KEY => $this->userId,
             PAYNOCCHIO_WALLET_KEY => $walletId,
-            'amount' => $amount,
+            "currency" => "USD",
+            'full_amount' => $amount,
+            'amount' => $fullAmount,
             'order_id' => $orderId,
         ];
 
