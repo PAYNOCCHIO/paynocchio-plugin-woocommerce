@@ -224,6 +224,37 @@ if (is_user_logged_in()) {
     </div>
 </section>
 
+<?php
+// TODO
+/* PLEASE do not delete it yet, I will finalize it later
+$string = simplexml_load_file("https://www.artlebedev.ru/country-list/xml/");
+//Обратите внимание на вложенность с помощью
+// echo '<pre>';  print_r($xml);  echo '</pre>';
+
+function xml2array ( $xmlObject, $out = array () )
+{
+    foreach ( (array) $xmlObject as $index => $node )
+        $out[$index] = ( is_object ( $node ) ) ? xml2array ( $node ) : $node;
+
+    return $out;
+}
+
+$array = xml2array($string);
+$array = $array['country'];
+
+foreach($array as $item){
+    $item = xml2array($item);
+}
+
+//   print_r($array);
+
+foreach($array['country'] as $item){
+   // print_r($item);
+    print_r($item['english']);
+    //echo '<option value="">'.$item['iso'].'</option>';
+} */
+?>
+
     <div class="modal topUpModal">
         <div class="container">
             <div class="header">
