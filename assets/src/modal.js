@@ -219,13 +219,15 @@ export default class Modal {
 (( $ ) => {
     $(document).ready(function () {
 
-        topupamount.oninput = function() {
-            this.value = this.value
-                .replace(/ /g, ".")
-                .replace(/_/g, "-")
-                .replace(/\.+/g, ".")
-                .replace(/\-+/g, "-")
-                .replace(/[^\w.-]|[a-zA-Z]|^[.-]/g, "")
+        if ($('#topupamount').length) {
+            topupamount.oninput = function () {
+                this.value = this.value
+                    .replace(/ /g, ".")
+                    .replace(/_/g, "-")
+                    .replace(/\.+/g, ".")
+                    .replace(/\-+/g, "-")
+                    .replace(/[^\w.-]|[a-zA-Z]|^[.-]/g, "")
+            }
         }
 
         $('.top-up-variants > a').click(function() {

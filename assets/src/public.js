@@ -175,6 +175,21 @@ import Modal from './modal'
                 $('.woocommerce-notices-wrapper:first-child').prepend('<div class="woocommerce-message" role="alert">Registration complete. Please check your email, then visit this page again.</div>')
             }
 
+            // Conversion rate value picker
+            const value = $('#conversion-value');
+            const input = $('#conversion-input');
+            value.val(input.val());
+            input.on('change', function() {
+                value.val(input.val());
+               /* let perc = (input.val()-input.attr('min')/(input.attr('max')-input.attr('min'))*100;
+                input.css('background','linear-gradient(to right, #3b82f6 ' + perc + '%, #f3f4f6 ' + perc + '%)');*/
+            })
+            value.on('change', function() {
+                input.val(value.val());
+                /* let perc = (input.val()-input.attr('min')/(input.attr('max')-input.attr('min'))*100;
+                 input.css('background','linear-gradient(to right, #3b82f6 ' + perc + '%, #f3f4f6 ' + perc + '%)');*/
+            })
+
             activationButton.click((evt) => activateWallet(evt))
 
         });

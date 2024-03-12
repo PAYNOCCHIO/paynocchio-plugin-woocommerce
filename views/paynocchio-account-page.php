@@ -41,7 +41,7 @@ if (is_user_logged_in()) {
                 </a>
                 <div class="paynocchio-count">
                     <div>
-                        <p class="cfps-text-2xl cfps-font-semibold"><?php echo $wallet_bon; ?></p>
+                        <p class="cfps-text-2xl cfps-font-semibold"><span class="paynocchio-numbers paynocchio-bonus-value"></span></p>
                         <p>bonuses</p>
                     </div>
                     <div>
@@ -75,11 +75,23 @@ if (is_user_logged_in()) {
                         </div>
                     </div>
                 <?php } else { ?>
-
+                    <div class="paynocchio-profile-block paynocchio-blue-badge">
+                        <div class="cfps-grid cfps-grid-cols-[1fr_100px_200px_35px] cfps-gap-x-6">
+                            <div>
+                                Kopybara.Pay
+                            </div>
+                            <div>
+                                $<span class="paynocchio-numbers paynocchio-balance-value"></span>
+                            </div>
+                            <div>
+                                Bonuses: <span class="paynocchio-numbers paynocchio-bonus-value"></span>
+                            </div>
+                            <a class="tab-switcher cfps-cursor-pointer" id="wallet_toggle">
+                                <img src="<?php echo plugin_dir_url( WOOCOMMERCE_PAYNOCCHIO_BASENAME ) . 'assets/img/arr_r.png' ?>" />
+                            </a>
+                        </div>
+                    </div>
                 <?php } ?>
-
-
-                <?php echo do_shortcode('[paynocchio_payment_widget]'); ?>
 
                 <div class="paynocchio-profile-block">
                     <h2 class="cfps-font-bold cfps-text-xl cfps-mb-4">Personal Info</h2>
@@ -121,7 +133,7 @@ if (is_user_logged_in()) {
                                         Balance
                                     </div>
                                     <div class="amount">
-                                        $<?php echo $wallet_balance ?? ''; ?>
+                                        $<span class="paynocchio-numbers paynocchio-balance-value"></span>
                                     </div>
                                 </div>
                                 <div class="paynocchio-bonuses">
@@ -129,7 +141,7 @@ if (is_user_logged_in()) {
                                         Bonuses
                                     </div>
                                     <div class="amount">
-                                        <?php echo $wallet_bonuses ?? ''; ?>
+                                        <span class="paynocchio-numbers paynocchio-bonus-value"></span>
                                     </div>
                                 </div>
                             </div>
@@ -325,9 +337,8 @@ if (is_user_logged_in()) {
 <?php /* ADD NEW CARD */ ?>
 
 <?php
-
+// TODO
 /* PLEASE do not delete it yet, I will finalize it later
-
 $string = simplexml_load_file("https://www.artlebedev.ru/country-list/xml/");
 //Обратите внимание на вложенность с помощью
 // echo '<pre>';  print_r($xml);  echo '</pre>';
