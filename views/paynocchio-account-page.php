@@ -346,7 +346,11 @@ foreach($array['country'] as $item){
                 </div>
             </div>
         </div>
-    </div>
+    </form>
+</div>
+
+
+
 
 
     <div class="modal paymentMethodModal">
