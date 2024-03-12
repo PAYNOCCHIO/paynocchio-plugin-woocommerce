@@ -271,6 +271,10 @@ class Woocommerce_Paynocchio {
         add_action( 'wp_ajax_nopriv_paynocchio_ajax_top_up', [$this, 'paynocchio_ajax_top_up']);
         add_action( 'wp_ajax_paynocchio_ajax_check_balance', [$this, 'paynocchio_ajax_check_balance']);
         add_action( 'wp_ajax_nopriv_paynocchio_ajax_check_balance', [$this, 'paynocchio_ajax_check_balance']);
+        add_action( 'wp_ajax_paynocchio_ajax_get_user_wallet', [$this, 'paynocchio_ajax_get_user_wallet']);
+        add_action( 'wp_ajax_nopriv_paynocchio_ajax_get_user_wallet', [$this, 'paynocchio_ajax_get_user_wallet']);
+        add_action( 'wp_ajax_paynocchio_ajax_withdraw', [$this, 'paynocchio_ajax_withdraw']);
+        add_action( 'wp_ajax_nopriv_paynocchio_ajax_withdraw', [$this, 'paynocchio_ajax_withdraw']);
 	}
 
     /**
@@ -337,10 +341,56 @@ class Woocommerce_Paynocchio {
         wp_send_json([
             'response' => $wallet_response
         ]);
+        wp_die();
+    }
 
-         /*if($json_response->status === 'success') {
-             wp_send_json_success();
-         }*/
+    /**
+     * Withdraw form Wallet
+     *
+     * @since    1.0.0
+     */
+    public function paynocchio_ajax_withdraw()
+    {
+        $nonce = isset( $_POST['ajax-withdraw-nonce'] ) ? sanitize_text_field( $_POST['ajax-withdraw-nonce'] ) : '';
+        $amount = isset( $_POST['amount'] ) ? sanitize_text_field( $_POST['amount'] ) : '';
+
+        if ( ! wp_verify_nonce( $nonce, 'paynocchio_ajax_withdraw' ) ) {
+            wp_send_json( array(
+                'status'  => 'error',
+                'title'   => 'Error',
+                'message' => 'Nonce verification failed',
+            ) );
+            wp_die();
+        }
+
+
+         if(get_user_meta($this->user_id, 'paynoccio_wallet')) {
+             $wallet = new Woocommerce_Paynocchio_Wallet($this->get_uuid());
+             $wallet_response = $wallet->withdrawFromWallet(get_user_meta($this->user_id, 'paynoccio_wallet', true), $amount);
+         }
+
+        wp_send_json([
+            'response' => $wallet_response
+        ]);
+        wp_die();
+    }
+
+    /**
+     * Check Wallet Balance
+     *
+     * @since    1.0.0
+     */
+    public function paynocchio_ajax_get_user_wallet()
+    {
+         if(get_user_meta($this->user_id, 'paynoccio_wallet')) {
+
+             wp_send_json([
+                 'walletId' => get_user_meta($this->user_id, 'paynoccio_wallet', true)
+             ]);
+         } else {
+             wp_send_json_error();
+         }
+
         wp_die();
     }
 

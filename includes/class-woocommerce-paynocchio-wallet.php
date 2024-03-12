@@ -111,10 +111,12 @@ class Woocommerce_Paynocchio_Wallet {
             PAYNOCCHIO_ENV_KEY => $this->envId,
             PAYNOCCHIO_USER_UUID_KEY => $this->userId,
             PAYNOCCHIO_WALLET_KEY => $walletId,
+            "currency" => "USD",
             'amount' => $amount,
+            'status_type' => 'ae1b841f-2e56-4fb9-a935-2064304f8639',
         ];
 
-        $response = $this->sendRequest('POST', '/wallet/withdraw', json_encode($data));
+        $response = $this->sendRequest('POST', '/operation/withdraw', json_encode($data));
 
         return $response;
     }

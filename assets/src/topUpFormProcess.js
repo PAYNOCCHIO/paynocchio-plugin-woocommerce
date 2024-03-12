@@ -1,15 +1,6 @@
 (( $ ) => {
     $(document).ready(function () {
 
-        $('#top_up_amount').on('input propertychange', function() {
-            this.value = this.value
-                .replace(/ /g, ".")
-                .replace(/_/g, "-")
-                .replace(/\.+/g, ".")
-                .replace(/\-+/g, "-")
-                .replace(/[^\w.-]|[a-zA-Z]|^[.-]/g, "")
-        })
-
         $('.top-up-variants > a').click(function() {
             let amount = $(this).get(0).id.replace('variant_','');
             $('#top_up_amount').val(amount);

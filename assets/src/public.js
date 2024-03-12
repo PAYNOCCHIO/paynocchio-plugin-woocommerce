@@ -26,7 +26,10 @@ import './topUpFormProcess'
         };
     }
 
-    createWebSocket('872ee190-6075-4081-91f2-5a38240c2240');
+    function setBalance (balance, bonus) {
+        $('.paynocchio-balance-value').text(balance / 10000);
+        $('.paynocchio-bonus-value').text(bonus);
+    }
 
     /**
      * Function to make block visibility work
@@ -93,7 +96,6 @@ import './topUpFormProcess'
                     setTimeout(() => {
                         $('.topUpModal .message').text('')
                     }, 1000)
-                    console.log(data)
                 }
             }
         })
@@ -104,19 +106,72 @@ import './topUpFormProcess'
             });
     }
 
-    const setBalance = (balance, bonus) => {
-        $('.paynocchio-balance-value').text(balance / 10000);
-        $('.paynocchio-bonus-value').text(bonus);
-        /*
-        $('.paynocchio-balance-value').css('--value', balance);
-        $('.paynocchio-bonus-value').css('--value', bonus);
-        */
+    /**
+     * Withdraw from Wallet
+     */
+
+    const withdrawWallet = (evt) => {
+        $(evt.target).addClass('cfps-disabled')
+
+        $(`#${evt.target.id} .cfps-spinner`).removeClass('cfps-hidden');
+
+        const amount = parseFloat($('#withdraw_amount').val());
+        const current_balance = parseFloat($('#witdrawForm .paynocchio-balance-value').text());
+
+        if (current_balance < amount) {
+            $('.withdrawModal .message').text('Sorry, can\'t do ;)');
+            $(evt.target).removeClass('cfps-disabled')
+            $(`#${evt.target.id} .cfps-spinner`).addClass('cfps-hidden');
+            setTimeout(() => {
+                $('.withdrawModal .message').text('')
+            }, 2000)
+        } else {
+            $.ajax({
+                url: paynocchio_object.ajaxurl,
+                type: 'POST',
+                data: {
+                    'action': 'paynocchio_ajax_withdraw',
+                    'ajax-withdraw-nonce': $('#ajax-withdraw-nonce').val(),
+                    'amount' : parseFloat($('#withdraw_amount').val()),
+                },
+                success: function(data){
+                    if (data.response.status_code === 200){
+                        $('#withdraw_amount').val('');
+                        $('.withdrawModal .message').text('Successful TopUp');
+                        setTimeout(() => {
+                            $('.withdrawModal .message').text('')
+                        }, 5000)
+                    }
+                }
+            })
+                .error((error) => console.log(error))
+                .always(function() {
+                    $(`#${evt.target.id} .cfps-spinner`).addClass('cfps-hidden');
+                    $(evt.target).removeClass('cfps-disabled')
+                });
+        }
     }
 
     /**
      * Wallet Balance checker
      */
-    const walletBalanceChecker = () => {
+    function initiateWebSocket() {
+        $.ajax({
+            url: paynocchio_object.ajaxurl,
+            type: 'POST',
+            data: {
+                'action': 'paynocchio_ajax_get_user_wallet',
+            },
+            success: function(data){
+                createWebSocket(data.walletId)
+            }
+        })
+            .error((error) => console.log(error))
+    }
+    /**
+     * Wallet Balance checker
+     */
+    function walletBalanceChecker() {
         $.ajax({
             url: paynocchio_object.ajaxurl,
             type: 'POST',
@@ -143,11 +198,15 @@ import './topUpFormProcess'
         //READY START
         Modal.initElements();
 
+        initiateWebSocket();
+
         const activationButton = $("#paynocchio_activation_button");
         const topUpButton = $("#top_up_button");
+        const withdrawButton = $("#withdraw_button");
 
         activationButton.click((evt) => activateWallet(evt, '/paynocchio-account-page'))
         topUpButton.click((evt) => topUpWallet(evt, '/paynocchio-account-page'))
+        withdrawButton.click((evt) => withdrawWallet(evt))
 
         $('a.tab-switcher').click(function() {
             let link = $(this);

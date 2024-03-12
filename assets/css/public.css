@@ -537,6 +537,12 @@ video {
 .cfps-mt-8 {
   margin-top: 2rem;
 }
+.cfps-mb-12 {
+  margin-bottom: 3rem;
+}
+.cfps-mb-8 {
+  margin-bottom: 2rem;
+}
 .cfps-block {
   display: block;
 }
