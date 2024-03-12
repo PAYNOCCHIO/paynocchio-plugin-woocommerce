@@ -469,30 +469,8 @@ input {
 }
 
 .paynocchio-payment-block {
-
     input[type="range"] {
-        @apply cfps-min-w-[150px] cfps-bg-gray-100 cfps-border-0 cfps-h-[7px] cfps-rounded-lg;
-        -webkit-appearance: none;
-
-    }
-
-    input[type="range"]::-webkit-slider-thumb,
-    input[type="range"]::-moz-range-thumb,
-    input[type="range"]::-ms-thumb {
-        @apply !cfps-h-[20px] !cfps-w-[20px] cfps-bg-gray-500 cfps-rounded-3xl;
-        -webkit-appearance: none;
-        box-shadow: 0 0 0 2px white;
-        cursor: ew-resize;
-    }
-
-    input[type="range"]::-webkit-slider-runnable-track,
-    input[type="range"]::-moz-range-progress,
-    input[type="range"]::-moz-range-track,
-    input[type="range"]::-ms-fill-lower,
-    input[type="range"]::-ms-track {
-        -webkit-appearance: none;
-        background: black;
-        height: 7px;
-        accent-color: green;
+        accent-color: #3b82f6;
+        width: 150px;
     }
 }

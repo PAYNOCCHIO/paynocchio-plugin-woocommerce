@@ -22,9 +22,6 @@ if (is_user_logged_in()) {
         <div class="paynocchio-embleme">
             <img src="<?php echo plugin_dir_url( WOOCOMMERCE_PAYNOCCHIO_BASENAME ) . 'assets/img/kopybara-logo.png' ?>" />
         </div>
-
-
-
     <?php if (is_user_logged_in()) { ?>
         <div class="paynocchio-profile-info">
             <div class="paynocchio-profile-img">

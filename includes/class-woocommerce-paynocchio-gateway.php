@@ -122,6 +122,9 @@ class Woocommerce_Paynocchio_Payment_Gateway extends WC_Payment_Gateway {
 
         $order_id = $customer_order->get_order_number();
 
+        $order_uuid = wp_generate_uuid4();
+        $customer_order->update_meta_data( 'uuid', $order_uuid );
+
         $user_wallet_id = get_user_meta($customer_order->get_user_id(), 'paynoccio_wallet', true);
         $user_uuid = get_user_meta($customer_order->get_user_id(), 'user_uuid', true);
         $user_paynocchio_wallet = new Woocommerce_Paynocchio_Wallet($user_uuid);
@@ -133,12 +136,12 @@ class Woocommerce_Paynocchio_Payment_Gateway extends WC_Payment_Gateway {
         $bonusAmount = null;
 
         //$wallet_response = $user_paynocchio_wallet->getWalletBalance(get_user_meta($customer_order->user_id, 'paynoccio_wallet', true));
-        $response = $user_paynocchio_wallet->makePayment($user_wallet_id, $fullAmount, $amount, wp_generate_uuid4(), $bonusAmount);
+        $response = $user_paynocchio_wallet->makePayment($user_wallet_id, $fullAmount, $amount, $order_uuid, $bonusAmount);
 
         //print_r($response);
 
         if ( $response['status_code'] !== 200)
-            throw new Exception( __( 'There is issue for connectin payment gateway. Sorry for the inconvenience.', 'paynocchio' ) );
+            throw new Exception( __( 'There is issue for connection payment gateway. Sorry for the inconvenience.', 'paynocchio' ) );
 
 
         if ( $response['status_code'] === 200) {
