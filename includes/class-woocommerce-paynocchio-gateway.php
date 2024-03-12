@@ -120,88 +120,24 @@ class Woocommerce_Paynocchio_Payment_Gateway extends WC_Payment_Gateway {
 
         $customer_order = new WC_Order( $order_id );
 
-        // Decide which URL to post to
-        $environment_url = $this->testmode
-            ? 'https://secure.Paynocchio/gateway/transact.dll'
-            : 'https://test.Paynocchio/gateway/transact.dll';
+        $order_id = $customer_order->get_order_number();
 
-        // This is where the fun stuff begins
-        $payload = array(
-            // Paynocchio Credentials and API Info
+        $user_wallet_id = get_user_meta($customer_order->user_id, 'paynoccio_wallet', true);
+        $user_paynocchio_wallet = new Woocommerce_Paynocchio_Wallet($customer_order->user_id);
 
-            // Order total
-            "full_amount"  => $customer_order->order_total,
+        $fullAmount = $customer_order->order_total;
+        $amount = (isset( $_POST['paynocchio-amount'] ) ) ? $_POST['paynocchio-amount'] : '';
+        $bonusAmount = ( isset( $_POST['paynocchio-bonus_amount'] ) ) ? $_POST['paynocchio-bonus_amount'] : '';
 
-            // Credit Card Information
-            //"x_card_num"           	=> str_replace( array(' ', '-' ), '', $_POST['paynocchio-card-number'] ),
-            //"x_card_code"          	=> ( isset( $_POST['paynocchio-card-cvc'] ) ) ? $_POST['paynocchio-card-cvc'] : '',
-            //"x_exp_date"           	=> str_replace( array( '/', ' '), '', $_POST['paynocchio-card-expiry'] ),
+        //$wallet_response = $user_paynocchio_wallet->getWalletBalance(get_user_meta($customer_order->user_id, 'paynoccio_wallet', true));
+        $response = $user_paynocchio_wallet->makePayment($user_wallet_id, $fullAmount, $amount, $order_id, $bonusAmount);
 
-            "x_type"               	=> 'AUTH_CAPTURE',
-            "x_invoice_num"        	=> str_replace( "#", "", $customer_order->get_order_number() ),
-            "x_test_request"       	=> $this->testmode,
-            "x_delim_char"         	=> '|',
-            "x_encap_char"         	=> '',
-            "x_delim_data"         	=> "TRUE",
-            "x_relay_response"     	=> "FALSE",
-            "x_method"             	=> "Paynocchio",
 
-            // Billing Information
-            "x_first_name"         	=> $customer_order->billing_first_name,
-            "x_last_name"          	=> $customer_order->billing_last_name,
-            "x_address"            	=> $customer_order->billing_address_1,
-            "x_city"              	=> $customer_order->billing_city,
-            "x_state"              	=> $customer_order->billing_state,
-            "x_zip"                	=> $customer_order->billing_postcode,
-            "x_country"            	=> $customer_order->billing_country,
-            "x_phone"              	=> $customer_order->billing_phone,
-            "x_email"              	=> $customer_order->billing_email,
-
-            // Shipping Information
-            "x_ship_to_first_name" 	=> $customer_order->shipping_first_name,
-            "x_ship_to_last_name"  	=> $customer_order->shipping_last_name,
-            "x_ship_to_company"    	=> $customer_order->shipping_company,
-            "x_ship_to_address"    	=> $customer_order->shipping_address_1,
-            "x_ship_to_city"       	=> $customer_order->shipping_city,
-            "x_ship_to_country"    	=> $customer_order->shipping_country,
-            "x_ship_to_state"      	=> $customer_order->shipping_state,
-            "x_ship_to_zip"        	=> $customer_order->shipping_postcode,
-
-            // information customer
-            "x_cust_id"            	=> $customer_order->user_id,
-            "x_customer_ip"        	=> $_SERVER['REMOTE_ADDR'],
-
-        );
-
-        // Send this payload to Paynocchio for processing
-        $response = wp_remote_post( $environment_url, array(
-            'method'    => 'POST',
-            'body'      => http_build_query( $payload ),
-            'timeout'   => 90,
-            'sslverify' => false,
-        ) );
-
-        if ( is_wp_error( $response ) )
+        if ( $response['status_code'] !== 200)
             throw new Exception( __( 'There is issue for connectin payment gateway. Sorry for the inconvenience.', 'paynocchio' ) );
 
-        if ( empty( $response['body'] ) )
-            throw new Exception( __( 'Paynocchio\'s Response was not get any data.', 'paynocchio' ) );
 
-        // get body response while get not error
-        $response_body = wp_remote_retrieve_body( $response );
-
-        foreach ( preg_split( "/\r?\n/", $response_body ) as $line ) {
-            $resp = explode( "|", $line );
-        }
-
-        // values get
-        $r['response_code']             = $resp[0];
-        $r['response_sub_code']         = $resp[1];
-        $r['response_reason_code']      = $resp[2];
-        $r['response_reason_text']      = $resp[3];
-
-        // 1 or 4 means the transaction was a success
-        if ( ( $r['response_code'] == 1 ) || ( $r['response_code'] == 4 ) ) {
+        if ( $response['status_code'] === 200) {
             // Payment successful
             $customer_order->add_order_note( __( 'Paynocchio complete payment.', 'paynocchio' ) );
 
@@ -218,8 +154,8 @@ class Woocommerce_Paynocchio_Payment_Gateway extends WC_Payment_Gateway {
             );
         } else {
             //transiction fail
-            wc_add_notice( $r['response_reason_text'], 'error' );
-            $customer_order->add_order_note( 'Error: '. $r['response_reason_text'] );
+            wc_add_notice( 'Please try again.', 'error' );
+            $customer_order->add_order_note( 'Error: '. json_decode($response['detail'])->msg );
         }
 
     }

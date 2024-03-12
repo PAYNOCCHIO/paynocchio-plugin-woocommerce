@@ -9,7 +9,7 @@ import Modal from './modal'
 
         ws.onmessage = function(event) {
             const data = JSON.parse(JSON.parse(event.data));
-            setBalance(data.balance.current / 10000, data.rewarding_balance)
+            setBalance(data.balance.current, data.rewarding_balance)
         };
         ws.onopen = function(event) {
             let event_map = {
@@ -86,7 +86,12 @@ import Modal from './modal'
                 'amount': $('#top_up_amount').val(),
             },
             success: function(data){
-                if (data.status_code === 200){
+                if (data.response.status_code === 200){
+                    $('#top_up_amount').val('');
+                    $('.topUpModal .message').text('Successful TopUp');
+                    setTimeout(() => {
+                        $('.topUpModal .message').text('')
+                    }, 1000)
                     console.log(data)
                 }
             }
