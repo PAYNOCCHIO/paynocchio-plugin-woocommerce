@@ -146,10 +146,16 @@ if (is_user_logged_in()) {
                         </div>
                     </div>
                     <div class="paynocchio-actions-btns cfps-mt-8 lg:cfps-mt-16">
-                        <div class="">
+                        <div class="autodeposit cfps-flex cfps-flex-row cfps-items-center cfps-mt-8 lg:cfps-mt-12 cfps-gap-x-2">
                             <img src="<?php echo plugin_dir_url( WOOCOMMERCE_PAYNOCCHIO_BASENAME ) . 'assets/img/i-gr.png' ?>"
                                  class="cfps-h-[18px] cfps-w-[16px] cfps-mr-1 cfps-inline-block" />
-                            Auto-refill
+                            Autodeposit
+                            <div class="toggle-autodeposit">
+                                <p>ON</p>
+                                <div class="toggler"></div>
+                                <p>OFF</p>
+                            </div>
+                            <input class="hidden" value="0" name="autodeposit" id="autodeposit" />
                         </div>
                         <div class="paynocchio-actions-btns">
                             <a href="#" class="btn-blue">
@@ -204,11 +210,13 @@ if (is_user_logged_in()) {
             <p class="cfps-text-slate-500">I agree to <a href="#" class="cfps-text-slate-500 cfps-underline">Kopybara Terms & Conditions</a> and <a href="#" class="cfps-text-slate-500 cfps-underline">rules of Kopybara.Pay Priority program</a> </p>
         </div>
     </div>
+
+
     <a href="#" data-modal=".myModal">Open Modal</a>
     <div class="modal myModal">
         <div class="container">
             <div class="header">
-                <h1>My Modal</h1>
+                <h3>My Modal</h3>
                 <button class="close">&times;</button>
             </div>
             <div class="content">
@@ -230,5 +238,180 @@ if (is_user_logged_in()) {
         </div>
     </div>
 </section>
+
+
+
+
+
+
+<?php /* TOP UP FORM */ ?>
+
+<div class="modal-content modal-top-up">
+    <form method="post" action="#">
+        <p class="cfps-text-gray-500">
+            From
+        </p>
+        <div class="card-variants">
+            <div class="card-var current-card" data-pan="1356567423522373">
+                <div class="cfps-flex cfps-flex-row cfps-gap-x-4 cfps-items-center">
+                    <img src="<?php echo plugin_dir_url( WOOCOMMERCE_PAYNOCCHIO_BASENAME ) . 'assets/img/mc.png' ?>" class="cfps-h-[30px] cfps-w-[30px] cfps-mr-1 cfps-inline-block" />
+                    <p>1356 5674 2352 2373</p>
+                </div>
+                <img src="<?php echo plugin_dir_url( WOOCOMMERCE_PAYNOCCHIO_BASENAME ) . 'assets/img/arr_d.png' ?>" class="cfps-h-[30px] cfps-w-[30px] cfps-inline-block" />
+            </div>
+            <div class="card-var" data-pan="3727844328348156">
+                <div class="cfps-flex cfps-flex-row cfps-gap-x-4 cfps-items-center">
+                    <img src="<?php echo plugin_dir_url( WOOCOMMERCE_PAYNOCCHIO_BASENAME ) . 'assets/img/vs.png' ?>" class="cfps-h-[30px] cfps-w-[30px] cfps-mr-1 cfps-inline-block" />
+                    <p>3727 8443 2834 8156</p>
+                </div>
+                <img src="<?php echo plugin_dir_url( WOOCOMMERCE_PAYNOCCHIO_BASENAME ) . 'assets/img/arr_d.png' ?>" class="cfps-h-[30px] cfps-w-[30px] cfps-inline-block" />
+            </div>
+            <div class="card-var" data-pan="">
+                <div class="cfps-flex cfps-flex-row cfps-gap-x-4 cfps-items-center">
+                    <img src="<?php echo plugin_dir_url( WOOCOMMERCE_PAYNOCCHIO_BASENAME ) . 'assets/img/plus_b.png' ?>" class="cfps-h-[30px] cfps-w-[30px] cfps-mr-1 cfps-inline-block" />
+                    <p>Add new payment method</p>
+                </div>
+            </div>
+        </div>
+        <input type="hidden" id="source-card" name="source-card" value="" />
+
+        <div class="top-up-amount-container cfps-mt-8 lg:cfps-mt-12 cfps-flex cfps-flex-row">
+            <p class="cfps-text-3xl">$</p>
+            <input type="text" class="cfps-bg-white cfps-border-0 cfps-text-3xl !cfps-p-0 focus:!cfps-outline-none"
+                 name="amount" pattern="[0-9]" id="topupamount" value="1000" />
+        </div>
+
+        <div class="top-up-variants cfps-flex cfps-flex-row cfps-items-center cfps-mt-8 lg:cfps-mt-12 cfps-gap-x-2">
+            <a class="cfps-bg-gray-100 cfps-px-4 cfps-py-3 cfps-rounded-lg cfps-text-xl cfps-cursor-pointer" id="variant_1000">
+                $1000
+            </a>
+            <a class="cfps-bg-gray-100 cfps-px-4 cfps-py-3 cfps-rounded-lg cfps-text-xl cfps-cursor-pointer" id="variant_2000">
+                $2000
+            </a>
+            <a class="cfps-bg-gray-100 cfps-px-4 cfps-py-3 cfps-rounded-lg cfps-text-xl cfps-cursor-pointer" id="variant_5000">
+                $5000
+            </a>
+            <a class="cfps-bg-gray-100 cfps-px-4 cfps-py-3 cfps-rounded-lg cfps-text-xl cfps-cursor-pointer" id="variant_10000">
+                $10 000
+            </a>
+            <a class="cfps-bg-gray-100 cfps-px-4 cfps-py-3 cfps-rounded-lg cfps-text-xl cfps-cursor-pointer" id="variant_15000">
+                $15 000
+            </a>
+        </div>
+        <p class="cfps-flex cfps-flex-row cfps-items-center cfps-mt-4 cfps-gap-x-0.5">
+            The sending bank may charge a fee.<a href="#">Here's how to avoid it.</a>
+            <img src="<?php echo plugin_dir_url( WOOCOMMERCE_PAYNOCCHIO_BASENAME ) . 'assets/img/arr_rb.png' ?>"
+                class="cfps-h-[18px] cfps-w-[18px] cfps-inline-block" />
+        </p>
+
+        <div class="autodeposit cfps-flex cfps-flex-row cfps-items-center cfps-mt-8 lg:cfps-mt-12 cfps-gap-x-2">
+            <img src="<?php echo plugin_dir_url( WOOCOMMERCE_PAYNOCCHIO_BASENAME ) . 'assets/img/i-gr.png' ?>"
+                 class="cfps-h-[18px] cfps-w-[16px] cfps-mr-1 cfps-inline-block" />
+            Autodeposit
+            <div class="toggle-autodeposit">
+                <p>ON</p>
+                <div class="toggler"></div>
+                <p>OFF</p>
+            </div>
+            <input class="hidden" value="0" name="autodeposit" id="autodeposit" />
+        </div>
+    </form>
+</div>
+
+
+
+
+
+<?php /* ADD NEW CARD */ ?>
+
+<?php
+
+/* PLEASE do not delete it yet, I will finalize it later
+
+$string = simplexml_load_file("https://www.artlebedev.ru/country-list/xml/");
+//Обратите внимание на вложенность с помощью
+// echo '<pre>';  print_r($xml);  echo '</pre>';
+
+function xml2array ( $xmlObject, $out = array () )
+{
+    foreach ( (array) $xmlObject as $index => $node )
+        $out[$index] = ( is_object ( $node ) ) ? xml2array ( $node ) : $node;
+
+    return $out;
+}
+
+$array = xml2array($string);
+$array = $array['country'];
+
+foreach($array as $item){
+    $item = xml2array($item);
+}
+
+//   print_r($array);
+
+foreach($array['country'] as $item){
+   // print_r($item);
+    print_r($item['english']);
+    //echo '<option value="">'.$item['iso'].'</option>';
+} */
+?>
+
+<div class="modal-content modal-add-card">
+    <form method="post" action="#">
+        <div class="cfps-flex cfps-flex-col cfps-gap-y-4">
+            <div class="cfps-grid cfps-grid-cols-[1fr_1fr] cfps-gap-4">
+                <div class="">
+                    <label for="card-country">Country<span class="cfps-text-red-500">*</span></label>
+                    <select name="card-country">
+                        <option value="USA">United States</option>
+                        <option value="GBR">United Kingdom</option>
+                    </select>
+                </div>
+                <div class="">
+                    <label for="card-city">City<span class="cfps-text-red-500">*</span></label>
+                    <input type="text" class="" name="card-city" />
+                </div>
+                </div>
+                    <div class="cfps-grid cfps-gap-4">
+                        <div class="cfps-w-auto">
+                            <label for="card-address">Address<span class="cfps-text-red-500">*</span></label>
+                            <input type="text" class="" name="card-address" />
+                        </div>
+                    </div>
+                    <div class="cfps-grid cfps-gap-4">
+                    <div class="cfps-w-auto">
+                        <label for="card-address1">Address line 1<span class="cfps-text-red-500">*</span></label>
+                        <input type="text" class="" name="card-address1" />
+                    </div>
+                </div>
+                <div class="cfps-grid cfps-grid-cols-[1fr_1fr] cfps-gap-4">
+                    <div class="">
+                        <label for="card-state">State<span class="cfps-text-red-500">*</span></label>
+                        <input type="text" class="" name="card-state" />
+                    </div>
+                    <div class="">
+                        <label for="card-zip">ZIP code<span class="cfps-text-red-500">*</span></label>
+                        <input type="text" class="" name="card-zip" />
+                    </div>
+                </div>
+                <div class="cfps-grid cfps-gap-4">
+                    <div class="cfps-w-auto">
+                        <label for="card-pan">Bank Card Number<span class="cfps-text-red-500">*</span></label>
+                        <input type="text" class="" name="card-pan" />
+                    </div>
+                </div>
+                <div class="cfps-grid cfps-grid-cols-[1fr_1fr] cfps-gap-4">
+                    <div class="">
+                        <label for="card-expire">Card expiration date<span class="cfps-text-red-500">*</span></label>
+                        <input type="text" class="" name="card-expire" />
+                    </div>
+                    <div class="">
+                        <label for="card-cvv">CVV code<span class="cfps-text-red-500">*</span></label>
+                        <input type="text" class="" name="card-cvv" />
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
 
 <?php
