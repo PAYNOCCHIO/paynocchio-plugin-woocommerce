@@ -677,9 +677,6 @@ video {
 .cfps-border-0 {
   border-width: 0px;
 }
-.cfps-border-l {
-  border-left-width: 1px;
-}
 .cfps-border-r {
   border-right-width: 1px;
 }
@@ -722,9 +719,6 @@ video {
 }
 .cfps-pl-10 {
   padding-left: 2.5rem;
-}
-.cfps-pl-2 {
-  padding-left: 0.5rem;
 }
 .cfps-pr-2 {
   padding-right: 0.5rem;
@@ -1236,6 +1230,7 @@ Numbers animation
     background-color: #f9fafc;*/
     padding: 15px;
     display: flex;
+    justify-content: center;
 }
 .modal .container .footer button {
     display: inline-flex;
@@ -1246,7 +1241,7 @@ Numbers animation
     background-color: #3a75d5;
     color: #ffffff;
     border-radius: 0.5rem;
-    padding: 7px 12px;
+    padding: 7px 22px;
     font-size: 14px;
     margin-right: 7px;
     cursor: pointer;

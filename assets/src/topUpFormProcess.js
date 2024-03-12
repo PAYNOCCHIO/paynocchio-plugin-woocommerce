@@ -1,0 +1,40 @@
+(( $ ) => {
+    $(document).ready(function () {
+
+        $('#top_up_amount').on('input propertychange', function() {
+            this.value = this.value
+                .replace(/ /g, ".")
+                .replace(/_/g, "-")
+                .replace(/\.+/g, ".")
+                .replace(/\-+/g, "-")
+                .replace(/[^\w.-]|[a-zA-Z]|^[.-]/g, "")
+        })
+
+        $('.top-up-variants > a').click(function() {
+            let amount = $(this).get(0).id.replace('variant_','');
+            $('#top_up_amount').val(amount);
+        });
+
+        $('.toggle-autodeposit').click(function () {
+            $(this).toggleClass('checked');
+            if ($(this).hasClass('checked')) {
+                $('input#autodeposit').attr('value','1');
+            } else {
+                $('input#autodeposit').attr('value','0');
+            };
+        });
+
+        //$('#source-card').attr('value',$('.current-card').id);
+
+        $('.card-var').click(function () {
+            $('.card-variants').toggleClass('clicked');
+            $('.clicked .card-var').click(function() {
+                $('.card-var').removeClass('current-card');
+                $(this).addClass('current-card');
+                $('#source-card').attr('value',$(this).attr('data-pan'));
+            });
+
+        });
+
+    });
+})(jQuery);

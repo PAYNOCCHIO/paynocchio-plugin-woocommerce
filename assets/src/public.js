@@ -1,6 +1,7 @@
 import './public.css';
 
 import Modal from './modal'
+import './topUpFormProcess'
 
 (( $ ) => {
 

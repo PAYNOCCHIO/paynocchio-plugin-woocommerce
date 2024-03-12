@@ -3,49 +3,49 @@
 @tailwind utilities;
 
 #paynocchio_auth_block {
-    p {
-        @apply cfps-text-base;
-    }
+p {
+    @apply cfps-text-base;
+}
 
-    &  > div {
-           @apply cfps-hidden cfps-rounded-lg cfps-p-8 cfps-bg-white cfps-drop-shadow;
+&  > div {
+       @apply cfps-hidden cfps-rounded-lg cfps-p-8 cfps-bg-white cfps-drop-shadow;
    }
 
-    .visible {
-        @apply cfps-block;
-    }
+.visible {
+    @apply cfps-block;
+}
 
-    .row {
-        @apply cfps-flex cfps-gap-x-6 cfps-mb-4;
+.row {
+    @apply cfps-flex cfps-gap-x-6 cfps-mb-4;
 
-        &:last-child {
-             @apply cfps-mb-0;
-         }
-    }
+&:last-child {
+     @apply cfps-mb-0;
+ }
+}
 
-    .col {
-        @apply cfps-flex cfps-flex-col cfps-w-1/2;
-    }
+.col {
+    @apply cfps-flex cfps-flex-col cfps-w-1/2;
+}
 
-    .paynocchio_input {
-        @apply cfps-bg-slate-200 cfps-rounded-lg cfps-border-0;
-    }
+.paynocchio_input {
+    @apply cfps-bg-slate-200 cfps-rounded-lg cfps-border-0;
+}
 
-    .form-toggle-a {
-        @apply cfps-cursor-pointer cfps-underline;
-    }
+.form-toggle-a {
+    @apply cfps-cursor-pointer cfps-underline;
+}
 
-    .paynocchio_button {
-        @apply cfps-bg-blue-500 cfps-text-white cfps-px-4 cfps-py-2 cfps-rounded-lg;
-    }
+.paynocchio_button {
+    @apply cfps-bg-blue-500 cfps-text-white cfps-px-4 cfps-py-2 cfps-rounded-lg;
+}
 
-    input[type="checkbox"] {
-        @apply cfps-rounded cfps-p-2;
-    }
+input[type="checkbox"] {
+    @apply cfps-rounded cfps-p-2;
+}
 
-    h2 {
-        @apply cfps-text-2xl cfps-font-bold cfps-mb-4;
-    }
+h2 {
+    @apply cfps-text-2xl cfps-font-bold cfps-mb-4;
+}
 }
 
 .cfps-h2 {
@@ -64,13 +64,13 @@
 .paynocchio-account {
     @apply cfps-m-4 cfps-bg-white cfps-rounded-lg cfps-drop-shadow;
 
-    a {
-        @apply cfps-text-blue-500;
+a {
+    @apply cfps-text-blue-500;
 
-        &.cfps-btn-primary {
-             @apply cfps-text-white;
-         }
-    }
+&.cfps-btn-primary {
+     @apply cfps-text-white;
+ }
+}
 }
 
 .paynocchio-embleme {
@@ -326,6 +326,7 @@ Numbers animation
     background-color: #f9fafc;*/
     padding: 15px;
     display: flex;
+    justify-content: center;
 }
 .modal .container .footer button {
     display: inline-flex;
@@ -334,7 +335,7 @@ Numbers animation
     background-color: #3a75d5;
     color: #ffffff;
     border-radius: 0.5rem;
-    padding: 7px 12px;
+    padding: 7px 22px;
     font-size: 14px;
     margin-right: 7px;
     cursor: pointer;
