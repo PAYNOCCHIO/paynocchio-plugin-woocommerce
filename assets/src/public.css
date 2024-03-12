@@ -181,7 +181,6 @@
     @apply cfps-text-right cfps-font-semibold;
 }
 
-
 .paynocchio-card-container {
     @apply cfps-flex cfps-justify-center;
 }
@@ -274,6 +273,8 @@ Numbers animation
     flex-flow: column;
     background-color: #ffffff;
     box-shadow: 0px 0px 5px 2px rgba(0, 0, 0, 0.03);
+    border-radius: 0.5rem;
+    overflow: hidden;
 }
 .modal .container.zoom {
     transform: scale(0.5);
@@ -283,17 +284,17 @@ Numbers animation
 }
 .modal .container .header {
     display: flex;
-    padding: 20px;
+    padding: 15px;
     font-weight: 600;
     justify-content: space-between;
-    border-bottom: 1px solid #e6e9ec;
     align-items: center;
 }
-.modal .container .header h1 {
+.modal .container .header h3 {
     font-weight: 500;
     color: #4d4d4d;
     padding: 0;
     margin: 0;
+    font-size: 1.2rem;
 }
 .modal .container .header button {
     appearance: none;
@@ -321,8 +322,8 @@ Numbers animation
     width: 100%;
 }
 .modal .container .footer {
-    border-top: 1px solid #e6e9ec;
-    background-color: #f9fafc;
+    /*border-top: 1px solid #e6e9ec;
+    background-color: #f9fafc;*/
     padding: 15px;
     display: flex;
 }
@@ -332,7 +333,7 @@ Numbers animation
     border: none;
     background-color: #3a75d5;
     color: #ffffff;
-    border-radius: 4px;
+    border-radius: 0.5rem;
     padding: 7px 12px;
     font-size: 14px;
     margin-right: 7px;
@@ -378,4 +379,68 @@ Numbers animation
 .modal.open .container.slide {
     transform: translateY(0);
     transition: all 0.5s ease;
+}
+
+
+input {
+    --tw-ring-color: transparent!important;
+}
+
+.toggle-autodeposit {
+    @apply cfps-rounded-3xl cfps-bg-gray-400 cfps-w-[70px] cfps-h-7 cfps-p-0.5 cfps-flex cfps-flex-row cfps-items-center cfps-gap-x-2 cfps-relative cfps-cursor-pointer;
+}
+
+.toggle-autodeposit.checked {
+    @apply cfps-bg-blue-500;
+}
+
+.toggle-autodeposit p:first-child {
+    @apply cfps-hidden cfps-text-white cfps-absolute cfps-top-0.5 cfps-left-2 cfps-leading-6;
+}
+
+.toggle-autodeposit.checked p:first-child {
+    @apply cfps-block;
+}
+
+.toggle-autodeposit p:last-child {
+    @apply cfps-text-white cfps-absolute cfps-top-0.5 cfps-right-2 cfps-leading-6;
+}
+
+.toggle-autodeposit.checked p:last-child {
+    @apply cfps-hidden;
+}
+
+.toggle-autodeposit.checked .toggler {
+    @apply cfps-left-auto cfps-right-0.5;
+}
+
+.toggle-autodeposit .toggler {
+    @apply cfps-rounded-3xl cfps-w-6 cfps-h-6 cfps-bg-gray-100 cfps-absolute cfps-left-0.5 cfps-top-0.5;
+}
+
+.card-variants {
+    @apply cfps-flex cfps-flex-col cfps-gap-y-2;
+}
+
+.card-variants .card-var {
+    @apply cfps-hidden cfps-rounded-lg cfps-bg-gray-100 cfps-p-4 cfps-drop-shadow cfps-flex-row cfps-items-center cfps-justify-between;
+}
+
+.card-variants.clicked .card-var,
+.card-variants .card-var.current-card {
+    @apply cfps-flex;
+}
+
+
+.modal-add-card input[type='text'],
+.modal-add-card select {
+    @apply cfps-p-2 cfps-pt-6 cfps-bg-gray-100 cfps-rounded-lg cfps-drop-shadow cfps-w-full cfps-border-0;
+}
+
+.modal-add-card div {
+    @apply cfps-relative;
+}
+
+.modal-add-card label {
+    @apply cfps-absolute cfps-top-1 cfps-left-2 cfps-text-sm cfps-z-20 cfps-text-gray-500;
 }
