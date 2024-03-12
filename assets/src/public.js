@@ -137,7 +137,7 @@ import './topUpFormProcess'
                 success: function(data){
                     if (data.response.status_code === 200){
                         $('#withdraw_amount').val('');
-                        $('.withdrawModal .message').text('Successful TopUp');
+                        $('.withdrawModal .message').text('Success!');
                         setTimeout(() => {
                             $('.withdrawModal .message').text('')
                         }, 5000)
