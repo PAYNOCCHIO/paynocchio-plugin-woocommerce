@@ -121,15 +121,15 @@ class Woocommerce_Paynocchio_Wallet {
         return $response;
     }
 
-    public function makePayment(string $walletId, float $fullAmount, float $amount, string $orderId, float $bonusAmount = null): array {
+    public function makePayment(string $walletId, $fullAmount, $amount, string $orderId, $bonusAmount = null): array {
         $data = [
             PAYNOCCHIO_ENV_KEY => $this->envId,
             PAYNOCCHIO_USER_UUID_KEY => $this->userId,
             PAYNOCCHIO_WALLET_KEY => $walletId,
             "currency" => "USD",
-            'full_amount' => $amount,
-            'amount' => $fullAmount,
-            'order_id' => $orderId,
+            'full_amount' => $fullAmount,
+            'amount' => $amount,
+            'external_order_id' => $orderId,
         ];
 
         if ($bonusAmount !== null) {
@@ -137,7 +137,7 @@ class Woocommerce_Paynocchio_Wallet {
         }
 
 
-        $response = $this->sendRequest('POST', '/wallet/payment', json_encode($data));
+        $response = $this->sendRequest('POST', '/operation/payment', json_encode($data));
 
         return $response;
     }
