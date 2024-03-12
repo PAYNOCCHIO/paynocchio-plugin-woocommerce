@@ -23,7 +23,8 @@ if (!defined('ABSPATH')) {
         </a>
     </div>
 
-    <div class="wallet cfps-flex cfps-flex-row cfps-items-center">
+    <?php if (is_user_logged_in() && get_user_meta(get_current_user_id(), 'paynoccio_wallet')) { ?>
+    <div class="wallet cfps-flex cfps-flex-row cfps-items-center cfps-pl-2 cfps-ml-2 cfps-border-l cfps-border-slate-300">
         <div class="cfps-flex cfps-flex-row cfps-items-center cfps-pr-2 cfps-mr-2 cfps-border-r cfps-border-slate-300 cfps-gap-x-2">
             <img src="<?php echo plugin_dir_url( WOOCOMMERCE_PAYNOCCHIO_BASENAME ) . 'assets/img/wallet.png' ?>" class="!cfps-h-[25px] cfps-w-auto"/>
             <p class="cfps-font-semibold">$<span class="paynocchio-numbers paynocchio-balance-value"></span></p>
@@ -34,4 +35,5 @@ if (!defined('ABSPATH')) {
             <p class="cfps-font-semibold"><span class="paynocchio-numbers paynocchio-bonus-value"></span></p>
         </div>
     </div>
+    <?php } ?>
 </div>

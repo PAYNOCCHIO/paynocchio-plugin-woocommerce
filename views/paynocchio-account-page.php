@@ -41,7 +41,7 @@ if (is_user_logged_in()) {
                 </a>
                 <div class="paynocchio-count">
                     <div>
-                        <p class="cfps-text-2xl cfps-font-semibold"><?php echo $wallet_bon; ?></p>
+                        <p class="cfps-text-2xl cfps-font-semibold"><span class="paynocchio-numbers paynocchio-bonus-value"></span></p>
                         <p>bonuses</p>
                     </div>
                     <div>
@@ -75,11 +75,23 @@ if (is_user_logged_in()) {
                         </div>
                     </div>
                 <?php } else { ?>
-
+                    <div class="paynocchio-profile-block paynocchio-blue-badge">
+                        <div class="cfps-grid cfps-grid-cols-[1fr_100px_200px_35px] cfps-gap-x-6">
+                            <div>
+                                Kopybara.Pay
+                            </div>
+                            <div>
+                                $<span class="paynocchio-numbers paynocchio-balance-value"></span>
+                            </div>
+                            <div>
+                                Bonuses: <span class="paynocchio-numbers paynocchio-bonus-value"></span>
+                            </div>
+                            <a class="tab-switcher cfps-cursor-pointer" id="wallet_toggle">
+                                <img src="<?php echo plugin_dir_url( WOOCOMMERCE_PAYNOCCHIO_BASENAME ) . 'assets/img/arr_r.png' ?>" />
+                            </a>
+                        </div>
+                    </div>
                 <?php } ?>
-
-
-                <?php echo do_shortcode('[paynocchio_payment_widget]'); ?>
 
                 <div class="paynocchio-profile-block">
                     <h2 class="cfps-font-bold cfps-text-xl cfps-mb-4">Personal Info</h2>
@@ -121,7 +133,7 @@ if (is_user_logged_in()) {
                                         Balance
                                     </div>
                                     <div class="amount">
-                                        $<?php echo $wallet_balance ?? ''; ?>
+                                        $<span class="paynocchio-numbers paynocchio-balance-value"></span>
                                     </div>
                                 </div>
                                 <div class="paynocchio-bonuses">
@@ -129,7 +141,7 @@ if (is_user_logged_in()) {
                                         Bonuses
                                     </div>
                                     <div class="amount">
-                                        <?php echo $wallet_bonuses ?? ''; ?>
+                                        <span class="paynocchio-numbers paynocchio-bonus-value"></span>
                                     </div>
                                 </div>
                             </div>
@@ -384,61 +396,4 @@ if (is_user_logged_in()) {
         </div>
     </div>
 
-<div class="modal withdrawModal">
-    <div class="container">
-        <div class="header">
-            <h3>Withdraw</h3>
-            <button class="close">&times;</button>
-        </div>
-        <div id="witdrawForm" class="content">
-            <div class="mb-4">Current balance: <span class="cfps-font-semibold">$<span class="paynocchio-numbers paynocchio-balance-value"></span></span></div>
-            <div class="top-up-amount-container cfps-mb-8 cfps-flex">
-                <p class="cfps-text-3xl">$</p>
-                <input type="number" step="0.01" class="cfps-bg-white cfps-border-0 cfps-text-3xl !cfps-p-0 focus:!cfps-outline-none"
-                       name="amount" id="withdraw_amount" placeholder="Type a number" />
-                <?php wp_nonce_field( 'paynocchio_ajax_withdraw', 'ajax-withdraw-nonce' ); ?>
-            </div>
-
-            <p class="cfps-text-gray-500">
-                To
-            </p>
-            <div class="card-variants">
-                <div class="card-var current-card" data-pan="1356567423522373">
-                    <div class="cfps-flex cfps-flex-row cfps-gap-x-4 cfps-items-center">
-                        <img src="<?php echo plugin_dir_url( WOOCOMMERCE_PAYNOCCHIO_BASENAME ) . 'assets/img/mc.png' ?>" class="cfps-h-[30px] cfps-w-[30px] cfps-mr-1 cfps-inline-block" />
-                        <p>1356 5674 2352 2373</p>
-                    </div>
-                    <img src="<?php echo plugin_dir_url( WOOCOMMERCE_PAYNOCCHIO_BASENAME ) . 'assets/img/arr_d.png' ?>" class="cfps-h-[30px] cfps-w-[30px] cfps-inline-block" />
-                </div>
-                <div class="card-var" data-pan="3727844328348156">
-                    <div class="cfps-flex cfps-flex-row cfps-gap-x-4 cfps-items-center">
-                        <img src="<?php echo plugin_dir_url( WOOCOMMERCE_PAYNOCCHIO_BASENAME ) . 'assets/img/vs.png' ?>" class="cfps-h-[30px] cfps-w-[30px] cfps-mr-1 cfps-inline-block" />
-                        <p>3727 8443 2834 8156</p>
-                    </div>
-                    <img src="<?php echo plugin_dir_url( WOOCOMMERCE_PAYNOCCHIO_BASENAME ) . 'assets/img/arr_d.png' ?>" class="cfps-h-[30px] cfps-w-[30px] cfps-inline-block" />
-                </div>
-                <div class="card-var" data-pan="">
-                    <div class="cfps-flex cfps-flex-row cfps-gap-x-4 cfps-items-center">
-                        <img data-modal=".paymentMethodModal" src="<?php echo plugin_dir_url( WOOCOMMERCE_PAYNOCCHIO_BASENAME ) . 'assets/img/plus_b.png' ?>" class="cfps-h-[30px] cfps-w-[30px] cfps-mr-1 cfps-inline-block" />
-                        <p data-modal=".paymentMethodModal">Add new payment method</p>
-                    </div>
-                </div>
-            </div>
-            <input type="hidden" id="source-card" name="source-card" value="" />
-        </div>
-        <div class="footer">
-            <div>
-                <button id="withdraw_button"
-                        type="button"
-                        class="cfps-btn-primary">
-                    Withdraw
-                    <svg class="cfps-spinner cfps-hidden cfps-animate-spin cfps-ml-4 cfps-h-5 cfps-w-5 cfps-text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                        <circle class="cfps-opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                        <path class="cfps-opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                    </svg>
-                </button>
-                <div class="message"></div>
-            </div>
-        </div>
-    </div>
-</div>
+<?php
