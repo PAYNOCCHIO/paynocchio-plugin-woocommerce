@@ -1459,7 +1459,8 @@ input {
 .paynocchio-payment-block {
   margin-left: auto;
   margin-right: auto;
-  margin-top: 2rem;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
   max-width: 64rem;
   border-radius: 0.5rem;
   --tw-bg-opacity: 1;
