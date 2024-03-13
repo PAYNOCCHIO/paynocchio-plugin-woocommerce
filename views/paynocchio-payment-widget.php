@@ -24,8 +24,8 @@ if (!defined('ABSPATH')) {
                 </div>
 
                 <div class="cfps-flex cfps-flex-row cfps-items-center cfps-gap-x-2">
-                    <a href="#" class="btn-blue">Add money</a>
-                    <a href="#" class="btn-white">Withdraw</a>
+                    <a href="#" class="btn-blue" data-modal=".topUpModal">Add money</a>
+                    <a href="#" class="btn-white" data-modal=".withdrawModal">Withdraw</a>
                 </div>
             </div>
             <div class="paynocchio-promo-badge">
@@ -54,3 +54,5 @@ if (!defined('ABSPATH')) {
         </div>
     </div>
 </section>
+
+<?php echo do_shortcode('[paynocchio_modal_forms]'); ?>

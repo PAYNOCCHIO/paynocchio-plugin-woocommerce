@@ -120,7 +120,7 @@ class Woocommerce_Paynocchio_Payment_Gateway extends WC_Payment_Gateway {
 
         $customer_order = new WC_Order( $order_id );
 
-        $order_id = $customer_order->get_order_number();
+        //$order_id = $customer_order->get_order_number();
 
         $order_uuid = wp_generate_uuid4();
         $customer_order->update_meta_data( 'uuid', $order_uuid );

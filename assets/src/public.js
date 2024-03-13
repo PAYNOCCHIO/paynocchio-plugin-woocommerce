@@ -91,11 +91,10 @@ import './topUpFormProcess'
             },
             success: function(data){
                 if (data.response.status_code === 200){
-                    $('#top_up_amount').val('');
-                    $('.topUpModal .message').text('Successful TopUp');
+                    $('.topUpModal .message').text('Success!');
                     setTimeout(() => {
                         $('.topUpModal .message').text('')
-                    }, 1000)
+                    }, 5000)
                 }
             }
         })
@@ -163,7 +162,9 @@ import './topUpFormProcess'
                 'action': 'paynocchio_ajax_get_user_wallet',
             },
             success: function(data){
-                createWebSocket(data.walletId)
+                if(data.walletId) {
+                    createWebSocket(data.walletId)
+                }
             }
         })
             .error((error) => console.log(error))
@@ -230,7 +231,18 @@ import './topUpFormProcess'
         // WOOCOMMERCE CHECKOUT SCRIPT
         $(document).on( "updated_checkout", function() {
 
+            const activationButton = $("#paynocchio_activation_button");
+            const topUpButton = $("#top_up_button");
+            const withdrawButton = $("#withdraw_button");
+
+            activationButton.click((evt) => activateWallet(evt, '/paynocchio-account-page'))
+            topUpButton.click((evt) => topUpWallet(evt, '/paynocchio-account-page'))
+            withdrawButton.click((evt) => withdrawWallet(evt))
+
             walletBalanceChecker()
+            Modal.initElements();
+
+            initiateWebSocket();
 
             $('.form-toggle-a').click(() => toggleVisibility('#paynocchio_auth_block'));
 

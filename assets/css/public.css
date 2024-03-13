@@ -562,6 +562,9 @@ video {
 .cfps-mt-8 {
   margin-top: 2rem;
 }
+.\!cfps-block {
+  display: block !important;
+}
 .cfps-block {
   display: block;
 }
@@ -1488,35 +1491,8 @@ input {
     background: linear-gradient(45deg, rgba(203,184,255,1) 0%, rgba(172,150,234,1) 100%);
 }
 .paynocchio-payment-block input[type="range"] {
-  height: 7px;
-  min-width: 150px;
-  border-radius: 0.5rem;
-  border-width: 0px;
-  --tw-bg-opacity: 1;
-  background-color: rgb(243 244 246 / var(--tw-bg-opacity));
-        -webkit-appearance: none;
-}
-.paynocchio-payment-block input[type="range"]::-webkit-slider-thumb,
-    .paynocchio-payment-block input[type="range"]::-moz-range-thumb,
-    .paynocchio-payment-block input[type="range"]::-ms-thumb {
-  height: 20px !important;
-  width: 20px !important;
-  border-radius: 1.5rem;
-  --tw-bg-opacity: 1;
-  background-color: rgb(107 114 128 / var(--tw-bg-opacity));
-        -webkit-appearance: none;
-        box-shadow: 0 0 0 2px white;
-        cursor: ew-resize;
-}
-.paynocchio-payment-block input[type="range"]::-webkit-slider-runnable-track,
-    .paynocchio-payment-block input[type="range"]::-moz-range-progress,
-    .paynocchio-payment-block input[type="range"]::-moz-range-track,
-    .paynocchio-payment-block input[type="range"]::-ms-fill-lower,
-    .paynocchio-payment-block input[type="range"]::-ms-track {
-        -webkit-appearance: none;
-        background: black;
-        height: 7px;
-        accent-color: green;
+        accent-color: #3b82f6;
+        width: 150px;
     }
 .focus\:\!cfps-outline-none:focus {
   outline: 2px solid transparent !important;
