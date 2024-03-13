@@ -175,6 +175,27 @@ class Woocommerce_Paynocchio_Payment_Gateway extends WC_Payment_Gateway {
 
     }
 
+    public function process_refund($order_id, $amount = null, $reason = '') {
+
+        $customer_order = new WC_Order($order_id);
+       // $wallet_id = get_user_meta($customer_order->get_user_id(), 'paynoccio_wallet', true);
+       // $user_uuid = get_user_meta($customer_order->get_user_id(), 'user_uuid', true);
+
+        $order_uuid = get_post_meta( $customer_order , 'uuid' , true );
+
+        $data = [
+            PAYNOCCHIO_ENV_KEY => $this->envId,
+            PAYNOCCHIO_USER_UUID_KEY => $this->userId,
+            PAYNOCCHIO_WALLET_KEY => $walletId,
+            "currency" => "USD",
+            'amount' => $amount,
+            'external_order_id' => $order_uuid,
+        ];
+        $response = $this->sendRequest('POST', '/operation/chargeback', json_encode($data));
+
+        return $response;
+    }
+
     // Validate fields
     public function validate_fields() {
         return false;
