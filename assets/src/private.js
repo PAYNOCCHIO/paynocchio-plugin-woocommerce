@@ -222,7 +222,6 @@ import './topUpFormProcess'
                 'action': 'paynocchio_ajax_check_balance',
             },
             success: function(data){
-                //console.log(data.response.balance)
                 setBalance(data.response.balance, data.response.bonuses)
             }
         })
