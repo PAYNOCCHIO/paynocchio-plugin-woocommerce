@@ -191,7 +191,7 @@ if (!defined('ABSPATH')) {
             <div class="top-up-amount-container cfps-mb-8 cfps-flex">
                 <p class="cfps-text-3xl">$</p>
                 <input type="number" step="0.01" class="cfps-bg-white cfps-border-0 cfps-text-3xl !cfps-p-0 focus:!cfps-outline-none"
-                       name="amount" id="withdraw_amount" placeholder="Type a number" />
+                       name="amount" id="withdraw_amount" value="0" />
                 <?php wp_nonce_field( 'paynocchio_ajax_withdraw', 'ajax-withdraw-nonce' ); ?>
             </div>
 
