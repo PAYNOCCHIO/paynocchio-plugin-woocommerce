@@ -193,11 +193,8 @@ import './topUpFormProcess'
     function updateOrderButtonState() {
         const place_orderButton = $('#place_order');
         const hidden = ($('.payment_box.payment_method_paynocchio').is(":hidden"));
-        if(place_orderButton) {
-            if(parseFloat($('.paynocchio-balance-value').text()) < parseFloat($('.order-total .woocommerce-Price-amount').text().replace('$', ''))) {
-                place_orderButton.addClass('cfps-disabled')
-                place_orderButton.text('Please TopUp your Wallet')
-            }
+        if(place_orderButton && !hidden) {
+            $(document.body).trigger('update_checkout');
         }
     }
 
@@ -216,7 +213,6 @@ import './topUpFormProcess'
 
         initiateWebSocket();
 
-        const activationButton = $("#paynocchio_activation_button");
         const topUpButton = $("#top_up_button");
         const withdrawButton = $("#withdraw_button");
 
@@ -305,8 +301,14 @@ import './topUpFormProcess'
 
             });
 
-            updateOrderButtonState()
-
+            const place_orderButton = $('#place_order');
+            const hidden = ($('.payment_box.payment_method_paynocchio').is(":hidden"));
+            if(place_orderButton && !hidden) {
+                if(parseFloat($('.paynocchio-card-simulator .paynocchio-balance-value').text()) < parseFloat($('.order-total .woocommerce-Price-amount').text().replace('$', ''))) {
+                    place_orderButton.addClass('cfps-disabled')
+                    place_orderButton.text('Please TopUp your Wallet')
+                }
+            }
 
         });
         // WOOCOMMERCE CHECKOUT SCRIPT END
