@@ -92,6 +92,8 @@ import './topUpFormProcess'
             success: function(data){
                 if (data.response.status_code === 200){
                     $('.topUpModal .message').text('Success!');
+                    updateWalletBalance();
+                    updateOrderButtonState();
                     setTimeout(() => {
                         $('.topUpModal .message').text('')
                     }, 5000)
@@ -137,6 +139,8 @@ import './topUpFormProcess'
                     if (data.response.status_code === 200){
                         $('#withdraw_amount').val('');
                         $('.withdrawModal .message').text('Success!');
+                        updateWalletBalance();
+                        updateOrderButtonState();
                         setTimeout(() => {
                             $('.withdrawModal .message').text('')
                         }, 5000)
@@ -172,7 +176,7 @@ import './topUpFormProcess'
     /**
      * Wallet Balance checker
      */
-    function walletBalanceChecker() {
+    function updateWalletBalance() {
         $.ajax({
             url: paynocchio_object.ajaxurl,
             type: 'POST',
@@ -184,6 +188,17 @@ import './topUpFormProcess'
             }
         })
             .error((error) => console.log(error))
+    }
+
+    function updateOrderButtonState() {
+        const place_orderButton = $('#place_order');
+        const hidden = ($('.payment_box.payment_method_paynocchio').is(":hidden"));
+        if(place_orderButton && !hidden) {
+            if(parseFloat($('.paynocchio-balance-value').text()) < parseFloat($('.order-total .woocommerce-Price-amount').text().replace('$', ''))) {
+                place_orderButton.addClass('cfps-disabled')
+                place_orderButton.text('Please TopUp your Wallet')
+            }
+        }
     }
 
     function getParameterByName(name, url = window.location.href) {
@@ -205,7 +220,6 @@ import './topUpFormProcess'
         const topUpButton = $("#top_up_button");
         const withdrawButton = $("#withdraw_button");
 
-        activationButton.click((evt) => activateWallet(evt))
         topUpButton.click((evt) => topUpWallet(evt))
         withdrawButton.click((evt) => withdrawWallet(evt))
 
@@ -226,26 +240,23 @@ import './topUpFormProcess'
 
         $('a.card-toggle').click(() => toggleVisibility('.paynocchio-card-container'));
 
-        $('.form-toggle-a').click(() => toggleVisibility('#paynocchio_auth_block'));
+        /**
+         * Trigger update checkout when payment method changed
+         */
+        $('form.checkout').on('change', 'input[name="payment_method"]', function(){
+            $(document.body).trigger('update_checkout');
+        });
 
         // WOOCOMMERCE CHECKOUT SCRIPT
         $(document).on( "updated_checkout", function() {
-
-            const activationButton = $("#paynocchio_activation_button");
             const topUpButton = $("#top_up_button");
             const withdrawButton = $("#withdraw_button");
-            const place_orderButton = $('#place_order');
 
-            activationButton.click((evt) => activateWallet(evt))
             topUpButton.click((evt) => topUpWallet(evt))
             withdrawButton.click((evt) => withdrawWallet(evt))
 
-            walletBalanceChecker()
+            updateWalletBalance()
             Modal.initElements();
-
-            initiateWebSocket();
-
-            $('.form-toggle-a').click(() => toggleVisibility('#paynocchio_auth_block'));
 
             const ans = getParameterByName('ans');
 
@@ -267,8 +278,6 @@ import './topUpFormProcess'
                 /* let perc = (input.val()-input.attr('min')/(input.attr('max')-input.attr('min'))*100;
                  input.css('background','linear-gradient(to right, #3b82f6 ' + perc + '%, #f3f4f6 ' + perc + '%)');*/
             })
-
-            activationButton.click((evt) => activateWallet(evt))
 
             $('.top-up-variants > a').click(function() {
                 let amount = $(this).get(0).id.replace('variant_','');
@@ -296,7 +305,8 @@ import './topUpFormProcess'
 
             });
 
-            //place_orderButton.addClass('cfps-disabled')
+            updateOrderButtonState()
+
 
         });
         // WOOCOMMERCE CHECKOUT SCRIPT END
