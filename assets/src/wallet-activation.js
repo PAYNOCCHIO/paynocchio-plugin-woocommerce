@@ -45,10 +45,13 @@ import './public.css';
     $(document).ready(function() {
         //READY START
 
+        const checkout = window.location.pathname === '/checkout/';
+
         const activationButton = $("#paynocchio_activation_button");
 
-        activationButton.click((evt) => activateWallet(evt))
-
+        if(!checkout) {
+            activationButton.click((evt) => activateWallet(evt))
+        }
 
         $('.form-toggle-a').click(() => toggleVisibility('#paynocchio_auth_block'));
 

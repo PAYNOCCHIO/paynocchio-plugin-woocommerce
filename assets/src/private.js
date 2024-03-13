@@ -193,7 +193,7 @@ import './topUpFormProcess'
     function updateOrderButtonState() {
         const place_orderButton = $('#place_order');
         const hidden = ($('.payment_box.payment_method_paynocchio').is(":hidden"));
-        if(place_orderButton && !hidden) {
+        if(place_orderButton) {
             if(parseFloat($('.paynocchio-balance-value').text()) < parseFloat($('.order-total .woocommerce-Price-amount').text().replace('$', ''))) {
                 place_orderButton.addClass('cfps-disabled')
                 place_orderButton.text('Please TopUp your Wallet')
