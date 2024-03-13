@@ -234,9 +234,10 @@ import './topUpFormProcess'
             const activationButton = $("#paynocchio_activation_button");
             const topUpButton = $("#top_up_button");
             const withdrawButton = $("#withdraw_button");
+            const place_orderButton = $('#place_order');
 
-            activationButton.click((evt) => activateWallet(evt, '/paynocchio-account-page'))
-            topUpButton.click((evt) => topUpWallet(evt, '/paynocchio-account-page'))
+            activationButton.click((evt) => activateWallet(evt))
+            topUpButton.click((evt) => topUpWallet(evt))
             withdrawButton.click((evt) => withdrawWallet(evt))
 
             walletBalanceChecker()
@@ -268,6 +269,8 @@ import './topUpFormProcess'
             })
 
             activationButton.click((evt) => activateWallet(evt))
+
+            //place_orderButton.addClass('cfps-disabled')
 
         });
         // WOOCOMMERCE CHECKOUT SCRIPT END

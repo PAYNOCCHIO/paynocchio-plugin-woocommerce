@@ -8,12 +8,15 @@ if (!defined('ABSPATH')) {
 if (is_user_logged_in()) {
     $current_user = wp_get_current_user();
     $user_paynocchio_wallet_id = get_user_meta($current_user->ID, 'paynoccio_wallet', true);
-    $user_paynocchio_wallet = new Woocommerce_Paynocchio_Wallet($current_user->ID);
-    $wallet_bal_bon = $user_paynocchio_wallet->getWalletBalance($user_paynocchio_wallet_id);
+    if($user_paynocchio_wallet_id) {
+        $user_paynocchio_wallet = new Woocommerce_Paynocchio_Wallet($current_user->ID);
+        $wallet_bal_bon = $user_paynocchio_wallet->getWalletBalance($user_paynocchio_wallet_id);
 
-    $wallet_bal = $wallet_bal_bon['balance'];
-    $wallet_bon = $wallet_bal_bon['bonuses'];
-    $wallet_pan = $wallet_bal_bon['number'];
+        $wallet_bal = $wallet_bal_bon['balance'];
+        $wallet_bon = $wallet_bal_bon['bonuses'];
+        $wallet_pan = $wallet_bal_bon['number'];
+    }
+
 };
 ?>
 

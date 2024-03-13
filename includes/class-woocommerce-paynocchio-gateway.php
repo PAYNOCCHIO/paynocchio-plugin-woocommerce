@@ -115,15 +115,16 @@ class Woocommerce_Paynocchio_Payment_Gateway extends WC_Payment_Gateway {
     }
 
     // Response handled for payment gateway
-    public function process_payment( $order_id ) {
+    public function process_payment( $order_id )
+    {
         global $woocommerce;
 
-        $customer_order = new WC_Order( $order_id );
+        $customer_order = new WC_Order($order_id);
 
         //$order_id = $customer_order->get_order_number();
 
         $order_uuid = wp_generate_uuid4();
-        $customer_order->update_meta_data( 'uuid', $order_uuid );
+        $customer_order->update_meta_data('uuid', $order_uuid);
 
         $user_wallet_id = get_user_meta($customer_order->get_user_id(), 'paynoccio_wallet', true);
         $user_uuid = get_user_meta($customer_order->get_user_id(), 'user_uuid', true);
@@ -135,14 +136,19 @@ class Woocommerce_Paynocchio_Payment_Gateway extends WC_Payment_Gateway {
         //$bonusAmount = ( isset( $_POST['paynocchio-bonus_amount'] ) ) ? $_POST['paynocchio-bonus_amount'] : '';
         $bonusAmount = null;
 
-        //$wallet_response = $user_paynocchio_wallet->getWalletBalance(get_user_meta($customer_order->user_id, 'paynoccio_wallet', true));
+        $wallet_response = $user_paynocchio_wallet->getWalletBalance(get_user_meta($customer_order->user_id, 'paynoccio_wallet', true));
         $response = $user_paynocchio_wallet->makePayment($user_wallet_id, $fullAmount, $amount, $order_uuid, $bonusAmount);
 
-        //print_r($response);
+        print_r($wallet_response);
 
-        if ( $response['status_code'] !== 200)
-            throw new Exception( __( 'There is issue for connection payment gateway. Sorry for the inconvenience.', 'paynocchio' ) );
+        /*if ($amount < 10000) {
 
+        }*/
+
+        if ( $response['status_code'] === 200) {
+            // Payment successful
+            $customer_order->add_order_note(__('Paynocchio complete payment.', 'paynocchio'));
+        }
 
         if ( $response['status_code'] === 200) {
             // Payment successful
@@ -150,6 +156,8 @@ class Woocommerce_Paynocchio_Payment_Gateway extends WC_Payment_Gateway {
 
             // paid order marked
             $customer_order->payment_complete();
+
+            //$customer_order->update_status( "completed" );
 
             // this is important part for empty cart
             $woocommerce->cart->empty_cart();
