@@ -162,7 +162,7 @@ if (is_user_logged_in()) {
                             </div>
                         </div>
                         <div class="paynocchio-actions-btns cfps-mt-8 lg:cfps-mt-16">
-                            <div class="autodeposit cfps-flex cfps-flex-row cfps-items-center cfps-mt-8 lg:cfps-mt-12 cfps-gap-x-2">
+                            <div class="autodeposit cfps-flex cfps-flex-row cfps-items-center cfps-gap-x-2">
                                 <img src="<?php echo plugin_dir_url( WOOCOMMERCE_PAYNOCCHIO_BASENAME ) . 'assets/img/i-gr.png' ?>"
                                      class="cfps-h-[18px] cfps-w-[16px] cfps-mr-1 cfps-inline-block" />
                                 Autodeposit
