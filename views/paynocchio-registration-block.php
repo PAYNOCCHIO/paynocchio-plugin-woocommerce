@@ -5,6 +5,9 @@ if (!defined('ABSPATH')) {
 ?>
 
 <section class="paynocchio">
+    <div class="paynocchio-embleme">
+        <img src="<?php echo plugin_dir_url( WOOCOMMERCE_PAYNOCCHIO_BASENAME ) . 'assets/img/kopybara-logo.png' ?>" class="!cfps-block !cfps-mx-auto" />
+    </div>
     <div id="paynocchio_auth_block" class="cfps-max-w-4xl cfps-mx-auto">
         <div class="paynocchio_login_form visible">
             <h2>Please, login before contunue!</h2>

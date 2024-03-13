@@ -22,9 +22,6 @@ if (is_user_logged_in()) {
         <div class="paynocchio-embleme">
             <img src="<?php echo plugin_dir_url( WOOCOMMERCE_PAYNOCCHIO_BASENAME ) . 'assets/img/kopybara-logo.png' ?>" />
         </div>
-
-
-
     <?php if (is_user_logged_in()) { ?>
         <div class="paynocchio-profile-info">
             <div class="paynocchio-profile-img">
@@ -41,7 +38,7 @@ if (is_user_logged_in()) {
                 </a>
                 <div class="paynocchio-count">
                     <div>
-                        <p class="cfps-text-2xl cfps-font-semibold"><?php echo $wallet_bon; ?></p>
+                        <p class="cfps-text-2xl cfps-font-semibold"><span class="paynocchio-numbers paynocchio-bonus-value"></span></p>
                         <p>bonuses</p>
                     </div>
                     <div>
@@ -75,11 +72,23 @@ if (is_user_logged_in()) {
                         </div>
                     </div>
                 <?php } else { ?>
-
+                    <div class="paynocchio-profile-block paynocchio-blue-badge">
+                        <div class="cfps-grid cfps-grid-cols-[1fr_100px_200px_35px] cfps-gap-x-6">
+                            <div>
+                                Kopybara.Pay
+                            </div>
+                            <div>
+                                $<span class="paynocchio-numbers paynocchio-balance-value"></span>
+                            </div>
+                            <div>
+                                Bonuses: <span class="paynocchio-numbers paynocchio-bonus-value"></span>
+                            </div>
+                            <a class="tab-switcher cfps-cursor-pointer" id="wallet_toggle">
+                                <img src="<?php echo plugin_dir_url( WOOCOMMERCE_PAYNOCCHIO_BASENAME ) . 'assets/img/arr_r.png' ?>" />
+                            </a>
+                        </div>
+                    </div>
                 <?php } ?>
-
-
-                <?php echo do_shortcode('[paynocchio_payment_widget]'); ?>
 
                 <div class="paynocchio-profile-block">
                     <h2 class="cfps-font-bold cfps-text-xl cfps-mb-4">Personal Info</h2>
@@ -121,7 +130,7 @@ if (is_user_logged_in()) {
                                         Balance
                                     </div>
                                     <div class="amount">
-                                        $<?php echo $wallet_balance ?? ''; ?>
+                                        $<span class="paynocchio-numbers paynocchio-balance-value"></span>
                                     </div>
                                 </div>
                                 <div class="paynocchio-bonuses">
@@ -129,7 +138,7 @@ if (is_user_logged_in()) {
                                         Bonuses
                                     </div>
                                     <div class="amount">
-                                        <?php echo $wallet_bonuses ?? ''; ?>
+                                        <span class="paynocchio-numbers paynocchio-bonus-value"></span>
                                     </div>
                                 </div>
                             </div>
@@ -211,6 +220,37 @@ if (is_user_logged_in()) {
         </div>
     </div>
 </section>
+
+<?php
+// TODO
+/* PLEASE do not delete it yet, I will finalize it later
+$string = simplexml_load_file("https://www.artlebedev.ru/country-list/xml/");
+//Обратите внимание на вложенность с помощью
+// echo '<pre>';  print_r($xml);  echo '</pre>';
+
+function xml2array ( $xmlObject, $out = array () )
+{
+    foreach ( (array) $xmlObject as $index => $node )
+        $out[$index] = ( is_object ( $node ) ) ? xml2array ( $node ) : $node;
+
+    return $out;
+}
+
+$array = xml2array($string);
+$array = $array['country'];
+
+foreach($array as $item){
+    $item = xml2array($item);
+}
+
+//   print_r($array);
+
+foreach($array['country'] as $item){
+   // print_r($item);
+    print_r($item['english']);
+    //echo '<option value="">'.$item['iso'].'</option>';
+} */
+?>
 
     <div class="modal topUpModal">
         <div class="container">
@@ -303,7 +343,11 @@ if (is_user_logged_in()) {
                 </div>
             </div>
         </div>
-    </div>
+    </form>
+</div>
+
+
+
 
 
     <div class="modal paymentMethodModal">
