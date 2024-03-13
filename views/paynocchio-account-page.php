@@ -59,10 +59,9 @@ if (is_user_logged_in()) {
                     My trips
                 </a>
             </div>
-
             <div class="paynocchio_tabs">
                 <div class="paynocchio-profile-body paynocchio-tab-body visible">
-                    <?php if (!get_user_meta(get_current_user_id(), 'paynoccio_wallet')) { ?>
+                    <?php if (!get_user_meta(get_current_user_id(), 'paynoccio_wallet', true)) { ?>
                         <div class="paynocchio-profile-block">
                             <div class="cfps-grid cfps-grid-cols-[24px_1fr] cfps-gap-x-6">
                                 <img src="<?php echo plugin_dir_url( WOOCOMMERCE_PAYNOCCHIO_BASENAME ) . 'assets/img/i.png' ?>" />

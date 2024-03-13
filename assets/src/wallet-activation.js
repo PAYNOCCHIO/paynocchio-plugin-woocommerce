@@ -4,6 +4,17 @@ import './public.css';
 (( $ ) => {
 
     /**
+     * Function to make block visibility work
+     * @param blockClass
+     */
+    const toggleVisibility = (blockClass) => {
+        $(`${blockClass} > div.visible`).fadeOut('fast',function() {
+            $(`${blockClass} > div:not(.visible)`).fadeIn('fast');
+            $(`${blockClass} > div`).toggleClass('visible');
+        });
+    }
+
+    /**
      * Wallet Activation function
      * @param evt
      * @param path
