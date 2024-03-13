@@ -205,8 +205,8 @@ import './topUpFormProcess'
         const topUpButton = $("#top_up_button");
         const withdrawButton = $("#withdraw_button");
 
-        activationButton.click((evt) => activateWallet(evt, '/paynocchio-account-page'))
-        topUpButton.click((evt) => topUpWallet(evt, '/paynocchio-account-page'))
+        activationButton.click((evt) => activateWallet(evt))
+        topUpButton.click((evt) => topUpWallet(evt))
         withdrawButton.click((evt) => withdrawWallet(evt))
 
         $('a.tab-switcher').click(function() {

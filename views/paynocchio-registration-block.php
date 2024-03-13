@@ -8,10 +8,10 @@ if (!defined('ABSPATH')) {
     <div class="paynocchio-embleme">
         <img src="<?php echo plugin_dir_url( WOOCOMMERCE_PAYNOCCHIO_BASENAME ) . 'assets/img/kopybara-logo.png' ?>" class="!cfps-block !cfps-mx-auto" />
     </div>
-    <div id="paynocchio_auth_block" class="cfps-max-w-4xl cfps-mx-auto">
+    <div id="paynocchio_auth_block" class="cfps-max-w-4xl cfps-mx-auto cfps-mb-4">
         <div class="paynocchio_login_form visible">
-            <h2>Please, login before contunue!</h2>
-            <p class="cfps-mb-4">Not registered? <a class="form-toggle-a">Sign up!</a></p>
+            <h2 class="cfps-text-center">Please, login before contunue!</h2>
+            <p class="cfps-mb-8 cfps-text-center">Not registered? <a class="form-toggle-a">Sign up!</a></p>
             <form name="loginform" id="paynocchio_loginform" action="<?php bloginfo('url') ?>/wp-login.php" method="post">
                 <div class="row">
                     <div class="col">
@@ -35,8 +35,8 @@ if (!defined('ABSPATH')) {
         </div>
 
         <div class="paynocchio_register_form">
-            <h2>Join <?php bloginfo('title') ?> for your convenience!</h2>
-            <p class="cfps-mb-4">Already registered? <a class="form-toggle-a">Log in!</a></p>
+            <h2 class="cfps-text-center">Join <?php bloginfo('title') ?> for your convenience!</h2>
+            <p class="cfps-text-center cfps-mb-8">Already registered? <a class="form-toggle-a">Log in!</a></p>
             <form name="registerform" id="registerform" action="<?php bloginfo('url') ?>/wp-login.php?action=register" method="post" novalidate="novalidate">
                 <div class="row">
                     <div class="col">

@@ -147,7 +147,7 @@ class Woocommerce_Paynocchio_Payment_Gateway extends WC_Payment_Gateway {
 
         if ( $response['status_code'] === 200) {
             // Payment successful
-            $customer_order->add_order_note(__('Paynocchio complete payment.', 'paynocchio'));
+            //$customer_order->add_order_note(__('Paynocchio complete payment.', 'paynocchio'));
         }
 
         if ( $response['status_code'] === 200) {
@@ -157,7 +157,7 @@ class Woocommerce_Paynocchio_Payment_Gateway extends WC_Payment_Gateway {
             // paid order marked
             $customer_order->payment_complete();
 
-            //$customer_order->update_status( "completed" );
+            $customer_order->update_status( "completed" );
 
             // this is important part for empty cart
             $woocommerce->cart->empty_cart();
