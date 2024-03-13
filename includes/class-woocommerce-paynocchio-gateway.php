@@ -139,10 +139,12 @@ class Woocommerce_Paynocchio_Payment_Gateway extends WC_Payment_Gateway {
         $wallet_response = $user_paynocchio_wallet->getWalletBalance(get_user_meta($customer_order->user_id, 'paynoccio_wallet', true));
         $response = $user_paynocchio_wallet->makePayment($user_wallet_id, $fullAmount, $amount, $order_uuid, $bonusAmount);
 
-        print_r($wallet_response['balance']);
-
+        //print_r($wallet_response['balance']);
+        //TODO: Works only first fire!
         if ($wallet_response['balance'] < $amount) {
-            $customer_order->add_order_note( __( 'You don\'t have enough money. Please TopUp firs.', 'paynocchio' ) );
+            wc_add_notice( 'You balance is lack for $' . $amount - $wallet_response['balance'] . '. Please TopUp.', 'error' );
+            $customer_order->add_order_note( 'Error: insufficient funds' );
+            return;
         }
 
         if ( $response['status_code'] === 200) {
