@@ -5,7 +5,8 @@ const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
 module.exports = {
     mode: 'development',
     entry: {
-        public: './assets/src/public.js',
+        public: './assets/src/wallet-activation.js',
+        private: './assets/src/private.js',
         admin: './assets/src/admin.js',
     },
     module: {
