@@ -205,8 +205,8 @@ import './topUpFormProcess'
         const topUpButton = $("#top_up_button");
         const withdrawButton = $("#withdraw_button");
 
-        activationButton.click((evt) => activateWallet(evt, '/paynocchio-account-page'))
-        topUpButton.click((evt) => topUpWallet(evt, '/paynocchio-account-page'))
+        activationButton.click((evt) => activateWallet(evt))
+        topUpButton.click((evt) => topUpWallet(evt))
         withdrawButton.click((evt) => withdrawWallet(evt))
 
         $('a.tab-switcher').click(function() {
@@ -269,6 +269,32 @@ import './topUpFormProcess'
             })
 
             activationButton.click((evt) => activateWallet(evt))
+
+            $('.top-up-variants > a').click(function() {
+                let amount = $(this).get(0).id.replace('variant_','');
+                $('#top_up_amount').val(amount);
+            });
+
+            $('.toggle-autodeposit').click(function () {
+                $(this).toggleClass('checked');
+                if ($(this).hasClass('checked')) {
+                    $('input#autodeposit').attr('value','1');
+                } else {
+                    $('input#autodeposit').attr('value','0');
+                };
+            });
+
+            //$('#source-card').attr('value',$('.current-card').id);
+
+            $('.card-var').click(function () {
+                $('.card-variants').toggleClass('clicked');
+                $('.clicked .card-var').click(function() {
+                    $('.card-var').removeClass('current-card');
+                    $(this).addClass('current-card');
+                    $('#source-card').attr('value',$(this).attr('data-pan'));
+                });
+
+            });
 
             //place_orderButton.addClass('cfps-disabled')
 

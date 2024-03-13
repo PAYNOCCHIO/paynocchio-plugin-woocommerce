@@ -3,6 +3,7 @@ export default class Modal {
     constructor(options) {
         let defaults = { element: null, effect: 'zoom', state: 'closed', size: 'medium', content: null, footer: null, header: null, title: null };
         this.options = Object.assign(defaults, options);
+        //this.options.body = document.body;
         if (this.options.element == null) {
             this.options.element = document.createElement('div');
             this.options.element.classList.add('modal');
@@ -42,6 +43,7 @@ export default class Modal {
         this.options.element.style.display = 'flex';
         this.options.element.getBoundingClientRect();
         this.options.element.classList.add('open');
+        //this.options.body.classList.add('paynocchio-modal-open');
         if (this.options.onOpen) {
             this.options.onOpen(this);
         }
@@ -50,6 +52,7 @@ export default class Modal {
     close() {
         this.options.state = 'closed';
         this.options.element.classList.remove('open');
+        //this.options.body.classList.remove('paynocchio-modal-open');
         this.options.element.style.display = 'none';
         if (this.options.onClose) {
             this.options.onClose(this);
