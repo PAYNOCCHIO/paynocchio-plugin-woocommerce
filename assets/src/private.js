@@ -43,7 +43,36 @@ import './topUpFormProcess'
     }
 
     /**
-     * Wallet TopUp function
+     * Wallet Activation function
+     * @param evt
+     * @param path
+     */
+    const activateWallet = (evt, path) => {
+        $(evt.target).addClass('cfps-disabled')
+
+        $(`#${evt.target.id} .cfps-spinner`).removeClass('cfps-hidden');
+
+        $.ajax({
+            url: paynocchio_object.ajaxurl,
+            type: 'POST',
+            data: {
+                'action': 'paynocchio_ajax_activation',
+                'ajax-activation-nonce': $('#ajax-activation-nonce').val(),
+            },
+            success: function(data){
+                if (data.success){
+                    path ? document.location.href = path : document.location.reload();
+                }
+            }
+        })
+            .always(function() {
+                $(`#${evt.target.id} .cfps-spinner`).addClass('cfps-hidden');
+                $(evt.target).removeClass('cfps-disabled')
+            });
+    }
+
+    /**
+     * Wallet Activation function
      * @param evt
      * @param path
      */
@@ -187,6 +216,7 @@ import './topUpFormProcess'
 
         initiateWebSocket();
 
+        const activationButton = $("#paynocchio_activation_button");
         const topUpButton = $("#top_up_button");
         const withdrawButton = $("#withdraw_button");
 
