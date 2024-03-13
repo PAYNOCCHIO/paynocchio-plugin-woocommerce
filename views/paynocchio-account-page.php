@@ -16,7 +16,6 @@ if (is_user_logged_in()) {
         $wallet_bon = $wallet_bal_bon['bonuses'];
         $wallet_pan = $wallet_bal_bon['number'];
     }
-
 };
 ?>
 

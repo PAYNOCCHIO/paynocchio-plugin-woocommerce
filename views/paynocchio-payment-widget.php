@@ -4,6 +4,21 @@ if (!defined('ABSPATH')) {
 }
 ?>
 
+<?php
+if (is_user_logged_in()) {
+    $current_user = wp_get_current_user();
+    $user_paynocchio_wallet_id = get_user_meta($current_user->ID, 'paynoccio_wallet', true);
+    if($user_paynocchio_wallet_id) {
+        $user_paynocchio_wallet = new Woocommerce_Paynocchio_Wallet($current_user->ID);
+        $wallet_bal_bon = $user_paynocchio_wallet->getWalletBalance($user_paynocchio_wallet_id);
+
+        $wallet_balance = $wallet_bal_bon['balance'];
+        $wallet_bonus = $wallet_bal_bon['bonuses'];
+        $wallet_pan = $wallet_bal_bon['number'];
+    }
+};
+?>
+
 <section class="paynocchio">
     <div class="paynocchio-embleme">
         <img src="<?php echo plugin_dir_url( WOOCOMMERCE_PAYNOCCHIO_BASENAME ) . 'assets/img/kopybara-logo.png' ?>" class="!cfps-block !cfps-mx-auto" />
@@ -15,11 +30,11 @@ if (!defined('ABSPATH')) {
                 <div class="cfps-flex cfps-flex-row cfps-items-center cfps-text-white cfps-gap-x-8 cfps-text-xl">
                     <div>
                         <p>Balance</p>
-                        <p>$<span class="paynocchio-numbers paynocchio-balance-value">0</span></p>
+                        <p>$<span class="paynocchio-numbers paynocchio-balance-value"><?php echo $wallet_balance ?? 0 ?></span></p>
                     </div>
                     <div>
                         <p>Bonuses</p>
-                        <p><span class="paynocchio-numbers paynocchio-bonus-value">0</span></p>
+                        <p><span class="paynocchio-numbers paynocchio-bonus-value"><?php echo $wallet_bonus ?? 0 ?></span></p>
                     </div>
                 </div>
 
