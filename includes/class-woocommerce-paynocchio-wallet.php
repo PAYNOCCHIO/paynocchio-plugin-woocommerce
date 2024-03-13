@@ -135,8 +135,6 @@ class Woocommerce_Paynocchio_Wallet {
         if ($bonusAmount !== null) {
             $data['bonus_amount'] = $bonusAmount;
         }
-
-
         $response = $this->sendRequest('POST', '/operation/payment', json_encode($data));
 
         return $response;
@@ -162,6 +160,21 @@ class Woocommerce_Paynocchio_Wallet {
         }
 
         $response = $this->sendRequest('GET', $url, $queryParams);
+
+        return $response;
+    }
+
+
+    public function chargeBack(string $orderId, string $walletId, $amount): array {
+        $data = [
+            PAYNOCCHIO_ENV_KEY => $this->envId,
+            PAYNOCCHIO_USER_UUID_KEY => $this->userId,
+            PAYNOCCHIO_WALLET_KEY => $walletId,
+            "currency" => "USD",
+            'amount' => $amount,
+            'external_order_id' => $orderId,
+        ];
+        $response = $this->sendRequest('POST', '/operation/chargeback', json_encode($data));
 
         return $response;
     }
