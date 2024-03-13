@@ -23,7 +23,7 @@ class Woocommerce_Paynocchio_Payment_Gateway extends WC_Payment_Gateway {
         $this->has_fields = true;
 
         // support default form with credit card
-        $this->supports = array( 'product' );
+        $this->supports = array( 'product', 'refunds' );
 
         // setting defines
         $this->init_form_fields();
