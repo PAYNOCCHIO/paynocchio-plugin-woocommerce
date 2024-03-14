@@ -67,9 +67,7 @@ import './topUpFormProcess'
                     $('.topUpModal .message').text('Success!');
                     updateWalletBalance();
                     updateOrderButtonState();
-                    setTimeout(() => {
-                        $('.topUpModal .message').text('')
-                    }, 5000)
+                    $('.topUpModal').hide('fast')
                 }
             }
         })
@@ -96,9 +94,7 @@ import './topUpFormProcess'
             $('.withdrawModal .message').text('Sorry, can\'t do ;)');
             $(evt.target).removeClass('cfps-disabled')
             $(`#${evt.target.id} .cfps-spinner`).addClass('cfps-hidden');
-            setTimeout(() => {
-                $('.withdrawModal .message').text('')
-            }, 2000)
+            $('.topUpModal').hide('fast')
         } else {
             $.ajax({
                 url: paynocchio_object.ajaxurl,
@@ -114,9 +110,7 @@ import './topUpFormProcess'
                         $('.withdrawModal .message').text('Success!');
                         updateWalletBalance();
                         updateOrderButtonState();
-                        setTimeout(() => {
-                            $('.withdrawModal .message').text('')
-                        }, 5000)
+                        $('.topUpModal').hide('fast')
                     }
                 }
             })
