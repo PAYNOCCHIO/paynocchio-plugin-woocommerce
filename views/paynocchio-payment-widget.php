@@ -66,7 +66,7 @@ if (is_user_logged_in()) {
                  $max_bonus = $cart_total;
              }
             ?>
-        <div class="paynocchio-conversion-rate cfps-my-8">
+        <div class="paynocchio-conversion-rate cfps-mt-8">
             <h3>
                 How much do you want to pay in bonuses?
             </h3>
@@ -80,12 +80,12 @@ if (is_user_logged_in()) {
                 'input_class' => ['short'],
             ] );
             ?>
-                <input id="bonuses-input" type="range" min="0" max="<?php echo $max_bonus; ?>" step="1" value="0" />
+            <input id="bonuses-input" type="range" min="0" max="<?php echo $max_bonus; ?>" step="1" value="0" />
 
         </div>
     <?php } ?>
 
-        <div class="cfps-flex cfps-flex-row cfps-gap-x-4">
+        <div class="cfps-flex cfps-flex-row cfps-gap-x-4 cfps-mt-8">
             <a href="#">Manage Cards</a>
             <a href="#">History</a>
             <a href="#">Support</a>
