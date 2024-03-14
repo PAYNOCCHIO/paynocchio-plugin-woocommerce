@@ -11,10 +11,11 @@ if (is_user_logged_in()) {
     if($user_paynocchio_wallet_id) {
         $user_paynocchio_wallet = new Woocommerce_Paynocchio_Wallet($current_user->ID);
         $wallet_bal_bon = $user_paynocchio_wallet->getWalletBalance($user_paynocchio_wallet_id);
-
-        $wallet_bal = $wallet_bal_bon['balance'];
-        $wallet_bon = $wallet_bal_bon['bonuses'];
-        $wallet_pan = $wallet_bal_bon['number'];
+        if($wallet_bal_bon) {
+            $wallet_balance = $wallet_bal_bon['balance'];
+            $wallet_bonus = $wallet_bal_bon['bonuses'];
+            $wallet_pan = $wallet_bal_bon['number'];
+        }
     }
 };
 ?>
@@ -85,10 +86,10 @@ if (is_user_logged_in()) {
                                     Kopybara.Pay
                                 </div>
                                 <div>
-                                    $<span class="paynocchio-numbers paynocchio-balance-value">0</span>
+                                    $<span class="paynocchio-numbers paynocchio-balance-value"><?php echo $wallet_balance ?? 0 ?></span>
                                 </div>
                                 <div>
-                                    Bonuses: <span class="paynocchio-numbers paynocchio-bonus-value">0</span>
+                                    Bonuses: <span class="paynocchio-numbers paynocchio-bonus-value"><?php echo $wallet_bonus ?? 0 ?></span>
                                 </div>
                                 <a class="tab-switcher cfps-cursor-pointer" id="wallet_toggle">
                                     <img src="<?php echo plugin_dir_url( WOOCOMMERCE_PAYNOCCHIO_BASENAME ) . 'assets/img/arr_r.png' ?>" />
@@ -137,7 +138,7 @@ if (is_user_logged_in()) {
                                             Balance
                                         </div>
                                         <div class="amount">
-                                            $<span class="paynocchio-numbers paynocchio-balance-value"></span>
+                                            $<span class="paynocchio-numbers paynocchio-balance-value"><?php echo $wallet_balance ?? 0 ?></span>
                                         </div>
                                     </div>
                                     <div class="paynocchio-bonuses">
@@ -145,7 +146,7 @@ if (is_user_logged_in()) {
                                             Bonuses
                                         </div>
                                         <div class="amount">
-                                            <span class="paynocchio-numbers paynocchio-bonus-value"></span>
+                                            <span class="paynocchio-numbers paynocchio-bonus-value"><?php echo $wallet_bonus ?? 0 ?></span>
                                         </div>
                                     </div>
                                 </div>

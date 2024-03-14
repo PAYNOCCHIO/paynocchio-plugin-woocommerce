@@ -16,10 +16,11 @@ if (is_user_logged_in()) {
     if($user_paynocchio_wallet_id) {
         $user_paynocchio_wallet = new Woocommerce_Paynocchio_Wallet($current_user->ID);
         $wallet_bal_bon = $user_paynocchio_wallet->getWalletBalance($user_paynocchio_wallet_id);
-
-        $wallet_balance = $wallet_bal_bon['balance'];
-        $wallet_bonus = $wallet_bal_bon['bonuses'];
-        $wallet_pan = $wallet_bal_bon['number'];
+        if($wallet_bal_bon) {
+            $wallet_balance = $wallet_bal_bon['balance'];
+            $wallet_bonus = $wallet_bal_bon['bonuses'];
+            $wallet_pan = $wallet_bal_bon['number'];
+        }
     }
 };
 ?>
