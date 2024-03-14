@@ -194,8 +194,8 @@ class Woocommerce_Paynocchio_Wallet {
         if($user_paynocchio_wallet['status_code'] === 200) {
             $json_response = json_decode($user_paynocchio_wallet['response']);
             return [
-                'balance' => $json_response->balance->current / 10000,
-                'bonuses' => $json_response->rewarding_balance / 10000,
+                'balance' => $json_response->balance->current,
+                'bonuses' => $json_response->rewarding_balance,
                 'number' => $json_response->number,
             ];
         }
