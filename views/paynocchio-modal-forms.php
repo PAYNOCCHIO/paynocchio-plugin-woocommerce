@@ -236,7 +236,7 @@ if (is_user_logged_in()) {
                     </div>
                 </div>
             </div>
-            <input type="hidden" id="source-card" name="source-card" value="" />
+            <input type="hidden" id="source-card2" name="source-card2" value="" />
         </div>
         <div class="footer">
             <div>
