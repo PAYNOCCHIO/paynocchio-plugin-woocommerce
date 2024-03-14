@@ -70,10 +70,19 @@ if (is_user_logged_in()) {
             <h3>
                 How much do you want to pay in bonuses?
             </h3>
-            <form action="">
-                <input type="text" id="conversion-value" class="cfps-bg-white cfps-w-[50px] cfps-border-0 cfps-p-0 !cfps-mb-6 cfps-text-xl cfps-block" />
-                <input id="conversion-input" type="range" min="0" max="<?php echo $max_bonus; ?>" step="1" value="0" oninput="this.previousElementSibling.value = this.value" />
-            </form>
+            <?php
+            woocommerce_form_field( 'bonuses_value', [
+                'type'        => 'number',
+                'id'          => 'bonuses-value',
+                'label'       => '',
+                'placeholder' => '',
+                'default'     => '',
+                'class'       => ['cfps-bg-white cfps-w-[50px] cfps-border-0 cfps-p-0 !cfps-mb-6 cfps-text-xl cfps-block'],
+                'input_class' => ['short'],
+            ] );
+            ?>
+                <input id="bonuses-input" type="range" min="0" max="<?php echo $max_bonus; ?>" step="1" value="0" />
+
         </div>
     <?php } ?>
 
