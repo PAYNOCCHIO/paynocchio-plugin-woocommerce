@@ -64,6 +64,7 @@ if (is_user_logged_in()) {
             <form action="">
                 <input type="text" id="conversion-value" class="cfps-bg-white cfps-w-[50px] cfps-border-0 cfps-p-0 !cfps-mb-6 cfps-text-xl cfps-block" />
                 <input id="conversion-input" type="range" min="0" max="100" step="1" value="0" oninput="this.previousElementSibling.value = this.value" />
+                <input id="conversion-input" type="range" min="0" max="<?php echo $wallet_bonus; ?>" step="1" value="0" />
             </form>
         </div>
     <?php } ?>
