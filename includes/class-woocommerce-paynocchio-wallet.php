@@ -53,7 +53,6 @@ class Woocommerce_Paynocchio_Wallet {
 
         curl_close($curl);
 
-        print_r($response);
         return [
             'status_code' => $httpCode,
             'response' => $response,
