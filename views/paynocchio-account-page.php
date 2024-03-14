@@ -6,6 +6,10 @@ if (!defined('ABSPATH')) {
 
 <?php
 if (is_user_logged_in()) {
+    $wallet_balance = 0;
+    $wallet_bonus = 0;
+    $wallet_pan = 0;
+
     $current_user = wp_get_current_user();
     $user_paynocchio_wallet_id = get_user_meta($current_user->ID, 'paynoccio_wallet', true);
     if($user_paynocchio_wallet_id) {
@@ -41,7 +45,7 @@ if (is_user_logged_in()) {
                     </a>
                     <div class="paynocchio-count">
                         <div>
-                            <p class="cfps-text-2xl cfps-font-semibold"><span class="paynocchio-numbers paynocchio-bonus-value">0</span></p>
+                            <p class="cfps-text-2xl cfps-font-semibold"><span class="paynocchio-numbers paynocchio-bonus-value"><?php echo $wallet_bonus; ?></span></p>
                             <p>bonuses</p>
                         </div>
                         <div>

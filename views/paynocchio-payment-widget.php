@@ -9,6 +9,10 @@ $wallet_balance = 0;
 $wallet_bonus = 0;
 $wallet_pan = '';
 
+global $woocommerce;
+$cart = $woocommerce->cart;
+$cart_total = intval($woocommerce->cart->total);
+
 if (is_user_logged_in()) {
     $current_user = wp_get_current_user();
     $user_paynocchio_wallet_id = get_user_meta($current_user->ID, 'paynoccio_wallet', true);
@@ -35,11 +39,11 @@ if (is_user_logged_in()) {
                 <div class="cfps-flex cfps-flex-row cfps-items-center cfps-text-white cfps-gap-x-8 cfps-text-xl">
                     <div>
                         <p>Balance</p>
-                        <p>$<span class="paynocchio-numbers paynocchio-balance-value"><?php echo $wallet_balance ?? 0 ?></span></p>
+                        <p>$<span class="paynocchio-numbers paynocchio-balance-value"><?php echo $wallet_balance; ?></span></p>
                     </div>
                     <div>
                         <p>Bonuses</p>
-                        <p><span class="paynocchio-numbers paynocchio-bonus-value"><?php echo $wallet_bonus ?? 0 ?></span></p>
+                        <p><span class="paynocchio-numbers paynocchio-bonus-value"><?php echo $wallet_bonus ?></span></p>
                     </div>
                 </div>
 
@@ -55,16 +59,20 @@ if (is_user_logged_in()) {
                 <a class="btn-white cfps-absolute cfps-bottom-4 cfps-left-4" href="#">Read more</a>
             </div>
         </div>
-
-        <?php if($wallet_bonus) { ?>
+        <?php if($wallet_bonus) {
+             if($wallet_bonus < $cart_total) {
+                 $max_bonus = $wallet_bonus;
+             } else {
+                 $max_bonus = $cart_total;
+             }
+            ?>
         <div class="paynocchio-conversion-rate cfps-my-8">
             <h3>
                 How much do you want to pay in bonuses?
             </h3>
             <form action="">
                 <input type="text" id="conversion-value" class="cfps-bg-white cfps-w-[50px] cfps-border-0 cfps-p-0 !cfps-mb-6 cfps-text-xl cfps-block" />
-                <input id="conversion-input" type="range" min="0" max="100" step="1" value="0" oninput="this.previousElementSibling.value = this.value" />
-                <input id="conversion-input" type="range" min="0" max="<?php echo $wallet_bonus; ?>" step="1" value="0" />
+                <input id="conversion-input" type="range" min="0" max="<?php echo $max_bonus; ?>" step="1" value="0" oninput="this.previousElementSibling.value = this.value" />
             </form>
         </div>
     <?php } ?>
