@@ -130,7 +130,7 @@ class Woocommerce_Paynocchio_Payment_Gateway extends WC_Payment_Gateway {
         $user_uuid = get_user_meta($customer_order->get_user_id(), 'user_uuid', true);
         $user_paynocchio_wallet = new Woocommerce_Paynocchio_Wallet($user_uuid);
 
-        $fullAmount = $customer_order->get_total();
+        $fullAmount = $customer_order->total;
         //$amount = (isset( $_POST['paynocchio-amount'] ) ) ? $_POST['paynocchio-amount'] : '';
         $amount = $fullAmount;
         //$bonusAmount = ( isset( $_POST['paynocchio-bonus_amount'] ) ) ? $_POST['paynocchio-bonus_amount'] : '';
