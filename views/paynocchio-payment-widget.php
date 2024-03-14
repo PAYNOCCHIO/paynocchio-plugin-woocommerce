@@ -77,7 +77,6 @@ if (is_user_logged_in()) {
                 'label'       => '',
                 'placeholder' => '',
                 'default'     => '',
-                'class'       => ['cfps-bg-white cfps-w-[50px] cfps-border-0 cfps-p-0 !cfps-mb-6 cfps-text-xl cfps-block'],
                 'input_class' => ['short'],
             ] );
             ?>
