@@ -5,6 +5,10 @@ if (!defined('ABSPATH')) {
 ?>
 
 <?php
+$wallet_balance = 0;
+$wallet_bonus = 0;
+$wallet_pan = '';
+
 if (is_user_logged_in()) {
     $current_user = wp_get_current_user();
     $user_paynocchio_wallet_id = get_user_meta($current_user->ID, 'paynoccio_wallet', true);
@@ -52,6 +56,7 @@ if (is_user_logged_in()) {
             </div>
         </div>
 
+        <?php if($wallet_bonus) { ?>
         <div class="paynocchio-conversion-rate cfps-my-8">
             <h3>
                 How much do you want to pay in bonuses?
@@ -61,6 +66,7 @@ if (is_user_logged_in()) {
                 <input id="conversion-input" type="range" min="0" max="100" step="1" value="0" oninput="this.previousElementSibling.value = this.value" />
             </form>
         </div>
+    <?php } ?>
 
         <div class="cfps-flex cfps-flex-row cfps-gap-x-4">
             <a href="#">Manage Cards</a>
