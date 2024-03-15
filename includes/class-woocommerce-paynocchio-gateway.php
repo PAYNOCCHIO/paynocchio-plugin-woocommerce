@@ -135,6 +135,8 @@ class Woocommerce_Paynocchio_Payment_Gateway extends WC_Payment_Gateway {
 
         $bonusAmount = ( isset( $_POST['bonuses_value'] ) ) ? $_POST['bonuses_value'] : null;
 
+        $customer_order->update_meta_data('bonuses_value', $bonusAmount);
+
         if(!$bonusAmount) {
             $fullAmount = null;
         } else {
@@ -183,6 +185,7 @@ class Woocommerce_Paynocchio_Payment_Gateway extends WC_Payment_Gateway {
 
         $customer_order = new WC_Order($order_id);
         $order_uuid = $customer_order->get_meta( 'uuid' , true );
+        $bonuses_value = $customer_order->get_meta( 'bonuses_value' , true );
 
         $user_wallet_id = get_user_meta($customer_order->get_user_id(), 'paynoccio_wallet', true);
         $user_uuid = get_user_meta($customer_order->get_user_id(), 'user_uuid', true);
@@ -192,6 +195,10 @@ class Woocommerce_Paynocchio_Payment_Gateway extends WC_Payment_Gateway {
         $customer_order->add_order_note( 'User UUID ' . $user_uuid );
         $customer_order->add_order_note( 'Wallet UUID ' . $user_wallet_id );
         $customer_order->add_order_note( 'Order UUID ' . $order_uuid );
+
+        if ($bonuses_value) {
+            $amount = $amount - $bonuses_value;
+        }
 
         $wallet_response = $user_paynocchio_wallet->chargeBack($order_uuid, $user_wallet_id, $amount);
 
