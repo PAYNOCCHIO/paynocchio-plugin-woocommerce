@@ -74,15 +74,20 @@ import './public.css';
         });
         // WOOCOMMERCE CHECKOUT SCRIPT
         $(document).on( "updated_checkout", function() {
-            const hasRegistration = $('#paynocchio_auth_block')
+            const paynocchio_auth_block = $('#paynocchio_auth_block').is(":hidden")
             const place_orderButton = $('#place_order');
 
-            const hidden = ($('.payment_box.payment_method_paynocchio').is(":hidden"));
+            const payment_hidden = ($('.payment_box.payment_method_paynocchio').is(":hidden"));
+            const activatioin_block_hidden = ($('.payment_box.payment_method_paynocchio .paynocchio').is(":hidden"));
 
-            if(place_orderButton && !hidden) {
-                if(hasRegistration) {
+            if(place_orderButton && !payment_hidden) {
+                if(paynocchio_auth_block) {
                     place_orderButton.addClass('cfps-disabled')
                     place_orderButton.text('Please login or register')
+                }
+                if(!activatioin_block_hidden) {
+                    place_orderButton.addClass('cfps-disabled')
+                    place_orderButton.text('Please activate the Wallet first')
                 }
             }
 
