@@ -203,10 +203,10 @@ class Woocommerce_Paynocchio_Payment_Gateway extends WC_Payment_Gateway {
             '$wallet_response' => $wallet_response,
         ]);*/
 
-        $customer_order->add_order_note( __( 'Paynocchio complete refund.', 'paynocchio' ) );
-        return true;
+        /*$customer_order->add_order_note( __( 'Paynocchio complete refund.', 'paynocchio' ) );
+        return true;*/
 
-        /*if ( $wallet_response['status_code'] === 200) {
+        if ( $wallet_response['status_code'] === 200) {
             // Refund successful
             $customer_order->add_order_note( __( 'Paynocchio complete refund.', 'paynocchio' ) );
             return true;
@@ -214,7 +214,7 @@ class Woocommerce_Paynocchio_Payment_Gateway extends WC_Payment_Gateway {
             // Refund fail
             $customer_order->add_order_note( 'Paynocchio refund error: '. json_decode($wallet_response['detail'])->msg );
             return false;
-        }*/
+        }
     }
 
     // Validate fields
