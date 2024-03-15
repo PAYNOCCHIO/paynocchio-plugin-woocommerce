@@ -38,7 +38,7 @@ class Woocommerce_Paynocchio_Payment_Gateway extends WC_Payment_Gateway {
         $this->description = $this->get_option( 'description' );
 
         // further check of SSL if you want
-        add_action( 'admin_notices', array( $this,	'do_ssl_check' ) );
+        //add_action( 'admin_notices', array( $this,	'do_ssl_check' ) );
 
         // Save settings
         if ( is_admin() ) {
@@ -261,12 +261,12 @@ class Woocommerce_Paynocchio_Payment_Gateway extends WC_Payment_Gateway {
 
     }
 
-    public function do_ssl_check() {
+    /*public function do_ssl_check() {
         if( $this->enabled == "yes" ) {
             if( get_option( 'woocommerce_force_ssl_checkout' ) == "no" ) {
                 echo "<div class=\"error\"><p>". sprintf( __( "<strong>%s</strong> is enabled and WooCommerce is not forcing the SSL certificate on your checkout page. Please ensure that you have a valid SSL certificate and that you are <a href=\"%s\">forcing the checkout pages to be secured.</a>" ), $this->method_title, admin_url( 'admin.php?page=wc-settings&tab=checkout' ) ) ."</p></div>";
             }
         }
-    }
+    }*/
 
 }
