@@ -66,8 +66,27 @@ import './public.css';
 
         $('.form-toggle-a').click(() => toggleVisibility('#paynocchio_auth_block'));
 
+        /**
+         * Trigger update checkout when payment method changed
+         */
+        $('form.checkout').on('change', 'input[name="payment_method"]', function(){
+            $(document.body).trigger('update_checkout');
+        });
         // WOOCOMMERCE CHECKOUT SCRIPT
         $(document).on( "updated_checkout", function() {
+            const hasRegistration = $('#paynocchio_auth_block')
+            const place_orderButton = $('#place_order');
+
+            const hidden = ($('.payment_box.payment_method_paynocchio').is(":hidden"));
+
+            if(place_orderButton && !hidden) {
+                if(hasRegistration) {
+                    place_orderButton.addClass('cfps-disabled')
+                    place_orderButton.text('Please login or register')
+                }
+            }
+
+
 
             const activationButton = $("#paynocchio_activation_button");
 
