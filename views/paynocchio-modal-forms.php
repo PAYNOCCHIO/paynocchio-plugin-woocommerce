@@ -4,6 +4,22 @@ if (!defined('ABSPATH')) {
 }
 ?>
 
+<?php
+if (is_user_logged_in()) {
+    $current_user = wp_get_current_user();
+    $user_paynocchio_wallet_id = get_user_meta($current_user->ID, 'paynoccio_wallet', true);
+    if($user_paynocchio_wallet_id) {
+        $user_paynocchio_wallet = new Woocommerce_Paynocchio_Wallet($current_user->ID);
+        $wallet_bal_bon = $user_paynocchio_wallet->getWalletBalance($user_paynocchio_wallet_id);
+        if($wallet_bal_bon) {
+            $wallet_balance = $wallet_bal_bon['balance'];
+            $wallet_bonus = $wallet_bal_bon['bonuses'];
+            $wallet_pan = $wallet_bal_bon['number'];
+        }
+    }
+};
+?>
+
 <div class="modal topUpModal">
     <div class="container">
         <div class="header">
@@ -187,11 +203,11 @@ if (!defined('ABSPATH')) {
             <button class="close">&times;</button>
         </div>
         <div id="witdrawForm" class="content">
-            <div class="mb-4">Current balance: <span class="cfps-font-semibold">$<span class="paynocchio-numbers paynocchio-balance-value"></span></span></div>
+            <div class="mb-4">Current balance: <span class="cfps-font-semibold">$<span class="paynocchio-numbers paynocchio-balance-value"><?php echo $wallet_balance ?? 0?></span></span></div>
             <div class="top-up-amount-container cfps-mb-8 cfps-flex">
                 <p class="cfps-text-3xl">$</p>
                 <input type="number" step="0.01" class="cfps-bg-white cfps-border-0 cfps-text-3xl !cfps-p-0 focus:!cfps-outline-none"
-                       name="amount" id="withdraw_amount" placeholder="Type a number" />
+                       name="amount" id="withdraw_amount" value="0" />
                 <?php wp_nonce_field( 'paynocchio_ajax_withdraw', 'ajax-withdraw-nonce' ); ?>
             </div>
 
@@ -220,7 +236,7 @@ if (!defined('ABSPATH')) {
                     </div>
                 </div>
             </div>
-            <input type="hidden" id="source-card" name="source-card" value="" />
+            <input type="hidden" id="source-card2" name="source-card2" value="" />
         </div>
         <div class="footer">
             <div>

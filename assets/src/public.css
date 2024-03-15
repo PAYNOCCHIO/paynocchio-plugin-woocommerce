@@ -330,8 +330,16 @@ Numbers animation
     background-color: #f9fafc;*/
     padding: 15px;
     display: flex;
-    justify-content: center;
+    justify-content: flex-start;
 }
+.modal .container .footer > div {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 1em;
+}
+
 .modal .container .footer button {
     display: inline-flex;
     appearance: none;
@@ -339,7 +347,7 @@ Numbers animation
     background-color: #3a75d5;
     color: #ffffff;
     border-radius: 0.5rem;
-    padding: 7px 22px;
+    padding: 3px 18px;
     font-size: 14px;
     margin-right: 7px;
     cursor: pointer;
@@ -473,4 +481,8 @@ input {
         accent-color: #3b82f6;
         width: 150px;
     }
+}
+
+#bonuses-value {
+    @apply !cfps-bg-white cfps-w-[50px] cfps-border-0 cfps-p-0 !cfps-mb-6 cfps-text-xl cfps-block;
 }

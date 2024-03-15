@@ -130,24 +130,19 @@ class Woocommerce_Paynocchio_Payment_Gateway extends WC_Payment_Gateway {
         $user_uuid = get_user_meta($customer_order->get_user_id(), 'user_uuid', true);
         $user_paynocchio_wallet = new Woocommerce_Paynocchio_Wallet($user_uuid);
 
-        $fullAmount = $customer_order->get_total();
-        //$amount = (isset( $_POST['paynocchio-amount'] ) ) ? $_POST['paynocchio-amount'] : '';
-        $amount = $fullAmount;
-        //$bonusAmount = ( isset( $_POST['paynocchio-bonus_amount'] ) ) ? $_POST['paynocchio-bonus_amount'] : '';
-        $bonusAmount = null;
+        $fullAmount = $customer_order->total;
+        $bonusAmount = ( isset( $_POST['bonuses_value'] ) ) ? $_POST['bonuses_value'] : '';
+        $amount = $fullAmount - $bonusAmount;
 
         $wallet_response = $user_paynocchio_wallet->getWalletBalance(get_user_meta($customer_order->user_id, 'paynoccio_wallet', true));
         $response = $user_paynocchio_wallet->makePayment($user_wallet_id, $fullAmount, $amount, $order_uuid, $bonusAmount);
 
-        print_r($wallet_response);
-
-        /*if ($amount < 10000) {
-
-        }*/
-
-        if ( $response['status_code'] === 200) {
-            // Payment successful
-            //$customer_order->add_order_note(__('Paynocchio complete payment.', 'paynocchio'));
+        //print_r($wallet_response['balance']);
+        //TODO: Works only first fire!
+        if ($wallet_response['balance'] + $wallet_response['bonuses'] < $amount) {
+            wc_add_notice( 'You balance is lack for $' . $amount - $wallet_response['balance'] . '. Please TopUp.', 'error' );
+            $customer_order->add_order_note( 'Error: insufficient funds' );
+            return;
         }
 
         if ( $response['status_code'] === 200) {
@@ -157,7 +152,7 @@ class Woocommerce_Paynocchio_Payment_Gateway extends WC_Payment_Gateway {
             // paid order marked
             $customer_order->payment_complete();
 
-            $customer_order->update_status( "completed" );
+            //$customer_order->update_status( "completed" );
 
             // this is important part for empty cart
             $woocommerce->cart->empty_cart();
@@ -178,22 +173,27 @@ class Woocommerce_Paynocchio_Payment_Gateway extends WC_Payment_Gateway {
     public function process_refund($order_id, $amount = null, $reason = '') {
 
         $customer_order = new WC_Order($order_id);
-       // $wallet_id = get_user_meta($customer_order->get_user_id(), 'paynoccio_wallet', true);
-       // $user_uuid = get_user_meta($customer_order->get_user_id(), 'user_uuid', true);
+        $order_uuid = $customer_order->get_meta( 'uuid' , true );
 
-        $order_uuid = get_post_meta( $customer_order , 'uuid' , true );
+        $user_wallet_id = get_user_meta($customer_order->get_user_id(), 'paynoccio_wallet', true);
+        $user_uuid = get_user_meta($customer_order->get_user_id(), 'user_uuid', true);
+        $user_paynocchio_wallet = new Woocommerce_Paynocchio_Wallet($user_uuid);
 
-        $data = [
-            PAYNOCCHIO_ENV_KEY => $this->envId,
-            PAYNOCCHIO_USER_UUID_KEY => $this->userId,
-            PAYNOCCHIO_WALLET_KEY => $walletId,
-            "currency" => "USD",
-            'amount' => $amount,
-            'external_order_id' => $order_uuid,
-        ];
-        $response = $this->sendRequest('POST', '/operation/chargeback', json_encode($data));
+        $customer_order->add_order_note( 'User UUID ' . $user_uuid );
+        $customer_order->add_order_note( 'Wallet UUID ' . $user_wallet_id );
+        $customer_order->add_order_note( 'Order UUID ' . $order_uuid );
 
-        return $response;
+        $wallet_response = $user_paynocchio_wallet->chargeBack($order_uuid, $user_wallet_id, $amount);
+
+        if ( $wallet_response['status_code'] === 200) {
+            // Refund successful
+            $customer_order->add_order_note( __( 'Paynocchio complete refund.', 'paynocchio' ) );
+            return true;
+        } else {
+            // Refund fail
+            $customer_order->add_order_note( 'Paynocchio refund error: '. json_decode($response['detail'])->msg );
+            return false;
+        }
     }
 
     // Validate fields

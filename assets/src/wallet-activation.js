@@ -4,6 +4,17 @@ import './public.css';
 (( $ ) => {
 
     /**
+     * Function to make block visibility work
+     * @param blockClass
+     */
+    const toggleVisibility = (blockClass) => {
+        $(`${blockClass} > div.visible`).fadeOut('fast',function() {
+            $(`${blockClass} > div:not(.visible)`).fadeIn('fast');
+            $(`${blockClass} > div`).toggleClass('visible');
+        });
+    }
+
+    /**
      * Wallet Activation function
      * @param evt
      * @param path
@@ -45,10 +56,13 @@ import './public.css';
     $(document).ready(function() {
         //READY START
 
+        const checkout = window.location.pathname === '/checkout/';
+
         const activationButton = $("#paynocchio_activation_button");
 
-        activationButton.click((evt) => activateWallet(evt))
-
+        if(!checkout) {
+            activationButton.click((evt) => activateWallet(evt))
+        }
 
         $('.form-toggle-a').click(() => toggleVisibility('#paynocchio_auth_block'));
 

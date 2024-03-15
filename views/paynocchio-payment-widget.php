@@ -5,16 +5,25 @@ if (!defined('ABSPATH')) {
 ?>
 
 <?php
+$wallet_balance = 0;
+$wallet_bonus = 0;
+$wallet_pan = '';
+
+global $woocommerce;
+$cart = $woocommerce->cart;
+$cart_total = intval($woocommerce->cart->total);
+
 if (is_user_logged_in()) {
     $current_user = wp_get_current_user();
     $user_paynocchio_wallet_id = get_user_meta($current_user->ID, 'paynoccio_wallet', true);
     if($user_paynocchio_wallet_id) {
         $user_paynocchio_wallet = new Woocommerce_Paynocchio_Wallet($current_user->ID);
         $wallet_bal_bon = $user_paynocchio_wallet->getWalletBalance($user_paynocchio_wallet_id);
-
-        $wallet_balance = $wallet_bal_bon['balance'];
-        $wallet_bonus = $wallet_bal_bon['bonuses'];
-        $wallet_pan = $wallet_bal_bon['number'];
+        if($wallet_bal_bon) {
+            $wallet_balance = $wallet_bal_bon['balance'];
+            $wallet_bonus = $wallet_bal_bon['bonuses'];
+            $wallet_pan = $wallet_bal_bon['number'];
+        }
     }
 };
 ?>
@@ -30,11 +39,11 @@ if (is_user_logged_in()) {
                 <div class="cfps-flex cfps-flex-row cfps-items-center cfps-text-white cfps-gap-x-8 cfps-text-xl">
                     <div>
                         <p>Balance</p>
-                        <p>$<span class="paynocchio-numbers paynocchio-balance-value"><?php echo $wallet_balance ?? 0 ?></span></p>
+                        <p>$<span class="paynocchio-numbers paynocchio-balance-value"><?php echo $wallet_balance; ?></span></p>
                     </div>
                     <div>
                         <p>Bonuses</p>
-                        <p><span class="paynocchio-numbers paynocchio-bonus-value"><?php echo $wallet_bonus ?? 0 ?></span></p>
+                        <p><span class="paynocchio-numbers paynocchio-bonus-value"><?php echo $wallet_bonus ?></span></p>
                     </div>
                 </div>
 
@@ -50,18 +59,33 @@ if (is_user_logged_in()) {
                 <a class="btn-white cfps-absolute cfps-bottom-4 cfps-left-4" href="#">Read more</a>
             </div>
         </div>
-
-        <div class="paynocchio-conversion-rate cfps-my-8">
+        <?php if($wallet_bonus) {
+             if($wallet_bonus < $cart_total) {
+                 $max_bonus = $wallet_bonus;
+             } else {
+                 $max_bonus = $cart_total;
+             }
+            ?>
+        <div class="paynocchio-conversion-rate cfps-mt-8">
             <h3>
                 How much do you want to pay in bonuses?
             </h3>
-            <form action="">
-                <input type="text" id="conversion-value" class="cfps-bg-white cfps-w-[50px] cfps-border-0 cfps-p-0 !cfps-mb-6 cfps-text-xl cfps-block" />
-                <input id="conversion-input" type="range" min="0" max="100" step="1" value="0" />
-            </form>
-        </div>
+            <?php
+            woocommerce_form_field( 'bonuses_value', [
+                'type'        => 'number',
+                'id'          => 'bonuses-value',
+                'label'       => '',
+                'placeholder' => '',
+                'default'     => '',
+                'input_class' => ['short'],
+            ] );
+            ?>
+            <input id="bonuses-input" type="range" min="0" max="<?php echo $max_bonus; ?>" step="1" value="0" />
 
-        <div class="cfps-flex cfps-flex-row cfps-gap-x-4">
+        </div>
+    <?php } ?>
+
+        <div class="cfps-flex cfps-flex-row cfps-gap-x-4 cfps-mt-8">
             <a href="#">Manage Cards</a>
             <a href="#">History</a>
             <a href="#">Support</a>

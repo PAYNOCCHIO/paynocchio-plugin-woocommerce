@@ -6,15 +6,20 @@ if (!defined('ABSPATH')) {
 
 <?php
 if (is_user_logged_in()) {
+    $wallet_balance = 0;
+    $wallet_bonus = 0;
+    $wallet_pan = 0;
+
     $current_user = wp_get_current_user();
     $user_paynocchio_wallet_id = get_user_meta($current_user->ID, 'paynoccio_wallet', true);
     if($user_paynocchio_wallet_id) {
         $user_paynocchio_wallet = new Woocommerce_Paynocchio_Wallet($current_user->ID);
         $wallet_bal_bon = $user_paynocchio_wallet->getWalletBalance($user_paynocchio_wallet_id);
-
-        $wallet_bal = $wallet_bal_bon['balance'];
-        $wallet_bon = $wallet_bal_bon['bonuses'];
-        $wallet_pan = $wallet_bal_bon['number'];
+        if($wallet_bal_bon) {
+            $wallet_balance = $wallet_bal_bon['balance'];
+            $wallet_bonus = $wallet_bal_bon['bonuses'];
+            $wallet_pan = $wallet_bal_bon['number'];
+        }
     }
 };
 ?>
@@ -40,7 +45,7 @@ if (is_user_logged_in()) {
                     </a>
                     <div class="paynocchio-count">
                         <div>
-                            <p class="cfps-text-2xl cfps-font-semibold"><span class="paynocchio-numbers paynocchio-bonus-value">0</span></p>
+                            <p class="cfps-text-2xl cfps-font-semibold"><span class="paynocchio-numbers paynocchio-bonus-value"><?php echo $wallet_bonus; ?></span></p>
                             <p>bonuses</p>
                         </div>
                         <div>
@@ -59,10 +64,9 @@ if (is_user_logged_in()) {
                     My trips
                 </a>
             </div>
-
             <div class="paynocchio_tabs">
                 <div class="paynocchio-profile-body paynocchio-tab-body visible">
-                    <?php if (!get_user_meta(get_current_user_id(), 'paynoccio_wallet')) { ?>
+                    <?php if (!get_user_meta(get_current_user_id(), 'paynoccio_wallet', true)) { ?>
                         <div class="paynocchio-profile-block">
                             <div class="cfps-grid cfps-grid-cols-[24px_1fr] cfps-gap-x-6">
                                 <img src="<?php echo plugin_dir_url( WOOCOMMERCE_PAYNOCCHIO_BASENAME ) . 'assets/img/i.png' ?>" />
@@ -86,10 +90,10 @@ if (is_user_logged_in()) {
                                     Kopybara.Pay
                                 </div>
                                 <div>
-                                    $<span class="paynocchio-numbers paynocchio-balance-value">0</span>
+                                    $<span class="paynocchio-numbers paynocchio-balance-value"><?php echo $wallet_balance ?? 0 ?></span>
                                 </div>
                                 <div>
-                                    Bonuses: <span class="paynocchio-numbers paynocchio-bonus-value">0</span>
+                                    Bonuses: <span class="paynocchio-numbers paynocchio-bonus-value"><?php echo $wallet_bonus ?? 0 ?></span>
                                 </div>
                                 <a class="tab-switcher cfps-cursor-pointer" id="wallet_toggle">
                                     <img src="<?php echo plugin_dir_url( WOOCOMMERCE_PAYNOCCHIO_BASENAME ) . 'assets/img/arr_r.png' ?>" />
@@ -138,7 +142,7 @@ if (is_user_logged_in()) {
                                             Balance
                                         </div>
                                         <div class="amount">
-                                            $<span class="paynocchio-numbers paynocchio-balance-value"></span>
+                                            $<span class="paynocchio-numbers paynocchio-balance-value"><?php echo $wallet_balance ?? 0 ?></span>
                                         </div>
                                     </div>
                                     <div class="paynocchio-bonuses">
@@ -146,7 +150,7 @@ if (is_user_logged_in()) {
                                             Bonuses
                                         </div>
                                         <div class="amount">
-                                            <span class="paynocchio-numbers paynocchio-bonus-value"></span>
+                                            <span class="paynocchio-numbers paynocchio-bonus-value"><?php echo $wallet_bonus ?? 0 ?></span>
                                         </div>
                                     </div>
                                 </div>
@@ -163,7 +167,7 @@ if (is_user_logged_in()) {
                             </div>
                         </div>
                         <div class="paynocchio-actions-btns cfps-mt-8 lg:cfps-mt-16">
-                            <div class="autodeposit cfps-flex cfps-flex-row cfps-items-center cfps-mt-8 lg:cfps-mt-12 cfps-gap-x-2">
+                            <div class="autodeposit cfps-flex cfps-flex-row cfps-items-center cfps-gap-x-2">
                                 <img src="<?php echo plugin_dir_url( WOOCOMMERCE_PAYNOCCHIO_BASENAME ) . 'assets/img/i-gr.png' ?>"
                                      class="cfps-h-[18px] cfps-w-[16px] cfps-mr-1 cfps-inline-block" />
                                 Autodeposit
