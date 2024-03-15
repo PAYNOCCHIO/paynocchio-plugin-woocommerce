@@ -165,7 +165,7 @@ class Woocommerce_Paynocchio_Wallet {
     }
 
 
-    public function chargeBack(string $orderId, string $walletId, $amount): array {
+    public function chargeBack($orderId, $walletId, $amount) {
         $data = [
             PAYNOCCHIO_ENV_KEY => $this->envId,
             PAYNOCCHIO_USER_UUID_KEY => $this->userId,
@@ -174,9 +174,8 @@ class Woocommerce_Paynocchio_Wallet {
             'amount' => $amount,
             'external_order_id' => $orderId,
         ];
-        $response = $this->sendRequest('POST', '/operation/chargeback', json_encode($data));
 
-        return $response;
+        return $this->sendRequest('POST', '/operation/chargeback', json_encode($data));
     }
 
 

@@ -161,7 +161,7 @@ import './topUpFormProcess'
     /**
      * Balance polling
      */
-    //setInterval(() => updateWalletBalance(), 5000)
+    setInterval(() => updateWalletBalance(), 5000)
 
     function updateOrderButtonState() {
         const place_orderButton = $('#place_order');
