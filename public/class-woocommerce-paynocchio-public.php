@@ -96,7 +96,7 @@ class Woocommerce_Paynocchio_Public {
 		 * class.
 		 */
 
-		if(!is_user_logged_in() || (is_user_logged_in() && !get_user_meta(get_current_user_id(), 'paynoccio_wallet', true))) {
+		if(!is_user_logged_in() || (is_user_logged_in() && !get_user_meta(get_current_user_id(), PAYNOCCHIO_WALLET_KEY, true))) {
             wp_register_script( $this->plugin_name.'_public', plugin_dir_url( WOOCOMMERCE_PAYNOCCHIO_BASENAME ) . 'dist/public.js', array( 'jquery' ), $this->version, false );
             wp_enqueue_script($this->plugin_name.'_public');
             wp_localize_script( $this->plugin_name.'_public', 'paynocchio_object', array(
@@ -105,7 +105,7 @@ class Woocommerce_Paynocchio_Public {
             ));
         }
 
-		if((is_user_logged_in() && get_user_meta(get_current_user_id(), 'paynoccio_wallet', true))) {
+		if((is_user_logged_in() && get_user_meta(get_current_user_id(), PAYNOCCHIO_WALLET_KEY, true))) {
             wp_register_script( $this->plugin_name.'_private', plugin_dir_url( WOOCOMMERCE_PAYNOCCHIO_BASENAME ) . 'dist/private.js', array( 'jquery' ), $this->version, false );
             wp_enqueue_script($this->plugin_name.'_private');
             wp_localize_script( $this->plugin_name.'_private', 'paynocchio_object', array(

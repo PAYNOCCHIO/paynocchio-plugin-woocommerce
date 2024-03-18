@@ -15,7 +15,7 @@ $cart_total = intval($woocommerce->cart->total);
 
 if (is_user_logged_in()) {
     $current_user = wp_get_current_user();
-    $user_paynocchio_wallet_id = get_user_meta($current_user->ID, 'paynoccio_wallet', true);
+    $user_paynocchio_wallet_id = get_user_meta($current_user->ID, PAYNOCCHIO_WALLET_KEY, true);
     if($user_paynocchio_wallet_id) {
         $user_paynocchio_wallet = new Woocommerce_Paynocchio_Wallet($current_user->ID);
         $wallet_bal_bon = $user_paynocchio_wallet->getWalletBalance($user_paynocchio_wallet_id);
