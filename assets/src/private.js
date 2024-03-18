@@ -74,6 +74,10 @@ import './topUpFormProcess'
             $('.paynocchio-bonus-value').countUp(bonus);
         }
 
+        console.log(balance)
+        console.log(existing_balance)
+        console.log(existing_balance === balance)
+
     }
 
     /**
@@ -335,7 +339,17 @@ import './topUpFormProcess'
 
         });
         // WOOCOMMERCE CHECKOUT SCRIPT END
-        //READY END
+        // READY END
+
+        $('#show_mini_modal').on('click', function() {
+            $('.topup_mini_form').toggle();
+            $(this).toggleClass('active');
+            if ($(this).hasClass('active')) {
+                $(this).css('transform','rotate(45deg)');
+            } else {
+                $(this).css('transform','rotate(0deg)');
+            }
+        });
     });
 
 })(jQuery);
