@@ -1,5 +1,6 @@
 import './public.css';
 
+import { CountUp } from 'countup.js';
 import Modal from './modal'
 import './topUpFormProcess'
 
@@ -26,11 +27,53 @@ import './topUpFormProcess'
         };
     }
 
+    $.fn.countUp = function (params, startValue = 0) {
+        // make sure dependency is present
+        if (typeof CountUp !== 'function') {
+            console.error('countUp.js is a required dependency of countUp-jquery.js.');
+            return;
+        }
+
+        const defaults = {
+            startVal: startValue,
+            decimalPlaces: 2,
+            duration: 2,
+        };
+
+        if (typeof params === 'number') {
+            defaults.endVal = params;
+        }
+        else if (typeof params === 'object') {
+            $.extend(defaults, params);
+        }
+        else {
+            console.error('countUp-jquery requires its argument to be either an object or number');
+            return;
+        }
+
+        this.each(function (i, elem) {
+            const countUp = new CountUp(elem, defaults.endVal, defaults);
+            countUp.start();
+        });
+
+        return this;
+    };
+
     function setBalance (balance, bonus) {
-        $('.paynocchio-balance-value').text('');
-        $('.paynocchio-bonus-value').text('');
-        $('.paynocchio-balance-value').text(balance);
-        $('.paynocchio-bonus-value').text(bonus);
+
+        const existing_balance = $('.paynocchio-balance-value').first().text();
+        const existing_bonuses = $('.paynocchio-bonus-value').first().text();
+
+        if(balance !== +existing_balance) {
+            $('.paynocchio-balance-value').text(balance);
+            $('.paynocchio-balance-value').countUp(balance);
+        }
+
+        if(bonus !== +existing_bonuses) {
+            $('.paynocchio-bonus-value').text(bonus);
+            $('.paynocchio-bonus-value').countUp(bonus);
+        }
+
     }
 
     /**

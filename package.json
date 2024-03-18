@@ -15,6 +15,7 @@
   "license": "ISC",
   "devDependencies": {
     "autoprefixer": "^10.4.17",
+    "countup.js": "^2.8.0",
     "css-loader": "^6.10.0",
     "css-minimizer-webpack-plugin": "^6.0.0",
     "mini-css-extract-plugin": "^2.8.0",
