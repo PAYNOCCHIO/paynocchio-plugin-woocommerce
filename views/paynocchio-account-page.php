@@ -11,7 +11,7 @@ if (is_user_logged_in()) {
     $wallet_pan = 0;
 
     $current_user = wp_get_current_user();
-    $user_paynocchio_wallet_id = get_user_meta($current_user->ID, 'paynoccio_wallet', true);
+    $user_paynocchio_wallet_id = get_user_meta($current_user->ID, PAYNOCCHIO_WALLET_KEY, true);
     if($user_paynocchio_wallet_id) {
         $user_paynocchio_wallet = new Woocommerce_Paynocchio_Wallet($current_user->ID);
         $wallet_bal_bon = $user_paynocchio_wallet->getWalletBalance($user_paynocchio_wallet_id);
@@ -66,7 +66,7 @@ if (is_user_logged_in()) {
             </div>
             <div class="paynocchio_tabs">
                 <div class="paynocchio-profile-body paynocchio-tab-body visible">
-                    <?php if (!get_user_meta(get_current_user_id(), 'paynoccio_wallet', true)) { ?>
+                    <?php if (!get_user_meta(get_current_user_id(), PAYNOCCHIO_WALLET_KEY, true)) { ?>
                         <div class="paynocchio-profile-block">
                             <div class="cfps-grid cfps-grid-cols-[24px_1fr] cfps-gap-x-6">
                                 <img src="<?php echo plugin_dir_url( WOOCOMMERCE_PAYNOCCHIO_BASENAME ) . 'assets/img/i.png' ?>" />

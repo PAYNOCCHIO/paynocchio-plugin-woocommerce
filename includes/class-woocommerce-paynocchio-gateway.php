@@ -126,7 +126,7 @@ class Woocommerce_Paynocchio_Payment_Gateway extends WC_Payment_Gateway {
         $order_uuid = wp_generate_uuid4();
         $customer_order->update_meta_data('uuid', $order_uuid);
 
-        $user_wallet_id = get_user_meta($customer_order->get_user_id(), 'paynoccio_wallet', true);
+        $user_wallet_id = get_user_meta($customer_order->get_user_id(), PAYNOCCHIO_WALLET_KEY, true);
         $user_uuid = get_user_meta($customer_order->get_user_id(), 'user_uuid', true);
         $user_paynocchio_wallet = new Woocommerce_Paynocchio_Wallet($user_uuid);
 
@@ -143,7 +143,7 @@ class Woocommerce_Paynocchio_Payment_Gateway extends WC_Payment_Gateway {
             $amount = $fullAmount - $bonusAmount;
         }
 
-        $wallet_response = $user_paynocchio_wallet->getWalletBalance(get_user_meta($customer_order->user_id, 'paynoccio_wallet', true));
+        $wallet_response = $user_paynocchio_wallet->getWalletBalance(get_user_meta($customer_order->user_id, PAYNOCCHIO_WALLET_KEY, true));
         $response = $user_paynocchio_wallet->makePayment($user_wallet_id, $fullAmount, $amount, $order_uuid, $bonusAmount);
 
         //TODO: Works only first fire!
@@ -187,7 +187,7 @@ class Woocommerce_Paynocchio_Payment_Gateway extends WC_Payment_Gateway {
         $order_uuid = $customer_order->get_meta( 'uuid' , true );
         $bonuses_value = $customer_order->get_meta( 'bonuses_value' , true );
 
-        $user_wallet_id = get_user_meta($customer_order->get_user_id(), 'paynoccio_wallet', true);
+        $user_wallet_id = get_user_meta($customer_order->get_user_id(), PAYNOCCHIO_WALLET_KEY, true);
         $user_uuid = get_user_meta($customer_order->get_user_id(), 'user_uuid', true);
 
         $user_paynocchio_wallet = new Woocommerce_Paynocchio_Wallet($user_uuid);
@@ -247,7 +247,7 @@ class Woocommerce_Paynocchio_Payment_Gateway extends WC_Payment_Gateway {
         }
 
         if(is_user_logged_in()) {
-            if (!get_user_meta(get_current_user_id(), 'paynoccio_wallet')) {
+            if (!get_user_meta(get_current_user_id(), PAYNOCCHIO_WALLET_KEY)) {
                 echo do_shortcode('[paynocchio_activation_block register_redirect="/checkout?ans=checkemail" login_redirect="/checkout#payment_method_paynocchio"]');
             } else {
                 echo do_shortcode('[paynocchio_payment_widget]');

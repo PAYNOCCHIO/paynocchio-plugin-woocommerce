@@ -45,7 +45,7 @@ $wallet_bal = 0;
             </div>
         </div>
         <?php if(is_user_logged_in()) { ?>
-            <?php if (!get_user_meta(get_current_user_id(), 'paynoccio_wallet')) { ?>
+            <?php if (!get_user_meta(get_current_user_id(), PAYNOCCHIO_WALLET_KEY)) { ?>
                 <div class="cfps-flex cfps-justify-center cfps-mb-10">
                     <button id="paynocchio_activation_button"
                             type="button"
