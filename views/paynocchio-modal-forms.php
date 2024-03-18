@@ -6,18 +6,8 @@ if (!defined('ABSPATH')) {
 
 <?php
 if (is_user_logged_in()) {
-    $current_user = wp_get_current_user();
-    $user_paynocchio_wallet_id = get_user_meta($current_user->ID, PAYNOCCHIO_WALLET_KEY, true);
-    if($user_paynocchio_wallet_id) {
-        $user_paynocchio_wallet = new Woocommerce_Paynocchio_Wallet($current_user->ID);
-        $wallet_bal_bon = $user_paynocchio_wallet->getWalletBalance($user_paynocchio_wallet_id);
-        if($wallet_bal_bon) {
-            $wallet_balance = $wallet_bal_bon['balance'];
-            $wallet_bonus = $wallet_bal_bon['bonuses'];
-            $wallet_pan = $wallet_bal_bon['number'];
-        }
-    }
-};
+    $paynocchio = new Woocommerce_Paynocchio();
+    $wallet = $paynocchio->get_paynocchio_wallet_info();
 ?>
 
 <div class="modal topUpModal">
@@ -31,7 +21,7 @@ if (is_user_logged_in()) {
                 From
             </p>
             <div class="card-variants">
-                <div class="card-var current-card" data-pan="1356567423522373">
+                <div class="card-var current-card" data-pan="<?php echo $wallet['card_number']; ?>">
                     <div class="cfps-flex cfps-flex-row cfps-gap-x-4 cfps-items-center">
                         <img src="<?php echo plugin_dir_url( WOOCOMMERCE_PAYNOCCHIO_BASENAME ) . 'assets/img/mc.png' ?>" class="cfps-h-[30px] cfps-w-[30px] cfps-mr-1 cfps-inline-block" />
                         <p>1356 5674 2352 2373</p>
@@ -113,10 +103,6 @@ if (is_user_logged_in()) {
     </div>
     </form>
 </div>
-
-
-
-
 
 <div class="modal paymentMethodModal">
     <div class="container">
@@ -254,3 +240,5 @@ if (is_user_logged_in()) {
         </div>
     </div>
 </div>
+
+<?php } ?>

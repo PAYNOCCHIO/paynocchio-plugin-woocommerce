@@ -276,7 +276,7 @@ class Woocommerce_Paynocchio {
         add_action( 'wp_ajax_nopriv_paynocchio_ajax_get_user_wallet', [$this, 'paynocchio_ajax_get_user_wallet']);
         add_action( 'wp_ajax_paynocchio_ajax_withdraw', [$this, 'paynocchio_ajax_withdraw']);
         add_action( 'wp_ajax_nopriv_paynocchio_ajax_withdraw', [$this, 'paynocchio_ajax_withdraw']);
-	}
+    }
 
     /**
      * Handle Creation of the UUID
@@ -498,4 +498,37 @@ class Woocommerce_Paynocchio {
         return get_current_user_id();
     }
 
+    /**
+     * Get the current User Wallet data
+     *
+     * @since    1.0.0
+     */
+    public function get_paynocchio_wallet_info() {
+
+        if (is_user_logged_in()) {
+            $wallet = [];
+
+            $current_user = wp_get_current_user();
+
+            $wallet['user'] = [
+                'first_name' => $current_user->first_name,
+                'last_name' => $current_user->last_name];
+
+            $user_paynocchio_wallet_id = get_user_meta($current_user->ID, PAYNOCCHIO_WALLET_KEY, true);
+
+            if($user_paynocchio_wallet_id) {
+                $user_paynocchio_wallet = new Woocommerce_Paynocchio_Wallet($current_user->ID);
+                $wallet_bal_bon = $user_paynocchio_wallet->getWalletBalance($user_paynocchio_wallet_id);
+                if($wallet_bal_bon) {
+                    $wallet['balance'] = $wallet_bal_bon['balance'];
+                    $wallet['bonuses'] = $wallet_bal_bon['bonuses'];
+                    $wallet['card_number'] = $wallet_bal_bon['number'];
+                }
+            }
+
+            return $wallet;
+        }
+
+        return false;
+    }
 }

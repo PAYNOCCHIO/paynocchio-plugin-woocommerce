@@ -85,7 +85,6 @@ class Woocommerce_Paynocchio_Public {
 	public function enqueue_scripts() {
 
 		/**
-		 * This function is provided for demonstration purposes only.
 		 *
 		 * An instance of this class should be passed to the run() function
 		 * defined in Woocommerce_Paynocchio_Loader as all of the hooks are defined
@@ -115,5 +114,4 @@ class Woocommerce_Paynocchio_Public {
         }
 
 	}
-
 }
