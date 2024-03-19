@@ -27,7 +27,7 @@ import './topUpFormProcess'
         };
     }
 
-    $.fn.countUp = function (params, startValue = 0) {
+    $.fn.countUp = function (params, startValue = 0, newValue = null) {
         // make sure dependency is present
         if (typeof CountUp !== 'function') {
             console.error('countUp.js is a required dependency of countUp-jquery.js.');
@@ -38,6 +38,7 @@ import './topUpFormProcess'
             startVal: startValue,
             decimalPlaces: 2,
             duration: 2,
+            separator: '',
         };
 
         if (typeof params === 'number') {
@@ -53,7 +54,11 @@ import './topUpFormProcess'
 
         this.each(function (i, elem) {
             const countUp = new CountUp(elem, defaults.endVal, defaults);
-            countUp.start();
+            if(newValue) {
+                countUp.update(newValue);
+            } else {
+                countUp.start();
+            }
         });
 
         return this;
@@ -62,7 +67,7 @@ import './topUpFormProcess'
     function setBalance (balance, bonus) {
 
         const existing_balance = $('.paynocchio-balance-value').first().text();
-        const existing_bonuses = $('.paynocchio-bonus-value').first().text();
+        const existing_bonuses = $('.paynocchio-bonus-value').first().text().toFixed(2);
 
         if(balance !== +existing_balance) {
             $('.paynocchio-balance-value').text(balance);

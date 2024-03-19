@@ -520,8 +520,8 @@ class Woocommerce_Paynocchio {
                 $user_paynocchio_wallet = new Woocommerce_Paynocchio_Wallet($current_user->ID);
                 $wallet_bal_bon = $user_paynocchio_wallet->getWalletBalance($user_paynocchio_wallet_id);
                 if($wallet_bal_bon) {
-                    $wallet['balance'] = number_format($wallet_bal_bon['balance'], 2);
-                    $wallet['bonuses'] = number_format($wallet_bal_bon['bonuses'], 2);
+                    $wallet['balance'] = $wallet_bal_bon['balance'];
+                    $wallet['bonuses'] = $wallet_bal_bon['bonuses'];
                     $wallet['card_number'] = $wallet_bal_bon['number'];
                 }
             }
