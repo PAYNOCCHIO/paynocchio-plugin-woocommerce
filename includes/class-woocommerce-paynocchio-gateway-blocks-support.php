@@ -15,56 +15,77 @@
 
 use Automattic\WooCommerce\Blocks\Payments\Integrations\AbstractPaymentMethodType;
 
-final class Woocommerce_Paynocchio_Gateway_Blocks_Support extends AbstractPaymentMethodType {
+final class Woocommerce_Paynocchio_Gateway_Blocks_Support  extends AbstractPaymentMethodType {
 
+    /**
+     * The gateway instance.
+     *
+     * @var Woocommerce_Paynocchio_Gateway
+     */
     private $gateway;
 
-    protected $name = 'paynocchio'; // payment gateway id
+    /**
+     * Payment method name/id/slug.
+     *
+     * @var string
+     */
+    protected $name = 'paynocchio';
 
+    /**
+     * Initializes the payment method type.
+     */
     public function initialize() {
-        // get payment gateway settings
-        $this->settings = get_option( "woocommerce_{$this->name}_settings", array() );
-
-        // you can also initialize your payment gateway here
-        // $gateways = WC()->payment_gateways->payment_gateways();
-        // $this->gateway  = $gateways[ $this->name ];
+        $this->settings = get_option( 'woocommerce_paynocchio_settings', [] );
+        $gateways       = WC()->payment_gateways->payment_gateways();
+        $this->gateway  = $gateways[$this->name];
     }
 
+    /**
+     * Returns if this payment method should be active. If false, the scripts will not be enqueued.
+     *
+     * @return boolean
+     */
     public function is_active() {
-        return ! empty( $this->settings[ 'enabled' ] ) && 'yes' === $this->settings[ 'enabled' ];
+        return $this->gateway->is_available();
     }
 
+    /**
+     * Returns an array of scripts/handles to be registered for this payment method.
+     *
+     * @return array
+     */
     public function get_payment_method_script_handles() {
+        $script_path       = '/dist/js/blocks.js';
+        $script_asset_path = plugin_dir_url( WOOCOMMERCE_PAYNOCCHIO_BASENAME ) . 'dist/js/blocks.asset.php';
+        $script_asset      = file_exists( $script_asset_path )
+            ? require( $script_asset_path )
+            : array(
+                'dependencies' => array(),
+                'version'      => '1.0.0'
+            );
+        $script_url        = plugin_dir_url( WOOCOMMERCE_PAYNOCCHIO_BASENAME ) . $script_path;
 
         wp_register_script(
-            'paynocchio-blocks-integration',
-            plugin_dir_url( WOOCOMMERCE_PAYNOCCHIO_BASENAME ) . 'dist/js/blocks.js',
-            array(
-                'wc-blocks-registry',
-                'wc-settings',
-                'wp-element',
-                'wp-html-entities',
-            ),
-            null, // or time() or filemtime( ... ) to skip caching
+            'paynocchio-payments-blocks',
+            $script_url,
+            $script_asset[ 'dependencies' ],
+            $script_asset[ 'version' ],
             true
         );
 
-        return array( 'paynocchio-blocks-integration' );
-
+        return [ 'paynocchio-payments-blocks' ];
     }
 
+    /**
+     * Returns an array of key=>value pairs of data made available to the payment methods script.
+     *
+     * @return array
+     */
     public function get_payment_method_data() {
-        return array(
-            'title'        => $this->get_setting( 'title' ),
-            // almost the same way:
-            // 'title'     => isset( $this->settings[ 'title' ] ) ? $this->settings[ 'title' ] : 'Default value';
-            'description'  => $this->get_setting( 'description' ),
-            // if $this->gateway was initialized on line 15
-            // 'supports'  => array_filter( $this->gateway->supports, [ $this->gateway, 'supports' ] ),
-
-            // example of getting a public key
-            // 'publicKey' => $this->get_publishable_key(),
-        );
+        return [
+            'title'       => $this->get_setting( 'title' ),
+            'description' => $this->get_setting( 'description' ),
+            //'supports'    => array_filter( $this->gateway->supports, [ $this->gateway, 'supports' ] )
+        ];
     }
-
 }

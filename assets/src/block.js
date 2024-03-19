@@ -3,11 +3,11 @@ import { registerPaymentMethod } from '@woocommerce/blocks-registry';
 import { decodeEntities } from '@wordpress/html-entities';
 import { getSetting } from '@woocommerce/settings';
 
-const settings = getSetting( 'dummy_data', {} );
+const settings = getSetting( 'paynocchio_data', {} );
 
 const defaultLabel = __(
-    'Dummy Payments',
-    'woo-gutenberg-products-block'
+    'Paynocchio Payment',
+    'woocommerce-paynocchiok'
 );
 
 const label = decodeEntities( settings.title ) || defaultLabel;
@@ -28,10 +28,10 @@ const Label = ( props ) => {
 };
 
 /**
- * Dummy payment method config object.
+ * Paynocchio payment method config object.
  */
-const Dummy = {
-    name: "dummy",
+const Paynocchio = {
+    name: "paynocchio",
     label: <Label />,
     content: <Content />,
     edit: <Content />,
@@ -42,4 +42,4 @@ const Dummy = {
     },
 };
 
-registerPaymentMethod( Dummy );
+registerPaymentMethod( Paynocchio );

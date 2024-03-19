@@ -6,7 +6,6 @@ class Woocommerce_Paynocchio_Payment_Gateway extends WC_Payment_Gateway {
 
     function __construct() {
 
-        // global ID
         $this->id = "paynocchio";
 
         // Show Title
@@ -16,7 +15,8 @@ class Woocommerce_Paynocchio_Payment_Gateway extends WC_Payment_Gateway {
         $this->method_description = __( "Paynocchio Payment Gateway Plug-in for WooCommerce", 'paynocchio' );
 
         // vertical tab title
-        $this->title = __( "Paynocchio", 'paynocchio' );
+        $this->title        = $this->get_option( 'title' );
+        $this->description = $this->get_option( 'description' );
 
         $this->icon = null;
 
@@ -34,8 +34,6 @@ class Woocommerce_Paynocchio_Payment_Gateway extends WC_Payment_Gateway {
         $this->testmode = 'yes' === $this->get_option( 'testmode' );
 
         $this->enabled = $this->get_option( 'enabled' );
-
-        $this->description = $this->get_option( 'description' );
 
         // further check of SSL if you want
         //add_action( 'admin_notices', array( $this,	'do_ssl_check' ) );

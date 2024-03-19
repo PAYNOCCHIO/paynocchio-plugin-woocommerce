@@ -250,8 +250,6 @@ class Woocommerce_Paynocchio {
 
 	}
 
-
-
 	/**
 	 * Register all of the hooks related to the public-facing functionality
 	 * of the plugin.
