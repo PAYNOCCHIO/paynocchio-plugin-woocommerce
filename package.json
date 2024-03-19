@@ -2,18 +2,20 @@
   "name": "contest",
   "version": "1.0.0",
   "description": "Timber starter",
-  "main": "index.js",
+  "main": "src/index.js",
   "directories": {
     "test": "tests"
   },
   "scripts": {
-    "watch": "webpack --watch --mode development --progress",
-    "build": "webpack --mode production --progress"
+    "start": "wp-scripts start",
+    "build": "wp-scripts build"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@woocommerce/dependency-extraction-webpack-plugin": "^2.3.0",
+    "@wordpress/scripts": "^27.4.0",
     "autoprefixer": "^10.4.17",
     "css-loader": "^6.10.0",
     "css-minimizer-webpack-plugin": "^6.0.0",

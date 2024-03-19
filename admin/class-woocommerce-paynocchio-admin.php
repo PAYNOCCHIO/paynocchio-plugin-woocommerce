@@ -85,7 +85,6 @@ class Woocommerce_Paynocchio_Admin {
 	public function enqueue_scripts() {
 
 		/**
-		 * This function is provided for demonstration purposes only.
 		 *
 		 * An instance of this class should be passed to the run() function
 		 * defined in Woocommerce_Paynocchio_Loader as all of the hooks are defined
@@ -98,6 +97,34 @@ class Woocommerce_Paynocchio_Admin {
 
 		wp_enqueue_script( $this->plugin_name, plugin_dir_url( WOOCOMMERCE_PAYNOCCHIO_BASENAME ) . 'dist/admin.js', array( 'jquery' ), $this->version, false );
 
+	}
+
+	/**
+	 * Register the JavaScript for the admin area.
+	 *
+	 * @since    1.0.0
+	 */
+	public function paynocchio_gateway_block_support() {
+
+		/**
+		 *
+		 * An instance of this class should be passed to the run() function
+		 * defined in Woocommerce_Paynocchio_Loader as all of the hooks are defined
+		 * in that particular class.
+		 *
+		 * The Woocommerce_Paynocchio_Loader will then create the relationship
+		 * between the defined hooks and the functions defined in this
+		 * class.
+		 */
+
+        require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-woocommerce-paynocchio-gateway-blocks-support.php';
+
+        add_action(
+            'woocommerce_blocks_payment_method_type_registration',
+            function( Automattic\WooCommerce\Blocks\Payments\PaymentMethodRegistry $payment_method_registry ) {
+                $payment_method_registry->register( new Woocommerce_Paynocchio_Gateway_Blocks_Support );
+            }
+        );
 	}
 
 }
