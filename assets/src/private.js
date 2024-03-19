@@ -27,7 +27,6 @@ import './topUpFormProcess'
     }
 
     function setBalance (balance, bonus) {
-
         let oldBalance = parseFloat($('.paynocchio-balance-value').first().text());
         let newBalance = parseFloat(balance);
 
@@ -104,6 +103,50 @@ import './topUpFormProcess'
                 $(`#${evt.target.id} .cfps-spinner`).addClass('cfps-hidden');
                 $(evt.target).removeClass('cfps-disabled')
             });
+    }
+
+
+    /**
+     * Wallet TopUp function for MiniForm in Widget
+     * @param evt
+     * @param path
+     */
+    const topUpWalletMiniForm = (evt) => {
+        $(evt.target).addClass('cfps-disabled')
+        $(`#${evt.target.id} .cfps-spinner`).removeClass('cfps-hidden');
+        $(`#${evt.target.id} .cfps-check`).addClass('cfps-hidden');
+        $(`#${evt.target.id} .cfps-cross`).addClass('cfps-hidden');
+
+        $.ajax({
+            url: paynocchio_object.ajaxurl,
+            type: 'POST',
+            data: {
+                'action': 'paynocchio_ajax_top_up',
+                'ajax-top-up-nonce': $('#ajax-top-up-nonce-mini-form').val(),
+                'amount': $('#top_up_amount_mini_form').val(),
+            },
+            success: function(data){
+                if (data.response.status_code === 200) {
+                    $(`#${evt.target.id} .cfps-check`).removeClass('cfps-hidden');
+                    updateWalletBalance();
+                    updateOrderButtonState();
+                    $('.topup_mini_form').delay(2000).hide('fast', function() {
+                        $('#show_mini_modal').css('transform','rotate(0deg)');
+                        $('#top_up_amount_mini_form').val('');
+                        $(`#${evt.target.id} .cfps-check`).addClass('cfps-hidden');
+                    });
+
+                }
+            }
+        })
+        .error(function () {
+            (error) => console.log(error);
+            $(`#${evt.target.id} .cfps-cross`).removeClass('cfps-hidden');
+        })
+        .always(function() {
+            $(`#${evt.target.id} .cfps-spinner`).addClass('cfps-hidden');
+            $(evt.target).removeClass('cfps-disabled')
+        });
     }
 
     /**
@@ -215,9 +258,11 @@ import './topUpFormProcess'
         //initiateWebSocket();
 
         const topUpButton = $("#top_up_button");
+        const topUpButtonMiniForm = $("#top_up_mini_form_button");
         const withdrawButton = $("#withdraw_button");
 
         topUpButton.click((evt) => topUpWallet(evt))
+        topUpButtonMiniForm.click((evt) => topUpWalletMiniForm(evt))
         withdrawButton.click((evt) => withdrawWallet(evt))
 
         $('a.tab-switcher').click(function() {
