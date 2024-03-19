@@ -189,7 +189,7 @@ if (is_user_logged_in()) {
             <button class="close">&times;</button>
         </div>
         <div id="witdrawForm" class="content">
-            <div class="mb-4">Current balance: <span class="cfps-font-semibold">$<span class="paynocchio-numbers paynocchio-balance-value"><?php echo $wallet_balance ?? 0?></span></span></div>
+            <div class="mb-4">Current balance: <span class="cfps-font-semibold">$<span class="paynocchio-numbers paynocchio-balance-value"><?php echo $wallet['balance'] ;?></span></span></div>
             <div class="top-up-amount-container cfps-mb-8 cfps-flex">
                 <p class="cfps-text-3xl">$</p>
                 <input type="number" step="0.01" class="cfps-bg-white cfps-border-0 cfps-text-3xl !cfps-p-0 focus:!cfps-outline-none"
