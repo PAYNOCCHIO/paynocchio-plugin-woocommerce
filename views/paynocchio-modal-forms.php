@@ -11,6 +11,7 @@ if (is_user_logged_in()) {
 ?>
 
 <div class="modal topUpModal">
+    <div class="close-modal close"></div>
     <div class="container">
         <div class="header">
             <h3>Deposit</h3>
@@ -47,7 +48,7 @@ if (is_user_logged_in()) {
             <div class="top-up-amount-container cfps-mt-8 lg:cfps-mt-12 cfps-flex cfps-flex-row">
                 <p class="cfps-text-3xl">$</p>
                 <input type="number" step="0.01" class="cfps-bg-white cfps-border-0 cfps-text-3xl !cfps-p-0 focus:!cfps-outline-none"
-                       name="amount" id="top_up_amount" value="1000" />
+                       name="amount" id="top_up_amount" placeholder="0" value="1000" />
                 <?php wp_nonce_field( 'paynocchio_ajax_top_up', 'ajax-top-up-nonce' ); ?>
             </div>
 
@@ -105,6 +106,7 @@ if (is_user_logged_in()) {
 </div>
 
 <div class="modal paymentMethodModal">
+    <div class="close-modal close"></div>
     <div class="container">
         <div class="header">
             <h3>Please add your card</h3>
@@ -183,6 +185,7 @@ if (is_user_logged_in()) {
 </div>
 
 <div class="modal withdrawModal">
+    <div class="close-modal close"></div>
     <div class="container">
         <div class="header">
             <h3>Withdraw</h3>
@@ -193,7 +196,7 @@ if (is_user_logged_in()) {
             <div class="top-up-amount-container cfps-mb-8 cfps-flex">
                 <p class="cfps-text-3xl">$</p>
                 <input type="number" step="0.01" class="cfps-bg-white cfps-border-0 cfps-text-3xl !cfps-p-0 focus:!cfps-outline-none"
-                       name="amount" id="withdraw_amount" value="0" />
+                       name="amount" id="withdraw_amount" placeholder="0" value="0" />
                 <?php wp_nonce_field( 'paynocchio_ajax_withdraw', 'ajax-withdraw-nonce' ); ?>
             </div>
 

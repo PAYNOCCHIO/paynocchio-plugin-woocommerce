@@ -94,7 +94,7 @@ import './topUpFormProcess'
                     $('.topUpModal .message').text('Success!');
                     updateWalletBalance();
                     updateOrderButtonState();
-                    $('.topUpModal').hide('fast')
+                    $('.topUpModal').delay(1000).fadeOut('fast')
                 }
             }
         })
@@ -130,7 +130,7 @@ import './topUpFormProcess'
                     $(`#${evt.target.id} .cfps-check`).removeClass('cfps-hidden');
                     updateWalletBalance();
                     updateOrderButtonState();
-                    $('.topup_mini_form').delay(2000).hide('fast', function() {
+                    $('.topup_mini_form').delay(2000).fadeOut('fast', function() {
                         $('#show_mini_modal').css('transform','rotate(0deg)');
                         $('#top_up_amount_mini_form').val('');
                         $(`#${evt.target.id} .cfps-check`).addClass('cfps-hidden');
@@ -181,7 +181,7 @@ import './topUpFormProcess'
                         $('.withdrawModal .message').text('Success!');
                         updateWalletBalance();
                         updateOrderButtonState();
-                        $('.topUpModal').hide('fast')
+                        $('.withdrawModal').delay(1000).fadeOut('fast')
                     }
                 }
             })
