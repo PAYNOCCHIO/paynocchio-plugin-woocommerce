@@ -95,7 +95,8 @@ class Woocommerce_Paynocchio_Admin {
 		 * class.
 		 */
 
-		wp_enqueue_script( $this->plugin_name, plugin_dir_url( WOOCOMMERCE_PAYNOCCHIO_BASENAME ) . 'dist/admin.js', array( 'jquery' ), $this->version, false );
+		wp_enqueue_script( $this->plugin_name, plugin_dir_url( WOOCOMMERCE_PAYNOCCHIO_BASENAME ) . 'dist/js/admin.js', array( 'jquery' ), $this->version, false );
+		wp_enqueue_script( $this->plugin_name.'_block', plugin_dir_url( WOOCOMMERCE_PAYNOCCHIO_BASENAME ) . 'dist/js/block.js', array( 'jquery' ), $this->version, false );
 
 	}
 
