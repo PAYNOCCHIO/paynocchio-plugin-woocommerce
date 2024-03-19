@@ -15,7 +15,6 @@
   "license": "ISC",
   "devDependencies": {
     "autoprefixer": "^10.4.17",
-    "countup.js": "^2.8.0",
     "css-loader": "^6.10.0",
     "css-minimizer-webpack-plugin": "^6.0.0",
     "mini-css-extract-plugin": "^2.8.0",
@@ -28,8 +27,5 @@
     "tailwindcss": "^3.4.1",
     "webpack": "^5.90.1",
     "webpack-cli": "^5.1.4"
-  },
-  "dependencies": {
-    "websocket-as-promised": "^2.0.1"
   }
 }

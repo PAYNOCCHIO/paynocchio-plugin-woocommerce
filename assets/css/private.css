@@ -498,11 +498,20 @@ video {
 .cfps-absolute {
   position: absolute;
 }
+.cfps-relative {
+  position: relative;
+}
 .cfps-bottom-4 {
   bottom: 1rem;
 }
+.cfps-left-0 {
+  left: 0px;
+}
 .cfps-left-4 {
   left: 1rem;
+}
+.cfps-top-\[110\%\] {
+  top: 110%;
 }
 .cfps-float-right {
   float: right;
@@ -621,6 +630,9 @@ video {
 .cfps-w-auto {
   width: auto;
 }
+.cfps-w-full {
+  width: 100%;
+}
 .cfps-max-w-4xl {
   max-width: 56rem;
 }
@@ -699,6 +711,9 @@ video {
 .cfps-gap-y-4 {
   row-gap: 1rem;
 }
+.cfps-whitespace-nowrap {
+  white-space: nowrap;
+}
 .cfps-rounded-3xl {
   border-radius: 1.5rem;
 }
@@ -717,6 +732,10 @@ video {
 .cfps-border-slate-300 {
   --tw-border-opacity: 1;
   border-color: rgb(203 213 225 / var(--tw-border-opacity));
+}
+.cfps-bg-blue-500 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(59 130 246 / var(--tw-bg-opacity));
 }
 .cfps-bg-gray-100 {
   --tw-bg-opacity: 1;
@@ -739,6 +758,9 @@ video {
 }
 .cfps-p-2 {
   padding: 0.5rem;
+}
+.cfps-p-4 {
+  padding: 1rem;
 }
 .cfps-px-4 {
   padding-left: 1rem;
@@ -816,6 +838,10 @@ video {
 }
 .cfps-opacity-75 {
   opacity: 0.75;
+}
+.cfps-drop-shadow {
+  --tw-drop-shadow: drop-shadow(0 1px 2px rgb(0 0 0 / 0.1)) drop-shadow(0 1px 1px rgb(0 0 0 / 0.06));
+  filter: var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow);
 }
 #paynocchio_auth_block p {
   font-size: 1rem;
