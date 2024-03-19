@@ -38,7 +38,7 @@ final class Woocommerce_Paynocchio_Gateway_Blocks_Support extends AbstractPaymen
 
         wp_register_script(
             'paynocchio-blocks-integration',
-            plugin_dir_url( __DIR__ ) . 'build/index.js',
+            plugin_dir_url( WOOCOMMERCE_PAYNOCCHIO_BASENAME ) . 'dist/js/blocks.js',
             array(
                 'wc-blocks-registry',
                 'wc-settings',

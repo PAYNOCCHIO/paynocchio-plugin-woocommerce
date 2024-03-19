@@ -102,6 +102,7 @@ import './topUpFormProcess'
             .always(function() {
                 $(`#${evt.target.id} .cfps-spinner`).addClass('cfps-hidden');
                 $(evt.target).removeClass('cfps-disabled')
+                $('.topUpModal .message').text('');
             });
     }
 
