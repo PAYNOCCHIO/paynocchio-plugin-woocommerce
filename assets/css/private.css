@@ -612,6 +612,9 @@ video {
 .cfps-w-6 {
   width: 1.5rem;
 }
+.cfps-w-\[100px\] {
+  width: 100px;
+}
 .cfps-w-\[16px\] {
   width: 16px;
 }
@@ -677,6 +680,9 @@ video {
 }
 .cfps-justify-center {
   justify-content: center;
+}
+.cfps-justify-between {
+  justify-content: space-between;
 }
 .cfps-gap-4 {
   gap: 1rem;
@@ -753,8 +759,14 @@ video {
   --tw-bg-opacity: 1;
   background-color: rgb(255 255 255 / var(--tw-bg-opacity));
 }
+.cfps-fill-white {
+  fill: #fff;
+}
 .\!cfps-p-0 {
   padding: 0px !important;
+}
+.cfps-p-0 {
+  padding: 0px;
 }
 .cfps-p-2 {
   padding: 0.5rem;
