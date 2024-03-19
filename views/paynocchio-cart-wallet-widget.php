@@ -41,7 +41,7 @@ if (!defined('ABSPATH')) {
             </div>
         </div>
 
-        <div class="topup_mini_form cfps-hidden cfps-absolute cfps-top-[110%] cfps-left-0 cfps-w-full">
+       <!-- <div class="topup_mini_form cfps-hidden cfps-absolute cfps-top-[110%] cfps-left-0 cfps-w-full">
             <div class="cfps-p-4 cfps-bg-white cfps-drop-shadow cfps-flex cfps-flex-row cfps-items-center cfps-gap-x-2 cfps-rounded-lg">
                 <p class="cfps-text-xl cfps-font-semibold">$</p>
                 <input type="number" class="cfps-border-0 cfps-rounded-lg cfps-text-xl cfps-font-semibold cfps-w-full" value="0" id="top_up_amount" />
@@ -54,8 +54,8 @@ if (!defined('ABSPATH')) {
                         <path class="cfps-opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                     </svg>
                 </button>
-                <?php wp_nonce_field( 'paynocchio_ajax_top_up', 'ajax-top-up-nonce' ); ?>
+                <?php /*wp_nonce_field( 'paynocchio_ajax_top_up', 'ajax-top-up-nonce' ); */?>
             </div>
-        </div>
+        </div>-->
     <?php } ?>
 </div>

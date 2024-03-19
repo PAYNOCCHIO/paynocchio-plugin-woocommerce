@@ -27,7 +27,47 @@ import './topUpFormProcess'
         };
     }
 
-    $.fn.countUp = function (params, startValue = 0, newValue = null) {
+    function setBalance (balance, bonus) {
+        /*$('.paynocchio-balance-value').text('');
+        $('.paynocchio-bonus-value').text('');*/
+
+        let oldBalance = parseFloat($('.paynocchio-balance-value').first().text());
+        let newBalance = parseFloat(balance);
+
+        let oldBonus = parseFloat($('.paynocchio-bonus-value').first().text());
+        let newBonus = parseFloat(bonus);
+
+        function animateDigits (type, start, end) {
+            let elem = $('.paynocchio-' + type + '-value');
+
+            if (start === end) return;
+            let range = end - start;
+            let current = start;
+
+            let stepTime = 4; // 4 ms
+            let increment = (range / 250); // 250 steps
+
+            let i = 0;
+            var timer = setInterval(function() {
+                current += increment;
+                let echo = parseFloat(current).toFixed(2);
+                //echo = parseFloat(echo); // remove trailing zero
+                elem.html(echo);
+                i++;
+                if (i == 250) {
+                    clearInterval(timer);
+                }
+            }, stepTime);
+        }
+
+        animateDigits('balance', oldBalance, newBalance);
+        animateDigits('bonus', oldBonus, newBonus);
+
+        //$('.paynocchio-balance-value').text(balance);*/
+        //$('.paynocchio-bonus-value').text(bonus);
+    }
+
+   /* $.fn.countUp = function (params, startValue = 0, newValue = null) {
         // make sure dependency is present
         if (typeof CountUp !== 'function') {
             console.error('countUp.js is a required dependency of countUp-jquery.js.');
@@ -67,7 +107,7 @@ import './topUpFormProcess'
     function setBalance (balance, bonus) {
 
         const existing_balance = $('.paynocchio-balance-value').first().text();
-        const existing_bonuses = $('.paynocchio-bonus-value').first().text().toFixed(2);
+        const existing_bonuses = $('.paynocchio-bonus-value').first().text();
 
         if(balance !== +existing_balance) {
             $('.paynocchio-balance-value').text(balance);
@@ -83,7 +123,7 @@ import './topUpFormProcess'
         console.log(existing_balance)
         console.log(existing_balance === balance)
 
-    }
+    }*/
 
     /**
      * Function to make block visibility work
