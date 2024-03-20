@@ -82,10 +82,12 @@ final class Woocommerce_Paynocchio_Gateway_Blocks_Support  extends AbstractPayme
      * @return array
      */
     public function get_payment_method_data() {
+        $paynocchio = new Woocommerce_Paynocchio();
+        $wallet = $paynocchio->get_paynocchio_wallet_info();
         return [
             'title'       => $this->get_setting( 'title' ),
             'description' => $this->get_setting( 'description' ),
-            //'supports'    => array_filter( $this->gateway->supports, [ $this->gateway, 'supports' ] )
+            'wallet' => $wallet,
         ];
     }
 }
