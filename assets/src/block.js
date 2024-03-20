@@ -1,13 +1,9 @@
-import 'react-range-slider-input/dist/style.css';
-
-
+import { useState, useEffect } from '@wordpress/element';
 import { sprintf, __ } from '@wordpress/i18n';
 import { registerPaymentMethod } from '@woocommerce/blocks-registry';
 import { decodeEntities } from '@wordpress/html-entities';
 import { getSetting } from '@woocommerce/settings';
 import cashback_ill from "../img/cashback_ill.png"
-import RangeSlider from 'react-range-slider-input';
-import { useState } from '@wordpress/element';
 
 const settings = getSetting( 'paynocchio_data', {} );
 
@@ -50,13 +46,20 @@ const PaymentBlock = () => {
                 <h3>
                     How much do you want to pay in bonuses?
                 </h3>
-                <RangeSlider
-                    min={0}
-                    max={settings.wallet.bonuses}
-                    onInput={(value) => setBonus(value)}
+
+                <input type="number" className="input-text short"
+                       name="bonuses_value" id="bonuses-value" placeholder=""
+                       onChange={(event) => setBonus(event.target.value)}
+                       value={bonuses}
                 />
-
-
+                <input
+                    type="range"
+                    name={'bonuses_input'}
+                    id={'bonuses_input'}
+                    min="0"
+                    max={settings.wallet.bonuses}
+                    value={bonuses}
+                    onChange={(event => setBonus(event.target.value))} />
             </div>
 
             <div className="cfps-flex cfps-flex-row cfps-gap-x-4 cfps-mt-8">
@@ -78,7 +81,41 @@ const label = decodeEntities( settings.title ) || defaultLabel;
 /**
  * Content component
  */
-const Content = () => {
+const Content = (props) => {
+    const { eventRegistration, emitResponse } = props;
+    const { onPaymentProcessing } = eventRegistration;
+    useEffect( () => {
+        const unsubscribe = onPaymentProcessing( async () => {
+            // Here we can do any processing we need, and then emit a response.
+            // For example, we might validate a custom field, or perform an AJAX request, and then emit a response indicating it is valid or not.
+            const bonusesValue = '10';
+            const customDataIsValid = !! bonusesValue.length;
+
+            if ( customDataIsValid ) {
+                return {
+                    type: emitResponse.responseTypes.SUCCESS,
+                    meta: {
+                        paymentMethodData: {
+                            bonusesValue,
+                        },
+                    },
+                };
+            }
+
+            return {
+                type: emitResponse.responseTypes.ERROR,
+                message: 'There was an error',
+            };
+        } );
+        // Unsubscribes when this component is unmounted.
+        return () => {
+            unsubscribe();
+        };
+    }, [
+        emitResponse.responseTypes.ERROR,
+        emitResponse.responseTypes.SUCCESS,
+        onPaymentProcessing,
+    ] );
     return (
         <>
             <PaymentBlock />

@@ -58,7 +58,7 @@ if (is_user_logged_in()) {
                 How much do you want to pay in bonuses?
             </h3>
             <?php
-            woocommerce_form_field( 'bonuses_value', [
+            woocommerce_form_field( 'bonusesvalue', [
                 'type'        => 'number',
                 'id'          => 'bonuses-value',
                 'label'       => '',

@@ -73,6 +73,13 @@ final class Woocommerce_Paynocchio_Gateway_Blocks_Support  extends AbstractPayme
             true
         );
 
+        wp_enqueue_style(
+            'paynocchio-payments-blocks',
+            plugin_dir_url( WOOCOMMERCE_PAYNOCCHIO_BASENAME ) . '/dist/assets/css/blocks.css',
+            $script_asset[ 'dependencies' ],
+            $script_asset[ 'version' ],
+        );
+
         return [ 'paynocchio-payments-blocks' ];
     }
 
