@@ -363,6 +363,15 @@ import './topUpFormProcess'
                 }
             }
 
+            jQuery('input[type="range"].slider-progress').each(function() {
+                jQuery(this).css('--value', jQuery(this).val());
+                jQuery(this).css('--min', jQuery(this).attr('min') == '' ? '0' : jQuery(this).attr('min'));
+                jQuery(this).css('--max', jQuery(this).attr('max') == '' ? '0' : jQuery(this).attr('max'));
+                jQuery(this).on('input', function () {
+                    jQuery(this).css('--value', jQuery(this).val())
+                });
+            });
+
         });
         // WOOCOMMERCE CHECKOUT SCRIPT END
         // READY END
@@ -376,6 +385,6 @@ import './topUpFormProcess'
                 $(this).css('transform','rotate(0deg)');
             }
         });
-    });
 
+    });
 })(jQuery);
