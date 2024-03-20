@@ -95,6 +95,7 @@ import './topUpFormProcess'
                     updateWalletBalance();
                     updateOrderButtonState();
                     $('.topUpModal').delay(1000).fadeOut('fast')
+                    $('body').removeClass('paynocchio-modal-open');
                 }
             }
         })
@@ -166,7 +167,8 @@ import './topUpFormProcess'
             $('.withdrawModal .message').text('Sorry, can\'t do ;)');
             $(evt.target).removeClass('cfps-disabled')
             $(`#${evt.target.id} .cfps-spinner`).addClass('cfps-hidden');
-            $('.topUpModal').hide('fast')
+            /*$('.withdrawModal').hide('fast');
+            $('body').removeClass('paynocchio-modal-open');*/
         } else {
             $.ajax({
                 url: paynocchio_object.ajaxurl,
@@ -183,6 +185,7 @@ import './topUpFormProcess'
                         updateWalletBalance();
                         updateOrderButtonState();
                         $('.withdrawModal').delay(1000).fadeOut('fast')
+                        $('body').removeClass('paynocchio-modal-open');
                     }
                 }
             })
