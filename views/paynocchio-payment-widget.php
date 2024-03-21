@@ -8,7 +8,7 @@ if (!defined('ABSPATH')) {
 
 global $woocommerce;
 $cart = $woocommerce->cart;
-$cart_total = intval($woocommerce->cart->total);
+$cart_total = floatval($woocommerce->cart->total);
 
 if (is_user_logged_in()) {
     $paynocchio = new Woocommerce_Paynocchio();

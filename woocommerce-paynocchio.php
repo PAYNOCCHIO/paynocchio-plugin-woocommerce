@@ -66,6 +66,10 @@ if ( ! defined( 'WOOCOMMERCE_PAYNOCCHIO_BASENAME' ) ) {
     define( 'WOOCOMMERCE_PAYNOCCHIO_BASENAME', plugin_basename( WOOCOMMERCE_PAYNOCCHIO_PAGE_FILE ) );
 }
 
+if ( ! defined( 'WOOCOMMERCE_PAYNOCCHIO_ABSPATH' ) ) {
+    define( 'WOOCOMMERCE_PAYNOCCHIO_ABSPATH', trailingslashit( plugin_dir_path( __FILE__ ) ));
+}
+
 /**
  * The code that runs during plugin activation.
  * This action is documented in includes/class-woocommerce-paynocchio-activator.php
