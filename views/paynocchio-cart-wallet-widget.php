@@ -9,23 +9,7 @@ if (!defined('ABSPATH')) {
     $amount = WC()->cart->cart_contents_total;
 ?>
 
-<?php
-if (is_user_logged_in()) {
-    $current_user = wp_get_current_user();
-    $user_paynocchio_wallet_id = get_user_meta($current_user->ID, 'paynoccio_wallet', true);
-    if($user_paynocchio_wallet_id) {
-        $user_paynocchio_wallet = new Woocommerce_Paynocchio_Wallet($current_user->ID);
-        $wallet_bal_bon = $user_paynocchio_wallet->getWalletBalance($user_paynocchio_wallet_id);
-        if($wallet_bal_bon) {
-            $wallet_balance = $wallet_bal_bon['balance'];
-            $wallet_bonus = $wallet_bal_bon['bonuses'];
-            $wallet_pan = $wallet_bal_bon['number'];
-        }
-    }
-};
-?>
-
-<div class="paynocchio-cart-wallet-widget cfps-bg-slate-100 cfps-p-2 cfps-rounded-lg cfps-flex cfps-flex-row cfps-items-center">
+<div class="paynocchio-cart-wallet-widget cfps-bg-slate-100 cfps-p-2 cfps-rounded-lg cfps-flex cfps-flex-row cfps-items-center cfps-relative">
     <div class="cart">
         <a href="<?php echo wc_get_checkout_url(); ?>" alt="Checkout" title="Checkout">
             <div class="cfps-flex cfps-flex-row cfps-items-center">
@@ -39,17 +23,51 @@ if (is_user_logged_in()) {
         </a>
     </div>
 
-    <?php if (is_user_logged_in() && get_user_meta(get_current_user_id(), 'paynoccio_wallet')) { ?>
-    <div class="wallet cfps-flex cfps-flex-row cfps-items-center cfps-pl-2 cfps-ml-2 cfps-border-l cfps-border-slate-300">
-        <div class="cfps-flex cfps-flex-row cfps-items-center cfps-pr-2 cfps-mr-2 cfps-border-r cfps-border-slate-300 cfps-gap-x-2">
-            <img src="<?php echo plugin_dir_url( WOOCOMMERCE_PAYNOCCHIO_BASENAME ) . 'assets/img/wallet.png' ?>" class="!cfps-h-[25px] cfps-w-auto"/>
-            <p class="cfps-font-semibold">$<span class="paynocchio-numbers paynocchio-balance-value"><?php echo $wallet_balance ?? 0 ?></span></p>
-            <a href="/<?php echo WOOCOMMERCE_PAYNOCCHIO_ACCOUNT_PAGE_SLUG ?>" title="Add money" alt="Add money" class="cfps-bg-slate-300 cfps-rounded-3xl cfps-w-6 cfps-h-6 cfps-leading-6 cfps-text-center cfps-block cfps-ml-2">+</a>
+    <?php if (is_user_logged_in() && get_user_meta(get_current_user_id(), PAYNOCCHIO_WALLET_KEY)) {
+        $paynocchio = new Woocommerce_Paynocchio();
+        $wallet = $paynocchio->get_paynocchio_wallet_info();
+        ?>
+        <div class="wallet cfps-flex cfps-flex-row cfps-items-center cfps-pl-2 cfps-ml-2 cfps-border-l cfps-border-slate-300">
+            <div class="cfps-flex cfps-flex-row cfps-items-center cfps-pr-2 cfps-mr-2 cfps-border-r cfps-border-slate-300 cfps-gap-x-2">
+                <img src="<?php echo plugin_dir_url( WOOCOMMERCE_PAYNOCCHIO_BASENAME ) . 'assets/img/wallet.png' ?>" class="!cfps-h-[25px] cfps-w-auto"/>
+                <p class="cfps-font-semibold">$<span class="paynocchio-numbers paynocchio-balance-value"><?php echo $wallet['balance'] ?></span></p>
+                <a title="Add money" alt="Add money"
+                   class="cfps-bg-slate-300 cfps-rounded-3xl cfps-w-6 cfps-h-6 cfps-leading-6 cfps-text-center cfps-block cfps-ml-2 cfps-cursor-pointer"
+                    id="show_mini_modal">+</a>
+            </div>
+            <div class="cfps-flex cfps-flex-row cfps-items-center cfps-gap-x-2">
+                <p>Bonus:</p>
+                <p class="cfps-font-semibold"><span class="paynocchio-numbers paynocchio-bonus-value"><?php echo $wallet['bonuses'] ?></span></p>
+            </div>
         </div>
-        <div class="cfps-flex cfps-flex-row cfps-items-center cfps-gap-x-2">
-            <p>Bonus:</p>
-            <p class="cfps-font-semibold"><span class="paynocchio-numbers paynocchio-bonus-value"><?php echo $wallet_bonus ?? 0 ?></span></p>
+
+        <div class="topup_mini_form cfps-hidden cfps-absolute cfps-top-[110%] cfps-left-0 cfps-w-full">
+            <div class="cfps-p-4 cfps-bg-white cfps-drop-shadow cfps-flex cfps-flex-row cfps-items-center cfps-gap-x-2 cfps-rounded-lg cfps-justify-between">
+                <div class="cfps-flex cfps-flex-row">
+                    <p class="cfps-text-xl cfps-font-semibold cfps-whitespace-nowrap"> Add $</p>
+                     <input type="number" class="cfps-border-0 cfps-p-0 cfps-rounded-lg cfps-text-xl cfps-font-semibold cfps-w-[100px]"
+                       placeholder="0" value="" id="top_up_amount_mini_form" />
+                </div>
+                <button id="top_up_mini_form_button"
+                        type="button"
+                        class="cfps-border-0 cfps-rounded-lg cfps-p-2 cfps-bg-blue-500 cfps-text-white cfps-flex cfps-flex-row">
+                    Top up
+                    <svg class="cfps-spinner cfps-hidden cfps-animate-spin cfps-ml-4 cfps-h-5 cfps-w-5 cfps-text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle class="cfps-opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="cfps-opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    <svg class="cfps-check cfps-hidden cfps-ml-4 cfps-h-5 cfps-w-5 cfps-text-white cfps-fill-white" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+                        <!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. -->
+                        <path d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM369 209L241 337c-9.4 9.4-24.6 9.4-33.9 0l-64-64c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l47 47L335 175c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9z"></path>
+                    </svg>
+                    <svg class="cfps-cross cfps-hidden cfps-ml-4 cfps-h-5 cfps-w-5 cfps-text-white cfps-fill-white" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+                        <!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. -->
+                        <path d="M256 32c14.2 0 27.3 7.5 34.5 19.8l216 368c7.3 12.4 7.3 27.7 .2 40.1S486.3 480 472 480H40c-14.3 0-27.6-7.7-34.7-20.1s-7-27.8 .2-40.1l216-368C228.7 39.5 241.8 32 256 32zm0 128c-13.3 0-24 10.7-24 24V296c0 13.3 10.7 24 24 24s24-10.7 24-24V184c0-13.3-10.7-24-24-24zm32 224a32 32 0 1 0 -64 0 32 32 0 1 0 64 0z"></path>
+                    </svg>
+                </button>
+                <?php wp_nonce_field( 'paynocchio_ajax_top_up', 'ajax-top-up-nonce-mini-form' ); ?>
+            </div>
+
         </div>
-    </div>
     <?php } ?>
 </div>

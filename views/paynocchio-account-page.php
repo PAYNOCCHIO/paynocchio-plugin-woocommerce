@@ -4,27 +4,12 @@ if (!defined('ABSPATH')) {
 }
 ?>
 
-<?php
-if (is_user_logged_in()) {
-    $wallet_balance = 0;
-    $wallet_bonus = 0;
-    $wallet_pan = 0;
+<?php if (is_user_logged_in()) {
 
-    $current_user = wp_get_current_user();
-    $user_paynocchio_wallet_id = get_user_meta($current_user->ID, 'paynoccio_wallet', true);
-    if($user_paynocchio_wallet_id) {
-        $user_paynocchio_wallet = new Woocommerce_Paynocchio_Wallet($current_user->ID);
-        $wallet_bal_bon = $user_paynocchio_wallet->getWalletBalance($user_paynocchio_wallet_id);
-        if($wallet_bal_bon) {
-            $wallet_balance = $wallet_bal_bon['balance'];
-            $wallet_bonus = $wallet_bal_bon['bonuses'];
-            $wallet_pan = $wallet_bal_bon['number'];
-        }
-    }
-};
-?>
+    $paynocchio = new Woocommerce_Paynocchio();
+    $wallet = $paynocchio->get_paynocchio_wallet_info();
 
-<?php if (is_user_logged_in()) { ?>
+    ?>
     <section class="paynocchio">
         <div class="paynocchio-account">
             <div class="paynocchio-embleme">
@@ -36,7 +21,7 @@ if (is_user_logged_in()) {
                 </div>
                 <div class="paynocchio-profile-text">
                     <h2>
-                       <?php echo $current_user->user_firstname. ' ' .$current_user->user_lastname; ?>
+                       <?php echo $wallet['user']['first_name']. ' ' .$wallet['user']['last_name']; ?>
                     </h2>
                     <a href="#">
                         <img src="<?php echo plugin_dir_url( WOOCOMMERCE_PAYNOCCHIO_BASENAME ) . 'assets/img/plane.png' ?>"
@@ -45,7 +30,7 @@ if (is_user_logged_in()) {
                     </a>
                     <div class="paynocchio-count">
                         <div>
-                            <p class="cfps-text-2xl cfps-font-semibold"><span class="paynocchio-numbers paynocchio-bonus-value"><?php echo $wallet_bonus; ?></span></p>
+                            <p class="cfps-text-2xl cfps-font-semibold"><span class="paynocchio-numbers paynocchio-bonus-value"><?php echo $wallet['bonuses']; ?></span></p>
                             <p>bonuses</p>
                         </div>
                         <div>
@@ -66,7 +51,7 @@ if (is_user_logged_in()) {
             </div>
             <div class="paynocchio_tabs">
                 <div class="paynocchio-profile-body paynocchio-tab-body visible">
-                    <?php if (!get_user_meta(get_current_user_id(), 'paynoccio_wallet', true)) { ?>
+                    <?php if (!get_user_meta(get_current_user_id(), PAYNOCCHIO_WALLET_KEY, true)) { ?>
                         <div class="paynocchio-profile-block">
                             <div class="cfps-grid cfps-grid-cols-[24px_1fr] cfps-gap-x-6">
                                 <img src="<?php echo plugin_dir_url( WOOCOMMERCE_PAYNOCCHIO_BASENAME ) . 'assets/img/i.png' ?>" />
@@ -90,10 +75,10 @@ if (is_user_logged_in()) {
                                     Kopybara.Pay
                                 </div>
                                 <div>
-                                    $<span class="paynocchio-numbers paynocchio-balance-value"><?php echo $wallet_balance ?? 0 ?></span>
+                                    $<span class="paynocchio-numbers paynocchio-balance-value"><?php echo $wallet['balance'] ?></span>
                                 </div>
                                 <div>
-                                    Bonuses: <span class="paynocchio-numbers paynocchio-bonus-value"><?php echo $wallet_bonus ?? 0 ?></span>
+                                    Bonuses: <span class="paynocchio-numbers paynocchio-bonus-value"><?php echo $wallet['bonuses'] ?></span>
                                 </div>
                                 <a class="tab-switcher cfps-cursor-pointer" id="wallet_toggle">
                                     <img src="<?php echo plugin_dir_url( WOOCOMMERCE_PAYNOCCHIO_BASENAME ) . 'assets/img/arr_r.png' ?>" />
@@ -142,7 +127,7 @@ if (is_user_logged_in()) {
                                             Balance
                                         </div>
                                         <div class="amount">
-                                            $<span class="paynocchio-numbers paynocchio-balance-value"><?php echo $wallet_balance ?? 0 ?></span>
+                                            $<span class="paynocchio-numbers paynocchio-balance-value"><?php echo $wallet['balance'] ?></span>
                                         </div>
                                     </div>
                                     <div class="paynocchio-bonuses">
@@ -150,19 +135,19 @@ if (is_user_logged_in()) {
                                             Bonuses
                                         </div>
                                         <div class="amount">
-                                            <span class="paynocchio-numbers paynocchio-bonus-value"><?php echo $wallet_bonus ?? 0 ?></span>
+                                            <span class="paynocchio-numbers paynocchio-bonus-value"><?php echo $wallet['bonuses'] ?></span>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="paynocchio-card-number-mask">
-                                    <span class="cfps-text-gray-300 cfps-mr-4">● ● ● ●</span> <?php echo substr(strval($wallet_pan), -4); ?>
+                                    <span class="cfps-text-gray-300 cfps-mr-4">● ● ● ●</span> <?php echo substr(strval($wallet['card_number']), -4); ?>
                                 </div>
                             </div>
                             <div class="paynocchio-card-back">
                                 <img src="<?php echo plugin_dir_url( WOOCOMMERCE_PAYNOCCHIO_BASENAME ) . 'assets/img/card-back.png' ?>" />
                                 <a class="card-toggle"></a>
                                 <div class="paynocchio-card-number">
-                                    <div><?php echo chunk_split(strval($wallet_pan), 4, '</div><div>'); ?></div>
+                                    <div><?php echo chunk_split(strval($wallet['card_number']), 4, '</div><div>'); ?></div>
                                 </div>
                             </div>
                         </div>

@@ -246,10 +246,9 @@ class Woocommerce_Paynocchio {
 
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_styles' );
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
+		$this->loader->add_action( 'woocommerce_blocks_loaded', $plugin_admin, 'paynocchio_gateway_block_support' );
 
 	}
-
-
 
 	/**
 	 * Register all of the hooks related to the public-facing functionality
@@ -276,7 +275,7 @@ class Woocommerce_Paynocchio {
         add_action( 'wp_ajax_nopriv_paynocchio_ajax_get_user_wallet', [$this, 'paynocchio_ajax_get_user_wallet']);
         add_action( 'wp_ajax_paynocchio_ajax_withdraw', [$this, 'paynocchio_ajax_withdraw']);
         add_action( 'wp_ajax_nopriv_paynocchio_ajax_withdraw', [$this, 'paynocchio_ajax_withdraw']);
-	}
+    }
 
     /**
      * Handle Creation of the UUID
@@ -298,12 +297,12 @@ class Woocommerce_Paynocchio {
 
         $this->set_uuid();
 
-         if(!get_user_meta($this->user_id, 'paynoccio_wallet')) {
+         if(!get_user_meta($this->user_id, PAYNOCCHIO_WALLET_KEY)) {
              $wallet = new Woocommerce_Paynocchio_Wallet($this->get_uuid());
              $wallet_response = $wallet->createWallet();
              $json_response = json_decode($wallet_response);
              if($json_response->status === 'success') {
-                 add_user_meta($this->user_id, 'paynoccio_wallet', $json_response->wallet, true);
+                 add_user_meta($this->user_id, PAYNOCCHIO_WALLET_KEY, $json_response->wallet, true);
              }
          }
 
@@ -333,9 +332,9 @@ class Woocommerce_Paynocchio {
         }
 
 
-         if(get_user_meta($this->user_id, 'paynoccio_wallet')) {
+         if(get_user_meta($this->user_id, PAYNOCCHIO_WALLET_KEY)) {
              $wallet = new Woocommerce_Paynocchio_Wallet($this->get_uuid());
-             $wallet_response = $wallet->topUpWallet(get_user_meta($this->user_id, 'paynoccio_wallet', true), $amount);
+             $wallet_response = $wallet->topUpWallet(get_user_meta($this->user_id, PAYNOCCHIO_WALLET_KEY, true), $amount);
              //$json_response = json_decode($wallet_response);
          }
 
@@ -365,9 +364,9 @@ class Woocommerce_Paynocchio {
         }
 
 
-         if(get_user_meta($this->user_id, 'paynoccio_wallet')) {
+         if(get_user_meta($this->user_id, PAYNOCCHIO_WALLET_KEY)) {
              $wallet = new Woocommerce_Paynocchio_Wallet($this->get_uuid());
-             $wallet_response = $wallet->withdrawFromWallet(get_user_meta($this->user_id, 'paynoccio_wallet', true), $amount);
+             $wallet_response = $wallet->withdrawFromWallet(get_user_meta($this->user_id, PAYNOCCHIO_WALLET_KEY, true), $amount);
          }
 
         wp_send_json([
@@ -383,10 +382,10 @@ class Woocommerce_Paynocchio {
      */
     public function paynocchio_ajax_get_user_wallet()
     {
-         if(get_user_meta($this->user_id, 'paynoccio_wallet')) {
+         if(get_user_meta($this->user_id, PAYNOCCHIO_WALLET_KEY)) {
 
              wp_send_json([
-                 'walletId' => get_user_meta($this->user_id, 'paynoccio_wallet', true)
+                 'walletId' => get_user_meta($this->user_id, PAYNOCCHIO_WALLET_KEY, true)
              ]);
          } else {
              wp_send_json_error();
@@ -402,9 +401,9 @@ class Woocommerce_Paynocchio {
      */
     public function paynocchio_ajax_check_balance()
     {
-         if(get_user_meta($this->user_id, 'paynoccio_wallet')) {
+         if(get_user_meta($this->user_id, PAYNOCCHIO_WALLET_KEY)) {
              $wallet = new Woocommerce_Paynocchio_Wallet($this->get_uuid());
-             $wallet_response = $wallet->getWalletBalance(get_user_meta($this->user_id, 'paynoccio_wallet', true));
+             $wallet_response = $wallet->getWalletBalance(get_user_meta($this->user_id, PAYNOCCHIO_WALLET_KEY, true));
          }
 
         wp_send_json([
@@ -498,4 +497,37 @@ class Woocommerce_Paynocchio {
         return get_current_user_id();
     }
 
+    /**
+     * Get the current User Wallet data
+     *
+     * @since    1.0.0
+     */
+    public function get_paynocchio_wallet_info() {
+
+        if (is_user_logged_in()) {
+            $wallet = [];
+
+            $current_user = wp_get_current_user();
+
+            $wallet['user'] = [
+                'first_name' => $current_user->first_name,
+                'last_name' => $current_user->last_name];
+
+            $user_paynocchio_wallet_id = get_user_meta($current_user->ID, PAYNOCCHIO_WALLET_KEY, true);
+
+            if($user_paynocchio_wallet_id) {
+                $user_paynocchio_wallet = new Woocommerce_Paynocchio_Wallet($current_user->ID);
+                $wallet_bal_bon = $user_paynocchio_wallet->getWalletBalance($user_paynocchio_wallet_id);
+                if($wallet_bal_bon) {
+                    $wallet['balance'] = $wallet_bal_bon['balance'];
+                    $wallet['bonuses'] = $wallet_bal_bon['bonuses'];
+                    $wallet['card_number'] = $wallet_bal_bon['number'];
+                }
+            }
+
+            return $wallet;
+        }
+
+        return false;
+    }
 }

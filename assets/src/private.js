@@ -27,10 +27,37 @@ import './topUpFormProcess'
     }
 
     function setBalance (balance, bonus) {
-        $('.paynocchio-balance-value').text('');
-        $('.paynocchio-bonus-value').text('');
-        $('.paynocchio-balance-value').text(balance);
-        $('.paynocchio-bonus-value').text(bonus);
+        let oldBalance = parseFloat($('.paynocchio-balance-value').first().text());
+        let newBalance = parseFloat(balance);
+
+        let oldBonus = parseFloat($('.paynocchio-bonus-value').first().text());
+        let newBonus = parseFloat(bonus);
+
+        function animateDigits (type, start, end) {
+            let elem = $('.paynocchio-' + type + '-value');
+
+            if (start === end) return;
+            let range = end - start;
+            let current = start;
+
+            let stepTime = 4; // 4 ms
+            let increment = (range / 250); // 250 steps
+
+            let i = 0;
+            var timer = setInterval(function() {
+                current += increment;
+                let echo = parseFloat(current).toFixed(2);
+                //echo = parseFloat(echo); // remove trailing zero
+                elem.html(echo);
+                i++;
+                if (i == 250) {
+                    clearInterval(timer);
+                }
+            }, stepTime);
+        }
+
+        animateDigits('balance', oldBalance, newBalance);
+        animateDigits('bonus', oldBonus, newBonus);
     }
 
     /**
@@ -67,11 +94,57 @@ import './topUpFormProcess'
                     $('.topUpModal .message').text('Success!');
                     updateWalletBalance();
                     updateOrderButtonState();
-                    $('.topUpModal').hide('fast')
+                    $('.topUpModal').delay(1000).fadeOut('fast')
+                    $('body').removeClass('paynocchio-modal-open');
                 }
             }
         })
             .error((error) => console.log(error))
+            .always(function() {
+                $(`#${evt.target.id} .cfps-spinner`).addClass('cfps-hidden');
+                $(evt.target).removeClass('cfps-disabled')
+                $('.topUpModal .message').text('');
+            });
+    }
+
+
+    /**
+     * Wallet TopUp function for MiniForm in Widget
+     * @param evt
+     * @param path
+     */
+    const topUpWalletMiniForm = (evt) => {
+        $(evt.target).addClass('cfps-disabled')
+        $(`#${evt.target.id} .cfps-spinner`).removeClass('cfps-hidden');
+        $(`#${evt.target.id} .cfps-check`).addClass('cfps-hidden');
+        $(`#${evt.target.id} .cfps-cross`).addClass('cfps-hidden');
+
+        $.ajax({
+            url: paynocchio_object.ajaxurl,
+            type: 'POST',
+            data: {
+                'action': 'paynocchio_ajax_top_up',
+                'ajax-top-up-nonce': $('#ajax-top-up-nonce-mini-form').val(),
+                'amount': $('#top_up_amount_mini_form').val(),
+            },
+            success: function(data){
+                if (data.response.status_code === 200) {
+                    $(`#${evt.target.id} .cfps-check`).removeClass('cfps-hidden');
+                    updateWalletBalance();
+                    updateOrderButtonState();
+                    $('.topup_mini_form').delay(2000).fadeOut('fast', function() {
+                        $('#show_mini_modal').css('transform','rotate(0deg)');
+                        $('#top_up_amount_mini_form').val('');
+                        $(`#${evt.target.id} .cfps-check`).addClass('cfps-hidden');
+                    });
+
+                }
+            }
+        })
+            .error(function () {
+                (error) => console.log(error);
+                $(`#${evt.target.id} .cfps-cross`).removeClass('cfps-hidden');
+            })
             .always(function() {
                 $(`#${evt.target.id} .cfps-spinner`).addClass('cfps-hidden');
                 $(evt.target).removeClass('cfps-disabled')
@@ -94,7 +167,8 @@ import './topUpFormProcess'
             $('.withdrawModal .message').text('Sorry, can\'t do ;)');
             $(evt.target).removeClass('cfps-disabled')
             $(`#${evt.target.id} .cfps-spinner`).addClass('cfps-hidden');
-            $('.topUpModal').hide('fast')
+            /*$('.withdrawModal').hide('fast');
+            $('body').removeClass('paynocchio-modal-open');*/
         } else {
             $.ajax({
                 url: paynocchio_object.ajaxurl,
@@ -110,7 +184,8 @@ import './topUpFormProcess'
                         $('.withdrawModal .message').text('Success!');
                         updateWalletBalance();
                         updateOrderButtonState();
-                        $('.topUpModal').hide('fast')
+                        $('.withdrawModal').delay(1000).fadeOut('fast')
+                        $('body').removeClass('paynocchio-modal-open');
                     }
                 }
             })
@@ -151,7 +226,6 @@ import './topUpFormProcess'
                 'action': 'paynocchio_ajax_check_balance',
             },
             success: function(data){
-                //console.log(data.response.balance)
                 setBalance(data.response.balance, data.response.bonuses)
             }
         })
@@ -161,7 +235,7 @@ import './topUpFormProcess'
     /**
      * Balance polling
      */
-    //setInterval(() => updateWalletBalance(), 5000)
+    setInterval(() => updateWalletBalance(), 5000)
 
     function updateOrderButtonState() {
         const place_orderButton = $('#place_order');
@@ -187,9 +261,11 @@ import './topUpFormProcess'
         //initiateWebSocket();
 
         const topUpButton = $("#top_up_button");
+        const topUpButtonMiniForm = $("#top_up_mini_form_button");
         const withdrawButton = $("#withdraw_button");
 
         topUpButton.click((evt) => topUpWallet(evt))
+        topUpButtonMiniForm.click((evt) => topUpWalletMiniForm(evt))
         withdrawButton.click((evt) => withdrawWallet(evt))
 
         $('a.tab-switcher').click(function() {
@@ -239,8 +315,8 @@ import './topUpFormProcess'
             value.val(input.val());
             input.on('change', function() {
                 value.val(input.val());
-               /* let perc = (input.val()-input.attr('min')/(input.attr('max')-input.attr('min'))*100;
-                input.css('background','linear-gradient(to right, #3b82f6 ' + perc + '%, #f3f4f6 ' + perc + '%)');*/
+                /* let perc = (input.val()-input.attr('min')/(input.attr('max')-input.attr('min'))*100;
+                 input.css('background','linear-gradient(to right, #3b82f6 ' + perc + '%, #f3f4f6 ' + perc + '%)');*/
             })
             value.on('change', function() {
                 input.val(value.val());
@@ -274,7 +350,6 @@ import './topUpFormProcess'
                     $(this).addClass('current-card');
                     $('#source-card').attr('value',$(this).attr('data-pan'));
                 });
-
             });
 
             const place_orderButton = $('#place_order');
@@ -290,9 +365,28 @@ import './topUpFormProcess'
                 }
             }
 
+            $('input[type="range"].slider-progress').each(function() {
+                $(this).css('--value', $(this).val());
+                $(this).css('--min', $(this).attr('min') == '' ? '0' : $(this).attr('min'));
+                $(this).css('--max', $(this).attr('max') == '' ? '0' : $(this).attr('max'));
+                $(this).on('input', function () {
+                    $(this).css('--value', $(this).val())
+                });
+            });
+
         });
         // WOOCOMMERCE CHECKOUT SCRIPT END
-        //READY END
-    });
+        });
+        // READY END
+
+        $('#show_mini_modal').on('click', function() {
+            $('.topup_mini_form').toggle();
+            $(this).toggleClass('active');
+            if ($(this).hasClass('active')) {
+                $(this).css('transform','rotate(45deg)');
+            } else {
+                $(this).css('transform','rotate(0deg)');
+            }
+        });
 
 })(jQuery);

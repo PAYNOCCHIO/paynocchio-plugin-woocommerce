@@ -43,16 +43,18 @@ export default class Modal {
         this.options.element.style.display = 'flex';
         this.options.element.getBoundingClientRect();
         this.options.element.classList.add('open');
-        //this.options.body.classList.add('paynocchio-modal-open');
+        document.body.classList.add('paynocchio-modal-open');
         if (this.options.onOpen) {
             this.options.onOpen(this);
         }
     }
 
     close() {
+        if (document.querySelectorAll('.modal.open').length == 1) {
+            document.body.classList.remove('paynocchio-modal-open');
+        }
         this.options.state = 'closed';
         this.options.element.classList.remove('open');
-        //this.options.body.classList.remove('paynocchio-modal-open');
         this.options.element.style.display = 'none';
         if (this.options.onClose) {
             this.options.onClose(this);

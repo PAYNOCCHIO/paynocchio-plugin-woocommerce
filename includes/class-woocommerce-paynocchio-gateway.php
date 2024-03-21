@@ -16,7 +16,8 @@ class Woocommerce_Paynocchio_Payment_Gateway extends WC_Payment_Gateway {
         $this->method_description = __( "Paynocchio Payment Gateway Plug-in for WooCommerce", 'paynocchio' );
 
         // vertical tab title
-        $this->title = __( "Paynocchio", 'paynocchio' );
+        $this->title        = $this->get_option( 'title' );
+        $this->description = $this->get_option( 'description' );
 
         $this->icon = null;
 
@@ -35,10 +36,8 @@ class Woocommerce_Paynocchio_Payment_Gateway extends WC_Payment_Gateway {
 
         $this->enabled = $this->get_option( 'enabled' );
 
-        $this->description = $this->get_option( 'description' );
-
         // further check of SSL if you want
-        add_action( 'admin_notices', array( $this,	'do_ssl_check' ) );
+        //add_action( 'admin_notices', array( $this,	'do_ssl_check' ) );
 
         // Save settings
         if ( is_admin() ) {
@@ -126,18 +125,26 @@ class Woocommerce_Paynocchio_Payment_Gateway extends WC_Payment_Gateway {
         $order_uuid = wp_generate_uuid4();
         $customer_order->update_meta_data('uuid', $order_uuid);
 
-        $user_wallet_id = get_user_meta($customer_order->get_user_id(), 'paynoccio_wallet', true);
+        $user_wallet_id = get_user_meta($customer_order->get_user_id(), PAYNOCCHIO_WALLET_KEY, true);
         $user_uuid = get_user_meta($customer_order->get_user_id(), 'user_uuid', true);
         $user_paynocchio_wallet = new Woocommerce_Paynocchio_Wallet($user_uuid);
 
         $fullAmount = $customer_order->total;
-        $bonusAmount = ( isset( $_POST['bonuses_value'] ) ) ? $_POST['bonuses_value'] : '';
-        $amount = $fullAmount - $bonusAmount;
+        $amount = $customer_order->total;
 
-        $wallet_response = $user_paynocchio_wallet->getWalletBalance(get_user_meta($customer_order->user_id, 'paynoccio_wallet', true));
+        $bonusAmount = ( isset( $_POST['bonusesvalue'] ) ) ? $_POST['bonusesvalue'] : null;
+
+        $customer_order->update_meta_data('bonuses_value', $bonusAmount);
+
+        if(!$bonusAmount) {
+            $fullAmount = null;
+        } else {
+            $amount = $fullAmount - $bonusAmount;
+        }
+
+        $wallet_response = $user_paynocchio_wallet->getWalletBalance(get_user_meta($customer_order->user_id, PAYNOCCHIO_WALLET_KEY, true));
         $response = $user_paynocchio_wallet->makePayment($user_wallet_id, $fullAmount, $amount, $order_uuid, $bonusAmount);
 
-        //print_r($wallet_response['balance']);
         //TODO: Works only first fire!
         if ($wallet_response['balance'] + $wallet_response['bonuses'] < $amount) {
             wc_add_notice( 'You balance is lack for $' . $amount - $wallet_response['balance'] . '. Please TopUp.', 'error' );
@@ -146,18 +153,22 @@ class Woocommerce_Paynocchio_Payment_Gateway extends WC_Payment_Gateway {
         }
 
         if ( $response['status_code'] === 200) {
+
             // Payment successful
             $customer_order->add_order_note( __( 'Paynocchio complete payment.', 'paynocchio' ) );
 
             // paid order marked
             $customer_order->payment_complete();
 
-            //$customer_order->update_status( "completed" );
+            /**
+             * Set COMPLETED status for Orders
+             */
+            $customer_order->update_status( "completed" );
 
             // this is important part for empty cart
             $woocommerce->cart->empty_cart();
-
             // Redirect to thank you page
+            //print_r($bonusAmount);
             return array(
                 'result'   => 'success',
                 'redirect' => $this->get_return_url( $customer_order ),
@@ -174,16 +185,33 @@ class Woocommerce_Paynocchio_Payment_Gateway extends WC_Payment_Gateway {
 
         $customer_order = new WC_Order($order_id);
         $order_uuid = $customer_order->get_meta( 'uuid' , true );
+        $bonuses_value = $customer_order->get_meta( 'bonuses_value' , true );
 
-        $user_wallet_id = get_user_meta($customer_order->get_user_id(), 'paynoccio_wallet', true);
+        $user_wallet_id = get_user_meta($customer_order->get_user_id(), PAYNOCCHIO_WALLET_KEY, true);
         $user_uuid = get_user_meta($customer_order->get_user_id(), 'user_uuid', true);
+
         $user_paynocchio_wallet = new Woocommerce_Paynocchio_Wallet($user_uuid);
 
         $customer_order->add_order_note( 'User UUID ' . $user_uuid );
         $customer_order->add_order_note( 'Wallet UUID ' . $user_wallet_id );
         $customer_order->add_order_note( 'Order UUID ' . $order_uuid );
 
+        if ($bonuses_value) {
+            $amount = $amount - $bonuses_value;
+        }
+
         $wallet_response = $user_paynocchio_wallet->chargeBack($order_uuid, $user_wallet_id, $amount);
+
+        /*print_r([
+            'order' => $order_uuid,
+            'wallet' => $user_wallet_id,
+            '$user_uuid' => $user_uuid,
+            '$amount' => $amount,
+            '$wallet_response' => $wallet_response,
+        ]);*/
+
+        /*$customer_order->add_order_note( __( 'Paynocchio complete refund.', 'paynocchio' ) );
+        return true;*/
 
         if ( $wallet_response['status_code'] === 200) {
             // Refund successful
@@ -191,7 +219,7 @@ class Woocommerce_Paynocchio_Payment_Gateway extends WC_Payment_Gateway {
             return true;
         } else {
             // Refund fail
-            $customer_order->add_order_note( 'Paynocchio refund error: '. json_decode($response['detail'])->msg );
+            $customer_order->add_order_note( 'Paynocchio refund error: '. json_decode($wallet_response['detail'])->msg );
             return false;
         }
     }
@@ -219,7 +247,7 @@ class Woocommerce_Paynocchio_Payment_Gateway extends WC_Payment_Gateway {
         }
 
         if(is_user_logged_in()) {
-            if (!get_user_meta(get_current_user_id(), 'paynoccio_wallet')) {
+            if (!get_user_meta(get_current_user_id(), PAYNOCCHIO_WALLET_KEY)) {
                 echo do_shortcode('[paynocchio_activation_block register_redirect="/checkout?ans=checkemail" login_redirect="/checkout#payment_method_paynocchio"]');
             } else {
                 echo do_shortcode('[paynocchio_payment_widget]');
@@ -233,12 +261,12 @@ class Woocommerce_Paynocchio_Payment_Gateway extends WC_Payment_Gateway {
 
     }
 
-    public function do_ssl_check() {
+    /*public function do_ssl_check() {
         if( $this->enabled == "yes" ) {
             if( get_option( 'woocommerce_force_ssl_checkout' ) == "no" ) {
                 echo "<div class=\"error\"><p>". sprintf( __( "<strong>%s</strong> is enabled and WooCommerce is not forcing the SSL certificate on your checkout page. Please ensure that you have a valid SSL certificate and that you are <a href=\"%s\">forcing the checkout pages to be secured.</a>" ), $this->method_title, admin_url( 'admin.php?page=wc-settings&tab=checkout' ) ) ."</p></div>";
             }
         }
-    }
+    }*/
 
 }

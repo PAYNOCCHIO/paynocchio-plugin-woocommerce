@@ -5,28 +5,15 @@ if (!defined('ABSPATH')) {
 ?>
 
 <?php
-$wallet_balance = 0;
-$wallet_bonus = 0;
-$wallet_pan = '';
 
 global $woocommerce;
 $cart = $woocommerce->cart;
-$cart_total = intval($woocommerce->cart->total);
+$cart_total = floatval($woocommerce->cart->total);
 
 if (is_user_logged_in()) {
-    $current_user = wp_get_current_user();
-    $user_paynocchio_wallet_id = get_user_meta($current_user->ID, 'paynoccio_wallet', true);
-    if($user_paynocchio_wallet_id) {
-        $user_paynocchio_wallet = new Woocommerce_Paynocchio_Wallet($current_user->ID);
-        $wallet_bal_bon = $user_paynocchio_wallet->getWalletBalance($user_paynocchio_wallet_id);
-        if($wallet_bal_bon) {
-            $wallet_balance = $wallet_bal_bon['balance'];
-            $wallet_bonus = $wallet_bal_bon['bonuses'];
-            $wallet_pan = $wallet_bal_bon['number'];
-        }
-    }
-};
-?>
+    $paynocchio = new Woocommerce_Paynocchio();
+    $wallet = $paynocchio->get_paynocchio_wallet_info();
+    ?>
 
 <section class="paynocchio">
     <div class="paynocchio-embleme">
@@ -39,11 +26,11 @@ if (is_user_logged_in()) {
                 <div class="cfps-flex cfps-flex-row cfps-items-center cfps-text-white cfps-gap-x-8 cfps-text-xl">
                     <div>
                         <p>Balance</p>
-                        <p>$<span class="paynocchio-numbers paynocchio-balance-value"><?php echo $wallet_balance; ?></span></p>
+                        <p>$<span class="paynocchio-numbers paynocchio-balance-value"><?php echo $wallet['balance']; ?></span></p>
                     </div>
                     <div>
                         <p>Bonuses</p>
-                        <p><span class="paynocchio-numbers paynocchio-bonus-value"><?php echo $wallet_bonus ?></span></p>
+                        <p><span class="paynocchio-numbers paynocchio-bonus-value"><?php echo $wallet['bonuses'] ?></span></p>
                     </div>
                 </div>
 
@@ -59,9 +46,9 @@ if (is_user_logged_in()) {
                 <a class="btn-white cfps-absolute cfps-bottom-4 cfps-left-4" href="#">Read more</a>
             </div>
         </div>
-        <?php if($wallet_bonus) {
-             if($wallet_bonus < $cart_total) {
-                 $max_bonus = $wallet_bonus;
+        <?php if($wallet['bonuses']) {
+             if($wallet['bonuses'] < $cart_total) {
+                 $max_bonus = $wallet['bonuses'];
              } else {
                  $max_bonus = $cart_total;
              }
@@ -71,7 +58,7 @@ if (is_user_logged_in()) {
                 How much do you want to pay in bonuses?
             </h3>
             <?php
-            woocommerce_form_field( 'bonuses_value', [
+            woocommerce_form_field( 'bonusesvalue', [
                 'type'        => 'number',
                 'id'          => 'bonuses-value',
                 'label'       => '',
@@ -94,4 +81,5 @@ if (is_user_logged_in()) {
     </div>
 </section>
 
+<?php } ?>
 <?php echo do_shortcode('[paynocchio_modal_forms]'); ?>
