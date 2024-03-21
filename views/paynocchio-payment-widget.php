@@ -8,7 +8,7 @@ if (!defined('ABSPATH')) {
 
 global $woocommerce;
 $cart = $woocommerce->cart;
-$cart_total = intval($woocommerce->cart->total);
+$cart_total = floatval($woocommerce->cart->total);
 
 if (is_user_logged_in()) {
     $paynocchio = new Woocommerce_Paynocchio();
@@ -58,7 +58,7 @@ if (is_user_logged_in()) {
                 How much do you want to pay in bonuses?
             </h3>
             <?php
-            woocommerce_form_field( 'bonuses_value', [
+            woocommerce_form_field( 'bonusesvalue', [
                 'type'        => 'number',
                 'id'          => 'bonuses-value',
                 'label'       => '',
@@ -67,7 +67,8 @@ if (is_user_logged_in()) {
                 'input_class' => ['short'],
             ] );
             ?>
-            <input id="bonuses-input" class="styled-slider slider-progress" type="range" min="0" max="<?php echo $max_bonus; ?>" step="1" value="0" />
+            <input id="bonuses-input" type="range" min="0" max="<?php echo $max_bonus; ?>" step="1" value="0" />
+
         </div>
     <?php } ?>
 

@@ -55,8 +55,8 @@ final class Woocommerce_Paynocchio_Gateway_Blocks_Support  extends AbstractPayme
      * @return array
      */
     public function get_payment_method_script_handles() {
-        $script_path       = '/dist/js/blocks.js';
-        $script_asset_path = plugin_dir_url( WOOCOMMERCE_PAYNOCCHIO_BASENAME ) . 'dist/js/blocks.asset.php';
+        $script_path       = 'dist/js/blocks.js';
+        $script_asset_path = WOOCOMMERCE_PAYNOCCHIO_ABSPATH . 'dist/js/blocks.asset.php';
         $script_asset      = file_exists( $script_asset_path )
             ? require( $script_asset_path )
             : array(
@@ -73,6 +73,8 @@ final class Woocommerce_Paynocchio_Gateway_Blocks_Support  extends AbstractPayme
             true
         );
 
+        wp_enqueue_style( 'paynocchio-payments-blocks', plugin_dir_url( WOOCOMMERCE_PAYNOCCHIO_BASENAME ) . 'dist/assets/css/blocks.css', array(), $script_asset[ 'version' ], 'all' );
+
         return [ 'paynocchio-payments-blocks' ];
     }
 
@@ -82,10 +84,20 @@ final class Woocommerce_Paynocchio_Gateway_Blocks_Support  extends AbstractPayme
      * @return array
      */
     public function get_payment_method_data() {
+
+        global $woocommerce;
+        $paynocchio = new Woocommerce_Paynocchio();
+        $wallet = $paynocchio->get_paynocchio_wallet_info();
+        $cart_total = 0;
+        if($woocommerce->cart) {
+            $cart_total = floatval($woocommerce->cart->total);
+        }
+
         return [
             'title'       => $this->get_setting( 'title' ),
             'description' => $this->get_setting( 'description' ),
-            //'supports'    => array_filter( $this->gateway->supports, [ $this->gateway, 'supports' ] )
+            'wallet' => $wallet,
+            'cart_total' => $cart_total,
         ];
     }
 }

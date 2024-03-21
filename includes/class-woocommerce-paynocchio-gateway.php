@@ -6,6 +6,7 @@ class Woocommerce_Paynocchio_Payment_Gateway extends WC_Payment_Gateway {
 
     function __construct() {
 
+        // global ID
         $this->id = "paynocchio";
 
         // Show Title
@@ -131,7 +132,7 @@ class Woocommerce_Paynocchio_Payment_Gateway extends WC_Payment_Gateway {
         $fullAmount = $customer_order->total;
         $amount = $customer_order->total;
 
-        $bonusAmount = ( isset( $_POST['bonuses_value'] ) ) ? $_POST['bonuses_value'] : null;
+        $bonusAmount = ( isset( $_POST['bonusesvalue'] ) ) ? $_POST['bonusesvalue'] : null;
 
         $customer_order->update_meta_data('bonuses_value', $bonusAmount);
 
@@ -152,6 +153,7 @@ class Woocommerce_Paynocchio_Payment_Gateway extends WC_Payment_Gateway {
         }
 
         if ( $response['status_code'] === 200) {
+
             // Payment successful
             $customer_order->add_order_note( __( 'Paynocchio complete payment.', 'paynocchio' ) );
 
@@ -165,8 +167,8 @@ class Woocommerce_Paynocchio_Payment_Gateway extends WC_Payment_Gateway {
 
             // this is important part for empty cart
             $woocommerce->cart->empty_cart();
-
             // Redirect to thank you page
+            //print_r($bonusAmount);
             return array(
                 'result'   => 'success',
                 'redirect' => $this->get_return_url( $customer_order ),

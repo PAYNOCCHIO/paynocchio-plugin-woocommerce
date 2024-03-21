@@ -472,7 +472,7 @@ input {
 }
 
 .paynocchio-payment-block {
-    @apply cfps-rounded-lg cfps-p-8 cfps-max-w-5xl cfps-mx-auto cfps-mt-4 cfps-mb-4 cfps-drop-shadow cfps-bg-white;
+    @apply cfps-rounded-lg cfps-p-8 cfps-max-w-5xl cfps-mx-auto cfps-mt-8 cfps-drop-shadow cfps-bg-white;
 }
 
 .paynocchio-card-simulator {

@@ -389,5 +389,4 @@ import './topUpFormProcess'
             }
         });
 
-    });
 })(jQuery);
