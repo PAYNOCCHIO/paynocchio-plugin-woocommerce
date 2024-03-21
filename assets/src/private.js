@@ -141,14 +141,14 @@ import './topUpFormProcess'
                 }
             }
         })
-        .error(function () {
-            (error) => console.log(error);
-            $(`#${evt.target.id} .cfps-cross`).removeClass('cfps-hidden');
-        })
-        .always(function() {
-            $(`#${evt.target.id} .cfps-spinner`).addClass('cfps-hidden');
-            $(evt.target).removeClass('cfps-disabled')
-        });
+            .error(function () {
+                (error) => console.log(error);
+                $(`#${evt.target.id} .cfps-cross`).removeClass('cfps-hidden');
+            })
+            .always(function() {
+                $(`#${evt.target.id} .cfps-spinner`).addClass('cfps-hidden');
+                $(evt.target).removeClass('cfps-disabled')
+            });
     }
 
     /**
@@ -315,8 +315,8 @@ import './topUpFormProcess'
             value.val(input.val());
             input.on('change', function() {
                 value.val(input.val());
-               /* let perc = (input.val()-input.attr('min')/(input.attr('max')-input.attr('min'))*100;
-                input.css('background','linear-gradient(to right, #3b82f6 ' + perc + '%, #f3f4f6 ' + perc + '%)');*/
+                /* let perc = (input.val()-input.attr('min')/(input.attr('max')-input.attr('min'))*100;
+                 input.css('background','linear-gradient(to right, #3b82f6 ' + perc + '%, #f3f4f6 ' + perc + '%)');*/
             })
             value.on('change', function() {
                 input.val(value.val());
@@ -350,7 +350,6 @@ import './topUpFormProcess'
                     $(this).addClass('current-card');
                     $('#source-card').attr('value',$(this).attr('data-pan'));
                 });
-
             });
 
             const place_orderButton = $('#place_order');
@@ -366,17 +365,18 @@ import './topUpFormProcess'
                 }
             }
 
-            jQuery('input[type="range"].slider-progress').each(function() {
-                jQuery(this).css('--value', jQuery(this).val());
-                jQuery(this).css('--min', jQuery(this).attr('min') == '' ? '0' : jQuery(this).attr('min'));
-                jQuery(this).css('--max', jQuery(this).attr('max') == '' ? '0' : jQuery(this).attr('max'));
-                jQuery(this).on('input', function () {
-                    jQuery(this).css('--value', jQuery(this).val())
+            $('input[type="range"].slider-progress').each(function() {
+                $(this).css('--value', $(this).val());
+                $(this).css('--min', $(this).attr('min') == '' ? '0' : $(this).attr('min'));
+                $(this).css('--max', $(this).attr('max') == '' ? '0' : $(this).attr('max'));
+                $(this).on('input', function () {
+                    $(this).css('--value', $(this).val())
                 });
             });
 
         });
         // WOOCOMMERCE CHECKOUT SCRIPT END
+        });
         // READY END
 
         $('#show_mini_modal').on('click', function() {

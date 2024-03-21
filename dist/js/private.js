@@ -449,11 +449,13 @@ __webpack_require__.r(__webpack_exports__);
           updateWalletBalance();
           updateOrderButtonState();
           $('.topUpModal').delay(1000).fadeOut('fast');
+          $('body').removeClass('paynocchio-modal-open');
         }
       }
     }).error(error => console.log(error)).always(function () {
       $(`#${evt.target.id} .cfps-spinner`).addClass('cfps-hidden');
       $(evt.target).removeClass('cfps-disabled');
+      $('.topUpModal .message').text('');
     });
   };
 
@@ -509,7 +511,8 @@ __webpack_require__.r(__webpack_exports__);
       $('.withdrawModal .message').text('Sorry, can\'t do ;)');
       $(evt.target).removeClass('cfps-disabled');
       $(`#${evt.target.id} .cfps-spinner`).addClass('cfps-hidden');
-      $('.topUpModal').hide('fast');
+      /*$('.withdrawModal').hide('fast');
+      $('body').removeClass('paynocchio-modal-open');*/
     } else {
       $.ajax({
         url: paynocchio_object.ajaxurl,
@@ -526,6 +529,7 @@ __webpack_require__.r(__webpack_exports__);
             updateWalletBalance();
             updateOrderButtonState();
             $('.withdrawModal').delay(1000).fadeOut('fast');
+            $('body').removeClass('paynocchio-modal-open');
           }
         }
       }).error(error => console.log(error)).always(function () {
@@ -686,19 +690,27 @@ __webpack_require__.r(__webpack_exports__);
           place_orderButton.text('Please TopUp your Wallet');
         }
       }
+      $('input[type="range"].slider-progress').each(function () {
+        $(this).css('--value', $(this).val());
+        $(this).css('--min', $(this).attr('min') == '' ? '0' : $(this).attr('min'));
+        $(this).css('--max', $(this).attr('max') == '' ? '0' : $(this).attr('max'));
+        $(this).on('input', function () {
+          $(this).css('--value', $(this).val());
+        });
+      });
     });
     // WOOCOMMERCE CHECKOUT SCRIPT END
-    // READY END
+  });
+  // READY END
 
-    $('#show_mini_modal').on('click', function () {
-      $('.topup_mini_form').toggle();
-      $(this).toggleClass('active');
-      if ($(this).hasClass('active')) {
-        $(this).css('transform', 'rotate(45deg)');
-      } else {
-        $(this).css('transform', 'rotate(0deg)');
-      }
-    });
+  $('#show_mini_modal').on('click', function () {
+    $('.topup_mini_form').toggle();
+    $(this).toggleClass('active');
+    if ($(this).hasClass('active')) {
+      $(this).css('transform', 'rotate(45deg)');
+    } else {
+      $(this).css('transform', 'rotate(0deg)');
+    }
   });
 })(jQuery);
 })();
