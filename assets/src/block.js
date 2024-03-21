@@ -3,14 +3,21 @@ import { sprintf, __ } from '@wordpress/i18n';
 import { registerPaymentMethod } from '@woocommerce/blocks-registry';
 import { decodeEntities } from '@wordpress/html-entities';
 import { getSetting } from '@woocommerce/settings';
+
 import cashback_ill from "../img/cashback_ill.png"
+
 import Modal from "./Components/Modal";
+import ActivationBlock from "./Components/ActivationBlock";
+import RegistrationBlock from "./Components/RegistrationBlock";
 
 const settings = getSetting( 'paynocchio_data', {} );
 
 const PaymentBlock = ({bonuses, setBonuses}) => {
 
     const [ isOpen, setOpen ] = useState( false );
+    const [ isUser, setIsUser ] = useState( settings.user );
+
+
     const openModal = () => setOpen( true );
     const closeModal = () => setOpen( false );
 
@@ -19,6 +26,10 @@ const PaymentBlock = ({bonuses, setBonuses}) => {
         max_bonuses = settings.wallet.balance;
     } else {
         max_bonuses = settings.cart_total;
+    }
+
+    if(!isUser) {
+        return <RegistrationBlock />
     }
 
     return (<div className="paynocchio-payment-block">
@@ -93,13 +104,11 @@ const PaymentBlock = ({bonuses, setBonuses}) => {
             </Modal>
         ) }
     </div>);
-
-
 }
 
 const defaultLabel = __(
     'Paynocchio Payment',
-    'woocommerce-paynocchiok'
+    'woocommerce-paynocchio'
 );
 
 const label = decodeEntities( settings.title ) || defaultLabel;
@@ -147,8 +156,13 @@ const Content = (props) => {
     return (
         <PaymentBlock bonuses={bonuses} setBonuses={setBonus} />
     )
-
 };
+
+const DummyContent = () => {
+    return (
+        <div>Best Payment method ever</div>
+    );
+}
 /**
  * Label component
  *
@@ -166,7 +180,7 @@ const Paynocchio = {
     name: "paynocchio",
     label: <Label />,
     content: <Content />,
-    edit: <Content />,
+    edit: <DummyContent />,
     canMakePayment: () => true,
     ariaLabel: label,
     supports: {
