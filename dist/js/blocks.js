@@ -459,6 +459,185 @@ function RegistrationBlock() {
 
 /***/ }),
 
+/***/ "./assets/src/Components/TopUpModalContent.js":
+/*!****************************************************!*\
+  !*** ./assets/src/Components/TopUpModalContent.js ***!
+  \****************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ TopUpModal)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _Modal__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Modal */ "./assets/src/Components/Modal.js");
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n");
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _img_mc_png__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../img/mc.png */ "./assets/img/mc.png");
+/* harmony import */ var _img_vs_png__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../img/vs.png */ "./assets/img/vs.png");
+/* harmony import */ var _img_arr_d_png__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../img/arr_d.png */ "./assets/img/arr_d.png");
+/* harmony import */ var _img_arr_rb_png__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../img/arr_rb.png */ "./assets/img/arr_rb.png");
+/* harmony import */ var _img_plus_b_png__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../img/plus_b.png */ "./assets/img/plus_b.png");
+/* harmony import */ var _img_i_gr_png__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../img/i-gr.png */ "./assets/img/i-gr.png");
+
+
+
+
+
+
+
+
+
+
+function TopUpModal({
+  onClose
+}) {
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Modal__WEBPACK_IMPORTED_MODULE_1__["default"], {
+    onClose: onClose
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Modal__WEBPACK_IMPORTED_MODULE_1__["default"].Header, {
+    onClose: onClose
+  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('TopUp Wallet')), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Modal__WEBPACK_IMPORTED_MODULE_1__["default"].Content, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: ""
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", {
+    className: "cfps-text-gray-500"
+  }, "From"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "card-variants"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "card-var current-card",
+    "data-pan": "<?php echo $wallet['card_number']; ?>"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "cfps-flex cfps-flex-row cfps-gap-x-4 cfps-items-center"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("img", {
+    src: _img_mc_png__WEBPACK_IMPORTED_MODULE_3__,
+    className: "cfps-h-[30px] cfps-w-[30px] cfps-mr-1 cfps-inline-block"
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, "1356 5674 2352 2373")), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("img", {
+    src: _img_arr_d_png__WEBPACK_IMPORTED_MODULE_5__,
+    className: "cfps-h-[30px] cfps-w-[30px] cfps-inline-block"
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "card-var",
+    "data-pan": "3727844328348156"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "cfps-flex cfps-flex-row cfps-gap-x-4 cfps-items-center"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("img", {
+    src: _img_vs_png__WEBPACK_IMPORTED_MODULE_4__,
+    className: "cfps-h-[30px] cfps-w-[30px] cfps-mr-1 cfps-inline-block"
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, "3727 8443 2834 8156")), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("img", {
+    src: _img_arr_d_png__WEBPACK_IMPORTED_MODULE_5__,
+    className: "cfps-h-[30px] cfps-w-[30px] cfps-inline-block"
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "card-var",
+    "data-pan": ""
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "cfps-flex cfps-flex-row cfps-gap-x-4 cfps-items-center"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("img", {
+    "data-modal": ".paymentMethodModal",
+    src: _img_plus_b_png__WEBPACK_IMPORTED_MODULE_7__,
+    className: "cfps-h-[30px] cfps-w-[30px] cfps-mr-1 cfps-inline-block"
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", {
+    "data-modal": ".paymentMethodModal"
+  }, "Add new payment method")))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
+    type: "hidden",
+    id: "source-card",
+    name: "source-card",
+    value: ""
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "top-up-amount-container cfps-mt-8 lg:cfps-mt-12 cfps-flex cfps-flex-row"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", {
+    className: "cfps-text-3xl"
+  }, "$"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
+    type: "number",
+    step: "0.01",
+    className: "cfps-bg-white cfps-border-0 cfps-text-3xl !cfps-p-0 focus:!cfps-outline-none",
+    name: "amount",
+    id: "top_up_amount",
+    placeholder: "0",
+    value: "1000"
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "top-up-variants cfps-flex cfps-flex-row cfps-items-center cfps-mt-8 lg:cfps-mt-12 cfps-gap-x-2"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("a", {
+    className: "cfps-bg-gray-100 cfps-px-4 cfps-py-3 cfps-rounded-lg cfps-text-xl cfps-cursor-pointer",
+    id: "variant_1000"
+  }, "$1000"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("a", {
+    className: "cfps-bg-gray-100 cfps-px-4 cfps-py-3 cfps-rounded-lg cfps-text-xl cfps-cursor-pointer",
+    id: "variant_2000"
+  }, "$2000"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("a", {
+    className: "cfps-bg-gray-100 cfps-px-4 cfps-py-3 cfps-rounded-lg cfps-text-xl cfps-cursor-pointer",
+    id: "variant_5000"
+  }, "$5000"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("a", {
+    className: "cfps-bg-gray-100 cfps-px-4 cfps-py-3 cfps-rounded-lg cfps-text-xl cfps-cursor-pointer",
+    id: "variant_10000"
+  }, "$10 000"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("a", {
+    className: "cfps-bg-gray-100 cfps-px-4 cfps-py-3 cfps-rounded-lg cfps-text-xl cfps-cursor-pointer",
+    id: "variant_15000"
+  }, "$15 000")), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", {
+    className: "cfps-flex cfps-flex-row cfps-items-center cfps-mt-4 cfps-gap-x-0.5"
+  }, "The sending bank may charge a fee.", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("a", {
+    href: "#"
+  }, "Here's how to avoid it."), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("img", {
+    src: _img_arr_rb_png__WEBPACK_IMPORTED_MODULE_6__,
+    className: "cfps-h-[18px] cfps-w-[18px] cfps-inline-block"
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "autodeposit cfps-flex cfps-flex-row cfps-items-center cfps-mt-8 lg:cfps-mt-12 cfps-gap-x-2"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("img", {
+    src: _img_i_gr_png__WEBPACK_IMPORTED_MODULE_8__,
+    className: "cfps-h-[18px] cfps-w-[16px] cfps-mr-1 cfps-inline-block"
+  }), "Autodeposit", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "toggle-autodeposit"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, "ON"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "toggler"
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, "OFF")), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
+    className: "hidden",
+    value: "0",
+    name: "autodeposit",
+    id: "autodeposit"
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
+    id: "top_up_button",
+    type: "button",
+    className: "cfps-btn-primary"
+  }, "Top up", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("svg", {
+    className: "cfps-spinner cfps-hidden cfps-animate-spin cfps-ml-4 cfps-h-5 cfps-w-5 cfps-text-white",
+    xmlns: "http://www.w3.org/2000/svg",
+    fill: "none",
+    viewBox: "0 0 24 24"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("circle", {
+    className: "cfps-opacity-25",
+    cx: "12",
+    cy: "12",
+    r: "10",
+    stroke: "currentColor",
+    "stroke-width": "4"
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("path", {
+    className: "cfps-opacity-75",
+    fill: "currentColor",
+    d: "M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+  }))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "message"
+  })))));
+}
+
+/***/ }),
+
+/***/ "./assets/img/arr_d.png":
+/*!******************************!*\
+  !*** ./assets/img/arr_d.png ***!
+  \******************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+module.exports = __webpack_require__.p + "images/arr_d.dd63e771.png";
+
+/***/ }),
+
+/***/ "./assets/img/arr_rb.png":
+/*!*******************************!*\
+  !*** ./assets/img/arr_rb.png ***!
+  \*******************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+module.exports = __webpack_require__.p + "images/arr_rb.8cd6a8f4.png";
+
+/***/ }),
+
 /***/ "./assets/img/cashback_ill.png":
 /*!*************************************!*\
   !*** ./assets/img/cashback_ill.png ***!
@@ -479,6 +658,16 @@ module.exports = __webpack_require__.p + "images/debit_card_example.59544911.png
 
 /***/ }),
 
+/***/ "./assets/img/i-gr.png":
+/*!*****************************!*\
+  !*** ./assets/img/i-gr.png ***!
+  \*****************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+module.exports = __webpack_require__.p + "images/i-gr.6c170f32.png";
+
+/***/ }),
+
 /***/ "./assets/img/kopybara-logo.png":
 /*!**************************************!*\
   !*** ./assets/img/kopybara-logo.png ***!
@@ -486,6 +675,36 @@ module.exports = __webpack_require__.p + "images/debit_card_example.59544911.png
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 module.exports = __webpack_require__.p + "images/kopybara-logo.a12fba6f.png";
+
+/***/ }),
+
+/***/ "./assets/img/mc.png":
+/*!***************************!*\
+  !*** ./assets/img/mc.png ***!
+  \***************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+module.exports = __webpack_require__.p + "images/mc.cf6ccc88.png";
+
+/***/ }),
+
+/***/ "./assets/img/plus_b.png":
+/*!*******************************!*\
+  !*** ./assets/img/plus_b.png ***!
+  \*******************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+module.exports = __webpack_require__.p + "images/plus_b.c366fd48.png";
+
+/***/ }),
+
+/***/ "./assets/img/vs.png":
+/*!***************************!*\
+  !*** ./assets/img/vs.png ***!
+  \***************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+module.exports = __webpack_require__.p + "images/vs.1343e352.png";
 
 /***/ }),
 
@@ -685,6 +904,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Components_Modal__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./Components/Modal */ "./assets/src/Components/Modal.js");
 /* harmony import */ var _Components_ActivationBlock__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./Components/ActivationBlock */ "./assets/src/Components/ActivationBlock.js");
 /* harmony import */ var _Components_RegistrationBlock__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./Components/RegistrationBlock */ "./assets/src/Components/RegistrationBlock.js");
+/* harmony import */ var _Components_TopUpModalContent__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./Components/TopUpModalContent */ "./assets/src/Components/TopUpModalContent.js");
+
 
 
 
@@ -701,9 +922,12 @@ const PaymentBlock = ({
   setBonuses
 }) => {
   const [isOpen, setOpen] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useState)(false);
+  const [isTopUpModalOpen, setTopUpModalOpen] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useState)(false);
   const [isUser, setIsUser] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useState)(settings.user);
   const openModal = () => setOpen(true);
+  const openTopUpModal = () => setTopUpModalOpen(true);
   const closeModal = () => setOpen(false);
+  const closeTopUpModal = () => setTopUpModalOpen(false);
   let max_bonuses;
   if (settings.wallet.balance < settings.cart_total) {
     max_bonuses = settings.wallet.balance;
@@ -730,13 +954,10 @@ const PaymentBlock = ({
   }, settings.wallet.bonuses)))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "cfps-flex cfps-flex-row cfps-items-center cfps-gap-x-2"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("a", {
-    href: "#",
     className: "btn-blue",
-    "data-modal": ".topUpModal"
+    onClick: openTopUpModal
   }, "Add money"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("a", {
-    href: "#",
-    className: "btn-white",
-    "data-modal": ".withdrawModal"
+    className: "btn-white"
   }, "Withdraw"))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "paynocchio-promo-badge"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
@@ -784,7 +1005,9 @@ const PaymentBlock = ({
     onClose: closeModal
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Components_Modal__WEBPACK_IMPORTED_MODULE_7__["default"].Header, {
     onClose: closeModal
-  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('TopUp Wallet')), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Components_Modal__WEBPACK_IMPORTED_MODULE_7__["default"].Content, null, "hello")));
+  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('TopUp Wallet')), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Components_Modal__WEBPACK_IMPORTED_MODULE_7__["default"].Content, null, "hello")), isTopUpModalOpen && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Components_TopUpModalContent__WEBPACK_IMPORTED_MODULE_10__["default"], {
+    onClose: closeTopUpModal
+  }));
 };
 const defaultLabel = (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Paynocchio Payment', 'woocommerce-paynocchio');
 const label = (0,_wordpress_html_entities__WEBPACK_IMPORTED_MODULE_4__.decodeEntities)(settings.title) || defaultLabel;
