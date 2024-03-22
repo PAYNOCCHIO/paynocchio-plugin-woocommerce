@@ -19,7 +19,6 @@ const PaymentBlock = ({bonuses, setBonuses}) => {
     const [ isTopUpModalOpen, setTopUpModalOpen ] = useState( false );
     const [ isUser, setIsUser ] = useState( settings.user );
 
-
     const openModal = () => setOpen( true );
     const openTopUpModal = () => setTopUpModalOpen(true);
     const closeModal = () => setOpen( false );
