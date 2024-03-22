@@ -3,22 +3,37 @@ import { sprintf, __ } from '@wordpress/i18n';
 import { registerPaymentMethod } from '@woocommerce/blocks-registry';
 import { decodeEntities } from '@wordpress/html-entities';
 import { getSetting } from '@woocommerce/settings';
+
 import cashback_ill from "../img/cashback_ill.png"
+
 import Modal from "./Components/Modal";
+import ActivationBlock from "./Components/ActivationBlock";
+import RegistrationBlock from "./Components/RegistrationBlock";
+import TopUpModal from "./Components/TopUpModalContent";
 
 const settings = getSetting( 'paynocchio_data', {} );
 
 const PaymentBlock = ({bonuses, setBonuses}) => {
 
     const [ isOpen, setOpen ] = useState( false );
+    const [ isTopUpModalOpen, setTopUpModalOpen ] = useState( false );
+    const [ isUser, setIsUser ] = useState( settings.user );
+
+
     const openModal = () => setOpen( true );
+    const openTopUpModal = () => setTopUpModalOpen(true);
     const closeModal = () => setOpen( false );
+    const closeTopUpModal = () => setTopUpModalOpen( false );
 
     let max_bonuses;
     if(settings.wallet.balance < settings.cart_total) {
         max_bonuses = settings.wallet.balance;
     } else {
         max_bonuses = settings.cart_total;
+    }
+
+    if(!isUser) {
+        return <RegistrationBlock />
     }
 
     return (<div className="paynocchio-payment-block">
@@ -37,8 +52,8 @@ const PaymentBlock = ({bonuses, setBonuses}) => {
                 </div>
 
                 <div className="cfps-flex cfps-flex-row cfps-items-center cfps-gap-x-2">
-                    <a href="#" className="btn-blue" data-modal=".topUpModal">Add money</a>
-                    <a href="#" className="btn-white" data-modal=".withdrawModal">Withdraw</a>
+                    <a className="btn-blue" onClick={ openTopUpModal } >Add money</a>
+                    <a className="btn-white" >Withdraw</a>
                 </div>
             </div>
             <div className="paynocchio-promo-badge">
@@ -86,20 +101,21 @@ const PaymentBlock = ({bonuses, setBonuses}) => {
                 Open Modal
             </span>
         </div>
+
         { isOpen && (
             <Modal onClose={ closeModal }>
                 <Modal.Header onClose={ closeModal }>{__('TopUp Wallet')}</Modal.Header>
                 <Modal.Content>hello</Modal.Content>
             </Modal>
         ) }
+
+        { isTopUpModalOpen && <TopUpModal onClose={ closeTopUpModal } /> }
     </div>);
-
-
 }
 
 const defaultLabel = __(
     'Paynocchio Payment',
-    'woocommerce-paynocchiok'
+    'woocommerce-paynocchio'
 );
 
 const label = decodeEntities( settings.title ) || defaultLabel;
@@ -147,8 +163,13 @@ const Content = (props) => {
     return (
         <PaymentBlock bonuses={bonuses} setBonuses={setBonus} />
     )
-
 };
+
+const DummyContent = () => {
+    return (
+        <div>Best Payment method ever</div>
+    );
+}
 /**
  * Label component
  *
@@ -166,7 +187,7 @@ const Paynocchio = {
     name: "paynocchio",
     label: <Label />,
     content: <Content />,
-    edit: <Content />,
+    edit: <DummyContent />,
     canMakePayment: () => true,
     ariaLabel: label,
     supports: {
