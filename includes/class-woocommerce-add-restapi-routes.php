@@ -29,6 +29,7 @@ class Woocommerce_Paynocchio_Add_RESTapi_Routes {
         register_rest_route($namespace, $current_user_route, array(
             'methods'   => WP_REST_Server::READABLE,
             'callback'  => [$this, 'get_current_user_wallet_balance'],
+            'permission_callback' => '__return_true',
         ));
     }
 
@@ -40,6 +41,10 @@ class Woocommerce_Paynocchio_Add_RESTapi_Routes {
     {
 
         $user_id = get_current_user_id();
+
+        if(!$user_id) {
+            return new WP_Error( 'no_user', 'Invalid user', array( 'status' => 404 ) );
+        }
 
         $user_uuid = get_user_meta($user_id, PAYNOCCHIO_USER_UUID_KEY, true);
 
