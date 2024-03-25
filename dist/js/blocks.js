@@ -488,7 +488,7 @@ function TopupModal({
     data: wallet,
     error,
     loading
-  } = (0,_hooks_useFetch__WEBPACK_IMPORTED_MODULE_3__.useFetch)('paynocchio_ajax_check_balance');
+  } = (0,_hooks_useFetch__WEBPACK_IMPORTED_MODULE_3__.useFetch)('wallet/current_user');
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Modal__WEBPACK_IMPORTED_MODULE_1__["default"], {
     onClose: onClose
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Modal__WEBPACK_IMPORTED_MODULE_1__["default"].Header, {
@@ -551,19 +551,16 @@ __webpack_require__.r(__webpack_exports__);
  * @returns { data, error, loading }
  */
 function useFetch(path, method = 'GET', body = null) {
-  /*const url = new URL( window.location.origin + '/wp-admin/admin-ajax.php' );
-  url.searchParams.append( 'action', ajax_action );*/
-
   const [data, setData] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null);
   const [error, setError] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null);
   const [loading, setLoading] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(true);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     _wordpress_api_fetch__WEBPACK_IMPORTED_MODULE_1___default()({
-      url: path,
+      url: '/wp-json/api-paynocchio/v2/' + path,
       method: method,
       data: body
     }).then(res => {
-      setData(res.response);
+      setData(res);
       setLoading(false);
     }).catch(error => setError(error));
   }, [path]);
