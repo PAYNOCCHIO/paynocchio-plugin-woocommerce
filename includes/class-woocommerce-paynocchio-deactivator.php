@@ -44,6 +44,8 @@ class Woocommerce_Paynocchio_Deactivator {
             delete_user_meta(get_current_user_id(), 'paynocchio_wallet_id');
         }
 
+        flush_rewrite_rules();
+
 	}
 
 }

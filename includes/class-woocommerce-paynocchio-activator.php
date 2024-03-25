@@ -68,5 +68,7 @@ class Woocommerce_Paynocchio_Activator {
                 )
             );
         }
+
+        flush_rewrite_rules();
 	}
 }

@@ -106,6 +106,7 @@ class Woocommerce_Paynocchio {
 		$this->load_dependencies();
 		$this->set_locale();
 		$this->add_gateway();
+		$this->add_routes();
 		$this->add_shortcodes();
 		$this->define_admin_hooks();
 		$this->define_public_hooks();
@@ -162,6 +163,11 @@ class Woocommerce_Paynocchio {
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-woocommerce-add-gateway.php';
 
 		/**
+		 * The class responsible for defining Paynocchio Wocommerce custom RESTapi Routes.
+		 */
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-woocommerce-add-restapi-routes.php';
+
+		/**
 		 * The class responsible for defining all actions that occur in the public-facing
 		 * side of the site.
 		 */
@@ -195,6 +201,22 @@ class Woocommerce_Paynocchio {
 	    $add_gateway = new Woocommerce_Paynocchio_Add_Gateway();
 
 		$this->loader->add_action( 'plugins_loaded', $add_gateway, 'add_woocommerce_gateway' );
+
+	}
+	/**
+	 * Add custom REST API routes
+	 *
+	 * Uses the Woocommerce_Paynocchio_Add_RESTapi_routes class in order to set the routes and to register the hook
+	 * with WordPress.
+	 *
+	 * @since    1.0.0
+	 * @access   private
+	 */
+	private function add_routes() {
+
+	    $add_routes = new Woocommerce_Paynocchio_Add_RESTapi_Routes();
+
+		$this->loader->add_action( 'rest_api_init', $add_routes, 'add_custom_routes' );
 
 	}
 	/**

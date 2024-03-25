@@ -5,14 +5,14 @@ import Loader from "./UI/Loader";
 
 export default function TopupModal({onClose}) {
 
-    const {data, error, loading} = useFetch('paynocchio_ajax_check_balance');
+    const {data: wallet, error, loading} = useFetch('paynocchio_ajax_check_balance');
 
     return (
         <Modal onClose={ onClose }>
             <Modal.Header onClose={ onClose }>{__('TopUp Wallet')}</Modal.Header>
             <Modal.Content>
                 {loading && <Loader />}
-                {!loading && data.balance}
+                {!loading && wallet.balance}
             </Modal.Content>
         </Modal>
     );

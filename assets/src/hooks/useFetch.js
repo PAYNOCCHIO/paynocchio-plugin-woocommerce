@@ -5,10 +5,10 @@ import apiFetch from '@wordpress/api-fetch';
  * @param endpoint endpoint to fetch data from
  * @returns { data, error, loading }
  */
-export function useFetch(ajax_action, method = 'GET', body = null){
+export function useFetch(path, method = 'GET', body = null){
 
-    const url = new URL( window.location.origin + '/wp-admin/admin-ajax.php' );
-    url.searchParams.append( 'action', ajax_action );
+    /*const url = new URL( window.location.origin + '/wp-admin/admin-ajax.php' );
+    url.searchParams.append( 'action', ajax_action );*/
 
     const [data, setData] = useState(null);
     const [error, setError] = useState(null);
@@ -16,14 +16,14 @@ export function useFetch(ajax_action, method = 'GET', body = null){
 
     useEffect(() => {
         apiFetch( {
-            url: url.toString(),
+            url: path,
             method: method,
             data: body
         }).then(res => {
             setData(res.response)
             setLoading(false)
         }).catch(error => setError(error));
-    }, [ajax_action]);
+    }, [path]);
 
     return { data, error, loading };
 }
