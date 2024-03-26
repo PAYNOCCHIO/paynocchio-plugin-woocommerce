@@ -123,10 +123,10 @@ class Woocommerce_Paynocchio_Payment_Gateway extends WC_Payment_Gateway {
         //$order_id = $customer_order->get_order_number();
 
         $order_uuid = wp_generate_uuid4();
-        $customer_order->update_meta_data('uuid', $order_uuid);
+        $customer_order->update_meta_data('order_uuid', $order_uuid);
 
         $user_wallet_id = get_user_meta($customer_order->get_user_id(), PAYNOCCHIO_WALLET_KEY, true);
-        $user_uuid = get_user_meta($customer_order->get_user_id(), 'user_uuid', true);
+        $user_uuid = get_user_meta($customer_order->get_user_id(), PAYNOCCHIO_WALLET_KEY, true);
         $user_paynocchio_wallet = new Woocommerce_Paynocchio_Wallet($user_uuid);
 
         $fullAmount = $customer_order->total;
@@ -163,7 +163,7 @@ class Woocommerce_Paynocchio_Payment_Gateway extends WC_Payment_Gateway {
             /**
              * Set COMPLETED status for Orders
              */
-            $customer_order->update_status( "completed" );
+            //$customer_order->update_status( "completed" );
 
             // this is important part for empty cart
             $woocommerce->cart->empty_cart();
@@ -184,9 +184,7 @@ class Woocommerce_Paynocchio_Payment_Gateway extends WC_Payment_Gateway {
     public function process_refund($order_id, $amount = null, $reason = '') {
 
         $customer_order = new WC_Order($order_id);
-       // $wallet_id = get_user_meta($customer_order->get_user_id(), 'paynoccio_wallet', true);
-       // $user_uuid = get_user_meta($customer_order->get_user_id(), 'user_uuid', true);
-        $order_uuid = $customer_order->get_meta( 'uuid' , true );
+        $order_uuid = $customer_order->get_meta( 'order_uuid' , true );
         $bonuses_value = $customer_order->get_meta( 'bonuses_value' , true );
 
         $user_wallet_id = get_user_meta($customer_order->get_user_id(), PAYNOCCHIO_WALLET_KEY, true);

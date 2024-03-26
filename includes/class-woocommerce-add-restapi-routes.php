@@ -22,19 +22,33 @@ class Woocommerce_Paynocchio_Add_RESTapi_Routes {
 	public function add_custom_routes() {
 
         $namespace = 'api-paynocchio/v2';
+        $testing = 'testing';
         $current_user_route = 'wallet/current_user';
+        $update_order_status_route = 'order/update';
         //$route     = 'wallet_balance/(?P<wallet_id>[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12})';
         //$route     = 'wallet_balance/(?P<id>\d+)';
 
-        register_rest_route($namespace, $current_user_route, array(
+        register_rest_route($namespace, $current_user_route, [
             'methods'   => WP_REST_Server::READABLE,
             'callback'  => [$this, 'get_current_user_wallet_balance'],
             'permission_callback' => '__return_true',
-        ));
+        ]);
+
+        register_rest_route($namespace, $update_order_status_route, [
+            'methods'   => 'POST',
+            'callback'  => [$this, 'update_order_status'],
+            'permission_callback' => '__return_true',
+        ]);
+
+        register_rest_route($namespace, $testing, [
+            'methods'   => 'POST',
+            'callback'  => [$this, 'testing'],
+            'permission_callback' => '__return_true',
+        ]);
     }
 
     /**
-     * at_rest_testing_endpoint
+     * get_current_user_wallet_balance
      * @return WP_REST_Response
      */
     public function get_current_user_wallet_balance()
@@ -57,6 +71,59 @@ class Woocommerce_Paynocchio_Add_RESTapi_Routes {
             }
         }
 
+    }
+
+    /**
+     * update_order_status
+     * @return WP_REST_Response
+     */
+    public function update_order_status($request)
+    {
+        $parameters = $request->get_params();
+
+        if(!$parameters) {
+            return new WP_Error( 'no_params', 'Invalid parameters', array( 'status' => 404 ) );
+        }
+
+        if($parameters['order_uuid']) {
+
+            $args = array(
+                'meta_key'      => 'order_uuid', // Postmeta key field
+                'meta_value'    => $parameters['order_uuid'], // Postmeta value field
+                'meta_compare'  => '=', // Possible values are ‘=’, ‘!=’, ‘>’, ‘>=’, ‘<‘, ‘<=’, ‘LIKE’, ‘NOT LIKE’, ‘IN’, ‘NOT IN’, ‘BETWEEN’, ‘NOT BETWEEN’, ‘EXISTS’ (only in WP >= 3.5), and ‘NOT EXISTS’ (also only in WP >= 3.5). Values ‘REGEXP’, ‘NOT REGEXP’ and ‘RLIKE’ were added in WordPress 3.7. Default value is ‘=’.
+                'return'        => 'ids' // Accepts a string: 'ids' or 'objects'. Default: 'objects'.
+            );
+
+            $order_id = wc_get_orders( $args );
+
+            $customer_order = new WC_Order($order_id[0]);
+
+            if(!$customer_order) {
+                return new WP_Error( 'no_order', 'Invalid Order number', array( 'status' => 404 ) );
+            }
+
+            /**
+             * Set COMPLETED status for Order
+             */
+            if($parameters['status']) {
+                $customer_order->update_status($parameters['status']);
+            } else {
+                return new WP_Error( 'no_status', 'Invalid Status value', array( 'status' => 404 ) );
+            }
+
+            return new WP_REST_Response( true, 200 );
+        }
+
+    }
+
+    /**
+     * update_order_status
+     * @return WP_REST_Response
+     */
+    public function testing()
+    {
+
+        return new WP_REST_Response( '$request', 200 );
     }
 
 }
