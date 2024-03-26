@@ -190,7 +190,7 @@ class Woocommerce_Paynocchio_Payment_Gateway extends WC_Payment_Gateway {
         $user_wallet_id = get_user_meta($customer_order->get_user_id(), PAYNOCCHIO_WALLET_KEY, true);
         $user_uuid = get_user_meta($customer_order->get_user_id(), PAYNOCCHIO_WALLET_KEY, true);
 
-        $order_uuid = get_post_meta( $customer_order , 'uuid' , true );
+        $user_paynocchio_wallet = new Woocommerce_Paynocchio_Wallet($user_uuid);
 
         $customer_order->add_order_note( 'User UUID ' . $user_uuid );
         $customer_order->add_order_note( 'Wallet UUID ' . $user_wallet_id );
