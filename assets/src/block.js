@@ -6,7 +6,6 @@ import { getSetting } from '@woocommerce/settings';
 
 import cashback_ill from "../img/cashback_ill.png"
 
-import Modal from "./Components/Modal";
 import ActivationBlock from "./Components/ActivationBlock";
 import RegistrationBlock from "./Components/RegistrationBlock";
 import TopupModal from "./Components/TopupModal";
@@ -15,7 +14,7 @@ const settings = getSetting( 'paynocchio_data', {} );
 
 const PaymentBlock = ({bonuses, setBonuses}) => {
 
-    const [ isTopupModalClosed, setIsTopupModalClosed ] = useState( false );
+    const [ isTopupModalOpen, setIsTopupModalOpen ] = useState( false );
     const [ isUser, setIsUser ] = useState( settings.user );
 
     let max_bonuses;
@@ -45,7 +44,7 @@ const PaymentBlock = ({bonuses, setBonuses}) => {
                 </div>
 
                 <div className="cfps-flex cfps-flex-row cfps-items-center cfps-gap-x-2">
-                    <a className="btn-blue" onClick={ openTopUpModal } >Add money</a>
+                    <a className="btn-blue" onClick={ () => setIsTopupModalOpen(true) } >Add money</a>
                     <a className="btn-white" >Withdraw</a>
                 </div>
             </div>
@@ -90,16 +89,8 @@ const PaymentBlock = ({bonuses, setBonuses}) => {
             <a href="#">History</a>
             <a href="#">Support</a>
             <a href="#">Terms</a>
-            <span role={'button'} onClick={ () => setIsTopupModalClosed(true) }>
-                Open Modal
-            </span>
         </div>
-        { isOpen && (
-            <Modal onClose={ closeModal }>
-                <Modal.Header onClose={ closeModal }>{__('TopUp Wallet')}</Modal.Header>
-                <Modal.Content>hello</Modal.Content>
-            </Modal>
-        ) }
+        { isTopupModalOpen && <TopupModal onClose={() => setIsTopupModalOpen(false)} /> }
     </div>);
 }
 
