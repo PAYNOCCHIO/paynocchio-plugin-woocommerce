@@ -700,18 +700,18 @@ __webpack_require__.r(__webpack_exports__);
       });
     });
     // WOOCOMMERCE CHECKOUT SCRIPT END
+
+    $('#show_mini_modal').on('click', function () {
+      $('.topup_mini_form').toggle();
+      $(this).toggleClass('active');
+      if ($(this).hasClass('active')) {
+        $(this).css('transform', 'rotate(45deg)');
+      } else {
+        $(this).css('transform', 'rotate(0deg)');
+      }
+    });
   });
   // READY END
-
-  $('#show_mini_modal').on('click', function () {
-    $('.topup_mini_form').toggle();
-    $(this).toggleClass('active');
-    if ($(this).hasClass('active')) {
-      $(this).css('transform', 'rotate(45deg)');
-    } else {
-      $(this).css('transform', 'rotate(0deg)');
-    }
-  });
 })(jQuery);
 })();
 

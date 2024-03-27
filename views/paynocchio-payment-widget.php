@@ -67,7 +67,7 @@ if (is_user_logged_in()) {
                 'input_class' => ['short'],
             ] );
             ?>
-            <input id="bonuses-input" type="range" min="0" max="<?php echo $max_bonus; ?>" step="1" value="0" />
+            <input id="bonuses-input" type="range" min="0" max="<?php echo $max_bonus; ?>" step="1" value="0" class="styled-slider slider-progress" />
 
         </div>
     <?php } ?>
