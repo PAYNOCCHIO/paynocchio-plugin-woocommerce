@@ -376,8 +376,6 @@ import './topUpFormProcess'
 
         });
         // WOOCOMMERCE CHECKOUT SCRIPT END
-        });
-        // READY END
 
         $('#show_mini_modal').on('click', function() {
             $('.topup_mini_form').toggle();
@@ -388,5 +386,7 @@ import './topUpFormProcess'
                 $(this).css('transform','rotate(0deg)');
             }
         });
+    });
+        // READY END
 
 })(jQuery);
