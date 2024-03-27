@@ -156,6 +156,8 @@ class Woocommerce_Paynocchio {
 		 * The class responsible for defining all actions that occur in the admin area.
 		 */
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-woocommerce-paynocchio-admin.php';
+        require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-woocommerce-paynocchio-admin-users-export-menu.php';
+        require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-woocommerce-paynocchio-admin-users-export.php';
 
 		/**
 		 * The class responsible for defining Paynocchio Wocommerce payment Gateway.
@@ -270,6 +272,10 @@ class Woocommerce_Paynocchio {
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
 		$this->loader->add_action( 'woocommerce_blocks_loaded', $plugin_admin, 'paynocchio_gateway_block_support' );
 
+        add_action( 'plugins_loaded', function() {
+            $plugin_user_export = new Paynocchio_Users_Export_Menu( new Paynocchio_Users_Export_Page() );
+            $plugin_user_export->init();
+        } );
 	}
 
 	/**

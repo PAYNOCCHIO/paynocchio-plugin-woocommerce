@@ -1,3 +1,21 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.paynocchio_filters {
+    @apply cfps-my-4 cfps-flex cfps-flex-row cfps-gap-4 cfps-flex-wrap cfps-items-stretch;
+}
+
+.paynocchio_submit {
+    @apply cfps-inline-block cfps-px-4 cfps-py-1 cfps-bg-blue-500 cfps-text-white cfps-cursor-pointer cfps-rounded;
+}
+
+.paynocchio_table {
+    @apply cfps-border cfps-border-slate-300 cfps-bg-white cfps-rounded;
+}
+.paynocchio_table td {
+    @apply cfps-p-2 cfps-border-slate-100;
+}
+.paynocchio_export {
+    @apply cfps-inline-block cfps-px-4 cfps-mt-4 cfps-py-1 cfps-bg-blue-500 cfps-text-white cfps-cursor-pointer cfps-rounded;
+}
