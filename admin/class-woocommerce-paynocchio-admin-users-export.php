@@ -17,6 +17,8 @@ class Paynocchio_Users_Export_Page {
      * This function renders the contents of the page associated with the
      * Paynocchio_Users_Export_Menu that invokes the render method. In
      * the context of this plugin, this is the Paynocchio_Users_Export_Page class.
+     *
+     * @since     1.0.0
      */
     public function render()
     {
@@ -32,27 +34,6 @@ class Paynocchio_Users_Export_Page {
         } else {
             $date_to = '';
         }
-
-        echo '
-        <div class="wrap">
-            <h1 class="wp-heading-inline">Paynocchio Users Export</h1>
-            <form action="" method="get">
-                <input type="hidden" name="page" value="paynocchio-export-users" />
-                <div class="paynocchio_filters">
-                    <div class="paynocchio_filter">
-                        <label for="date_from">
-                        <input type="date" name="date_from" id="date_from" value="' . $date_from . '" />
-                        </label>
-                    </div>
-                    <div class="paynocchio_filter">
-                        <label for="date_to">
-                        <input type="date" name="date_to" id="date_to" value="' . $date_to . '" />
-                        </label>
-                    </div>
-                    <input type="submit" class="paynocchio_submit" id="filters" value="Filter" />
-                </div>
-                
-            </form>';
 
         function dateFromString ($dateparam, $date) {
             $dateUnix = strtotime($date);
@@ -106,21 +87,74 @@ class Paynocchio_Users_Export_Page {
 
         foreach ($users as $user) {
             $user_array = array(
-                $user->ID,
-                get_user_meta($user->ID, PAYNOCCHIO_USER_UUID_KEY, true), // USER_UUID
-                get_option('woocommerce_paynocchio_settings')[PAYNOCCHIO_CURRENCY_KEY], // CURRENCY_UUID
-                'type',
-                'status'
+                'user_id' => $user->ID,
+                'user_uuid' => get_user_meta($user->ID, PAYNOCCHIO_USER_UUID_KEY, true),
+                'currency' => get_option('woocommerce_paynocchio_settings')[PAYNOCCHIO_CURRENCY_KEY],
+                'type' => 'fiat',
+                'status' => 'active'
             );
             array_push($result, $user_array);
         }
 
-        if (count($result)) {
-            echo '<table class="paynocchio_table"><thead><tr><td>USER ID</td><td>USER UUID</td><td>CURRENCY UUID</td><td>TYPE</td><td>STATUS</td></tr></thead><tbody>';
-            foreach ($result as $row) {
-                echo '<tr><td>' . $row[0] . '</td><td>' . $row[1] . '</td><td>' . $row[2] . '</td><td>' . $row[3] . '</td><td>' . $row[4] . '</td></tr>';
+        if (isset($_GET['export'])) {
+            if ($_GET['export'] == 1) {
+                $this->csv_export($result);
             }
-            echo '</tbody></table>';
+        }
+        if (isset($_GET['generate'])) {
+            if ($_GET['generate'] == 1) {
+                $this->set_user_uuid($result);
+            }
+        }
+
+        echo '
+        <div class="wrap">
+            <div class="cfps-flex cfps-flex-row cfps-items-center cfps-gap-4">
+                <img src="'.plugin_dir_url( WOOCOMMERCE_PAYNOCCHIO_BASENAME ) . 'assets/img/kopybara-logo.png" class="cfps-w-[100px]" /><h1 class="wp-heading-inline cfps-p-0">Paynocchio Users Export</h1>
+            </div>
+            
+            <form action="" method="get">
+                <input type="hidden" name="page" value="paynocchio-export-users" />
+                <div class="paynocchio_filters">
+                    <div class="paynocchio_filter">
+                        <label for="date_from">
+                        <input type="date" name="date_from" id="date_from" value="' . $date_from . '" />
+                        </label>
+                    </div>
+                    <div class="paynocchio_filter">
+                        <label for="date_to">
+                        <input type="date" name="date_to" id="date_to" value="' . $date_to . '" />
+                        </label>
+                    </div>
+                    <input type="submit" class="paynocchio_submit" id="filters" value="Filter" />
+                </div>
+                
+            </form>';
+
+        if (count($result)) {
+            echo '
+                    <table class="paynocchio_table">
+                        <thead>
+                            <tr>
+                                <td>USER ID</td>
+                                <td>USER UUID</td>
+                                <td>CURRENCY UUID</td>
+                                <td>TYPE</td>
+                                <td>STATUS</td>
+                            </tr>
+                        </thead>
+                        <tbody>';
+            foreach ($result as $row) {
+                echo '<tr>
+                          <td>' . $row['user_id'] . '</td>
+                          <td>' . $row['user_uuid'] . '</td>
+                          <td>' . $row['currency'] . '</td>
+                          <td>' . $row['type'] . '</td>
+                          <td>' . $row['status'] . '</td>
+                      </tr>';
+            }
+            echo '      </tbody>
+                    </table>';
         }
 
         function curPageURL() {
@@ -138,22 +172,26 @@ class Paynocchio_Users_Export_Page {
             return $pageURL;
         }
         $url = curPageURL();
-        $url .= (parse_url($url, PHP_URL_QUERY) ? '&' : '?') . 'export=1';
+        $export_url = $url . (parse_url($url, PHP_URL_QUERY) ? '&' : '?') . 'export=1';
+        $generate_url = $url . (parse_url($url, PHP_URL_QUERY) ? '&' : '?') . 'generate=1';
 
         if (count($result) == 0) {
             return null;
         } else {
-            echo '<a href="'.$url.'" class="paynocchio_export">Export Users</a>';
+            echo '
+                    <div class="paynocchio_buttons">
+                        <a href="'.$export_url.'" class="paynocchio_button">Export Users</a>
+                        <a href="'.$generate_url.'" class="paynocchio_button">Generating missing UUIDs</a>
+                    </div>';
         }
         echo '</div>';
-
-        if(isset($_GET['export'])) {
-            if ($_GET['export'] == 1) {
-                $this->csv_export($result);
-            }
-        }
     }
 
+    /**
+     * This function renders the CSV file with users without WALLET_UUID meta field
+     *
+     * @since     1.0.0
+     */
     public function csv_export ($result) {
         function array2csv($array) {
             ob_clean();
@@ -186,5 +224,20 @@ class Paynocchio_Users_Export_Page {
         download_send_headers("user_export_" . date("Y-m-d") . ".csv");
         echo array2csv($result);
         die();
+    }
+
+    /**
+     * This function generates USER_UUID for users without USER_UUID and WALLET_UUID
+     *
+     * @since     1.0.0
+     */
+    public function set_user_uuid ($result) {
+        foreach ($result as $row) {
+            if (!$row['user_uuid']) {
+                $uuid = wp_generate_uuid4();
+                add_user_meta($row['user_id'], PAYNOCCHIO_USER_UUID_KEY, $uuid, true);
+            }
+        }
+
     }
 }

@@ -16,6 +16,10 @@
 .paynocchio_table td {
     @apply cfps-p-2 cfps-border-slate-100;
 }
-.paynocchio_export {
+
+.paynocchio_buttons {
+    @apply cfps-flex cfps-flex-row cfps-items-center cfps-gap-2;
+}
+.paynocchio_button {
     @apply cfps-inline-block cfps-px-4 cfps-mt-4 cfps-py-1 cfps-bg-blue-500 cfps-text-white cfps-cursor-pointer cfps-rounded;
 }

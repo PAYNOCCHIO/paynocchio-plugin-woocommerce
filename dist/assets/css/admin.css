@@ -909,7 +909,13 @@ video {
   border-color: rgb(241 245 249 / var(--tw-border-opacity));
   padding: 0.5rem;
 }
-.paynocchio_export {
+.paynocchio_buttons {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.5rem;
+}
+.paynocchio_button {
   margin-top: 1rem;
   display: inline-block;
   cursor: pointer;
