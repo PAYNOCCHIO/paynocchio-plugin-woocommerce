@@ -30,7 +30,7 @@ if (!defined('ABSPATH')) {
                     </a>
                     <div class="paynocchio-count">
                         <div>
-                            <p class="cfps-text-2xl cfps-font-semibold"><span class="paynocchio-numbers paynocchio-bonus-value"><?php echo $wallet['bonuses']; ?></span></p>
+                            <p class="cfps-text-2xl cfps-font-semibold"><span class="paynocchio-numbers paynocchio-bonus-value"><?php echo $wallet['bonuses'] ?? 0; ?></span></p>
                             <p>bonuses</p>
                         </div>
                         <div>
@@ -75,10 +75,10 @@ if (!defined('ABSPATH')) {
                                     Kopybara.Pay
                                 </div>
                                 <div>
-                                    $<span class="paynocchio-numbers paynocchio-balance-value"><?php echo $wallet['balance'] ?></span>
+                                    $<span class="paynocchio-numbers paynocchio-balance-value"><?php echo $wallet['balance'] ?? 0 ?></span>
                                 </div>
                                 <div>
-                                    Bonuses: <span class="paynocchio-numbers paynocchio-bonus-value"><?php echo $wallet['bonuses'] ?></span>
+                                    Bonuses: <span class="paynocchio-numbers paynocchio-bonus-value"><?php echo $wallet['bonuses'] ?? 0 ?></span>
                                 </div>
                                 <a class="tab-switcher cfps-cursor-pointer" id="wallet_toggle">
                                     <img src="<?php echo plugin_dir_url( WOOCOMMERCE_PAYNOCCHIO_BASENAME ) . 'assets/img/arr_r.png' ?>" />

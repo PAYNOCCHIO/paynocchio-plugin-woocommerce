@@ -26,11 +26,11 @@ if (is_user_logged_in()) {
                 <div class="cfps-flex cfps-flex-row cfps-items-center cfps-text-white cfps-gap-x-8 cfps-text-xl">
                     <div>
                         <p>Balance</p>
-                        <p>$<span class="paynocchio-numbers paynocchio-balance-value"><?php echo $wallet['balance']; ?></span></p>
+                        <p>$<span class="paynocchio-numbers paynocchio-balance-value"><?php echo $wallet['balance'] ?? 0; ?></span></p>
                     </div>
                     <div>
                         <p>Bonuses</p>
-                        <p><span class="paynocchio-numbers paynocchio-bonus-value"><?php echo $wallet['bonuses'] ?></span></p>
+                        <p><span class="paynocchio-numbers paynocchio-bonus-value"><?php echo $wallet['bonuses'] ?? 0 ?></span></p>
                     </div>
                 </div>
 
