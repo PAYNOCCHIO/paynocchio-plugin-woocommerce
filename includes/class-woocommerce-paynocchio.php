@@ -510,7 +510,7 @@ class Woocommerce_Paynocchio {
     public function set_uuid () {
 	    if(!get_user_meta($this->user_id, PAYNOCCHIO_USER_UUID_KEY, true)){
             $uuid = wp_generate_uuid4();
-            add_user_meta($this->user_id, PAYNOCCHIO_WALLET_KEY, $uuid, true);
+            add_user_meta($this->user_id, PAYNOCCHIO_USER_UUID_KEY, $uuid, true);
         }
     }
 
