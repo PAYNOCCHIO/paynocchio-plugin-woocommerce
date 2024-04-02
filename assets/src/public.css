@@ -3,49 +3,53 @@
 @tailwind utilities;
 
 #paynocchio_auth_block {
-p {
-    @apply cfps-text-base;
-}
+    p {
+        @apply cfps-text-base;
+    }
 
-&  > div {
-       @apply cfps-hidden cfps-rounded-lg cfps-p-8 cfps-bg-white cfps-drop-shadow;
-   }
+    & > div {
+           @apply cfps-hidden cfps-rounded-lg cfps-p-8 cfps-bg-white cfps-drop-shadow;
+    }
 
-.visible {
-    @apply cfps-block;
-}
+    .visible {
+        @apply cfps-block;
+    }
 
-.row {
-    @apply cfps-flex cfps-gap-x-6 cfps-mb-4;
+    form {
+        @apply cfps-flex cfps-flex-col cfps-gap-4;
+    }
 
-&:last-child {
-     @apply cfps-mb-0;
- }
-}
+    .row {
+        @apply lg:cfps-grid lg:cfps-grid-cols-2 cfps-gap-4 cfps-flex cfps-flex-col;
+    }
 
-.col {
-    @apply cfps-flex cfps-flex-col cfps-w-1/2;
-}
+    .col {
+        @apply cfps-flex cfps-flex-col;
+    }
 
-.paynocchio_input {
-    @apply cfps-bg-slate-200 cfps-rounded-lg cfps-border-0;
-}
+    &:last-child {
+         @apply cfps-mb-0;
+    }
 
-.form-toggle-a {
-    @apply cfps-cursor-pointer cfps-underline;
-}
+    .paynocchio_input {
+        @apply cfps-bg-slate-200 cfps-rounded-lg cfps-border-0;
+    }
 
-.paynocchio_button {
-    @apply cfps-bg-blue-500 cfps-text-white cfps-px-4 cfps-py-2 cfps-rounded-lg;
-}
+    .form-toggle-a {
+        @apply cfps-cursor-pointer cfps-underline;
+    }
 
-input[type="checkbox"] {
-    @apply cfps-rounded cfps-p-2;
-}
+    .paynocchio_button {
+        @apply cfps-bg-blue-500 cfps-text-white cfps-px-4 cfps-py-2 cfps-rounded-lg;
+    }
 
-h2 {
-    @apply cfps-text-2xl cfps-font-bold cfps-mb-4;
-}
+    input[type="checkbox"] {
+        @apply cfps-rounded cfps-p-2;
+    }
+
+    h2 {
+        @apply cfps-text-2xl cfps-font-bold cfps-mb-4 cfps-text-center;
+    }
 }
 
 .cfps-h2 {
@@ -74,11 +78,11 @@ a {
 }
 
 .paynocchio-embleme {
-    @apply cfps-p-4 cfps-drop-shadow cfps-mb-4;
+    @apply cfps-drop-shadow cfps-mb-4 cfps-w-full cfps-text-center;
 }
 
 .paynocchio-embleme img {
-    @apply cfps-w-44 cfps-mx-auto cfps-my-4;
+    @apply cfps-w-1/2 cfps-min-w-[150px] cfps-max-w-40 !cfps-h-auto cfps-mx-auto cfps-my-8 !cfps-float-none !cfps-max-h-none;
 }
 
 .paynocchio-profile-info {
