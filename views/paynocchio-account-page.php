@@ -39,6 +39,21 @@ if (!defined('ABSPATH')) {
                         </div>
                     </div>
                 </div>
+                <div class="paynocchio-profile-actions">
+                    <label class="dropdown">
+
+                        <div class="action-button">
+                            Manage wallet
+                        </div>
+
+                        <input type="checkbox" class="wallet-input" />
+                        <ul class="wallet-menu">
+                            <li>Suspend wallet</li>
+                            <li>Delete wallet</li>
+                        </ul>
+
+                    </label>
+                </div>
             </div>
 
             <div class="paynocchio-tab-selector">
