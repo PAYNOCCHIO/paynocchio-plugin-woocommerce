@@ -1,0 +1,60 @@
+@layer components {
+
+}
+
+.paynocchio_rounded {
+    #paynocchio_auth_block {
+        @apply !cfps-rounded-lg;
+    }
+
+    .paynocchio_input, .paynocchio_button {
+        @apply !cfps-rounded-lg;
+    }
+
+    .paynocchio-payment-block {
+        @apply !cfps-rounded-lg;
+    }
+
+    .paynocchio-payment-block .paynocchio_tiles > div {
+        @apply !cfps-rounded-lg;
+    }
+
+
+}
+
+.modal.paynocchio_rounded {
+    .container {
+        @apply !cfps-rounded-lg;
+    }
+
+    .card-variants .card-var {
+        @apply !cfps-rounded-lg;
+    }
+
+    .modal-add-card input[type='text'],
+    .modal-add-card select {
+        @apply !cfps-rounded-lg;
+    }
+
+    .top-up-variants a {
+        @apply cfps-rounded-lg;
+    }
+
+    .container select,
+    .container input[type="text"] {
+        @apply cfps-rounded-lg
+    }
+}
+
+.paynocchio-cart-wallet-widget.paynocchio_rounded {
+    @apply cfps-rounded-lg;
+
+    .wallet,
+    .cart,
+    .cart a,
+    .top_up_mini_form_wrapper,
+    .mini_form_top_up_button {
+        @apply cfps-rounded-lg;
+    }
+}
+

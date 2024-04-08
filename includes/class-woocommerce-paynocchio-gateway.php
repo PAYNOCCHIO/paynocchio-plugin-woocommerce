@@ -109,7 +109,32 @@ class Woocommerce_Paynocchio_Payment_Gateway extends WC_Payment_Gateway {
                 'description' => __( 'This is the test mode of gateway.', 'paynocchio' ),
                 'default'	=> 'no',
             ),
-
+            'darkmode' => array(
+                'title'		=> __( 'Paynocchio Dark Mode', 'paynocchio' ),
+                'label'		=> __( 'Enable Dark mode', 'paynocchio' ),
+                'type'		=> 'checkbox',
+                'description' => __( 'If you select this checkbox, Paynocchio pages and modules will be displayed with a dark theme.', 'paynocchio' ),
+                'default'	=> 'no',
+            ),
+            'rounded' => array(
+                'title'		=> __( 'Paynocchio Rounded Mode', 'paynocchio' ),
+                'label'		=> __( 'Enable Rounded mode', 'paynocchio' ),
+                'type'		=> 'checkbox',
+                'description' => __( 'If you select this checkbox, the Paynocchio interface elements will be rounded off.', 'paynocchio' ),
+                'default'	=> 'no',
+            ),
+            'accent_color' => array(
+                'title'		=> __( 'Paynocchio Accent Color', 'paynocchio' ),
+                'label'		=> __( 'Enter accent color', 'paynocchio' ),
+                'type'		=> 'color',
+                'description' => __( 'Specify the accent color of the interface elements, such as buttons. Leave blank for default.', 'paynocchio' ),
+            ),
+            'accent_text_color' => array(
+                'title'		=> __( 'Paynocchio Text Accent Color', 'paynocchio' ),
+                'label'		=> __( 'Enter text accent color', 'paynocchio' ),
+                'type'		=> 'color',
+                'description' => __( 'Specify the text color for accent elements of the interface, such as buttons. Leave blank for default.', 'paynocchio' ),
+            ),
         );
     }
 

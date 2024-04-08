@@ -9,15 +9,38 @@ if (!defined('ABSPATH')) {
     $amount = WC()->cart->cart_contents_total;
 ?>
 
-<div class="paynocchio-cart-wallet-widget cfps-bg-slate-100 cfps-p-2 cfps-rounded-lg cfps-flex cfps-flex-row cfps-items-center cfps-relative">
+<?php
+$paynocchio_classes = '';
+$paynocchio_classes .= get_option( 'woocommerce_paynocchio_settings')['darkmode'] == 'yes' ? 'paynocchio_dark_mode ' : '';
+$paynocchio_classes .= get_option( 'woocommerce_paynocchio_settings')['rounded'] == 'yes' ? 'paynocchio_rounded ' : '';
+
+$accent_color = '#3b82f6';
+if (get_option( 'woocommerce_paynocchio_settings')['accent_color']) {
+    $accent_color = get_option( 'woocommerce_paynocchio_settings')['accent_color'];
+}
+
+$accent_text_color = '#ffffff';
+if (get_option( 'woocommerce_paynocchio_settings')['accent_text_color']) {
+    $accent_text_color = get_option( 'woocommerce_paynocchio_settings')['accent_text_color'];
+}
+?>
+
+<style>
+    .paynocchio_widget_colored {
+        background-color: <?php echo $accent_color; ?>!important;
+        color: <?php echo $accent_text_color; ?>!important;
+    }
+</style>
+
+<div class="paynocchio-cart-wallet-widget <?php echo $paynocchio_classes; ?>">
     <div class="cart">
-        <a href="<?php echo wc_get_checkout_url(); ?>" alt="Checkout" title="Checkout">
-            <div class="cfps-flex cfps-flex-row cfps-items-center">
+        <a href="<?php echo wc_get_cart_url(); ?>" alt="Checkout" title="Checkout">
+            <div class="cfps-flex cfps-flex-row cfps-items-center cfps-flex-nowrap">
                 <img src="<?php echo plugin_dir_url( WOOCOMMERCE_PAYNOCCHIO_BASENAME ) . 'assets/img/cart.png' ?>" class="!cfps-h-[25px] cfps-w-auto cfps-mr-2"/>
                 <?php if (!is_user_logged_in()) { ?>
-                    <p>Your cart: <span class="cfps-font-semibold">$<?php echo $amount; ?></span></p>
+                    <div>Your cart: <span class="cfps-font-semibold">$<?php echo $amount; ?></span></div>
                 <?php } else { ?>
-                    <p class="cfps-font-semibold">$<?php echo $amount; ?></p>
+                    <div class="cfps-font-semibold">$<?php echo $amount; ?></div>
                 <?php } ?>
             </div>
         </a>
@@ -27,30 +50,30 @@ if (!defined('ABSPATH')) {
         $paynocchio = new Woocommerce_Paynocchio();
         $wallet = $paynocchio->get_paynocchio_wallet_info();
         ?>
-        <div class="paynocchio-wallet <?php if ($wallet['status'] !== 'ACTIVE') { ?>cfps-disabled<?php } ?>">
-            <div class="cfps-flex cfps-flex-row cfps-items-center cfps-pr-2 cfps-mr-2 cfps-border-r cfps-border-slate-300 cfps-gap-x-2">
+        <div class="wallet paynocchio-wallet <?php if ($wallet['status'] !== 'ACTIVE') { ?>cfps-disabled<?php } ?>"">
+            <div class="balance">
                 <img src="<?php echo plugin_dir_url( WOOCOMMERCE_PAYNOCCHIO_BASENAME ) . 'assets/img/wallet.png' ?>" class="!cfps-h-[25px] cfps-w-auto"/>
-                <p class="cfps-font-semibold">$<span class="paynocchio-numbers paynocchio-balance-value"><?php echo $wallet['balance'] ?? 0 ?></span></p>
+                <div class="cfps-font-semibold">$<span class="paynocchio-numbers paynocchio-balance-value"><?php echo $wallet['balance'] ?? 0 ?></span></div>
                 <a title="Add money" alt="Add money"
-                   class="cfps-bg-slate-300 cfps-rounded-3xl cfps-w-6 cfps-h-6 cfps-leading-6 cfps-text-center cfps-block cfps-ml-2 cfps-cursor-pointer"
+                   class="add_money_button"
                     id="show_mini_modal">+</a>
             </div>
-            <div class="cfps-flex cfps-flex-row cfps-items-center cfps-gap-x-2">
-                <p>Bonus:</p>
-                <p class="cfps-font-semibold"><span class="paynocchio-numbers paynocchio-bonus-value"><?php echo $wallet['bonuses'] ?? 0 ?></span></p>
+            <div class="bonuses">
+                <div>Bonus:</div>
+                <div class="cfps-font-semibold"><span class="paynocchio-numbers paynocchio-bonus-value"><?php echo $wallet['bonuses'] ?? 0 ?></span></div>
             </div>
         </div>
 
-        <div class="topup_mini_form cfps-hidden cfps-absolute cfps-top-[110%] cfps-left-0 cfps-w-full">
-            <div class="cfps-p-4 cfps-bg-white cfps-drop-shadow cfps-flex cfps-flex-row cfps-items-center cfps-gap-x-2 cfps-rounded-lg cfps-justify-between">
+        <div class="topup_mini_form <?php echo $paynocchio_classes; ?>">
+            <div class="top_up_mini_form_wrapper">
                 <div class="cfps-flex cfps-flex-row">
-                    <p class="cfps-text-xl cfps-font-semibold cfps-whitespace-nowrap"> Add $</p>
-                     <input type="number" class="cfps-border-0 cfps-p-0 cfps-rounded-lg cfps-text-xl cfps-font-semibold cfps-w-[100px]"
+                    <div class="cfps-text-lg cfps-font-semibold cfps-whitespace-nowrap"> Add $</div>
+                     <input type="number" class="cfps-border-0 cfps-p-0 cfps-rounded-lg cfps-text-lg cfps-font-semibold cfps-w-[100px] cfps-bg-transparent"
                        placeholder="0" value="" id="top_up_amount_mini_form" />
                 </div>
                 <button id="top_up_mini_form_button"
                         type="button"
-                        class="cfps-border-0 cfps-rounded-lg cfps-p-2 cfps-bg-blue-500 cfps-text-white cfps-flex cfps-flex-row">
+                        class="paynocchio_widget_colored mini_form_top_up_button">
                     Top up
                     <svg class="cfps-spinner cfps-hidden cfps-animate-spin cfps-ml-4 cfps-h-5 cfps-w-5 cfps-text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                         <circle class="cfps-opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>

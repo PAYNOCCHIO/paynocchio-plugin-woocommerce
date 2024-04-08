@@ -8,9 +8,13 @@ if (!defined('ABSPATH')) {
 if (is_user_logged_in()) {
     $paynocchio = new Woocommerce_Paynocchio();
     $wallet = $paynocchio->get_paynocchio_wallet_info();
+
+    $paynocchio_classes = '';
+    $paynocchio_classes .= get_option( 'woocommerce_paynocchio_settings')['darkmode'] == 'yes' ? 'paynocchio_dark_mode ' : '';
+    $paynocchio_classes .= get_option( 'woocommerce_paynocchio_settings')['rounded'] == 'yes' ? 'paynocchio_rounded ' : '';
 ?>
 
-<div class="modal topUpModal">
+<div class="modal topUpModal <?php echo $paynocchio_classes; ?>">
     <div class="close-modal close"></div>
     <div class="container">
         <div class="header">
@@ -47,32 +51,30 @@ if (is_user_logged_in()) {
 
             <div class="top-up-amount-container cfps-mt-8 lg:cfps-mt-12 cfps-flex cfps-flex-row">
                 <p class="cfps-text-3xl">$</p>
-                <input type="number" step="0.01" class="cfps-bg-white cfps-border-0 cfps-text-3xl !cfps-p-0 focus:!cfps-outline-none"
+                <input type="number" step="0.01" class="!cfps-bg-transparent !cfps-border-0 !cfps-shadow-none cfps-text-3xl !cfps-p-0 focus:!cfps-outline-none"
                        name="amount" id="top_up_amount" placeholder="0" value="1000" />
                 <?php wp_nonce_field( 'paynocchio_ajax_top_up', 'ajax-top-up-nonce' ); ?>
             </div>
 
-            <div class="top-up-variants cfps-flex cfps-flex-row cfps-items-center cfps-mt-8 lg:cfps-mt-12 cfps-gap-x-2">
-                <a class="cfps-bg-gray-100 cfps-px-4 cfps-py-3 cfps-rounded-lg cfps-text-xl cfps-cursor-pointer" id="variant_1000">
+            <div class="top-up-variants">
+                <a id="variant_1000">
                     $1000
                 </a>
-                <a class="cfps-bg-gray-100 cfps-px-4 cfps-py-3 cfps-rounded-lg cfps-text-xl cfps-cursor-pointer" id="variant_2000">
+                <a id="variant_2000">
                     $2000
                 </a>
-                <a class="cfps-bg-gray-100 cfps-px-4 cfps-py-3 cfps-rounded-lg cfps-text-xl cfps-cursor-pointer" id="variant_5000">
+                <a id="variant_5000">
                     $5000
                 </a>
-                <a class="cfps-bg-gray-100 cfps-px-4 cfps-py-3 cfps-rounded-lg cfps-text-xl cfps-cursor-pointer" id="variant_10000">
+                <a id="variant_10000">
                     $10 000
                 </a>
-                <a class="cfps-bg-gray-100 cfps-px-4 cfps-py-3 cfps-rounded-lg cfps-text-xl cfps-cursor-pointer" id="variant_15000">
+                <a id="variant_15000">
                     $15 000
                 </a>
             </div>
             <p class="cfps-flex cfps-flex-row cfps-items-center cfps-mt-4 cfps-gap-x-0.5">
-                The sending bank may charge a fee.<a href="#">Here's how to avoid it.</a>
-                <img src="<?php echo plugin_dir_url( WOOCOMMERCE_PAYNOCCHIO_BASENAME ) . 'assets/img/arr_rb.png' ?>"
-                     class="cfps-h-[18px] cfps-w-[18px] cfps-inline-block" />
+                The sending bank may charge a fee.<a href="#">Here's how to avoid it.</a> >
             </p>
 
             <div class="autodeposit cfps-flex cfps-flex-row cfps-items-center cfps-mt-8 lg:cfps-mt-12 cfps-gap-x-2">
@@ -84,14 +86,13 @@ if (is_user_logged_in()) {
                     <div class="toggler"></div>
                     <p>OFF</p>
                 </div>
-                <input class="hidden" value="0" name="autodeposit" id="autodeposit" />
+                <input type="hidden" value="0" name="autodeposit" id="autodeposit" />
             </div>
         </div>
         <div class="footer">
             <div>
                 <button id="top_up_button"
-                        type="button"
-                        class="cfps-btn-primary">
+                        type="button" class="cfps-btn-primary paynocchio_button paynocchio_colored">
                     Top up
                     <svg class="cfps-spinner cfps-hidden cfps-animate-spin cfps-ml-4 cfps-h-5 cfps-w-5 cfps-text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                         <circle class="cfps-opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
@@ -105,7 +106,7 @@ if (is_user_logged_in()) {
     </form>
 </div>
 
-<div class="modal paymentMethodModal">
+<div class="modal paymentMethodModal <?php echo $paynocchio_classes; ?>">
     <div class="close-modal close"></div>
     <div class="container">
         <div class="header">
@@ -171,7 +172,7 @@ if (is_user_logged_in()) {
             <div>
                 <button id="payment_method_button"
                         type="button"
-                        class="cfps-btn-primary close">
+                        class="cfps-btn-primary paynocchio_button paynocchio_colored close">
                     Contunue
                     <svg class="cfps-spinner cfps-hidden cfps-animate-spin cfps-ml-4 cfps-h-5 cfps-w-5 cfps-text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                         <circle class="cfps-opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
@@ -184,7 +185,7 @@ if (is_user_logged_in()) {
     </div>
 </div>
 
-<div class="modal withdrawModal">
+<div class="modal withdrawModal <?php echo $paynocchio_classes; ?>">
     <div class="close-modal close"></div>
     <div class="container">
         <div class="header">
@@ -192,10 +193,10 @@ if (is_user_logged_in()) {
             <button class="close">&times;</button>
         </div>
         <div id="witdrawForm" class="content">
-            <div class="mb-4">Current balance: <span class="cfps-font-semibold">$<span class="paynocchio-numbers paynocchio-balance-value"><?php echo $wallet['balance'] ;?></span></span></div>
-            <div class="top-up-amount-container cfps-mb-8 cfps-flex">
+            <div class="cfps-mb-8 cfps-text-xl">Current balance: <span class="cfps-font-semibold">$<span class="paynocchio-numbers paynocchio-balance-value"><?php echo $wallet['balance'] ;?></span></span></div>
+            <div class="withdraw-amount-container cfps-mb-8 cfps-flex">
                 <p class="cfps-text-3xl">$</p>
-                <input type="number" step="0.01" class="cfps-bg-white cfps-border-0 cfps-text-3xl !cfps-p-0 focus:!cfps-outline-none"
+                <input type="number" step="0.01" class="!cfps-bg-transparent !cfps-border-0 !cfps-shadow-none cfps-text-3xl !cfps-p-0 focus:!cfps-outline-none"
                        name="amount" id="withdraw_amount" placeholder="0" value="0" />
                 <?php wp_nonce_field( 'paynocchio_ajax_withdraw', 'ajax-withdraw-nonce' ); ?>
             </div>
@@ -231,7 +232,7 @@ if (is_user_logged_in()) {
             <div>
                 <button id="withdraw_button"
                         type="button"
-                        class="cfps-btn-primary">
+                        class="cfps-btn-primary paynocchio_button paynocchio_colored">
                     Withdraw
                     <svg class="cfps-spinner cfps-hidden cfps-animate-spin cfps-ml-4 cfps-h-5 cfps-w-5 cfps-text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                         <circle class="cfps-opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>

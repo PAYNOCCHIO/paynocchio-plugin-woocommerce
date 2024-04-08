@@ -1,0 +1,59 @@
+@layer components {
+
+}
+
+.paynocchio_dark_mode {
+    #paynocchio_auth_block {
+        @apply !cfps-bg-zinc-800 !cfps-text-zinc-200;
+
+        h2 {
+            @apply !cfps-text-zinc-200;
+        }
+
+        .paynocchio_input {
+            @apply !cfps-bg-zinc-600 !cfps-text-white;
+        }
+    }
+
+    .paynocchio-payment-block {
+        @apply !cfps-bg-zinc-800 !cfps-text-zinc-200;
+    }
+
+    .paynocchio-conversion-rate h3 {
+        @apply cfps-text-white;
+    }
+
+    #bonuses-value {
+        @apply cfps-text-white;
+    }
+}
+
+.modal.paynocchio_dark_mode {
+
+    .container .header h3 {
+        @apply cfps-text-white;
+    }
+    .container {
+        @apply !cfps-bg-zinc-800 !cfps-text-zinc-200;
+    }
+
+    .top-up-variants a {
+        @apply cfps-bg-zinc-600 cfps-text-white;
+    }
+
+    .card-variants .card-var, .card-variants .card-var {
+        @apply cfps-bg-zinc-600 cfps-text-white;
+    }
+
+     .withdraw-amount-container input[type="number"],
+     .top-up-amount-container input[type="number"] {
+        @apply cfps-text-white;
+    }
+
+}
+
+.paynocchio-cart-wallet-widget.paynocchio_dark_mode .wallet,
+.paynocchio-cart-wallet-widget.paynocchio_dark_mode .cart,
+.paynocchio-cart-wallet-widget.paynocchio_dark_mode .cart a {
+    @apply cfps-bg-zinc-800 cfps-text-white;
+}

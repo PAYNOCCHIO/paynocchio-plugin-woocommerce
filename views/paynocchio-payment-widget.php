@@ -13,26 +13,51 @@ $cart_total = floatval($woocommerce->cart->total);
 if (is_user_logged_in()) {
     $paynocchio = new Woocommerce_Paynocchio();
     $wallet = $paynocchio->get_paynocchio_wallet_info();
-    ?>
+?>
 
-    <?php if ($wallet['status'] !== 'ACTIVE') { ?>
-        <div>
-            <p>Current Wallet is <?php echo $wallet['status'] ?></p>
-            <?php if ($wallet['status'] !== 'BLOCKED') { ?>
-                <p>You can manage it at your wallet <a href="/<?php echo WOOCOMMERCE_PAYNOCCHIO_ACCOUNT_PAGE_SLUG ?>">account page</a>.</p>
-            <?php } ?>
-        </div>
+<?php
+    $paynocchio_classes = '';
+    $paynocchio_classes .= get_option( 'woocommerce_paynocchio_settings')['darkmode'] == 'yes' ? 'paynocchio_dark_mode ' : '';
+    $paynocchio_classes .= get_option( 'woocommerce_paynocchio_settings')['rounded'] == 'yes' ? 'paynocchio_rounded ' : '';
+    $embleme_link = plugin_dir_url( WOOCOMMERCE_PAYNOCCHIO_BASENAME ) . 'assets/img/paynocchio_';
+    $embleme_link .= get_option( 'woocommerce_paynocchio_settings')['darkmode'] == 'yes' ? 'white.svg' : 'black.svg';
 
-    <?php } else { ?>
+    $accent_color = '#3b82f6';
+    if (get_option( 'woocommerce_paynocchio_settings')['accent_color']) {
+        $accent_color = get_option( 'woocommerce_paynocchio_settings')['accent_color'];
+    }
 
-<section class="paynocchio">
-    <div class="paynocchio-embleme">
-        <img src="<?php echo plugin_dir_url( WOOCOMMERCE_PAYNOCCHIO_BASENAME ) . 'assets/img/kopybara-logo.png' ?>" class="!cfps-block !cfps-mx-auto" />
+    $accent_text_color = '#ffffff';
+    if (get_option( 'woocommerce_paynocchio_settings')['accent_text_color']) {
+        $accent_text_color = get_option( 'woocommerce_paynocchio_settings')['accent_text_color'];
+    }
+?>
+
+<style>
+    .paynocchio_colored {
+        background-color: <?php echo $accent_color; ?>!important;
+        color: <?php echo $accent_text_color; ?>!important;
+    }
+</style>
+
+<?php if ($wallet['status'] !== 'ACTIVE') { ?>
+    <div>
+        <p>Current Wallet is <?php echo $wallet['status'] ?></p>
+        <?php if ($wallet['status'] !== 'BLOCKED') { ?>
+            <p>You can manage it at your wallet <a href="/<?php echo WOOCOMMERCE_PAYNOCCHIO_ACCOUNT_PAGE_SLUG ?>">account page</a>.</p>
+        <?php } ?>
     </div>
+
+<?php } else { ?>
+
+<section class="paynocchio <?php echo $paynocchio_classes; ?>">
     <div class="paynocchio-payment-block">
-        <div class="cfps-grid cfps-grid-cols-[1fr_1fr] cfps-gap-x-8 cfps-items-stretch">
+        <div class="paynocchio-embleme">
+            <img src="<?php echo $embleme_link; ?>" />
+        </div>
+        <div class="paynocchio_tiles">
             <div class="paynocchio-card-simulator">
-                <h3 class="!cfps-mb-0">Paynocchio.Pay</h3>
+                <h3>Your Wallet</h3>
                 <div class="cfps-flex cfps-flex-row cfps-items-center cfps-text-white cfps-gap-x-8 cfps-text-xl">
                     <div>
                         <p>Balance</p>
@@ -44,16 +69,19 @@ if (is_user_logged_in()) {
                     </div>
                 </div>
 
-                <div class="cfps-flex cfps-flex-row cfps-items-center cfps-gap-x-2">
-                    <a href="#" class="btn-blue" data-modal=".topUpModal">Add money</a>
-                    <a href="#" class="btn-white" data-modal=".withdrawModal">Withdraw</a>
+                <div class="cfps-flex cfps-flex-row cfps-items-center cfps-gap-2 cfps-flex-wrap">
+                    <a href="#" class="btn-blue paynocchio_button" data-modal=".topUpModal">Add money</a>
+                    <a href="#" class="btn-white paynocchio_button" data-modal=".withdrawModal">Withdraw</a>
                 </div>
             </div>
             <div class="paynocchio-promo-badge">
-                <img src="<?php echo plugin_dir_url( WOOCOMMERCE_PAYNOCCHIO_BASENAME ) . 'assets/img/cashback_ill.png' ?>" class="cfps-max-h-full cfps-float-right" />
-                <h3 class="!cfps-mb-0">Ultimate Cashback</h3>
+                <img src="<?php echo plugin_dir_url( WOOCOMMERCE_PAYNOCCHIO_BASENAME ) . 'assets/img/cashback_ill.png' ?>"
+                     class="!cfps-h-[100px] !cfps-max-h-[100%] !cfps-float-right hidden lg:block" />
+                <h3>Ultimate Cashback</h3>
                 <p>Make three purchases and get an increased cashback on everything!</p>
-                <a class="btn-white cfps-absolute cfps-bottom-4 cfps-left-4" href="#">Read more</a>
+                <div class="cfps-flex cfps-flex-row cfps-items-center cfps-gap-x-2 cfps-mt-4">
+                    <a class="btn-white paynocchio_button" href="#">Read more</a>
+                </div>
             </div>
         </div>
         <?php if($wallet['bonuses']) {
@@ -63,7 +91,7 @@ if (is_user_logged_in()) {
                  $max_bonus = $cart_total;
              }
             ?>
-        <div class="paynocchio-conversion-rate cfps-mt-8">
+        <div class="paynocchio-conversion-rate">
             <h3>
                 How much do you want to pay in bonuses?
             </h3>
@@ -74,19 +102,16 @@ if (is_user_logged_in()) {
                 'label'       => '',
                 'placeholder' => '',
                 'default'     => '',
-                'input_class' => ['short'],
+                'input_class' => ['short focus:!cfps-outline-none'],
             ] );
             ?>
             <input id="bonuses-input" type="range" min="0" max="<?php echo $max_bonus; ?>" step="1" value="0" class="styled-slider slider-progress" />
-
         </div>
     <?php } ?>
-
-        <div class="cfps-flex cfps-flex-row cfps-gap-x-4 cfps-mt-8">
-            <a href="#">Manage Cards</a>
-            <a href="#">History</a>
-            <a href="#">Support</a>
-            <a href="#">Terms</a>
+        <div class="cfps-flex cfps-flex-row cfps-gap-x-4 cfps-mt-8 cfps-text-sm cfps-flex-wrap">
+            <a href="/paynocchio-account">Paynocchio Account</a>
+            <a href="<?php echo get_privacy_policy_url(); ?>">Privacy Policy</a>
+            <a href="<?php echo get_permalink( wc_terms_and_conditions_page_id() ); ?>">Terms and Conditions</a>
         </div>
     </div>
 </section>
