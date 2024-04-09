@@ -60,7 +60,7 @@ class Woocommerce_Paynocchio_Activator {
                     'comment_status' => 'close',
                     'ping_status'    => 'close',
                     'post_author'    => 1,
-                    'post_title'     => 'Kopybara.Account',
+                    'post_title'     => 'Paynocchio.Account',
                     'post_name'      => strtolower(str_replace(' ', '-', trim(WOOCOMMERCE_PAYNOCCHIO_ACCOUNT_PAGE_SLUG))),
                     'post_status'    => 'publish',
                     'post_content'   =>  '[paynocchio_account_page]',

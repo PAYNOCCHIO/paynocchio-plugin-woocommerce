@@ -4,15 +4,43 @@ if (!defined('ABSPATH')) {
 }
 ?>
 
+<?php
+    $paynocchio_classes = '';
+    $paynocchio_classes .= get_option( 'woocommerce_paynocchio_settings')['darkmode'] == 'yes' ? 'paynocchio_dark_mode ' : '';
+    $paynocchio_classes .= get_option( 'woocommerce_paynocchio_settings')['rounded'] == 'yes' ? 'paynocchio_rounded ' : '';
+    $embleme_link = plugin_dir_url( WOOCOMMERCE_PAYNOCCHIO_BASENAME ) . 'assets/img/paynocchio_';
+    $embleme_link .= get_option( 'woocommerce_paynocchio_settings')['darkmode'] == 'yes' ? 'white.svg' : 'black.svg';
+
+    $accent_color = '#3b82f6';
+    if (get_option( 'woocommerce_paynocchio_settings')['accent_color']) {
+        $accent_color = get_option( 'woocommerce_paynocchio_settings')['accent_color'];
+    }
+
+    $accent_text_color = '#ffffff';
+    if (get_option( 'woocommerce_paynocchio_settings')['accent_text_color']) {
+        $accent_text_color = get_option( 'woocommerce_paynocchio_settings')['accent_text_color'];
+    }
+?>
+
+<style>
+    .paynocchio_colored {
+        background-color: <?php echo $accent_color; ?>!important;
+        color: <?php echo $accent_text_color; ?>!important;
+    }
+</style>
+
 <?php if (is_user_logged_in()) {
 
     $paynocchio = new Woocommerce_Paynocchio();
     $wallet = $paynocchio->get_paynocchio_wallet_info();
-    ?>
-    <section class="paynocchio">
+
+    global $current_user;
+    get_currentuserinfo();
+?>
+    <section class="paynocchio  <?php echo $paynocchio_classes; ?>">
         <div class="paynocchio-account">
             <div class="paynocchio-embleme">
-                <img src="<?php echo plugin_dir_url( WOOCOMMERCE_PAYNOCCHIO_BASENAME ) . 'assets/img/kopybara-logo.png' ?>" />
+                <img src="<?php echo $embleme_link; ?>" />
             </div>
             <div class="paynocchio-profile-info">
                 <div class="paynocchio-profile-img">
@@ -22,21 +50,12 @@ if (!defined('ABSPATH')) {
                     <h2>
                         <?php echo $wallet['user']['first_name']. ' ' .$wallet['user']['last_name']; ?>
                     </h2>
+                    <p>
+                        <?php echo $current_user->user_email; ?>
+                    </p>
                     <a href="#">
-                        <img src="<?php echo plugin_dir_url( WOOCOMMERCE_PAYNOCCHIO_BASENAME ) . 'assets/img/plane.png' ?>"
-                             class="cfps-h-[20px] cfps-w-[20px] cfps-mr-1 cfps-inline-block" />
                         Start earning bonuses
                     </a>
-                    <div class="paynocchio-count">
-                        <div>
-                            <p class="cfps-text-2xl cfps-font-semibold"><span class="paynocchio-numbers paynocchio-bonus-value"><?php echo $wallet['bonuses'] ?? 0; ?></span></p>
-                            <p>bonuses</p>
-                        </div>
-                        <div>
-                            <p class="">0</p>
-                            <p>flights</p>
-                        </div>
-                    </div>
                 </div>
                 <?php if(isset($wallet['status'])) { ?>
                     <div class="paynocchio-profile-actions">
@@ -74,8 +93,8 @@ if (!defined('ABSPATH')) {
                 <a class="tab-switcher choosen" id="profile_toggle">
                     Profile
                 </a>
-                <a class="tab-switcher" id="my-trips_toggle">
-                    My trips
+                <a class="tab-switcher" id="my-orders_toggle">
+                    My orders
                 </a>
             </div>
             <div class="paynocchio_tabs">
@@ -86,7 +105,7 @@ if (!defined('ABSPATH')) {
                                 <img src="<?php echo plugin_dir_url( WOOCOMMERCE_PAYNOCCHIO_BASENAME ) . 'assets/img/i.png' ?>" />
                                 <div class="">
                                     <p class="cfps-mb-4">Join Paynocchio.Pay program. Save document info to make quicker purchases, earn cashback bonuses, and buy premium tickets.</p>
-                                    <button id="paynocchio_activation_button" type="button" class="cfps-btn-primary" value="">
+                                    <button id="paynocchio_activation_button" type="button" class="paynocchio_button paynocchio_colored cfps-btn-primary" value="">
                                         Activate Paynocchio.Pay
                                         <svg class="cfps-spinner cfps-hidden cfps-animate-spin cfps-ml-4 cfps-h-5 cfps-w-5 cfps-text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                                             <circle class="cfps-opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
@@ -98,8 +117,8 @@ if (!defined('ABSPATH')) {
                             </div>
                         </div>
                     <?php } else { ?>
-                        <div class="paynocchio-profile-block paynocchio-blue-badge">
-                            <div class="cfps-grid cfps-grid-cols-[1fr_100px_200px_35px] cfps-gap-x-6">
+                        <div class="paynocchio-profile-block paynocchio-blue-badge paynocchio_colored">
+                            <div class="cfps-flex cfps-flex-col lg:cfps-flex lg:cfps-flex-row cfps-justify-between cfps-gap-4">
                                 <div>
                                     Paynocchio.Pay
                                 </div>
@@ -109,9 +128,11 @@ if (!defined('ABSPATH')) {
                                 <div>
                                     Bonuses: <span class="paynocchio-numbers paynocchio-bonus-value"><?php echo $wallet['bonuses'] ?? 0 ?></span>
                                 </div>
-                                <a class="tab-switcher cfps-cursor-pointer" id="wallet_toggle">
-                                    <img src="<?php echo plugin_dir_url( WOOCOMMERCE_PAYNOCCHIO_BASENAME ) . 'assets/img/arr_r.png' ?>" />
-                                </a>
+                                <div>
+                                    <a class="tab-switcher cfps-cursor-pointer" id="wallet_toggle">
+                                        <img src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pjxzdmcgdmlld0JveD0iMCAwIDk2IDk2IiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjx0aXRsZS8+PHBhdGggZD0iTTY5Ljg0MzcsNDMuMzg3NiwzMy44NDIyLDEzLjM4NjNhNi4wMDM1LDYuMDAzNSwwLDAsMC03LjY4NzgsOS4yMjNsMzAuNDcsMjUuMzktMzAuNDcsMjUuMzlhNi4wMDM1LDYuMDAzNSwwLDAsMCw3LjY4NzgsOS4yMjMxTDY5Ljg0MzcsNTIuNjEwNmE2LjAwOTEsNi4wMDkxLDAsMCwwLDAtOS4yMjNaIi8+PC9zdmc+" />
+                                    </a>
+                                </div>
                             </div>
                         </div>
                     <?php } ?>
@@ -129,115 +150,113 @@ if (!defined('ABSPATH')) {
                     </div>
                 </div>
 
-                <div class="paynocchio-my-trips-body paynocchio-tab-body">
+                <div class="paynocchio-my-orders-body paynocchio-tab-body">
                     <div class="paynocchio-profile-block">
-                        <h2>My Trips</h2>
-                        <p>No trips found!</p>
+                        <h2>My orders</h2>
+                        <p>No orders found!</p>
                     </div>
                 </div>
 
-                <?php if(isset($wallet['status']) && $wallet['status'] !== 'BLOCKED') { ?>
-                    <div class="paynocchio-wallet-body paynocchio-tab-body">
-                        <div class="cfps-max-w-5xl cfps-mx-auto cfps-mt-8">
-                            <a class="btn-back tab-switcher" id="profile_toggle">
-                                <img src="<?php echo plugin_dir_url( WOOCOMMERCE_PAYNOCCHIO_BASENAME ) . 'assets/img/arr_back.png' ?>"
-                                     class="cfps-h-[20px] cfps-w-[20px] cfps-mr-1 cfps-inline-block" />
-                                Profile
-                            </a>
-                        </div>
-                        <div class="paynocchio-profile-block">
-                            <h2>Paynocchio.Pay</h2>
-                            <div class="paynocchio-card-container">
-                                <div class="paynocchio-card-face visible">
-                                    <img src="<?php echo plugin_dir_url( WOOCOMMERCE_PAYNOCCHIO_BASENAME ) . 'assets/img/card-face.png' ?>" />
-                                    <a class="card-toggle"></a>
-                                    <div class="paynocchio-balance-bonuses">
-                                        <div class="paynocchio-balance">
-                                            <div>
-                                                Balance
-                                            </div>
-                                            <div class="amount">
-                                                $<span class="paynocchio-numbers paynocchio-balance-value"><?php echo $wallet['balance'] ?></span>
-                                            </div>
+    <?php if(isset($wallet['status']) && $wallet['status'] !== 'BLOCKED') { ?>
+                <div class="paynocchio-wallet-body paynocchio-tab-body">
+                    <div class="cfps-max-w-5xl cfps-mx-auto cfps-mt-8">
+                        <a class="paynocchio_colored paynocchio_button btn-back tab-switcher" id="profile_toggle">
+                            < Profile
+                        </a>
+                    </div>
+                    <div class="paynocchio-profile-block">
+                        <h2>Paynocchio.Pay</h2>
+                        <div class="paynocchio-card-container">
+                            <div class="paynocchio-card-face visible">
+                                <img src="<?php echo plugin_dir_url( WOOCOMMERCE_PAYNOCCHIO_BASENAME ) . 'assets/img/card-face.png' ?>" />
+                                <a class="card-toggle"></a>
+                                <div class="paynocchio-balance-bonuses">
+                                    <div class="paynocchio-balance">
+                                        <div>
+                                            Balance
                                         </div>
-                                        <div class="paynocchio-bonuses">
-                                            <div>
-                                                Bonuses
-                                            </div>
-                                            <div class="amount">
-                                                <span class="paynocchio-numbers paynocchio-bonus-value"><?php echo $wallet['bonuses'] ?></span>
-                                            </div>
+                                        <div class="amount">
+                                            $<span class="paynocchio-numbers paynocchio-balance-value"><?php echo $wallet['balance'] ?></span>
                                         </div>
                                     </div>
-                                    <div class="paynocchio-card-number-mask">
-                                        <span class="cfps-text-gray-300 cfps-mr-4">● ● ● ●</span> <?php echo substr(strval($wallet['card_number']), -4); ?>
+                                    <div class="paynocchio-bonuses">
+                                        <div>
+                                            Bonuses
+                                        </div>
+                                        <div class="amount">
+                                            <span class="paynocchio-numbers paynocchio-bonus-value"><?php echo $wallet['bonuses'] ?></span>
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="paynocchio-card-back">
-                                    <img src="<?php echo plugin_dir_url( WOOCOMMERCE_PAYNOCCHIO_BASENAME ) . 'assets/img/card-back.png' ?>" />
-                                    <a class="card-toggle"></a>
-                                    <div class="paynocchio-card-number">
-                                        <div><?php echo chunk_split(strval($wallet['card_number']), 4, '</div><div>'); ?></div>
-                                    </div>
+                                <div class="paynocchio-card-number-mask">
+                                    <span class="cfps-text-gray-300 cfps-mr-4">● ● ● ●</span> <?php echo substr(strval($wallet['card_number']), -4); ?>
                                 </div>
                             </div>
-                            <div class="paynocchio-actions-btns cfps-mt-8 lg:cfps-mt-16">
-                                <div class="autodeposit cfps-flex cfps-flex-row cfps-items-center cfps-gap-x-2">
-                                    <img src="<?php echo plugin_dir_url( WOOCOMMERCE_PAYNOCCHIO_BASENAME ) . 'assets/img/i-gr.png' ?>"
-                                         class="cfps-h-[18px] cfps-w-[16px] cfps-mr-1 cfps-inline-block" />
-                                    Autodeposit
-                                    <div class="toggle-autodeposit">
-                                        <p>ON</p>
-                                        <div class="toggler"></div>
-                                        <p>OFF</p>
-                                    </div>
-                                    <input class="hidden" value="0" name="autodeposit" id="autodeposit" />
-                                </div>
-                                <div class="paynocchio-actions-btns">
-                                    <a href="#" class="btn-blue" data-modal=".topUpModal">
-                                        <img src="<?php echo plugin_dir_url( WOOCOMMERCE_PAYNOCCHIO_BASENAME ) . 'assets/img/plus.png' ?>"
-                                             class="cfps-h-[24px] cfps-w-[24px] cfps-mr-1 cfps-inline-block" />
-                                        Add money
-                                    </a>
-                                    <a href="#" class="btn-gray" data-modal=".withdrawModal">
-                                        Withdraw
-                                    </a>
+                            <div class="paynocchio-card-back">
+                                <img src="<?php echo plugin_dir_url( WOOCOMMERCE_PAYNOCCHIO_BASENAME ) . 'assets/img/card-back.png' ?>" />
+                                <a class="card-toggle"></a>
+                                <div class="paynocchio-card-number">
+                                    <div><?php echo chunk_split(strval($wallet['card_number']), 4, '</div><div>'); ?></div>
                                 </div>
                             </div>
                         </div>
-
-                        <div class="paynocchio-profile-block">
-                            <h2>Payments methods</h2>
-                            <a href="" class="btn-blue" data-modal=".paymentMethodModal">Add payment method</a>
-                        </div>
-
-                        <div class="paynocchio-profile-block">
-                            <h2>History</h2>
-                            <div class="history-list">
-                                <div class="history-item">
-                                    <div class="history-info cfps-text-gray-500">
-                                        Today
-                                    </div>
-                                    <div class="history-amount">
-                                        $0
-                                    </div>
+                        <div class="paynocchio-actions-btns cfps-mt-8 lg:cfps-mt-16">
+                            <div class="autodeposit cfps-flex cfps-flex-row cfps-items-center cfps-gap-x-2">
+                                <img src="<?php echo plugin_dir_url( WOOCOMMERCE_PAYNOCCHIO_BASENAME ) . 'assets/img/i-gr.png' ?>"
+                                     class="cfps-h-[18px] cfps-w-[16px] cfps-mr-1 cfps-inline-block" />
+                                Autodeposit
+                                <div class="toggle-autodeposit">
+                                    <p>ON</p>
+                                    <div class="toggler"></div>
+                                    <p>OFF</p>
                                 </div>
-                                <div class="history-item">
-                                    <div class="history-info">
-                                        <p class="cfps-font-semibold">NY - LA</p>
-                                        <p>January 3</p>
-                                    </div>
-                                    <div class="history-amount">
-                                        - $235.29
-                                    </div>
+                                <input type="hidden" value="0" name="autodeposit" id="autodeposit" />
+                            </div>
+                            <div class="paynocchio-actions-btns">
+                                <a href="#" class="paynocchio_button btn-blue paynocchio_colored" data-modal=".topUpModal">
+                                    <img src="<?php echo plugin_dir_url( WOOCOMMERCE_PAYNOCCHIO_BASENAME ) . 'assets/img/plus.png' ?>"
+                                         class="cfps-h-[24px] cfps-w-[24px] cfps-mr-1 cfps-inline-block" />
+                                    Add money
+                                </a>
+                                <a href="#" class="paynocchio_button btn-gray" data-modal=".withdrawModal">
+                                    Withdraw
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="paynocchio-profile-block">
+                        <h2>Payments methods</h2>
+                        <a href="" class="paynocchio_button btn-blue paynocchio_colored" data-modal=".paymentMethodModal">Add payment method</a>
+                    </div>
+
+                    <div class="paynocchio-profile-block">
+                        <h2>History</h2>
+                        <div class="history-list">
+                            <div class="history-item">
+                                <div class="history-info cfps-text-gray-500">
+                                    Today
+                                </div>
+                                <div class="history-amount">
+                                    $0
+                                </div>
+                            </div>
+                            <div class="history-item">
+                                <div class="history-info">
+                                    <p class="cfps-font-semibold">NY - LA</p>
+                                    <p>January 3</p>
+                                </div>
+                                <div class="history-amount">
+                                    - $235.29
                                 </div>
                             </div>
                         </div>
                     </div>
-                <?php } ?>
+                </div>
+            <?php } ?>
             </div>
             <div class="paynocchio-consents">
-                <p class="cfps-text-slate-500"><a href="#" class="cfps-text-slate-500 cfps-underline">Kopybara Terms & Conditions</a> • <a href="#" class="cfps-text-slate-500 cfps-underline">Rules of Paynocchio.Pay Priority program</a></p>
+                <div class="cfps-text-slate-500"><a href="#" class="cfps-text-slate-500 cfps-underline">Paynocchio Terms & Conditions</a> • <a href="#" class="cfps-text-slate-500 cfps-underline">Rules of Paynocchio.Pay Priority program</a></div>
             </div>
         </div>
     </section>

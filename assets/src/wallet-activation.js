@@ -64,7 +64,7 @@ import './public.css';
             activationButton.click((evt) => activateWallet(evt))
         }
 
-        $('.form-toggle-a').click(() => toggleVisibility('#paynocchio_auth_block'));
+        $('.form-toggle-a').click(() => toggleVisibility('#login-signup-forms'));
 
         /**
          * Trigger update checkout when payment method changed
@@ -95,7 +95,7 @@ import './public.css';
 
             activationButton.click((evt) => activateWallet(evt))
 
-            $('.form-toggle-a').click(() => toggleVisibility('#paynocchio_auth_block'));
+            $('.form-toggle-a').click(() => toggleVisibility('#login-signup-forms'));
 
             const ans = getParameterByName('ans');
 

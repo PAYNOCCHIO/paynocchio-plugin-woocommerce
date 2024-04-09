@@ -29,28 +29,28 @@ if (is_user_logged_in()) {
                 <div class="card-var current-card" data-pan="<?php echo $wallet['card_number']; ?>">
                     <div class="cfps-flex cfps-flex-row cfps-gap-x-4 cfps-items-center">
                         <img src="<?php echo plugin_dir_url( WOOCOMMERCE_PAYNOCCHIO_BASENAME ) . 'assets/img/mc.png' ?>" class="cfps-h-[30px] cfps-w-[30px] cfps-mr-1 cfps-inline-block" />
-                        <p>1356 5674 2352 2373</p>
+                        <div>1356 5674 2352 2373</div>
                     </div>
                     <img src="<?php echo plugin_dir_url( WOOCOMMERCE_PAYNOCCHIO_BASENAME ) . 'assets/img/arr_d.png' ?>" class="cfps-h-[30px] cfps-w-[30px] cfps-inline-block" />
                 </div>
                 <div class="card-var" data-pan="3727844328348156">
                     <div class="cfps-flex cfps-flex-row cfps-gap-x-4 cfps-items-center">
                         <img src="<?php echo plugin_dir_url( WOOCOMMERCE_PAYNOCCHIO_BASENAME ) . 'assets/img/vs.png' ?>" class="cfps-h-[30px] cfps-w-[30px] cfps-mr-1 cfps-inline-block" />
-                        <p>3727 8443 2834 8156</p>
+                        <div>3727 8443 2834 8156</div>
                     </div>
                     <img src="<?php echo plugin_dir_url( WOOCOMMERCE_PAYNOCCHIO_BASENAME ) . 'assets/img/arr_d.png' ?>" class="cfps-h-[30px] cfps-w-[30px] cfps-inline-block" />
                 </div>
                 <div class="card-var" data-pan="">
                     <div class="cfps-flex cfps-flex-row cfps-gap-x-4 cfps-items-center">
                         <img data-modal=".paymentMethodModal" src="<?php echo plugin_dir_url( WOOCOMMERCE_PAYNOCCHIO_BASENAME ) . 'assets/img/plus_b.png' ?>" class="cfps-h-[30px] cfps-w-[30px] cfps-mr-1 cfps-inline-block" />
-                        <p data-modal=".paymentMethodModal">Add new payment method</p>
+                        <div data-modal=".paymentMethodModal">Add new payment method</div>
                     </div>
                 </div>
             </div>
             <input type="hidden" id="source-card" name="source-card" value="" />
 
             <div class="top-up-amount-container cfps-mt-8 lg:cfps-mt-12 cfps-flex cfps-flex-row">
-                <p class="cfps-text-3xl">$</p>
+                <span class="cfps-text-3xl">$</span>
                 <input type="number" step="0.01" class="!cfps-bg-transparent !cfps-border-0 !cfps-shadow-none cfps-text-3xl !cfps-p-0 focus:!cfps-outline-none"
                        name="amount" id="top_up_amount" placeholder="0" value="1000" />
                 <?php wp_nonce_field( 'paynocchio_ajax_top_up', 'ajax-top-up-nonce' ); ?>

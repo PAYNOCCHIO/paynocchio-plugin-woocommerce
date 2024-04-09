@@ -57,3 +57,24 @@
 .paynocchio-cart-wallet-widget.paynocchio_dark_mode .cart a {
     @apply cfps-bg-zinc-800 cfps-text-white;
 }
+
+.paynocchio_dark_mode .paynocchio-account {
+    @apply cfps-bg-zinc-800 cfps-text-white;
+
+    .paynocchio-profile-text h2,
+    .paynocchio-tab-selector a {
+        @apply !cfps-text-white;
+    }
+
+    .paynocchio_tabs {
+        @apply cfps-bg-zinc-700 cfps-text-white;
+    }
+
+    .paynocchio-profile-block {
+        @apply cfps-bg-zinc-600 cfps-text-white;
+
+        h2 {
+            @apply cfps-text-white;
+        }
+    }
+}
