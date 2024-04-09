@@ -13,6 +13,7 @@ class Woocommerce_Paynocchio_Wallet {
     private $secret;
     private $userId;
     private $signature;
+    private $simpleSignature;
     private $walletId;
 
     public function __construct($userId) {
@@ -22,14 +23,20 @@ class Woocommerce_Paynocchio_Wallet {
         $this->userId = $userId;
 
         $this->signature = $this->createSignature();
+        $this->simpleSignature = $this->createSimpleSignature();
     }
 
-    private function sendRequest(string $method, string $url, string $body = ""): array {
+    private function sendRequest(string $method, string $url, string $body = "", bool $simple = false): array {
         $headers = [
-            'X-Wallet-Signature:'. $this->signature,
             'X-API-KEY: X-API-KEY',
             'Content-Type: application/json'
         ];
+
+        if($simple) {
+            $headers[] = 'X-Company-Signature:'. $this->simpleSignature;
+        } else {
+            $headers[] = 'X-Wallet-Signature:'. $this->signature;
+        }
 
         $curl = curl_init();
 
@@ -65,6 +72,17 @@ class Woocommerce_Paynocchio_Wallet {
         return $signature;
     }
 
+    /**
+    *  Signature for Order requests
+    */
+    public function createSimpleSignature() {
+        $signature = hash("sha256", $this->secret . "|" . $this->envId);
+        return $signature;
+    }
+
+    /**
+     *  Get Wallet by ID
+     */
     public function getWalletById(string $walletId): array {
         $url = '/wallet/' . $walletId . '?environment_uuid=' . $this->envId;
 
@@ -73,6 +91,9 @@ class Woocommerce_Paynocchio_Wallet {
         return $response;
     }
 
+    /**
+     *  Create Wallet
+     */
     public function createWallet() {
         $data = [
             PAYNOCCHIO_ENV_KEY => $this->envId,
@@ -92,6 +113,9 @@ class Woocommerce_Paynocchio_Wallet {
         }
     }
 
+    /**
+     *  TopUp Wallet
+     */
     public function topUpWallet(string $walletId, float $amount): array {
         $data = [
             PAYNOCCHIO_ENV_KEY => $this->envId,
@@ -106,6 +130,9 @@ class Woocommerce_Paynocchio_Wallet {
         return $response;
     }
 
+    /**
+     *  Withdraw Wallet
+     */
     public function withdrawFromWallet(string $walletId, float $amount): array {
         $data = [
             PAYNOCCHIO_ENV_KEY => $this->envId,
@@ -121,6 +148,9 @@ class Woocommerce_Paynocchio_Wallet {
         return $response;
     }
 
+    /**
+     *  Make Payment
+     */
     public function makePayment(string $walletId, $fullAmount, $amount, string $orderId, $bonusAmount = null): array {
         $data = [
             PAYNOCCHIO_ENV_KEY => $this->envId,
@@ -140,7 +170,9 @@ class Woocommerce_Paynocchio_Wallet {
         return $response;
     }
 
-
+    /**
+     *  Get Orders List
+     */
     public function getOrdersList(string $orderId, array $filters = []): array {
         $url = '/orders/' . $orderId;
 
@@ -164,7 +196,9 @@ class Woocommerce_Paynocchio_Wallet {
         return $response;
     }
 
-
+    /**
+     *  ChargeBack
+     */
     public function chargeBack($orderId, $walletId, $amount) {
         $data = [
             PAYNOCCHIO_ENV_KEY => $this->envId,
@@ -178,7 +212,9 @@ class Woocommerce_Paynocchio_Wallet {
         return $this->sendRequest('POST', '/operation/chargeback', json_encode($data));
     }
 
-
+    /**
+     *  Get Order by ID
+     */
     public function getOrderById(string $orderId): array {
         $url = '/orders/' . $orderId;
 
@@ -186,6 +222,10 @@ class Woocommerce_Paynocchio_Wallet {
 
         return $response;
     }
+
+    /**
+     *  Wallet information
+     */
 
     public function getWalletBalance(string $walletId): array
     {
@@ -196,10 +236,22 @@ class Woocommerce_Paynocchio_Wallet {
                 'balance' => $json_response->balance->current,
                 'bonuses' => $json_response->rewarding_balance,
                 'number' => $json_response->number,
+                'status' => $json_response->status->code,
+                'simpleSignature' => $this->simpleSignature,
+                'secret' => $this->secret,
+                'env' => $this->envId,
             ];
         }
 
         return [];
+    }
+
+    public function getWalletStatuses() {
+        $url = '/status/';
+
+        $response = $this->sendRequest('GET', $url);
+
+        return $response;
     }
 
 }
