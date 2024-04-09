@@ -122,8 +122,8 @@ class Woocommerce_Paynocchio_Add_RESTapi_Routes {
      */
     public function testing($request)
     {
-
-        return new WP_REST_Response( $request, 200 );
+        $parameters = $request->get_params();
+        return new WP_REST_Response( $parameters, 200 );
     }
 
 }
