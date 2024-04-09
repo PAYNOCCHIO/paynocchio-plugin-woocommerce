@@ -120,10 +120,10 @@ class Woocommerce_Paynocchio_Add_RESTapi_Routes {
      * update_order_status
      * @return WP_REST_Response
      */
-    public function testing()
+    public function testing($request)
     {
 
-        return new WP_REST_Response( '$request', 200 );
+        return new WP_REST_Response( $request, 200 );
     }
 
 }
