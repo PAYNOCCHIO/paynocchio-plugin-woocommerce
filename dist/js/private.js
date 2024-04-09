@@ -460,6 +460,36 @@ __webpack_require__.r(__webpack_exports__);
   };
 
   /**
+   * Set Wallet Status
+   * @param evt
+   * @param path
+   */
+  const setWalletStatus = (evt, status) => {
+    $(evt.target).addClass('cfps-disabled');
+    $(`#${evt.target.id} .cfps-spinner`).removeClass('cfps-hidden');
+    $.ajax({
+      url: paynocchio_object.ajaxurl,
+      type: 'POST',
+      data: {
+        'action': 'paynocchio_ajax_set_status',
+        'ajax-status-nonce': $('#ajax-status-nonce').val(),
+        'status': 'SUSPEND'
+      },
+      success: function (data) {
+        console.log(data);
+        if (data.response.status_code === 200) {
+          $('.suspendModal .message').text('Success!');
+          $('.suspendModal').delay(1000).fadeOut('fast');
+        }
+      }
+    }).error(error => console.log(error)).always(function () {
+      $(`#${evt.target.id} .cfps-spinner`).addClass('cfps-hidden');
+      $(evt.target).removeClass('cfps-disabled');
+      $('.suspendModal .message').text('');
+    });
+  };
+
+  /**
    * Wallet TopUp function for MiniForm in Widget
    * @param evt
    * @param path
@@ -600,9 +630,11 @@ __webpack_require__.r(__webpack_exports__);
     const topUpButton = $("#top_up_button");
     const topUpButtonMiniForm = $("#top_up_mini_form_button");
     const withdrawButton = $("#withdraw_button");
+    const suspendButton = $("#suspend_button");
     topUpButton.click(evt => topUpWallet(evt));
     topUpButtonMiniForm.click(evt => topUpWalletMiniForm(evt));
     withdrawButton.click(evt => withdrawWallet(evt));
+    suspendButton.click(evt => setWalletStatus(evt, 'suspend'));
     $('a.tab-switcher').click(function () {
       let link = $(this);
       let id = link.get(0).id;

@@ -238,6 +238,7 @@ class Woocommerce_Paynocchio_Wallet {
                 'number' => $json_response->number,
                 'status' => $json_response->status->code,
                 'simpleSignature' => $this->simpleSignature,
+                'signature' => $this->signature,
                 'secret' => $this->secret,
                 'env' => $this->envId,
             ];
@@ -250,8 +251,19 @@ class Woocommerce_Paynocchio_Wallet {
         $url = '/status/';
 
         $response = $this->sendRequest('GET', $url);
+        $json_response = json_decode($response['response']);
 
-        return $response;
+        return [
+            'ACTIVE' => array_reduce($json_response->statuses, static function ($carry, $item) {
+                return $carry === false && $item->code === 'ACTIVE' ? $item->uuid : $carry;
+            }, false),
+            'SUSPEND' => array_reduce($json_response->statuses, static function ($carry, $item) {
+                return $carry === false && $item->code === 'SUSPEND' ? $item->uuid : $carry;
+            }, false),
+            'BLOCKED' => array_reduce($json_response->statuses, static function ($carry, $item) {
+                return $carry === false && $item->code === 'BLOCKED' ? $item->uuid : $carry;
+            }, false),
+        ];
     }
 
 }

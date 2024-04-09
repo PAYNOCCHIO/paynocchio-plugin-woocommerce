@@ -352,7 +352,7 @@ class Woocommerce_Paynocchio {
         $nonce = isset( $_POST['ajax-top-up-nonce'] ) ? sanitize_text_field( $_POST['ajax-top-up-nonce'] ) : '';
         $amount = isset( $_POST['amount'] ) ? sanitize_text_field( $_POST['amount'] ) : '';
 
-        if ( ! wp_verify_nonce( $nonce, 'paynocchio_ajax_top_up' ) ) {
+        if ( ! wp_verify_nonce( $nonce, 'paynocchio_ajax_set_status' ) ) {
             wp_send_json( array(
                 'status'  => 'error',
                 'title'   => 'Error',
@@ -382,7 +382,7 @@ class Woocommerce_Paynocchio {
     public function paynocchio_ajax_set_status()
     {
         $nonce = isset( $_POST['ajax-status-nonce'] ) ? sanitize_text_field( $_POST['ajax-status-nonce'] ) : '';
-        $amount = isset( $_POST['status'] ) ? sanitize_text_field( $_POST['status'] ) : '';
+        $status = isset( $_POST['status'] ) ? sanitize_text_field( $_POST['status'] ) : '';
 
         if ( ! wp_verify_nonce( $nonce, 'paynocchio_ajax_set_status' ) ) {
             wp_send_json( array(
@@ -395,13 +395,14 @@ class Woocommerce_Paynocchio {
 
          if(get_user_meta($this->user_id, PAYNOCCHIO_WALLET_KEY)) {
              $wallet = new Woocommerce_Paynocchio_Wallet($this->get_uuid());
-             $response = $wallet->getWalletStatuses();
+             $wallet_statuses = $wallet->getWalletStatuses();
              //$wallet_response = $wallet->topUpWallet(get_user_meta($this->user_id, PAYNOCCHIO_WALLET_KEY, true), $amount);
-             //$json_response = json_decode($wallet_response);
+             //$json_response = json_decode($response);
          }
 
         wp_send_json([
-            'response' => $wallet_response
+            'ACTIVE' => $wallet_statuses['ACTIVE'],
+            'SUSPEND' => $wallet_statuses['SUSPEND'],
         ]);
         wp_die();
     }
@@ -586,6 +587,7 @@ class Woocommerce_Paynocchio {
                     $wallet['card_number'] = $wallet_bal_bon['number'];
                     $wallet['status'] = $wallet_bal_bon['status'];
                     $wallet['simpleSignature'] = $wallet_bal_bon['simpleSignature'];
+                    $wallet['signature'] = $wallet_bal_bon['signature'];
                     $wallet['secret'] = $wallet_bal_bon['secret'];
                     $wallet['env'] = $wallet_bal_bon['env'];
                 }

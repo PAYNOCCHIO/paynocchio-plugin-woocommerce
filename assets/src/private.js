@@ -122,8 +122,8 @@ import './topUpFormProcess'
             type: 'POST',
             data: {
                 'action': 'paynocchio_ajax_set_status',
-                'ajax-top-up-nonce': $('#ajax-status-nonce').val(),
-                status,
+                'ajax-status-nonce': $('#ajax-status-nonce').val(),
+                'status': 'SUSPEND',
             },
             success: function(data){
                 console.log(data)
