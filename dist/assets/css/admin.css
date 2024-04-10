@@ -741,11 +741,11 @@ video {
 .cfps-border-0 {
   border-width: 0px;
 }
-.cfps-border-l {
-  border-left-width: 1px;
-}
 .cfps-border-r {
   border-right-width: 1px;
+}
+.cfps-border-l {
+  border-left-width: 1px;
 }
 .cfps-border-slate-300 {
   --tw-border-opacity: 1;
@@ -803,11 +803,11 @@ video {
 .cfps-pl-10 {
   padding-left: 2.5rem;
 }
-.cfps-pl-2 {
-  padding-left: 0.5rem;
-}
 .cfps-pr-2 {
   padding-right: 0.5rem;
+}
+.cfps-pl-2 {
+  padding-left: 0.5rem;
 }
 .cfps-text-center {
   text-align: center;

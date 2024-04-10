@@ -107,10 +107,19 @@ class Woocommerce_Paynocchio_Wallet {
 
         if($response['status_code'] === 201) {
             $json = json_decode($response['response']);
+            $this->walletId = $json->uuid;
             return json_encode(['status'=> 'success', 'wallet' => $json->uuid,]);
         } else {
             return json_encode($response);
         }
+    }
+
+    /**
+     * Get Wallet ID
+     */
+
+    public function getWalletId() {
+        return $this->walletId;
     }
 
     /**
@@ -237,10 +246,6 @@ class Woocommerce_Paynocchio_Wallet {
                 'bonuses' => $json_response->rewarding_balance,
                 'number' => $json_response->number,
                 'status' => $json_response->status->code,
-                'simpleSignature' => $this->simpleSignature,
-                'signature' => $this->signature,
-                'secret' => $this->secret,
-                'env' => $this->envId,
             ];
         }
 
@@ -266,4 +271,17 @@ class Woocommerce_Paynocchio_Wallet {
         ];
     }
 
+    /**
+    *  Update Wallet Status
+    */
+    public function updateWalletStatus(string $wallet_id, string $status) {
+
+        $data = [
+            PAYNOCCHIO_ENV_KEY => $this->envId,
+            'uuid' => $wallet_id,
+            PAYNOCCHIO_STATUS_KEY => $status,
+        ];
+
+        return $this->sendRequest('PATCH', '/wallet/', json_encode($data), true);
+    }
 }

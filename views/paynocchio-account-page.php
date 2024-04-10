@@ -8,8 +8,6 @@ if (!defined('ABSPATH')) {
 
     $paynocchio = new Woocommerce_Paynocchio();
     $wallet = $paynocchio->get_paynocchio_wallet_info();
-    print_r($wallet);
-    echo '<br/>hash: '. hash("sha256", $wallet['secret'] . "|" . $wallet['env'])
     ?>
     <section class="paynocchio">
         <div class="paynocchio-account">
@@ -57,7 +55,7 @@ if (!defined('ABSPATH')) {
                             <?php } else { ?>
                                 <li><a href="#" data-modal=".reactivateModal">Reactivate wallet</a></li>
                             <?php } ?>
-                            <li>Delete wallet</li>
+                            <li><a href="#" data-modal=".blockModal">Block wallet</a></li>
                         </ul>
                     </label>
                 </div>
@@ -252,6 +250,72 @@ if (!defined('ABSPATH')) {
                 <div>
                     <strong>Are you sure you want to suspend your wallet?</strong>
                     <button id="suspend_button"
+                            type="button"
+                            class="cfps-btn-primary close">
+                        Yes
+                        <svg class="cfps-spinner cfps-hidden cfps-animate-spin cfps-ml-4 cfps-h-5 cfps-w-5 cfps-text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <circle class="cfps-opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                            <path class="cfps-opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                    </button>
+                    <?php wp_nonce_field( 'paynocchio_ajax_set_status', 'ajax-status-nonce' ); ?>
+
+                    <button
+                            class="cfps-btn-primary close"
+                            type="button">No</button>
+                    <div class="message"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal reactivateModal">
+        <div class="close-modal close"></div>
+        <div class="container">
+            <div class="header">
+                <h3>Reactivate Paynocchio Wallet</h3>
+                <button class="close">&times;</button>
+            </div>
+            <div class="content">
+                <p>After reactivating the wallet you can continue shopping.</p>
+            </div>
+            <div class="footer">
+                <div>
+                    <strong>Are you sure you want to reactivate your wallet?</strong>
+                    <button id="reactivate_button"
+                            type="button"
+                            class="cfps-btn-primary close">
+                        Yes
+                        <svg class="cfps-spinner cfps-hidden cfps-animate-spin cfps-ml-4 cfps-h-5 cfps-w-5 cfps-text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <circle class="cfps-opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                            <path class="cfps-opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                    </button>
+                    <?php wp_nonce_field( 'paynocchio_ajax_set_status', 'ajax-status-nonce' ); ?>
+
+                    <button
+                            class="cfps-btn-primary close"
+                            type="button">No</button>
+                    <div class="message"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal blockModal">
+        <div class="close-modal close"></div>
+        <div class="container">
+            <div class="header">
+                <h3>Block Paynocchio Wallet</h3>
+                <button class="close">&times;</button>
+            </div>
+            <div class="content">
+                <p>Blocking with block.</p>
+            </div>
+            <div class="footer">
+                <div>
+                    <strong>Are you sure you want to reactivate your wallet?</strong>
+                    <button id="block_button"
                             type="button"
                             class="cfps-btn-primary close">
                         Yes

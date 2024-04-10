@@ -123,22 +123,11 @@ import './topUpFormProcess'
             data: {
                 'action': 'paynocchio_ajax_set_status',
                 'ajax-status-nonce': $('#ajax-status-nonce').val(),
-                'status': 'SUSPEND',
+                'status': status,
             },
-            success: function(data){
-                console.log(data)
-                if (data.response.status_code === 200){
-                    $('.suspendModal .message').text('Success!');
-                    $('.suspendModal').delay(1000).fadeOut('fast')
-                }
-            }
+            success: () => $(window.location.reload())
         })
-            .error((error) => console.log(error))
-            .always(function() {
-                $(`#${evt.target.id} .cfps-spinner`).addClass('cfps-hidden');
-                $(evt.target).removeClass('cfps-disabled')
-                $('.suspendModal .message').text('');
-            });
+            .error((error) => console.log(error));
     }
 
 
@@ -298,11 +287,15 @@ import './topUpFormProcess'
         const topUpButtonMiniForm = $("#top_up_mini_form_button");
         const withdrawButton = $("#withdraw_button");
         const suspendButton = $("#suspend_button");
+        const activateButton = $("#reactivate_button");
+        const blockButton = $("#block_button");
 
         topUpButton.click((evt) => topUpWallet(evt))
         topUpButtonMiniForm.click((evt) => topUpWalletMiniForm(evt))
         withdrawButton.click((evt) => withdrawWallet(evt))
-        suspendButton.click((evt) => setWalletStatus(evt, 'suspend'))
+        suspendButton.click((evt) => setWalletStatus(evt, 'SUSPEND'))
+        activateButton.click((evt) => setWalletStatus(evt, 'ACTIVE'))
+        blockButton.click((evt) => setWalletStatus(evt, 'BLOCKED'))
 
         $('a.tab-switcher').click(function() {
             let link = $(this);

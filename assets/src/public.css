@@ -681,6 +681,10 @@ input[type=range].styled-slider.slider-progress:active::-ms-fill-lower {
     100%{box-shadow: 20px 0 #0002,-20px 0 #000; background: #000 }
 }
 
+.paynocchio-wallet {
+    @apply  cfps-flex cfps-flex-row cfps-items-center cfps-pl-2 cfps-ml-2 cfps-border-l cfps-border-slate-300;
+}
+
 .paynocchio-profile-actions {
     .dropdown {
         @apply cfps-relative cfps-inline-block;
