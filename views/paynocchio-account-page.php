@@ -63,8 +63,9 @@ if (!defined('ABSPATH')) {
                         <?php } ?>
 
                         <?php if($wallet['status'] === 'BLOCKED') { ?>
-                            <button data-modal=".deleteModal" class="cfps-btn-primary">Delete Wallet</button>
+
                         <?php } ?>
+                        <button data-modal=".deleteModal" class="cfps-btn-primary">Delete Wallet</button>
                     </div>
                 <?php } ?>
             </div>

@@ -105,8 +105,10 @@ class Woocommerce_Paynocchio_Add_RESTapi_Routes {
             /**
              * Set COMPLETED status for Order
              */
-            if($parameters['status']) {
-                $customer_order->update_status($parameters['status']);
+            if($parameters['status_type']) {
+                if($parameters['status_type'] === 'complete') {
+                    $customer_order->update_status('COMPLETED');
+                }
             } else {
                 return new WP_Error( 'no_status', 'Invalid Status value', array( 'status' => 404 ) );
             }
