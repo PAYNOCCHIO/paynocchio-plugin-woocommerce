@@ -189,7 +189,7 @@ import './topUpFormProcess'
             }
         })
             .error(function () {
-                (error) => alert(error);
+                (error) => console.log(error);
                 $(`#${evt.target.id} .cfps-cross`).removeClass('cfps-hidden');
             })
             .always(function() {

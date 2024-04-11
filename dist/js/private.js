@@ -452,7 +452,7 @@ __webpack_require__.r(__webpack_exports__);
           $('body').removeClass('paynocchio-modal-open');
         }
       }
-    }).error(error => console.log(error)).always(function () {
+    }).error(error => alert(error.response.response)).always(function () {
       $(`#${evt.target.id} .cfps-spinner`).addClass('cfps-hidden');
       $(evt.target).removeClass('cfps-disabled');
       $('.topUpModal .message').text('');
@@ -473,20 +473,29 @@ __webpack_require__.r(__webpack_exports__);
       data: {
         'action': 'paynocchio_ajax_set_status',
         'ajax-status-nonce': $('#ajax-status-nonce').val(),
-        'status': 'SUSPEND'
+        'status': status
       },
-      success: function (data) {
-        console.log(data);
-        if (data.response.status_code === 200) {
-          $('.suspendModal .message').text('Success!');
-          $('.suspendModal').delay(1000).fadeOut('fast');
-        }
-      }
-    }).error(error => console.log(error)).always(function () {
-      $(`#${evt.target.id} .cfps-spinner`).addClass('cfps-hidden');
-      $(evt.target).removeClass('cfps-disabled');
-      $('.suspendModal .message').text('');
-    });
+      success: () => $(window.location.reload())
+    }).error(error => console.log(error));
+  };
+
+  /**
+   * Delete Wallet from User meta
+   * @param evt
+   * @param path
+   */
+  const deleteWallet = evt => {
+    $(evt.target).addClass('cfps-disabled');
+    $(`#${evt.target.id} .cfps-spinner`).removeClass('cfps-hidden');
+    $.ajax({
+      url: paynocchio_object.ajaxurl,
+      type: 'POST',
+      data: {
+        'action': 'paynocchio_ajax_delete_wallet',
+        'ajax-delete-nonce': $('#ajax-delete-nonce').val()
+      },
+      success: data => $(window.location.reload())
+    }).error(error => console.log(error));
   };
 
   /**
@@ -517,6 +526,8 @@ __webpack_require__.r(__webpack_exports__);
             $('#top_up_amount_mini_form').val('');
             $(`#${evt.target.id} .cfps-check`).addClass('cfps-hidden');
           });
+        } else {
+          alert(data.response.response);
         }
       }
     }).error(function () {
@@ -631,10 +642,16 @@ __webpack_require__.r(__webpack_exports__);
     const topUpButtonMiniForm = $("#top_up_mini_form_button");
     const withdrawButton = $("#withdraw_button");
     const suspendButton = $("#suspend_button");
+    const activateButton = $("#reactivate_button");
+    const blockButton = $("#block_button");
+    const deleteButton = $("#delete_button");
     topUpButton.click(evt => topUpWallet(evt));
     topUpButtonMiniForm.click(evt => topUpWalletMiniForm(evt));
     withdrawButton.click(evt => withdrawWallet(evt));
-    suspendButton.click(evt => setWalletStatus(evt, 'suspend'));
+    suspendButton.click(evt => setWalletStatus(evt, 'SUSPEND'));
+    activateButton.click(evt => setWalletStatus(evt, 'ACTIVE'));
+    blockButton.click(evt => setWalletStatus(evt, 'BLOCKED'));
+    deleteButton.click(evt => deleteWallet(evt));
     $('a.tab-switcher').click(function () {
       let link = $(this);
       let id = link.get(0).id;
