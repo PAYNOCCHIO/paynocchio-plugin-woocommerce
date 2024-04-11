@@ -65,9 +65,10 @@ if (!defined('ABSPATH')) {
                         <?php if($wallet['status'] === 'BLOCKED') { ?>
 
                         <?php } ?>
-                        <button data-modal=".deleteModal" class="cfps-btn-primary">Delete Wallet</button>
+
                     </div>
                 <?php } ?>
+                <button data-modal=".deleteModal" class="cfps-btn-primary">Delete Wallet</button>
             </div>
 
             <div class="paynocchio-tab-selector">
