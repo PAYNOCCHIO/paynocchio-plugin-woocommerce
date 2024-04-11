@@ -99,7 +99,7 @@ import './topUpFormProcess'
                 }
             }
         })
-            .error((error) => console.log(error))
+            .error((error) => alert(error.response.response))
             .always(function() {
                 $(`#${evt.target.id} .cfps-spinner`).addClass('cfps-hidden');
                 $(evt.target).removeClass('cfps-disabled')
@@ -126,6 +126,28 @@ import './topUpFormProcess'
                 'status': status,
             },
             success: () => $(window.location.reload())
+        })
+            .error((error) => console.log(error));
+    }
+
+    /**
+     * Delete Wallet from User meta
+     * @param evt
+     * @param path
+     */
+    const deleteWallet = (evt) => {
+        $(evt.target).addClass('cfps-disabled')
+
+        $(`#${evt.target.id} .cfps-spinner`).removeClass('cfps-hidden');
+
+        $.ajax({
+            url: paynocchio_object.ajaxurl,
+            type: 'POST',
+            data: {
+                'action': 'paynocchio_ajax_delete_wallet',
+                'ajax-delete-nonce': $('#ajax-delete-nonce').val(),
+            },
+            success: (data) => $(window.location.reload())
         })
             .error((error) => console.log(error));
     }
@@ -161,11 +183,13 @@ import './topUpFormProcess'
                         $(`#${evt.target.id} .cfps-check`).addClass('cfps-hidden');
                     });
 
+                } else {
+                    alert(data.response.response)
                 }
             }
         })
             .error(function () {
-                (error) => console.log(error);
+                (error) => alert(error);
                 $(`#${evt.target.id} .cfps-cross`).removeClass('cfps-hidden');
             })
             .always(function() {
@@ -289,6 +313,7 @@ import './topUpFormProcess'
         const suspendButton = $("#suspend_button");
         const activateButton = $("#reactivate_button");
         const blockButton = $("#block_button");
+        const deleteButton = $("#delete_button");
 
         topUpButton.click((evt) => topUpWallet(evt))
         topUpButtonMiniForm.click((evt) => topUpWalletMiniForm(evt))
@@ -296,6 +321,7 @@ import './topUpFormProcess'
         suspendButton.click((evt) => setWalletStatus(evt, 'SUSPEND'))
         activateButton.click((evt) => setWalletStatus(evt, 'ACTIVE'))
         blockButton.click((evt) => setWalletStatus(evt, 'BLOCKED'))
+        deleteButton.click((evt) => deleteWallet(evt))
 
         $('a.tab-switcher').click(function() {
             let link = $(this);

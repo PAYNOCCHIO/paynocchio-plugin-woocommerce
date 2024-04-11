@@ -57,7 +57,7 @@ h2 {
 }
 
 .cfps-disabled {
-    @apply cfps-opacity-75 cfps-pointer-events-none;
+    @apply cfps-opacity-50 cfps-pointer-events-none;
 }
 
 

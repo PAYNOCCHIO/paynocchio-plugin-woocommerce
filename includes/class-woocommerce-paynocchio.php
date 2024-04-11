@@ -261,7 +261,9 @@ class Woocommerce_Paynocchio {
 
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_styles' );
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
-		$this->loader->add_action( 'woocommerce_blocks_loaded', $plugin_admin, 'paynocchio_gateway_block_support' );
+
+		// TODO: add Block editor Support
+		//$this->loader->add_action( 'woocommerce_blocks_loaded', $plugin_admin, 'paynocchio_gateway_block_support' );
 
         add_action( 'plugins_loaded', function() {
             $plugin_user_export = new Paynocchio_Users_Export_Menu( new Paynocchio_Users_Export_Page() );
@@ -290,6 +292,8 @@ class Woocommerce_Paynocchio {
         add_action( 'wp_ajax_nopriv_paynocchio_ajax_top_up', [$this, 'paynocchio_ajax_top_up']);
         add_action( 'wp_ajax_paynocchio_ajax_set_status', [$this, 'paynocchio_ajax_set_status']);
         add_action( 'wp_ajax_nopriv_paynocchio_ajax_set_status', [$this, 'paynocchio_ajax_set_status']);
+        add_action( 'wp_ajax_paynocchio_ajax_delete_wallet', [$this, 'paynocchio_ajax_delete_wallet']);
+        add_action( 'wp_ajax_nopriv_paynocchio_ajax_delete_wallet', [$this, 'paynocchio_ajax_delete_wallet']);
         add_action( 'wp_ajax_paynocchio_ajax_check_balance', [$this, 'paynocchio_ajax_check_balance']);
         add_action( 'wp_ajax_nopriv_paynocchio_ajax_check_balance', [$this, 'paynocchio_ajax_check_balance']);
         add_action( 'wp_ajax_paynocchio_ajax_get_user_wallet', [$this, 'paynocchio_ajax_get_user_wallet']);
@@ -394,6 +398,34 @@ class Woocommerce_Paynocchio {
              } else {
                  wp_send_json_error();
              }
+
+             wp_die();
+         }
+    }
+
+    /**
+     * Delete Wallet from User Meta
+     *
+     * @since    1.0.0
+     */
+    public function paynocchio_ajax_delete_wallet()
+    {
+        $nonce = isset( $_POST['ajax-delete-nonce'] ) ? sanitize_text_field( $_POST['ajax-delete-nonce'] ) : '';
+
+        if ( ! wp_verify_nonce( $nonce, 'paynocchio_ajax_delete_wallet' ) ) {
+            wp_send_json( array(
+                'status'  => 'error',
+                'title'   => 'Error',
+                'message' => 'Nonce verification failed',
+            ) );
+            wp_die();
+        }
+
+         if(get_user_meta($this->user_id, PAYNOCCHIO_WALLET_KEY)) {
+
+             delete_user_meta($this->user_id, PAYNOCCHIO_WALLET_KEY);
+
+             wp_send_json_success();
 
              wp_die();
          }

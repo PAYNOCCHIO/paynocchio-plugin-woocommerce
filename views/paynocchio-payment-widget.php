@@ -15,6 +15,16 @@ if (is_user_logged_in()) {
     $wallet = $paynocchio->get_paynocchio_wallet_info();
     ?>
 
+    <?php if ($wallet['status'] !== 'ACTIVE') { ?>
+        <div>
+            <p>Current Wallet is <?php echo $wallet['status'] ?></p>
+            <?php if ($wallet['status'] !== 'BLOCKED') { ?>
+                <p>You can manage it at your wallet <a href="/<?php echo WOOCOMMERCE_PAYNOCCHIO_ACCOUNT_PAGE_SLUG ?>">account page</a>.</p>
+            <?php } ?>
+        </div>
+
+    <?php } else { ?>
+
 <section class="paynocchio">
     <div class="paynocchio-embleme">
         <img src="<?php echo plugin_dir_url( WOOCOMMERCE_PAYNOCCHIO_BASENAME ) . 'assets/img/kopybara-logo.png' ?>" class="!cfps-block !cfps-mx-auto" />
@@ -80,6 +90,7 @@ if (is_user_logged_in()) {
         </div>
     </div>
 </section>
+    <?php }  ?>
 
 <?php } ?>
 <?php echo do_shortcode('[paynocchio_modal_forms]'); ?>
