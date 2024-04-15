@@ -115,4 +115,9 @@ class Woocommerce_Paynocchio_Public {
         }
 
 	}
+
+	public function redirect_checkout_add_cart()
+    {
+        return wc_get_checkout_url();
+    }
 }

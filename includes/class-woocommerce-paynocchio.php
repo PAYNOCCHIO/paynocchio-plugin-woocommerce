@@ -300,6 +300,9 @@ class Woocommerce_Paynocchio {
         add_action( 'wp_ajax_nopriv_paynocchio_ajax_get_user_wallet', [$this, 'paynocchio_ajax_get_user_wallet']);
         add_action( 'wp_ajax_paynocchio_ajax_withdraw', [$this, 'paynocchio_ajax_withdraw']);
         add_action( 'wp_ajax_nopriv_paynocchio_ajax_withdraw', [$this, 'paynocchio_ajax_withdraw']);
+
+        $this->loader->add_action( 'woocommerce_add_to_cart_redirect', $plugin_public, 'redirect_checkout_add_cart' );
+
     }
 
     /**
