@@ -227,6 +227,7 @@ class Woocommerce_Paynocchio {
         add_shortcode( 'paynocchio_registration_block', [ 'Woocommerce_Paynocchio_Shortcodes', 'paynocchio_registration_block' ] );
         add_shortcode( 'paynocchio_account_page', [ 'Woocommerce_Paynocchio_Shortcodes', 'paynocchio_account_page' ] );
         add_shortcode( 'paynocchio_cart_wallet_widget', [ 'Woocommerce_Paynocchio_Shortcodes', 'paynocchio_cart_wallet_widget' ] );
+        add_shortcode( 'paynocchio_kopybara_cart_wallet_widget', [ 'Woocommerce_Paynocchio_Shortcodes', 'paynocchio_kopybara_cart_wallet_widget' ] );
         add_shortcode( 'paynocchio_payment_widget', [ 'Woocommerce_Paynocchio_Shortcodes', 'paynocchio_payment_widget' ] );
         add_shortcode( 'paynocchio_modal_forms', [ 'Woocommerce_Paynocchio_Shortcodes', 'paynocchio_modal_forms' ] );
 
