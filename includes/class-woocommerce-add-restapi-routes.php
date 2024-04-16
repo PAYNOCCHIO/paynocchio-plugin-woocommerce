@@ -98,6 +98,8 @@ class Woocommerce_Paynocchio_Add_RESTapi_Routes {
 
             $customer_order = new WC_Order($order_id[0]);
 
+            $customer_order->update_status('pending');
+
             if(!$customer_order) {
                 return new WP_Error( 'no_order', 'Invalid Order number', array( 'status' => 404 ) );
             }
@@ -107,7 +109,7 @@ class Woocommerce_Paynocchio_Add_RESTapi_Routes {
              */
             if($parameters['status_type']) {
                 if($parameters['status_type'] === 'complete') {
-                    $customer_order->update_status('COMPLETED');
+                    $customer_order->update_status('completed');
                 }
             } else {
                 return new WP_Error( 'no_status', 'Invalid Status value', array( 'status' => 404 ) );
