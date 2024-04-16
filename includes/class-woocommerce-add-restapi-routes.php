@@ -85,11 +85,11 @@ class Woocommerce_Paynocchio_Add_RESTapi_Routes {
             return new WP_Error( 'no_params', 'Invalid parameters', array( 'status' => 404 ) );
         }
 
-        if($parameters['order_uuid']) {
+        if($parameters['external_order_uuid']) {
 
             $args = array(
                 'meta_key'      => 'order_uuid', // Postmeta key field
-                'meta_value'    => $parameters['order_uuid'], // Postmeta value field
+                'meta_value'    => $parameters['external_order_uuid'], // Postmeta value field
                 'meta_compare'  => '=', // Possible values are ‘=’, ‘!=’, ‘>’, ‘>=’, ‘<‘, ‘<=’, ‘LIKE’, ‘NOT LIKE’, ‘IN’, ‘NOT IN’, ‘BETWEEN’, ‘NOT BETWEEN’, ‘EXISTS’ (only in WP >= 3.5), and ‘NOT EXISTS’ (also only in WP >= 3.5). Values ‘REGEXP’, ‘NOT REGEXP’ and ‘RLIKE’ were added in WordPress 3.7. Default value is ‘=’.
                 'return'        => 'ids' // Accepts a string: 'ids' or 'objects'. Default: 'objects'.
             );
