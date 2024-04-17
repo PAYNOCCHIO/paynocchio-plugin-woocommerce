@@ -1,1 +1,769 @@
-(()=>{var e={177:()=>{var e;(e=jQuery)(document).ready((function(){e(".top-up-variants > a").click((function(){let t=e(this).get(0).id.replace("variant_","");e("#top_up_amount").val(t)})),e(".toggle-autodeposit").click((function(){e(this).toggleClass("checked"),e(this).hasClass("checked")?e("input#autodeposit").attr("value","1"):e("input#autodeposit").attr("value","0")})),e(".card-var").click((function(){e(".card-variants").toggleClass("clicked"),e(".clicked .card-var").click((function(){e(".card-var").removeClass("current-card"),e(this).addClass("current-card"),e("#source-card").attr("value",e(this).attr("data-pan"))}))}))}))}},t={};function o(s){var n=t[s];if(void 0!==n)return n.exports;var a=t[s]={exports:{}};return e[s](a,a.exports,o),a.exports}(()=>{"use strict";class e{constructor(e){this.options=Object.assign({element:null,effect:"zoom",state:"closed",size:"medium",content:null,footer:null,header:null,title:null},e),null==this.options.element&&(this.options.element=document.createElement("div"),this.options.element.classList.add("modal"),this.options.element.innerHTML='\n                <div class="container">\n                    <div class="header">\n                        <button class="close">&times;</button> \n                    </div>\n                    <div class="content"></div>\n                    <div class="footer">\n                        <button class="close">Close</button>\n                    </div>\n                </div>                        \n            ',document.body.appendChild(this.options.element)),this.options.element.querySelector(".container").classList.remove("zoom","slide"),this.options.element.querySelector(".container").classList.add(this.options.effect),null!=this.options.header&&(this.header=this.options.header),null!=this.options.content&&(this.content=this.options.content),null!=this.options.footer&&(this.footer=this.options.footer),null!=this.options.title&&(this.title=this.options.title),this.size=this.options.size,this._eventHandlers()}open(){this.options.state="open",this.options.element.style.display="flex",this.options.element.getBoundingClientRect(),this.options.element.classList.add("open"),document.body.classList.add("paynocchio-modal-open"),this.options.onOpen&&this.options.onOpen(this)}close(){1==document.querySelectorAll(".modal.open").length&&document.body.classList.remove("paynocchio-modal-open"),this.options.state="closed",this.options.element.classList.remove("open"),this.options.element.style.display="none",this.options.onClose&&this.options.onClose(this)}get state(){return this.options.state}get effect(){return this.options.effect}set effect(e){this.options.effect=e,this.options.element.querySelector(".container").classList.remove("zoom","slide"),this.options.element.querySelector(".container").classList.add(e)}get size(){return this.options.size}set size(e){this.options.size=e,this.options.element.classList.remove("small","large","medium","full"),this.options.element.classList.add(e)}get content(){return this.options.element.querySelector(".content").innerHTML}get contentElement(){return this.options.element.querySelector(".content")}set content(e){e?(this.options.element.querySelector(".content")||this.options.element.querySelector(".container").insertAdjacentHTML("afterbegin",'<div class="content"></div>'),this.options.element.querySelector(".content").innerHTML=e):this.options.element.querySelector(".content").remove()}get header(){return this.options.element.querySelector(".header").innerHTML}get headerElement(){return this.options.element.querySelector(".header")}set header(e){e?(this.options.element.querySelector(".header")||this.options.element.querySelector(".container").insertAdjacentHTML("afterbegin",'<div class="header"></div>'),this.options.element.querySelector(".header").innerHTML=e):this.options.element.querySelector(".header").remove()}get title(){return this.options.element.querySelector(".header .title")?this.options.element.querySelector(".header .title").innerHTML:null}set title(e){this.options.element.querySelector(".header .title")||this.options.element.querySelector(".header").insertAdjacentHTML("afterbegin",'<h3 class="title"></h3>'),this.options.element.querySelector(".header .title").innerHTML=e}get footer(){return this.options.element.querySelector(".footer").innerHTML}get footerElement(){return this.options.element.querySelector(".footer")}set footer(e){e?(this.options.element.querySelector(".footer")||this.options.element.querySelector(".container").insertAdjacentHTML("beforeend",'<div class="footer"></div>'),this.options.element.querySelector(".footer").innerHTML=e):this.options.element.querySelector(".footer").remove()}_eventHandlers(){this.options.element.querySelectorAll(".close").forEach((e=>{e.onclick=e=>{e.preventDefault(),this.close()}}))}static initElements(){document.querySelectorAll("[data-modal]").forEach((t=>{t.addEventListener("click",(o=>{o.preventDefault();let s=document.querySelector(t.dataset.modal),n=new e({element:s});for(let e in s.dataset)n[e]&&(n[e]=s.dataset[e]);n.open()}))}))}static confirm(t,o,s){let n=new e({content:t,header:"",footer:'<button class="success">OK</button><button class="cancel alt">Cancel</button>'});n.footerElement.querySelector(".success").onclick=e=>{e.preventDefault(),o&&o(),n.close()},n.footerElement.querySelector(".cancel").onclick=e=>{e.preventDefault(),s&&s(),n.close()},n.open()}static alert(t,o){let s=new e({content:t,header:"",footer:'<button class="success">OK</button>'});s.footerElement.querySelector(".success").onclick=e=>{e.preventDefault(),o&&o(),s.close()},s.open()}static prompt(t,o,s,n){let a=new e({header:"",footer:'<button class="success">OK</button><button class="cancel alt">Cancel</button>'});a.content=t+`<div class="prompt-input"><input type="text" value="${o}" placeholder="Enter your text..."></div>`,a.footerElement.querySelector(".success").onclick=e=>{e.preventDefault(),s&&s(a.contentElement.querySelector(".prompt-input input").value),a.close()},a.footerElement.querySelector(".cancel").onclick=e=>{e.preventDefault(),n&&n(a.contentElement.querySelector(".prompt-input input").value),a.close()},a.open()}}o(177),(t=>{const o=e=>{t(e.target).addClass("cfps-disabled"),t(`#${e.target.id} .cfps-spinner`).removeClass("cfps-hidden"),t.ajax({url:paynocchio_object.ajaxurl,type:"POST",data:{action:"paynocchio_ajax_top_up","ajax-top-up-nonce":t("#ajax-top-up-nonce").val(),amount:t("#top_up_amount").val()},success:function(e){200===e.response.status_code&&(t(".topUpModal .message").text("Success!"),a(),i(),t(".topUpModal").delay(1e3).fadeOut("fast"),t("body").removeClass("paynocchio-modal-open"))}}).error((e=>alert(e.response.response))).always((function(){t(`#${e.target.id} .cfps-spinner`).addClass("cfps-hidden"),t(e.target).removeClass("cfps-disabled"),t(".topUpModal .message").text("")}))},s=(e,o)=>{t(e.target).addClass("cfps-disabled"),t(`#${e.target.id} .cfps-spinner`).removeClass("cfps-hidden"),t.ajax({url:paynocchio_object.ajaxurl,type:"POST",data:{action:"paynocchio_ajax_set_status","ajax-status-nonce":t("#ajax-status-nonce").val(),status:o},success:()=>t(window.location.reload())}).error((e=>console.log(e)))},n=e=>{t(e.target).addClass("cfps-disabled"),t(`#${e.target.id} .cfps-spinner`).removeClass("cfps-hidden");const o=parseFloat(t("#withdraw_amount").val());parseFloat(t("#witdrawForm .paynocchio-balance-value").text())<o?(t(".withdrawModal .message").text("Sorry, can't do ;)"),t(e.target).removeClass("cfps-disabled"),t(`#${e.target.id} .cfps-spinner`).addClass("cfps-hidden")):t.ajax({url:paynocchio_object.ajaxurl,type:"POST",data:{action:"paynocchio_ajax_withdraw","ajax-withdraw-nonce":t("#ajax-withdraw-nonce").val(),amount:parseFloat(t("#withdraw_amount").val())},success:function(e){200===e.response.status_code&&(t("#withdraw_amount").val(""),t(".withdrawModal .message").text("Success!"),a(),i(),t(".withdrawModal").delay(1e3).fadeOut("fast"),t("body").removeClass("paynocchio-modal-open"))}}).error((e=>console.log(e))).always((function(){t(`#${e.target.id} .cfps-spinner`).addClass("cfps-hidden"),t(e.target).removeClass("cfps-disabled")}))};function a(){t.ajax({url:paynocchio_object.ajaxurl,type:"POST",data:{action:"paynocchio_ajax_check_balance"},success:function(e){!function(e,o){let s=parseFloat(t(".paynocchio-balance-value").first().text()),n=parseFloat(e),a=parseFloat(t(".paynocchio-bonus-value").first().text()),i=parseFloat(o);function c(e,o,s){let n=t(".paynocchio-"+e+"-value");if(o===s)return;let a=o,i=(s-o)/250,c=0;var l=setInterval((function(){a+=i;let e=parseFloat(a).toFixed(2);n.html(e),c++,250==c&&clearInterval(l)}),4)}c("balance",s,n),c("bonus",a,i)}(e.response.balance,e.response.bonuses)}}).error((e=>console.log(e)))}function i(){const e=t("#place_order"),o=t(".payment_box.payment_method_paynocchio").is(":hidden");e&&!o&&t(document.body).trigger("update_checkout")}setInterval((()=>a()),5e3),t(document).ready((function(){e.initElements();const c=t("#top_up_button"),l=t("#top_up_mini_form_button"),r=t("#withdraw_button"),d=t("#suspend_button"),p=t("#reactivate_button"),u=t("#block_button"),h=t("#delete_button");c.click((e=>o(e))),l.click((e=>(e=>{t(e.target).addClass("cfps-disabled"),t(`#${e.target.id} .cfps-spinner`).removeClass("cfps-hidden"),t(`#${e.target.id} .cfps-check`).addClass("cfps-hidden"),t(`#${e.target.id} .cfps-cross`).addClass("cfps-hidden"),t.ajax({url:paynocchio_object.ajaxurl,type:"POST",data:{action:"paynocchio_ajax_top_up","ajax-top-up-nonce":t("#ajax-top-up-nonce-mini-form").val(),amount:t("#top_up_amount_mini_form").val()},success:function(o){200===o.response.status_code?(t(`#${e.target.id} .cfps-check`).removeClass("cfps-hidden"),a(),i(),t(".topup_mini_form").delay(2e3).fadeOut("fast",(function(){t("#show_mini_modal").css("transform","rotate(0deg)"),t("#top_up_amount_mini_form").val(""),t(`#${e.target.id} .cfps-check`).addClass("cfps-hidden")}))):alert(o.response.response)}}).error((function(){t(`#${e.target.id} .cfps-cross`).removeClass("cfps-hidden")})).always((function(){t(`#${e.target.id} .cfps-spinner`).addClass("cfps-hidden"),t(e.target).removeClass("cfps-disabled")}))})(e))),r.click((e=>n(e))),d.click((e=>s(e,"SUSPEND"))),p.click((e=>s(e,"ACTIVE"))),u.click((e=>s(e,"BLOCKED"))),h.click((e=>(e=>{t(e.target).addClass("cfps-disabled"),t(`#${e.target.id} .cfps-spinner`).removeClass("cfps-hidden"),t.ajax({url:paynocchio_object.ajaxurl,type:"POST",data:{action:"paynocchio_ajax_delete_wallet","ajax-delete-nonce":t("#ajax-delete-nonce").val()},success:e=>t(window.location.reload())}).error((e=>console.log(e)))})(e))),t("a.tab-switcher").click((function(){let e=t(this),o=e.get(0).id;o=o.replace("_toggle","");let s=t(".paynocchio-"+o+"-body");s.hasClass("visible")||(t(".paynocchio-tab-selector a").removeClass("choosen"),e.addClass("choosen"),s.siblings(".paynocchio-tab-body").removeClass("visible").fadeOut("fast",(function(){s.fadeIn("fast").addClass("visible")})))})),t("a.card-toggle").click((()=>{var e;t((e=".paynocchio-card-container")+" > div.visible").fadeOut("fast",(function(){t(`${e} > div:not(.visible)`).fadeIn("fast"),t(`${e} > div`).toggleClass("visible")}))})),t("form.checkout").on("change",'input[name="payment_method"]',(function(){t(document.body).trigger("update_checkout")})),t(document).on("updated_checkout",(function(){const s=t("#top_up_button"),i=t("#withdraw_button");s.click((e=>o(e))),i.click((e=>n(e))),a(),e.initElements(),function(e,t=window.location.href){e=e.replace(/[\[\]]/g,"\\$&");const o=new RegExp("[?&]"+e+"(=([^&#]*)|&|#|$)").exec(t);return o?o[2]?decodeURIComponent(o[2].replace(/\+/g," ")):"":null}("ans")&&t(".woocommerce-notices-wrapper:first-child").prepend('<div class="woocommerce-message" role="alert">Registration complete. Please check your email, then visit this page again.</div>');const c=t("#bonuses-value"),l=t("#bonuses-input");c.val(l.val()),l.on("change",(function(){c.val(l.val())})),c.on("change",(function(){l.val(c.val())})),t("input[type=range]").on("input",(function(){t(this).trigger("change")})),t(".top-up-variants > a").click((function(){let e=t(this).get(0).id.replace("variant_","");t("#top_up_amount").val(e)})),t(".toggle-autodeposit").click((function(){t(this).toggleClass("checked"),t(this).hasClass("checked")?t("input#autodeposit").attr("value","1"):t("input#autodeposit").attr("value","0")})),t(".card-var").click((function(){t(".card-variants").toggleClass("clicked"),t(".clicked .card-var").click((function(){t(".card-var").removeClass("current-card"),t(this).addClass("current-card"),t("#source-card").attr("value",t(this).attr("data-pan"))}))}));const r=t("#place_order"),d=t(".payment_box.payment_method_paynocchio").is(":hidden");r&&!d&&parseFloat(t(".paynocchio-card-simulator .paynocchio-balance-value").text())+parseFloat(t(".paynocchio-card-simulator .paynocchio-bonus-value").text())<parseFloat(t(".order-total .woocommerce-Price-amount").text().replace("$",""))&&(r.addClass("cfps-disabled"),r.text("Please TopUp your Wallet")),t('input[type="range"].slider-progress').each((function(){t(this).css("--value",t(this).val()),t(this).css("--min",""==t(this).attr("min")?"0":t(this).attr("min")),t(this).css("--max",""==t(this).attr("max")?"0":t(this).attr("max")),t(this).on("input",(function(){t(this).css("--value",t(this).val())}))}))})),t("#show_mini_modal").on("click",(function(){t(".topup_mini_form").toggle(),t(this).toggleClass("active"),t(this).hasClass("active")?t(this).css("transform","rotate(45deg)"):t(this).css("transform","rotate(0deg)")}))}))})(jQuery)})()})();
+/******/ (() => { // webpackBootstrap
+/******/ 	var __webpack_modules__ = ({
+
+/***/ "./assets/src/modal.js":
+/*!*****************************!*\
+  !*** ./assets/src/modal.js ***!
+  \*****************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ Modal)
+/* harmony export */ });
+class Modal {
+  constructor(options) {
+    let defaults = {
+      element: null,
+      effect: 'zoom',
+      state: 'closed',
+      size: 'medium',
+      content: null,
+      footer: null,
+      header: null,
+      title: null
+    };
+    this.options = Object.assign(defaults, options);
+    //this.options.body = document.body;
+    if (this.options.element == null) {
+      this.options.element = document.createElement('div');
+      this.options.element.classList.add('modal');
+      this.options.element.innerHTML = `
+                <div class="container">
+                    <div class="header">
+                        <button class="close">&times;</button> 
+                    </div>
+                    <div class="content"></div>
+                    <div class="footer">
+                        <button class="close">Close</button>
+                    </div>
+                </div>                        
+            `;
+      document.body.appendChild(this.options.element);
+    }
+    this.options.element.querySelector('.container').classList.remove('zoom', 'slide');
+    this.options.element.querySelector('.container').classList.add(this.options.effect);
+    if (this.options.header != null) {
+      this.header = this.options.header;
+    }
+    if (this.options.content != null) {
+      this.content = this.options.content;
+    }
+    if (this.options.footer != null) {
+      this.footer = this.options.footer;
+    }
+    if (this.options.title != null) {
+      this.title = this.options.title;
+    }
+    this.size = this.options.size;
+    this._eventHandlers();
+  }
+  open() {
+    this.options.state = 'open';
+    this.options.element.style.display = 'flex';
+    this.options.element.getBoundingClientRect();
+    this.options.element.classList.add('open');
+    document.body.classList.add('paynocchio-modal-open');
+    if (this.options.onOpen) {
+      this.options.onOpen(this);
+    }
+  }
+  close() {
+    if (document.querySelectorAll('.modal.open').length == 1) {
+      document.body.classList.remove('paynocchio-modal-open');
+    }
+    this.options.state = 'closed';
+    this.options.element.classList.remove('open');
+    this.options.element.style.display = 'none';
+    if (this.options.onClose) {
+      this.options.onClose(this);
+    }
+  }
+  get state() {
+    return this.options.state;
+  }
+  get effect() {
+    return this.options.effect;
+  }
+  set effect(value) {
+    this.options.effect = value;
+    this.options.element.querySelector('.container').classList.remove('zoom', 'slide');
+    this.options.element.querySelector('.container').classList.add(value);
+  }
+  get size() {
+    return this.options.size;
+  }
+  set size(value) {
+    this.options.size = value;
+    this.options.element.classList.remove('small', 'large', 'medium', 'full');
+    this.options.element.classList.add(value);
+  }
+  get content() {
+    return this.options.element.querySelector('.content').innerHTML;
+  }
+  get contentElement() {
+    return this.options.element.querySelector('.content');
+  }
+  set content(value) {
+    if (!value) {
+      this.options.element.querySelector('.content').remove();
+    } else {
+      if (!this.options.element.querySelector('.content')) {
+        this.options.element.querySelector('.container').insertAdjacentHTML('afterbegin', `<div class="content"></div>`);
+      }
+      this.options.element.querySelector('.content').innerHTML = value;
+    }
+  }
+  get header() {
+    return this.options.element.querySelector('.header').innerHTML;
+  }
+  get headerElement() {
+    return this.options.element.querySelector('.header');
+  }
+  set header(value) {
+    if (!value) {
+      this.options.element.querySelector('.header').remove();
+    } else {
+      if (!this.options.element.querySelector('.header')) {
+        this.options.element.querySelector('.container').insertAdjacentHTML('afterbegin', `<div class="header"></div>`);
+      }
+      this.options.element.querySelector('.header').innerHTML = value;
+    }
+  }
+  get title() {
+    return this.options.element.querySelector('.header .title') ? this.options.element.querySelector('.header .title').innerHTML : null;
+  }
+  set title(value) {
+    if (!this.options.element.querySelector('.header .title')) {
+      this.options.element.querySelector('.header').insertAdjacentHTML('afterbegin', `<h3 class="title"></h3>`);
+    }
+    this.options.element.querySelector('.header .title').innerHTML = value;
+  }
+  get footer() {
+    return this.options.element.querySelector('.footer').innerHTML;
+  }
+  get footerElement() {
+    return this.options.element.querySelector('.footer');
+  }
+  set footer(value) {
+    if (!value) {
+      this.options.element.querySelector('.footer').remove();
+    } else {
+      if (!this.options.element.querySelector('.footer')) {
+        this.options.element.querySelector('.container').insertAdjacentHTML('beforeend', `<div class="footer"></div>`);
+      }
+      this.options.element.querySelector('.footer').innerHTML = value;
+    }
+  }
+  _eventHandlers() {
+    this.options.element.querySelectorAll('.close').forEach(element => {
+      element.onclick = event => {
+        event.preventDefault();
+        this.close();
+      };
+    });
+  }
+  static initElements() {
+    document.querySelectorAll('[data-modal]').forEach(element => {
+      element.addEventListener('click', event => {
+        event.preventDefault();
+        let modalElement = document.querySelector(element.dataset.modal);
+        let modal = new Modal({
+          element: modalElement
+        });
+        for (let data in modalElement.dataset) {
+          if (modal[data]) {
+            modal[data] = modalElement.dataset[data];
+          }
+        }
+        modal.open();
+      });
+    });
+  }
+  static confirm(value, success, cancel) {
+    let modal = new Modal({
+      content: value,
+      header: '',
+      footer: '<button class="success">OK</button><button class="cancel alt">Cancel</button>'
+    });
+    modal.footerElement.querySelector('.success').onclick = event => {
+      event.preventDefault();
+      if (success) success();
+      modal.close();
+    };
+    modal.footerElement.querySelector('.cancel').onclick = event => {
+      event.preventDefault();
+      if (cancel) cancel();
+      modal.close();
+    };
+    modal.open();
+  }
+  static alert(value, success) {
+    let modal = new Modal({
+      content: value,
+      header: '',
+      footer: '<button class="success">OK</button>'
+    });
+    modal.footerElement.querySelector('.success').onclick = event => {
+      event.preventDefault();
+      if (success) success();
+      modal.close();
+    };
+    modal.open();
+  }
+  static prompt(value, def, success, cancel) {
+    let modal = new Modal({
+      header: '',
+      footer: '<button class="success">OK</button><button class="cancel alt">Cancel</button>'
+    });
+    modal.content = value + `<div class="prompt-input"><input type="text" value="${def}" placeholder="Enter your text..."></div>`;
+    modal.footerElement.querySelector('.success').onclick = event => {
+      event.preventDefault();
+      if (success) success(modal.contentElement.querySelector('.prompt-input input').value);
+      modal.close();
+    };
+    modal.footerElement.querySelector('.cancel').onclick = event => {
+      event.preventDefault();
+      if (cancel) cancel(modal.contentElement.querySelector('.prompt-input input').value);
+      modal.close();
+    };
+    modal.open();
+  }
+}
+
+/***/ }),
+
+/***/ "./assets/src/topUpFormProcess.js":
+/*!****************************************!*\
+  !*** ./assets/src/topUpFormProcess.js ***!
+  \****************************************/
+/***/ (() => {
+
+($ => {
+  $(document).ready(function () {
+    $('.top-up-variants > a').click(function () {
+      let amount = $(this).get(0).id.replace('variant_', '');
+      $('#top_up_amount').val(amount);
+    });
+    $('.toggle-autodeposit').click(function () {
+      $(this).toggleClass('checked');
+      if ($(this).hasClass('checked')) {
+        $('input#autodeposit').attr('value', '1');
+      } else {
+        $('input#autodeposit').attr('value', '0');
+      }
+      ;
+    });
+
+    //$('#source-card').attr('value',$('.current-card').id);
+
+    $('.card-var').click(function () {
+      $('.card-variants').toggleClass('clicked');
+      $('.clicked .card-var').click(function () {
+        $('.card-var').removeClass('current-card');
+        $(this).addClass('current-card');
+        $('#source-card').attr('value', $(this).attr('data-pan'));
+      });
+    });
+  });
+})(jQuery);
+
+/***/ }),
+
+/***/ "./assets/src/public.css":
+/*!*******************************!*\
+  !*** ./assets/src/public.css ***!
+  \*******************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+// extracted by mini-css-extract-plugin
+
+
+/***/ })
+
+/******/ 	});
+/************************************************************************/
+/******/ 	// The module cache
+/******/ 	var __webpack_module_cache__ = {};
+/******/ 	
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/ 		// Check if module is in cache
+/******/ 		var cachedModule = __webpack_module_cache__[moduleId];
+/******/ 		if (cachedModule !== undefined) {
+/******/ 			return cachedModule.exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = __webpack_module_cache__[moduleId] = {
+/******/ 			// no module.id needed
+/******/ 			// no module.loaded needed
+/******/ 			exports: {}
+/******/ 		};
+/******/ 	
+/******/ 		// Execute the module function
+/******/ 		__webpack_modules__[moduleId](module, module.exports, __webpack_require__);
+/******/ 	
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/ 	
+/************************************************************************/
+/******/ 	/* webpack/runtime/compat get default export */
+/******/ 	(() => {
+/******/ 		// getDefaultExport function for compatibility with non-harmony modules
+/******/ 		__webpack_require__.n = (module) => {
+/******/ 			var getter = module && module.__esModule ?
+/******/ 				() => (module['default']) :
+/******/ 				() => (module);
+/******/ 			__webpack_require__.d(getter, { a: getter });
+/******/ 			return getter;
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/define property getters */
+/******/ 	(() => {
+/******/ 		// define getter functions for harmony exports
+/******/ 		__webpack_require__.d = (exports, definition) => {
+/******/ 			for(var key in definition) {
+/******/ 				if(__webpack_require__.o(definition, key) && !__webpack_require__.o(exports, key)) {
+/******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
+/******/ 				}
+/******/ 			}
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/hasOwnProperty shorthand */
+/******/ 	(() => {
+/******/ 		__webpack_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/make namespace object */
+/******/ 	(() => {
+/******/ 		// define __esModule on exports
+/******/ 		__webpack_require__.r = (exports) => {
+/******/ 			if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+/******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
+/******/ 			}
+/******/ 			Object.defineProperty(exports, '__esModule', { value: true });
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/************************************************************************/
+var __webpack_exports__ = {};
+// This entry need to be wrapped in an IIFE because it need to be in strict mode.
+(() => {
+"use strict";
+/*!*******************************!*\
+  !*** ./assets/src/private.js ***!
+  \*******************************/
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _public_css__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./public.css */ "./assets/src/public.css");
+/* harmony import */ var _modal__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./modal */ "./assets/src/modal.js");
+/* harmony import */ var _topUpFormProcess__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./topUpFormProcess */ "./assets/src/topUpFormProcess.js");
+/* harmony import */ var _topUpFormProcess__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_topUpFormProcess__WEBPACK_IMPORTED_MODULE_2__);
+
+
+
+($ => {
+  const createWebSocket = wallet => {
+    let ws = new WebSocket(`wss://wallet.stage.paynocchio.com/ws/wallet-socket/${wallet}`);
+    ws.onmessage = function (event) {
+      const data = JSON.parse(JSON.parse(event.data));
+      setBalance(data.balance.current, data.rewarding_balance);
+    };
+    ws.onopen = function (event) {
+      let event_map = {
+        "event": "get_wallet"
+      };
+      ws.send(JSON.stringify(event_map));
+    };
+    ws.onclose = function (event) {
+      console.log('closed');
+    };
+    ws.onerror = function (error) {
+      console.error(error);
+    };
+  };
+  function setBalance(balance, bonus) {
+    let oldBalance = parseFloat($('.paynocchio-balance-value').first().text());
+    let newBalance = parseFloat(balance);
+    let oldBonus = parseFloat($('.paynocchio-bonus-value').first().text());
+    let newBonus = parseFloat(bonus);
+    function animateDigits(type, start, end) {
+      let elem = $('.paynocchio-' + type + '-value');
+      if (start === end) return;
+      let range = end - start;
+      let current = start;
+      let stepTime = 4; // 4 ms
+      let increment = range / 250; // 250 steps
+
+      let i = 0;
+      var timer = setInterval(function () {
+        current += increment;
+        let echo = parseFloat(current).toFixed(2);
+        //echo = parseFloat(echo); // remove trailing zero
+        elem.html(echo);
+        i++;
+        if (i == 250) {
+          clearInterval(timer);
+        }
+      }, stepTime);
+    }
+    animateDigits('balance', oldBalance, newBalance);
+    animateDigits('bonus', oldBonus, newBonus);
+  }
+
+  /**
+   * Function to make block visibility work
+   * @param blockClass
+   */
+  const toggleVisibility = blockClass => {
+    $(`${blockClass} > div.visible`).fadeOut('fast', function () {
+      $(`${blockClass} > div:not(.visible)`).fadeIn('fast');
+      $(`${blockClass} > div`).toggleClass('visible');
+    });
+  };
+
+  /**
+   * Wallet Activation function
+   * @param evt
+   * @param path
+   */
+  const topUpWallet = evt => {
+    $(evt.target).addClass('cfps-disabled');
+    $(`#${evt.target.id} .cfps-spinner`).removeClass('cfps-hidden');
+    $.ajax({
+      url: paynocchio_object.ajaxurl,
+      type: 'POST',
+      data: {
+        'action': 'paynocchio_ajax_top_up',
+        'ajax-top-up-nonce': $('#ajax-top-up-nonce').val(),
+        'amount': $('#top_up_amount').val()
+      },
+      success: function (data) {
+        if (data.response.status_code === 200) {
+          $('.topUpModal .message').text('Success!');
+          updateWalletBalance();
+          updateOrderButtonState();
+          $('.topUpModal').delay(1000).fadeOut('fast');
+          $('body').removeClass('paynocchio-modal-open');
+        }
+      }
+    }).error(error => alert(error.response.response)).always(function () {
+      $(`#${evt.target.id} .cfps-spinner`).addClass('cfps-hidden');
+      $(evt.target).removeClass('cfps-disabled');
+      $('.topUpModal .message').text('');
+    });
+  };
+
+  /**
+   * Set Wallet Status
+   * @param evt
+   * @param path
+   */
+  const setWalletStatus = (evt, status) => {
+    $(evt.target).addClass('cfps-disabled');
+    $(`#${evt.target.id} .cfps-spinner`).removeClass('cfps-hidden');
+    $.ajax({
+      url: paynocchio_object.ajaxurl,
+      type: 'POST',
+      data: {
+        'action': 'paynocchio_ajax_set_status',
+        'ajax-status-nonce': $('#ajax-status-nonce').val(),
+        'status': status
+      },
+      success: () => $(window.location.reload())
+    }).error(error => console.log(error));
+  };
+
+  /**
+   * Delete Wallet from User meta
+   * @param evt
+   * @param path
+   */
+  const deleteWallet = evt => {
+    $(evt.target).addClass('cfps-disabled');
+    $(`#${evt.target.id} .cfps-spinner`).removeClass('cfps-hidden');
+    $.ajax({
+      url: paynocchio_object.ajaxurl,
+      type: 'POST',
+      data: {
+        'action': 'paynocchio_ajax_delete_wallet',
+        'ajax-delete-nonce': $('#ajax-delete-nonce').val()
+      },
+      success: data => $(window.location.reload())
+    }).error(error => console.log(error));
+  };
+
+  /**
+   * Wallet TopUp function for MiniForm in Widget
+   * @param evt
+   * @param path
+   */
+  const topUpWalletMiniForm = evt => {
+    $(evt.target).addClass('cfps-disabled');
+    $(`#${evt.target.id} .cfps-spinner`).removeClass('cfps-hidden');
+    $(`#${evt.target.id} .cfps-check`).addClass('cfps-hidden');
+    $(`#${evt.target.id} .cfps-cross`).addClass('cfps-hidden');
+    $.ajax({
+      url: paynocchio_object.ajaxurl,
+      type: 'POST',
+      data: {
+        'action': 'paynocchio_ajax_top_up',
+        'ajax-top-up-nonce': $('#ajax-top-up-nonce-mini-form').val(),
+        'amount': $('#top_up_amount_mini_form').val()
+      },
+      success: function (data) {
+        if (data.response.status_code === 200) {
+          $(`#${evt.target.id} .cfps-check`).removeClass('cfps-hidden');
+          updateWalletBalance();
+          updateOrderButtonState();
+          $('.topup_mini_form').delay(2000).fadeOut('fast', function () {
+            $('#show_mini_modal').css('transform', 'rotate(0deg)');
+            $('#top_up_amount_mini_form').val('');
+            $(`#${evt.target.id} .cfps-check`).addClass('cfps-hidden');
+          });
+        } else {
+          alert(data.response.response);
+        }
+      }
+    }).error(function () {
+      error => console.log(error);
+      $(`#${evt.target.id} .cfps-cross`).removeClass('cfps-hidden');
+    }).always(function () {
+      $(`#${evt.target.id} .cfps-spinner`).addClass('cfps-hidden');
+      $(evt.target).removeClass('cfps-disabled');
+    });
+  };
+
+  /**
+   * Withdraw from Wallet
+   */
+
+  const withdrawWallet = evt => {
+    $(evt.target).addClass('cfps-disabled');
+    $(`#${evt.target.id} .cfps-spinner`).removeClass('cfps-hidden');
+    const amount = parseFloat($('#withdraw_amount').val());
+    const current_balance = parseFloat($('#witdrawForm .paynocchio-balance-value').text());
+    if (current_balance < amount) {
+      $('.withdrawModal .message').text('Sorry, can\'t do ;)');
+      $(evt.target).removeClass('cfps-disabled');
+      $(`#${evt.target.id} .cfps-spinner`).addClass('cfps-hidden');
+      /*$('.withdrawModal').hide('fast');
+      $('body').removeClass('paynocchio-modal-open');*/
+    } else {
+      $.ajax({
+        url: paynocchio_object.ajaxurl,
+        type: 'POST',
+        data: {
+          'action': 'paynocchio_ajax_withdraw',
+          'ajax-withdraw-nonce': $('#ajax-withdraw-nonce').val(),
+          'amount': parseFloat($('#withdraw_amount').val())
+        },
+        success: function (data) {
+          if (data.response.status_code === 200) {
+            $('#withdraw_amount').val('');
+            $('.withdrawModal .message').text('Success!');
+            updateWalletBalance();
+            updateOrderButtonState();
+            $('.withdrawModal').delay(1000).fadeOut('fast');
+            $('body').removeClass('paynocchio-modal-open');
+          }
+        }
+      }).error(error => console.log(error)).always(function () {
+        $(`#${evt.target.id} .cfps-spinner`).addClass('cfps-hidden');
+        $(evt.target).removeClass('cfps-disabled');
+      });
+    }
+  };
+
+  /**
+   * Wallet Balance checker
+   */
+  function initiateWebSocket() {
+    $.ajax({
+      url: paynocchio_object.ajaxurl,
+      type: 'POST',
+      data: {
+        'action': 'paynocchio_ajax_get_user_wallet'
+      },
+      success: function (data) {
+        if (data.walletId) {
+          createWebSocket(data.walletId);
+        }
+      }
+    }).error(error => console.log(error));
+  }
+  /**
+   * Wallet Balance checker
+   */
+  function updateWalletBalance() {
+    $.ajax({
+      url: paynocchio_object.ajaxurl,
+      type: 'POST',
+      data: {
+        'action': 'paynocchio_ajax_check_balance'
+      },
+      success: function (data) {
+        setBalance(data.response.balance, data.response.bonuses);
+      }
+    }).error(error => console.log(error));
+  }
+
+  /**
+   * Balance polling
+   */
+  setInterval(() => updateWalletBalance(), 5000);
+  function updateOrderButtonState() {
+    const place_orderButton = $('#place_order');
+    const hidden = $('.payment_box.payment_method_paynocchio').is(":hidden");
+    if (place_orderButton && !hidden) {
+      $(document.body).trigger('update_checkout');
+    }
+  }
+  function getParameterByName(name, url = window.location.href) {
+    name = name.replace(/[\[\]]/g, '\\$&');
+    const regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
+      results = regex.exec(url);
+    if (!results) return null;
+    if (!results[2]) return '';
+    return decodeURIComponent(results[2].replace(/\+/g, ' '));
+  }
+  $(document).ready(function () {
+    //READY START
+    _modal__WEBPACK_IMPORTED_MODULE_1__["default"].initElements();
+
+    //initiateWebSocket();
+
+    const topUpButton = $("#top_up_button");
+    const topUpButtonMiniForm = $("#top_up_mini_form_button");
+    const withdrawButton = $("#withdraw_button");
+    const suspendButton = $("#suspend_button");
+    const activateButton = $("#reactivate_button");
+    const blockButton = $("#block_button");
+    const deleteButton = $("#delete_button");
+    topUpButton.click(evt => topUpWallet(evt));
+    topUpButtonMiniForm.click(evt => topUpWalletMiniForm(evt));
+    withdrawButton.click(evt => withdrawWallet(evt));
+    suspendButton.click(evt => setWalletStatus(evt, 'SUSPEND'));
+    activateButton.click(evt => setWalletStatus(evt, 'ACTIVE'));
+    blockButton.click(evt => setWalletStatus(evt, 'BLOCKED'));
+    deleteButton.click(evt => deleteWallet(evt));
+    $('a.tab-switcher').click(function () {
+      let link = $(this);
+      let id = link.get(0).id;
+      id = id.replace('_toggle', '');
+      let elem = $('.paynocchio-' + id + '-body');
+      if (!elem.hasClass('visible')) {
+        $('.paynocchio-tab-selector a').removeClass('choosen');
+        link.addClass('choosen');
+        elem.siblings('.paynocchio-tab-body').removeClass('visible').fadeOut('fast', function () {
+          elem.fadeIn('fast').addClass('visible');
+        });
+      }
+    });
+    $('a.card-toggle').click(() => toggleVisibility('.paynocchio-card-container'));
+
+    /**
+     * Trigger update checkout when payment method changed
+     */
+    $('form.checkout').on('change', 'input[name="payment_method"]', function () {
+      $(document.body).trigger('update_checkout');
+    });
+
+    // WOOCOMMERCE CHECKOUT SCRIPT
+    $(document).on("updated_checkout", function () {
+      const topUpButton = $("#top_up_button");
+      const withdrawButton = $("#withdraw_button");
+      topUpButton.click(evt => topUpWallet(evt));
+      withdrawButton.click(evt => withdrawWallet(evt));
+      updateWalletBalance();
+      _modal__WEBPACK_IMPORTED_MODULE_1__["default"].initElements();
+      const ans = getParameterByName('ans');
+      if (ans) {
+        $('.woocommerce-notices-wrapper:first-child').prepend('<div class="woocommerce-message" role="alert">Registration complete. Please check your email, then visit this page again.</div>');
+      }
+
+      // Conversion rate value picker
+      const value = $('#bonuses-value');
+      const input = $('#bonuses-input');
+      value.val(input.val());
+      input.on('change', function () {
+        value.val(input.val());
+        /* let perc = (input.val()-input.attr('min')/(input.attr('max')-input.attr('min'))*100;
+         input.css('background','linear-gradient(to right, #3b82f6 ' + perc + '%, #f3f4f6 ' + perc + '%)');*/
+      });
+      value.on('change', function () {
+        input.val(value.val());
+        /* let perc = (input.val()-input.attr('min')/(input.attr('max')-input.attr('min'))*100;
+         input.css('background','linear-gradient(to right, #3b82f6 ' + perc + '%, #f3f4f6 ' + perc + '%)');*/
+      });
+      $('input[type=range]').on('input', function () {
+        $(this).trigger('change');
+      });
+      $('.top-up-variants > a').click(function () {
+        let amount = $(this).get(0).id.replace('variant_', '');
+        $('#top_up_amount').val(amount);
+      });
+      $('.toggle-autodeposit').click(function () {
+        $(this).toggleClass('checked');
+        if ($(this).hasClass('checked')) {
+          $('input#autodeposit').attr('value', '1');
+        } else {
+          $('input#autodeposit').attr('value', '0');
+        }
+        ;
+      });
+
+      //$('#source-card').attr('value',$('.current-card').id);
+
+      $('.card-var').click(function () {
+        $('.card-variants').toggleClass('clicked');
+        $('.clicked .card-var').click(function () {
+          $('.card-var').removeClass('current-card');
+          $(this).addClass('current-card');
+          $('#source-card').attr('value', $(this).attr('data-pan'));
+        });
+      });
+      const place_orderButton = $('#place_order');
+      const hidden = $('.payment_box.payment_method_paynocchio').is(":hidden");
+      if (place_orderButton && !hidden) {
+        const balance_value = parseFloat($('.paynocchio-card-simulator .paynocchio-balance-value').text());
+        const bonus_value = parseFloat($('.paynocchio-card-simulator .paynocchio-bonus-value').text());
+        const order_total = parseFloat($('.order-total .woocommerce-Price-amount').text().replace('$', ''));
+        if (balance_value + bonus_value < order_total) {
+          place_orderButton.addClass('cfps-disabled');
+          place_orderButton.text('Please TopUp your Wallet');
+        }
+      }
+      $('input[type="range"].slider-progress').each(function () {
+        $(this).css('--value', $(this).val());
+        $(this).css('--min', $(this).attr('min') == '' ? '0' : $(this).attr('min'));
+        $(this).css('--max', $(this).attr('max') == '' ? '0' : $(this).attr('max'));
+        $(this).on('input', function () {
+          $(this).css('--value', $(this).val());
+        });
+      });
+    });
+    // WOOCOMMERCE CHECKOUT SCRIPT END
+
+    $('#show_mini_modal').on('click', function () {
+      $('.topup_mini_form').toggle();
+      $(this).toggleClass('active');
+      if ($(this).hasClass('active')) {
+        $(this).css('transform', 'rotate(45deg)');
+      } else {
+        $(this).css('transform', 'rotate(0deg)');
+      }
+    });
+  });
+  // READY END
+})(jQuery);
+})();
+
+/******/ })()
+;
+//# sourceMappingURL=private.js.map

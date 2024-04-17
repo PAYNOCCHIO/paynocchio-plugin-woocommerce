@@ -111,6 +111,9 @@ class Woocommerce_Paynocchio {
                 $this->user_id = $this->get_user_id();
             }
         });
+
+        add_filter('woocommerce_create_account_default_checked', '__return_true');
+
     }
 
 	/**
@@ -288,6 +291,8 @@ class Woocommerce_Paynocchio {
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_scripts' );
         add_action( 'wp_ajax_nopriv_paynocchio_ajax_login', [$this, 'paynocchio_ajax_login']);
         add_action( 'wp_ajax_paynocchio_ajax_activation', [$this, 'paynocchio_ajax_activation']);
+        add_action( 'wp_ajax_paynocchio_ajax_registration', [$this, 'paynocchio_ajax_registration']);
+        add_action( 'wp_ajax_nopriv_paynocchio_ajax_registration', [$this, 'paynocchio_ajax_registration']);
         add_action( 'wp_ajax_nopriv_paynocchio_ajax_activation', [$this, 'paynocchio_ajax_activation']);
         add_action( 'wp_ajax_paynocchio_ajax_top_up', [$this, 'paynocchio_ajax_top_up']);
         add_action( 'wp_ajax_nopriv_paynocchio_ajax_top_up', [$this, 'paynocchio_ajax_top_up']);
@@ -338,6 +343,54 @@ class Woocommerce_Paynocchio {
          if($json_response->status === 'success') {
              wp_send_json_success();
          }
+        wp_die();
+    }
+
+
+    /**
+     * Handle Creation of the UUID
+     *
+     * @since    1.0.0
+     */
+    public function paynocchio_ajax_registration()
+    {
+        $nonce = isset( $_POST['ajax-registration-nonce'] ) ? sanitize_text_field( $_POST['ajax-registration-nonce'] ) : '';
+        $user_email = isset( $_POST['email'] ) ? sanitize_text_field( $_POST['email'] ) : '';
+
+        if ( ! wp_verify_nonce( $nonce, 'paynocchio_ajax_registration' ) ) {
+            wp_send_json( array(
+                'status'  => 'error',
+                'title'   => 'Error',
+                'message' => 'Nonce verification failed',
+            ) );
+            wp_die();
+        }
+
+        if($user_email) {
+            $user_pass = wp_generate_uuid4();
+
+            $info = array(
+                'user_login'  =>  $user_email,
+                'user_pass'  =>  $user_pass,
+                'user_email' => $user_email,
+            );
+            $result = wp_insert_user( $info );
+
+            if(is_wp_error( $result)) {
+                wp_send_json_error([
+                    'message' => $result->get_error_message()
+                ]);
+
+            } else {
+
+                wp_set_current_user($result);
+                wp_set_auth_cookie($result);
+
+                wp_send_json_success();
+            }
+
+        }
+
         wp_die();
     }
 
