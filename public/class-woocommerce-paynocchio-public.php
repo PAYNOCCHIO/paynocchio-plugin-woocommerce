@@ -120,4 +120,12 @@ class Woocommerce_Paynocchio_Public {
     {
         return wc_get_checkout_url();
     }
+
+    public function paynocchio_body_class($classes) {
+        if (get_user_meta(get_current_user_id(), PAYNOCCHIO_WALLET_KEY)) {
+            $classes[] = 'has-paynocchio-wallet';
+        }
+        return $classes;
+    }
+
 }

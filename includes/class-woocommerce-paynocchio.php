@@ -112,8 +112,6 @@ class Woocommerce_Paynocchio {
             }
         });
 
-        add_filter('woocommerce_create_account_default_checked', '__return_true');
-
     }
 
 	/**
@@ -309,6 +307,7 @@ class Woocommerce_Paynocchio {
 
         $this->loader->add_action( 'woocommerce_add_to_cart_redirect', $plugin_public, 'redirect_checkout_add_cart' );
 
+        $this->loader->add_filter( 'body_class', $plugin_public, 'paynocchio_body_class' );
     }
 
     /**
