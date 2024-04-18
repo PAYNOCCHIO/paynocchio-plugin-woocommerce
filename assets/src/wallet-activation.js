@@ -34,6 +34,10 @@ import './public.css';
             success: function(data){
                 if (data.success){
                     path ? document.location.href = path : document.location.reload();
+                    if(localStorage.getItem('paynocchio')) {
+                        localStorage.setItem('paynocchio', JSON.stringify({registered: true, activated: true}));
+
+                    }
                 }
             }
         })

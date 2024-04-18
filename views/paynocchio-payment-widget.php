@@ -32,7 +32,7 @@ if (is_user_logged_in()) {
     <div class="paynocchio-payment-block">
         <div class="cfps-grid cfps-grid-cols-[1fr_1fr] cfps-gap-x-8 cfps-items-stretch">
             <div class="paynocchio-card-simulator">
-                <h3 class="!cfps-mb-0">Kopybara.Pay</h3>
+                <h3 class="!cfps-mb-0">Paynocchio.Pay</h3>
                 <div class="cfps-flex cfps-flex-row cfps-items-center cfps-text-white cfps-gap-x-8 cfps-text-xl">
                     <div>
                         <p>Balance</p>

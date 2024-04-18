@@ -45,7 +45,7 @@ class Woocommerce_Paynocchio_Activator {
                     'comment_status' => 'close',
                     'ping_status'    => 'close',
                     'post_author'    => 1,
-                    'post_title'     => 'Kopybara.Pay',
+                    'post_title'     => 'Paynocchio.Pay',
                     'post_name'      => strtolower(str_replace(' ', '-', trim(WOOCOMMERCE_PAYNOCCHIO_ACTIVATION_PAGE_SLUG))),
                     'post_status'    => 'publish',
                     'post_content'   =>  '[paynocchio_activation_block register_redirect="/'.WOOCOMMERCE_PAYNOCCHIO_ACTIVATION_PAGE_SLUG.'?ans=checkemail" login_redirect="/'.WOOCOMMERCE_PAYNOCCHIO_ACTIVATION_PAGE_SLUG.'"]',

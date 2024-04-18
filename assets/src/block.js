@@ -31,7 +31,7 @@ const PaymentBlock = ({bonuses, setBonuses}) => {
     return (<div className="paynocchio-payment-block">
         <div className="cfps-grid cfps-grid-cols-[1fr_1fr] cfps-gap-x-8 cfps-items-stretch">
             <div className="paynocchio-card-simulator">
-                <h3 className="!cfps-mb-0">Kopybara.Pay</h3>
+                <h3 className="!cfps-mb-0">Paynocchio.Pay</h3>
                 <div className="cfps-flex cfps-flex-row cfps-items-center cfps-text-white cfps-gap-x-8 cfps-text-xl">
                     <div>
                         <p>Balance</p>

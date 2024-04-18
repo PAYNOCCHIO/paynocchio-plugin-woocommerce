@@ -59,7 +59,7 @@ const ActivationBlock = () => {
                     <button id="paynocchio_activation_button"
                             type="button"
                             className="cfps-btn-primary">
-                        Activate Kopybara.Pay
+                        Activate Paynocchio.Pay
                         <svg
                             className="cfps-spinner cfps-hidden cfps-animate-spin cfps-ml-4 cfps-h-5 cfps-w-5 cfps-text-white"
                             xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
@@ -75,7 +75,7 @@ const ActivationBlock = () => {
                     <p className="cfps-text-slate-500">I agree to <a href="#"
                                                                      className="cfps-text-slate-500 cfps-underline">Kopybara
                         Terms & Conditions</a> and <a href="#" className="cfps-text-slate-500 cfps-underline">Rules of
-                        Kopybara.Pay Priority program</a></p>
+                        Paynocchio.Pay Priority program</a></p>
                 </div>
             </div>
         </section>

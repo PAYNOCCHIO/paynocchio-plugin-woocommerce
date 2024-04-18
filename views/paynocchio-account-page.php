@@ -85,9 +85,9 @@ if (!defined('ABSPATH')) {
                             <div class="cfps-grid cfps-grid-cols-[24px_1fr] cfps-gap-x-6">
                                 <img src="<?php echo plugin_dir_url( WOOCOMMERCE_PAYNOCCHIO_BASENAME ) . 'assets/img/i.png' ?>" />
                                 <div class="">
-                                    <p class="cfps-mb-4">Join Kopybara.Pay program. Save document info to make quicker purchases, earn cashback bonuses, and buy premium tickets.</p>
+                                    <p class="cfps-mb-4">Join Paynocchio.Pay program. Save document info to make quicker purchases, earn cashback bonuses, and buy premium tickets.</p>
                                     <button id="paynocchio_activation_button" type="button" class="cfps-btn-primary" value="">
-                                        Activate Kopybara.Pay
+                                        Activate Paynocchio.Pay
                                         <svg class="cfps-spinner cfps-hidden cfps-animate-spin cfps-ml-4 cfps-h-5 cfps-w-5 cfps-text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                                             <circle class="cfps-opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                                             <path class="cfps-opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
@@ -101,7 +101,7 @@ if (!defined('ABSPATH')) {
                         <div class="paynocchio-profile-block paynocchio-blue-badge">
                             <div class="cfps-grid cfps-grid-cols-[1fr_100px_200px_35px] cfps-gap-x-6">
                                 <div>
-                                    Kopybara.Pay
+                                    Paynocchio.Pay
                                 </div>
                                 <div>
                                     $<span class="paynocchio-numbers paynocchio-balance-value"><?php echo $wallet['balance'] ?? 0 ?></span>
@@ -146,7 +146,7 @@ if (!defined('ABSPATH')) {
                             </a>
                         </div>
                         <div class="paynocchio-profile-block">
-                            <h2>Kopybara.Pay</h2>
+                            <h2>Paynocchio.Pay</h2>
                             <div class="paynocchio-card-container">
                                 <div class="paynocchio-card-face visible">
                                     <img src="<?php echo plugin_dir_url( WOOCOMMERCE_PAYNOCCHIO_BASENAME ) . 'assets/img/card-face.png' ?>" />
@@ -237,7 +237,7 @@ if (!defined('ABSPATH')) {
                 <?php } ?>
             </div>
             <div class="paynocchio-consents">
-                <p class="cfps-text-slate-500"><a href="#" class="cfps-text-slate-500 cfps-underline">Kopybara Terms & Conditions</a> • <a href="#" class="cfps-text-slate-500 cfps-underline">Rules of Kopybara.Pay Priority program</a></p>
+                <p class="cfps-text-slate-500"><a href="#" class="cfps-text-slate-500 cfps-underline">Kopybara Terms & Conditions</a> • <a href="#" class="cfps-text-slate-500 cfps-underline">Rules of Paynocchio.Pay Priority program</a></p>
             </div>
         </div>
     </section>
