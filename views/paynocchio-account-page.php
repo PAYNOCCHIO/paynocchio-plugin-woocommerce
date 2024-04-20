@@ -59,7 +59,12 @@ if (!defined('ABSPATH')) {
                 </div>
                 <?php if(isset($wallet['status'])) { ?>
                     <div class="paynocchio-profile-actions">
-                        <div class="cfps-mb-4 cfps-text-gray-500">Wallet Status: <span class="cfps-font-bold"><?php echo $wallet['status'] ?></span></div>
+                        <div class="cfps-mb-4 cfps-text-gray-500">Wallet Status:
+                            <svg class="cfps-spinner cfps-hidden cfps-animate-spin cfps-ml-4 cfps-h-5 cfps-w-5 cfps-text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                <circle class="cfps-opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                <path class="cfps-opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                            </svg>
+                            <span id="wallet_status" class="cfps-font-bold"><?php echo $wallet['status'] ?></span></div>
                         <?php if($wallet['status'] !== 'BLOCKED') { ?>
                             <label class="dropdown">
                                 <div class="action-button">
@@ -157,7 +162,7 @@ if (!defined('ABSPATH')) {
                     </div>
                 </div>
 
-    <?php if(isset($wallet['status']) && $wallet['status'] !== 'BLOCKED') { ?>
+                 <?php if(isset($wallet['status']) && $wallet['status'] === 'ACTIVE') { ?>
                 <div class="paynocchio-wallet-body paynocchio-tab-body">
                     <div class="cfps-max-w-5xl cfps-mx-auto cfps-mt-8">
                         <a class="paynocchio_colored paynocchio_button btn-back tab-switcher" id="profile_toggle">
@@ -233,23 +238,31 @@ if (!defined('ABSPATH')) {
                     <div class="paynocchio-profile-block">
                         <h2>History</h2>
                         <div class="history-list">
+
+                            <?php
+
+                            $orders = wc_get_orders([
+                                'numberposts' => -1,
+                                'orderby' => 'date',
+                                'order' => 'DESC',
+                                'customer_id'  => get_current_user_id(),
+                             ]);
+
+                            foreach ($orders as $order) { ?>
+
                             <div class="history-item">
                                 <div class="history-info cfps-text-gray-500">
-                                    Today
+                                    #<?php echo $order->get_id(); ?>
+                                </div>
+                                <div class="history-info cfps-text-gray-500">
+                                    <?php echo $order->get_date_completed(); ?>
                                 </div>
                                 <div class="history-amount">
-                                    $0
+                                    <?php echo $order->get_total(); ?>
+                                    <?php echo $order->get_currency(); ?>
                                 </div>
                             </div>
-                            <div class="history-item">
-                                <div class="history-info">
-                                    <p class="cfps-font-semibold">NY - LA</p>
-                                    <p>January 3</p>
-                                </div>
-                                <div class="history-amount">
-                                    - $235.29
-                                </div>
-                            </div>
+                                <?php } ?>
                         </div>
                     </div>
                 </div>

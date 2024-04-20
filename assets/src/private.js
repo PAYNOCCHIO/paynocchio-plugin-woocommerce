@@ -115,7 +115,7 @@ import './topUpFormProcess'
     const setWalletStatus = (evt, status) => {
         $(evt.target).addClass('cfps-disabled')
 
-        $(`#${evt.target.id} .cfps-spinner`).removeClass('cfps-hidden');
+        $(`.paynocchio-profile-actions .cfps-spinner`).removeClass('cfps-hidden');
 
         $.ajax({
             url: paynocchio_object.ajaxurl,
@@ -127,7 +127,8 @@ import './topUpFormProcess'
             },
             success: () => $(window.location.reload())
         })
-            .error((error) => console.log(error));
+            .error((error) => alert(error))
+            .always(() => $(`.paynocchio-profile-actions .cfps-spinner`).addClass('cfps-hidden'));
     }
 
     /**
@@ -425,7 +426,7 @@ import './topUpFormProcess'
                     if( (balance_value + bonus_value) < order_total) {
                         place_orderButton.addClass('cfps-disabled')
                         place_orderButton.text('Please TopUp your Wallet')
-                    } else if ((balance_value + bonus_value) >= order_total && inputed_bonuses_value < order_total) {
+                    } else if ((balance_value + bonus_value) >= order_total && (inputed_bonuses_value + balance_value) < order_total) {
                         place_orderButton.addClass('cfps-disabled')
                         place_orderButton.text('Please TopUp your Wallet or use your Bonuses')
                     } else {
