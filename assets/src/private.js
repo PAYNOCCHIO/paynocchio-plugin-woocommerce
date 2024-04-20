@@ -407,18 +407,38 @@ import './topUpFormProcess'
                 });
             });
 
-            const place_orderButton = $('#place_order');
-            const hidden = ($('.payment_box.payment_method_paynocchio').is(":hidden"));
+            /**
+             * Hide Place order button if no money
+             * @type {define.amd.jQuery|HTMLElement|*}
+             */
+            function checkBalance() {
+                const place_orderButton = $('#place_order');
+                const hidden = ($('.payment_box.payment_method_paynocchio').is(":hidden"));
 
-            if(place_orderButton && !hidden) {
-                const balance_value = parseFloat($('.paynocchio-card-simulator .paynocchio-balance-value').text());
-                const bonus_value = parseFloat($('.paynocchio-card-simulator .paynocchio-bonus-value').text());
-                const order_total = parseFloat($('.order-total .woocommerce-Price-amount').text().replace('$', ''))
-                if( (balance_value + bonus_value) < order_total) {
-                    place_orderButton.addClass('cfps-disabled')
-                    place_orderButton.text('Please TopUp your Wallet')
+
+                if(place_orderButton && !hidden) {
+                    const balance_value = parseFloat($('.paynocchio-card-simulator .paynocchio-balance-value').text());
+                    const bonus_value = parseFloat($('.paynocchio-card-simulator .paynocchio-bonus-value').text());
+                    const order_total = parseFloat($('.woocommerce-Price-amount').text().replace('$', ''))
+                    const inputed_bonuses_value = parseFloat($('#bonuses-value').val());
+
+                    if( (balance_value + bonus_value) < order_total) {
+                        place_orderButton.addClass('cfps-disabled')
+                        place_orderButton.text('Please TopUp your Wallet')
+                    } else if ((balance_value + bonus_value) >= order_total && inputed_bonuses_value < order_total) {
+                        place_orderButton.addClass('cfps-disabled')
+                        place_orderButton.text('Please TopUp your Wallet or use your Bonuses')
+                    } else {
+                        place_orderButton.removeClass('cfps-disabled')
+                        place_orderButton.text('Place order')
+                    }
                 }
             }
+            checkBalance()
+
+            $("#bonuses-value").on("change", function() {
+                checkBalance();
+            });
 
             $('input[type="range"].slider-progress').each(function() {
                 $(this).css('--value', $(this).val());
@@ -426,6 +446,7 @@ import './topUpFormProcess'
                 $(this).css('--max', $(this).attr('max') == '' ? '0' : $(this).attr('max'));
                 $(this).on('input', function () {
                     $(this).css('--value', $(this).val())
+                    $( "#bonuses-value" ).trigger( "change" );
                 });
             });
 

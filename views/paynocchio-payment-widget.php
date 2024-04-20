@@ -113,6 +113,16 @@ if (is_user_logged_in()) {
             <a href="<?php echo get_privacy_policy_url(); ?>">Privacy Policy</a>
             <a href="<?php echo get_permalink( wc_terms_and_conditions_page_id() ); ?>">Terms and Conditions</a>
         </div>
+        <div class="checkout_pricing">
+            <div class="price">
+                <h4>Total:</h4>
+                <h2><?php wc_cart_totals_order_total_html(); ?></h2>
+            </div>
+            <div class="bonus">
+                <h4>You earning for this purchase:</h4>
+                <h2>+146 bonuses</h2>
+            </div>
+        </div>
     </div>
 </section>
     <?php }  ?>
