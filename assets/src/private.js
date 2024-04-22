@@ -329,9 +329,9 @@ import './topUpFormProcess'
             let id = link.get(0).id;
             id = id.replace('_toggle','');
 
-            let elem = $('.paynocchio-' + id + '-body');
+            let elem = $('#paynocchio_' + id + '_body');
             if (!elem.hasClass('visible')) {
-                $('.paynocchio-tab-selector a').removeClass('choosen');
+                $('.paynocchio_tab_switchers a').removeClass('choosen');
                 link.addClass('choosen');
                 elem.siblings('.paynocchio-tab-body').removeClass('visible').fadeOut('fast', function () {
                     elem.fadeIn('fast').addClass('visible');

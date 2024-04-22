@@ -732,3 +732,65 @@ li {
     @apply cfps-block;
 }
 }
+
+
+.paynocchio-new-account {
+    @apply cfps-grid cfps-grid-cols-[384px_1fr] cfps-gap-8 cfps-items-start cfps-p-4 cfps-bg-gray-100 cfps-rounded-2xl;
+    .paynocchio-account-menu {
+
+        menu {
+            @apply cfps-bg-white cfps-rounded-xl cfps-p-2  cfps-drop-shadow-sm;
+
+            li {
+
+                a {
+                    @apply cfps-block cfps-p-4 cfps-rounded-lg hover:cfps-bg-gray-100 cfps-text-lg cfps-cursor-pointer;
+                }
+            }
+        }
+
+        .paynocchio-profile-info {
+            @apply cfps-p-4 cfps-rounded-xl cfps-bg-white cfps-flex cfps-flex-row cfps-gap-4  cfps-drop-shadow-sm;
+
+            .paynocchio-profile-img {
+                @apply cfps-h-auto;
+
+                img {
+                    @apply cfps-w-[100px] cfps-h-[100px];
+                }
+            }
+        }
+    }
+
+    .paynocchio-profile-block {
+        @apply cfps-rounded-xl cfps-drop-shadow-sm;
+    }
+
+    .paynocchio-card {
+        @apply cfps-relative cfps-text-black/80;
+        .paynocchio-balance-bonuses {
+            @apply cfps-text-black/80;
+        }
+
+        .paynocchio-card-number {
+            @apply cfps-top-[75%] cfps-text-black/80;
+        }
+
+        .wallet_status {
+            @apply cfps-absolute cfps-left-[7%] cfps-top-[10%] cfps-font-black;
+        }
+    }
+
+    .history_table {
+        @apply cfps-rounded-lg cfps-border-[1px] cfps-border-gray-200 cfps-w-full;
+
+        thead {
+            @apply cfps-font-bold;
+        }
+        td {
+            @apply cfps-px-4 cfps-py-2 cfps-border-b-[1px] cfps-border-gray-200;
+        }
+    }
+
+}
+

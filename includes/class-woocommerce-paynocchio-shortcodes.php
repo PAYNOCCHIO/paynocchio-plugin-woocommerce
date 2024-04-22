@@ -8,7 +8,7 @@ class Woocommerce_Paynocchio_Shortcodes {
 
     static function paynocchio_activation_block($attr) {
         ob_start();
-        require(WOOCOMMERCE_PAYNOCCHIO_PATH . 'views/paynocchio-activation-block.php');
+        require(WOOCOMMERCE_PAYNOCCHIO_PATH . 'views/paynocchio-kopybara-activation-block.php');
         return ob_get_clean();
     }
 
@@ -20,7 +20,7 @@ class Woocommerce_Paynocchio_Shortcodes {
 
     static function paynocchio_account_page() {
         ob_start();
-        require(WOOCOMMERCE_PAYNOCCHIO_PATH . 'views/paynocchio-account-page.php');
+        require(WOOCOMMERCE_PAYNOCCHIO_PATH . 'views/paynocchio-kopybara-account-page.php');
         return ob_get_clean();
     }
 

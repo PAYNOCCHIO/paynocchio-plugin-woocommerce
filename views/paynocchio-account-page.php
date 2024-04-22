@@ -91,7 +91,6 @@ if (!defined('ABSPATH')) {
                         <?php } ?>
                     </div>
                 <?php } ?>
-
             </div>
 
             <div class="paynocchio-tab-selector">

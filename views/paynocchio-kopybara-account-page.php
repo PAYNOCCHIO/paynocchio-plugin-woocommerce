@@ -1,0 +1,496 @@
+<?php
+if (!defined('ABSPATH')) {
+    die;
+}
+?>
+
+<?php
+$paynocchio_classes = '';
+$settigns = get_option( 'woocommerce_paynocchio_settings');
+$paynocchio_classes .= array_key_exists('darkmode', $settigns) && $settigns['darkmode'] == 'yes' ? 'paynocchio_dark_mode ' : '';
+$paynocchio_classes .= array_key_exists('rounded', $settigns) && $settigns['rounded'] == 'yes' ? 'paynocchio_rounded ' : '';
+$embleme_link = plugin_dir_url( WOOCOMMERCE_PAYNOCCHIO_BASENAME ) . 'assets/img/paynocchio_';
+$embleme_link .= array_key_exists('darkmode', $settigns) && $settigns['darkmode'] == 'yes' ? 'white.svg' : 'black.svg';
+
+$accent_color = '#3b82f6';
+if (array_key_exists('accent_color', $settigns)) {
+    $accent_color = get_option( 'woocommerce_paynocchio_settings')['accent_color'];
+}
+
+$accent_text_color = '#ffffff';
+if (array_key_exists('accent_text_color', $settigns)) {
+    $accent_text_color = get_option( 'woocommerce_paynocchio_settings')['accent_text_color'];
+}
+?>
+
+    <style>
+        .paynocchio_colored {
+            background-color: <?php echo $accent_color; ?>!important;
+            color: <?php echo $accent_text_color; ?>!important;
+        }
+    </style>
+
+<?php if (is_user_logged_in()) {
+
+    $paynocchio = new Woocommerce_Paynocchio();
+    $wallet = $paynocchio->get_paynocchio_wallet_info();
+
+    global $current_user;
+    ?>
+    <section class="paynocchio <?php echo $paynocchio_classes; ?>">
+        <div class="paynocchio-new-account">
+            <div class="paynocchio-account-menu">
+                <div class="paynocchio-profile-info">
+                    <div class="paynocchio-profile-img">
+                        <img src="<?php echo plugin_dir_url( WOOCOMMERCE_PAYNOCCHIO_BASENAME ) . 'assets/img/profile.png' ?>" />
+                    </div>
+                    <div class="paynocchio-profile-text">
+                        <h2>
+                            <?php echo $wallet['user']['first_name']. ' ' .$wallet['user']['last_name']; ?>
+                        </h2>
+                        <p>
+                            <?php echo $current_user->user_email; ?>
+                        </p>
+                        <a href="/loyalty-club/" class="cfps-text-blue-500">
+                            Start earning bonuses
+                        </a>
+                    </div>
+                </div>
+                <menu class="paynocchio_tab_switchers">
+                    <li>
+                        <a class="tab-switcher choosen" id="bonuses_toggle">Bonuses</a>
+                    </li>
+                    <li>
+                        <a class="tab-switcher" id="history_toggle">History</a>
+                    </li>
+                    <li>
+                        <a class="tab-switcher" id="account_details_toggle">Account Details</a>
+                    </li>
+                    <li>
+                        <a class="tab-switcher" id="wallet_settings_toggle">Settings</a>
+                    </li>
+                    <li>
+                        <a href="<?php echo wp_logout_url('/') ?>">Log out</a>
+                    </li>
+                </menu>
+            </div>
+            <div class="paynocchio-account-content">
+                <div class="paynocchio_tab paynocchio-tab-body visible" id="paynocchio_bonuses_body">
+                    <?php if (!get_user_meta(get_current_user_id(), PAYNOCCHIO_WALLET_KEY, true)) { ?>
+                        <div class="paynocchio-profile-block">
+                            <div class="cfps-grid cfps-grid-cols-[24px_1fr] cfps-gap-x-6">
+                                <img src="<?php echo plugin_dir_url( WOOCOMMERCE_PAYNOCCHIO_BASENAME ) . 'assets/img/i.png' ?>" />
+                                <div class="">
+                                    <p class="cfps-mb-4">Join Paynocchio.Pay program to make quicker purchases, earn cashback bonuses, and buy premium tickets.</p>
+                                    <button id="paynocchio_activation_button" type="button" class="paynocchio_button paynocchio_colored cfps-btn-primary" value="">
+                                        Activate Paynocchio.Pay
+                                        <svg class="cfps-spinner cfps-hidden cfps-animate-spin cfps-ml-4 cfps-h-5 cfps-w-5 cfps-text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                            <circle class="cfps-opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                            <path class="cfps-opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                        </svg>
+                                    </button>
+                                    <?php wp_nonce_field( 'paynocchio_ajax_activation', 'ajax-activation-nonce' ); ?>
+                                </div>
+                            </div>
+                        </div>
+                    <?php } else { ?>
+                        <div class="paynocchio-profile-block <?php if ($wallet['status'] !== 'ACTIVE') { ?>cfps-disabled<?php } ?>">
+                            <h2>Paynocchio.Pay</h2>
+                            <div class="paynocchio-card-container">
+                                <div class="paynocchio-card">
+                                    <img class="cfps-block !cfps-mx-auto !cfps-w-full !cfps-max-w-[350px]" src="<?php echo plugin_dir_url( WOOCOMMERCE_PAYNOCCHIO_BASENAME ) . 'assets/img/blank_card.webp' ?>" />
+                                    <?php
+                                        if ($wallet['status'] == 'SUSPEND') {
+                                            echo '<div class="wallet_status">SUSPENDED</div>';
+                                        } elseif ($wallet['status'] == 'BLOCKED') {
+                                            echo '<div class="wallet_status">BLOCKED</div>';
+                                        }
+                                    ?>
+                                    <div class="paynocchio-balance-bonuses">
+                                        <div class="paynocchio-balance">
+                                            <div>
+                                                Balance
+                                            </div>
+                                            <div class="amount">
+                                                $<span class="paynocchio-numbers paynocchio-balance-value"><?php echo $wallet['balance'] ?></span>
+                                            </div>
+                                        </div>
+                                        <div class="paynocchio-bonuses">
+                                            <div>
+                                                Bonuses
+                                            </div>
+                                            <div class="amount">
+                                                <span class="paynocchio-numbers paynocchio-bonus-value"><?php echo $wallet['bonuses'] ?></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="paynocchio-card-number">
+                                        <div><?php echo chunk_split(strval($wallet['card_number']), 4, '</div><div>'); ?></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="paynocchio-actions-btns cfps-mt-8 lg:cfps-mt-16">
+                                <div class="autodeposit cfps-flex cfps-flex-row cfps-items-center cfps-gap-x-2">
+                                    <img src="<?php echo plugin_dir_url( WOOCOMMERCE_PAYNOCCHIO_BASENAME ) . 'assets/img/i-gr.png' ?>"
+                                         class="cfps-h-[18px] cfps-w-[16px] cfps-mr-1 cfps-inline-block" />
+                                    Autodeposit
+                                    <div class="toggle-autodeposit">
+                                        <p>ON</p>
+                                        <div class="toggler"></div>
+                                        <p>OFF</p>
+                                    </div>
+                                    <input type="hidden" value="0" name="autodeposit" id="autodeposit" />
+                                </div>
+                                <div class="paynocchio-actions-btns">
+                                    <a href="#" class="paynocchio_button btn-blue paynocchio_colored" data-modal=".topUpModal">
+                                        <img src="<?php echo plugin_dir_url( WOOCOMMERCE_PAYNOCCHIO_BASENAME ) . 'assets/img/plus.png' ?>"
+                                             class="cfps-h-[24px] cfps-w-[24px] cfps-mr-1 cfps-inline-block" />
+                                        Add money
+                                    </a>
+                                    <a href="#" class="paynocchio_button btn-gray" data-modal=".withdrawModal">
+                                        Withdraw
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="paynocchio-profile-block">
+                            <h2>Payments methods</h2>
+                            <a href="" class="paynocchio_button btn-blue paynocchio_colored" data-modal=".paymentMethodModal">Add payment method</a>
+                        </div>
+                    <?php } ?>
+                </div>
+
+                <div class="paynocchio_tab paynocchio-tab-body" id="paynocchio_history_body">
+                    <div class="paynocchio-profile-block">
+                        <h2>History</h2>
+                        <table class="history_table">
+                            <thead>
+                            <tr>
+                                <td>ID</td>
+                                <td>Date</td>
+                                <td>Status</td>
+                                <td>Total</td>
+                                <td>Bonuses<br>spent</td>
+                                <td>Bonuses<br>earned</td>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <?php
+                                $args = array(
+                                    'customer_id' => get_current_user_id(),
+                                    'limit' => -1, // to retrieve _all_ orders by this user
+
+                                );
+                                $orders = wc_get_orders($args);
+
+                               // print_r($orders);
+
+                                foreach($orders as $order) {
+
+                                    $date = strtotime($order->date_created);
+                                    $newformatdate = date('F j, Y',$date);
+
+                                    $bonuses_spent = 0;
+                                    $bonuses_spent_base = $order->get_meta( 'bonuses_value' );
+                                    if ($bonuses_spent_base) {
+                                        $bonuses_spent = $bonuses_spent_base;
+                                    } else {
+                                        $bonuses_spent = '';
+                                    }
+
+                                    $item_count = $order->get_item_count() - $order->get_item_count_refunded();
+
+                                    echo '<tr>
+                                        <td>#'.$order->id.'</td>
+                                        <td>'.$newformatdate.'</td>
+                                        <td class="cfps-capitalize">'.$order->status.'</td>
+                                        <td>'.wp_kses_post( sprintf( _n( '%1$s', '%1$s', $item_count, 'woocommerce' ), $order->get_formatted_order_total(), $item_count ) ).'</td>
+                                        <td class="cfps-text-gray-700">'.$bonuses_spent.'</td>
+                                        <td class="cfps-text-green-700">+ '.$order->total * 0.1.'</td>
+                                      </tr>';
+                                }
+                            ?>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="paynocchio_tab paynocchio-tab-body" id="paynocchio_account_details_body">
+                    <div class="paynocchio-profile-block woocommerce">
+                        <h2>Account Details</h2>
+
+                        <?php do_action( 'woocommerce_before_edit_account_form' ); ?>
+
+                        <form class="woocommerce-EditAccountForm edit-account" action="" method="post" <?php do_action( 'woocommerce_edit_account_form_tag' ); ?> >
+
+                            <?php do_action( 'woocommerce_edit_account_form_start' ); ?>
+
+                            <p class="woocommerce-form-row woocommerce-form-row--first form-row form-row-first">
+                                <label for="account_first_name"><?php esc_html_e( 'First name', 'woocommerce' ); ?>&nbsp;<span class="required">*</span></label>
+                                <input type="text" class="woocommerce-Input woocommerce-Input--text input-text" name="account_first_name" id="account_first_name" autocomplete="given-name" value="<?php echo esc_attr( $current_user->first_name ); ?>" />
+                            </p>
+                            <p class="woocommerce-form-row woocommerce-form-row--last form-row form-row-last">
+                                <label for="account_last_name"><?php esc_html_e( 'Last name', 'woocommerce' ); ?>&nbsp;<span class="required">*</span></label>
+                                <input type="text" class="woocommerce-Input woocommerce-Input--text input-text" name="account_last_name" id="account_last_name" autocomplete="family-name" value="<?php echo esc_attr( $current_user->last_name ); ?>" />
+                            </p>
+                            <div class="clear"></div>
+
+                            <p class="woocommerce-form-row woocommerce-form-row--wide form-row form-row-wide">
+                                <label for="account_display_name"><?php esc_html_e( 'Display name', 'woocommerce' ); ?>&nbsp;<span class="required">*</span></label>
+                                <input type="text" class="woocommerce-Input woocommerce-Input--text input-text" name="account_display_name" id="account_display_name" value="<?php echo esc_attr( $current_user->display_name ); ?>" /> <span><em><?php esc_html_e( 'This will be how your name will be displayed in the account section and in reviews', 'woocommerce' ); ?></em></span>
+                            </p>
+                            <div class="clear"></div>
+
+                            <p class="woocommerce-form-row woocommerce-form-row--wide form-row form-row-wide">
+                                <label for="account_email"><?php esc_html_e( 'Email address', 'woocommerce' ); ?>&nbsp;<span class="required">*</span></label>
+                                <input type="email" class="woocommerce-Input woocommerce-Input--email input-text" name="account_email" id="account_email" autocomplete="email" value="<?php echo esc_attr( $current_user->user_email ); ?>" />
+                            </p>
+
+                            <fieldset>
+                                <legend><?php esc_html_e( 'Password change', 'woocommerce' ); ?></legend>
+
+                                <p class="woocommerce-form-row woocommerce-form-row--wide form-row form-row-wide">
+                                    <label for="password_current"><?php esc_html_e( 'Current password (leave blank to leave unchanged)', 'woocommerce' ); ?></label>
+                                    <input type="password" class="woocommerce-Input woocommerce-Input--password input-text" name="password_current" id="password_current" autocomplete="off" />
+                                </p>
+                                <p class="woocommerce-form-row woocommerce-form-row--wide form-row form-row-first">
+                                    <label for="password_1"><?php esc_html_e( 'New password (leave blank to leave unchanged)', 'woocommerce' ); ?></label>
+                                    <input type="password" class="woocommerce-Input woocommerce-Input--password input-text" name="password_1" id="password_1" autocomplete="off" />
+                                </p>
+                                <p class="woocommerce-form-row woocommerce-form-row--wide form-row form-row-last">
+                                    <label for="password_2"><?php esc_html_e( 'Confirm new password', 'woocommerce' ); ?></label>
+                                    <input type="password" class="woocommerce-Input woocommerce-Input--password input-text" name="password_2" id="password_2" autocomplete="off" />
+                                </p>
+                            </fieldset>
+                            <div class="clear"></div>
+
+                            <?php do_action( 'woocommerce_edit_account_form' ); ?>
+
+                            <p>
+                                <?php wp_nonce_field( 'save_account_details', 'save-account-details-nonce' ); ?>
+                                <button type="submit" class="!cfps-bg-blue-500 !cfps-rounded-lg !cfps-text-white hover:!cfps-bg-blue-500/80 !cfps-mt-4 woocommerce-Button button<?php echo esc_attr( wc_wp_theme_get_element_class_name( 'button' ) ? ' ' . wc_wp_theme_get_element_class_name( 'button' ) : '' ); ?>" name="save_account_details" value="<?php esc_attr_e( 'Save changes', 'woocommerce' ); ?>"><?php esc_html_e( 'Save changes', 'woocommerce' ); ?></button>
+                                <input type="hidden" name="action" value="save_account_details" />
+                            </p>
+
+                            <?php do_action( 'woocommerce_edit_account_form_end' ); ?>
+                        </form>
+
+                        <?php do_action( 'woocommerce_after_edit_account_form' ); ?>
+                    </div>
+                </div>
+                <div class="paynocchio_tab paynocchio-tab-body" id="paynocchio_wallet_settings_body">
+                    <div class="paynocchio-profile-block woocommerce">
+                        <h2>Settings</h2>
+
+                        <?php if(isset($wallet['status'])) { ?>
+                            <div class="paynocchio-profile-actions">
+                                <div class="cfps-mb-4 cfps-text-gray-500">Wallet Status:
+                                    <svg class="cfps-spinner cfps-hidden cfps-animate-spin cfps-ml-4 cfps-h-5 cfps-w-5 cfps-text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                        <circle class="cfps-opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                        <path class="cfps-opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                    </svg>
+                                    <span id="wallet_status" class="cfps-font-bold"><?php echo $wallet['status'] ?></span></div>
+                                <?php if($wallet['status'] !== 'BLOCKED') { ?>
+                                    <label class="dropdown">
+                                        <div class="action-button">
+                                            Manage wallet
+                                        </div>
+
+                                        <input type="checkbox" class="wallet-input" />
+
+                                        <ul class="wallet-menu cfps-bg-white">
+                                            <?php if($wallet['status'] === "ACTIVE") { ?>
+                                                <li><a href="#" data-modal=".suspendModal">Suspend wallet</a></li>
+                                            <?php }
+                                            if ($wallet['status'] === "SUSPEND") { ?>
+                                                <li><a href="#" data-modal=".reactivateModal">Reactivate wallet</a></li>
+                                            <?php } ?>
+
+                                            <li><a class="cfps-text-red-500" href="#" data-modal=".blockModal">Block wallet</a></li>
+                                        </ul>
+                                    </label>
+                                <?php } ?>
+
+                                <?php if($wallet['status'] === 'BLOCKED') { ?>
+                                    <button data-modal=".deleteModal" class="cfps-btn-primary">Delete Wallet</button>
+                                <?php } ?>
+                            </div>
+                        <?php } ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <?php
+    /** Suspension and Deletion modals */
+    ?>
+    <div class="modal suspendModal">
+        <div class="close-modal close"></div>
+        <div class="container">
+            <div class="header">
+                <h3>Suspend Paynocchio Wallet</h3>
+                <button class="close">&times;</button>
+            </div>
+            <div class="content">
+                <p>Suspension blocks all transactions until further actions.</p>
+                <p>Lorem ipsum.</p>
+            </div>
+            <div class="footer">
+                <div>
+                    <strong>Are you sure you want to suspend your wallet?</strong>
+                    <button id="suspend_button"
+                            type="button"
+                            class="cfps-btn-primary close">
+                        Yes
+                        <svg class="cfps-spinner cfps-hidden cfps-animate-spin cfps-ml-4 cfps-h-5 cfps-w-5 cfps-text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <circle class="cfps-opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                            <path class="cfps-opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                    </button>
+                    <?php wp_nonce_field( 'paynocchio_ajax_set_status', 'ajax-status-nonce' ); ?>
+
+                    <button
+                        class="cfps-btn-primary close"
+                        type="button">No</button>
+                    <div class="message"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal reactivateModal">
+        <div class="close-modal close"></div>
+        <div class="container">
+            <div class="header">
+                <h3>Reactivate Paynocchio Wallet</h3>
+                <button class="close">&times;</button>
+            </div>
+            <div class="content">
+                <p>After reactivating the wallet you can continue shopping.</p>
+            </div>
+            <div class="footer">
+                <div>
+                    <strong>Are you sure you want to reactivate your wallet?</strong>
+                    <button id="reactivate_button"
+                            type="button"
+                            class="cfps-btn-primary close">
+                        Yes
+                        <svg class="cfps-spinner cfps-hidden cfps-animate-spin cfps-ml-4 cfps-h-5 cfps-w-5 cfps-text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <circle class="cfps-opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                            <path class="cfps-opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                    </button>
+                    <?php wp_nonce_field( 'paynocchio_ajax_set_status', 'ajax-status-nonce' ); ?>
+
+                    <button
+                        class="cfps-btn-primary close"
+                        type="button">No</button>
+                    <div class="message"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal blockModal">
+        <div class="close-modal close"></div>
+        <div class="container">
+            <div class="header">
+                <h3>Block Paynocchio Wallet</h3>
+                <button class="close">&times;</button>
+            </div>
+            <div class="content">
+                <p class="cfps-font-bold cfps-text-red-500">Attention!</p>
+            </div>
+            <div class="footer">
+                <div>
+                    <strong>Are you sure you want to BLOCK your wallet?</strong>
+                    <button id="block_button"
+                            type="button"
+                            class="cfps-btn-primary close">
+                        Yes
+                        <svg class="cfps-spinner cfps-hidden cfps-animate-spin cfps-ml-4 cfps-h-5 cfps-w-5 cfps-text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <circle class="cfps-opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                            <path class="cfps-opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                    </button>
+                    <?php wp_nonce_field( 'paynocchio_ajax_set_status', 'ajax-status-nonce' ); ?>
+
+                    <button
+                        class="cfps-btn-primary close"
+                        type="button">No</button>
+                    <div class="message"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal deleteModal">
+        <div class="close-modal close"></div>
+        <div class="container">
+            <div class="header">
+                <h3>Delete Paynocchio Wallet</h3>
+                <button class="close">&times;</button>
+            </div>
+            <div class="content">
+                <p class="cfps-font-bold cfps-text-red-500">Attention!</p>
+            </div>
+            <div class="footer">
+                <div>
+                    <strong>Are you sure you want to DELETE your wallet?</strong>
+                    <button id="delete_button"
+                            type="button"
+                            class="cfps-btn-primary close">
+                        Yes
+                        <svg class="cfps-spinner cfps-hidden cfps-animate-spin cfps-ml-4 cfps-h-5 cfps-w-5 cfps-text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <circle class="cfps-opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                            <path class="cfps-opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                    </button>
+                    <?php wp_nonce_field( 'paynocchio_ajax_delete_wallet', 'ajax-delete-nonce' ); ?>
+
+                    <button
+                        class="cfps-btn-primary close"
+                        type="button">No</button>
+                    <div class="message"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+<?php } else {
+    echo do_shortcode('[paynocchio_registration_block]');
+} ?>
+
+<?php
+// TODO
+/* PLEASE do not delete it yet, I will finalize it later
+$string = simplexml_load_file("https://www.artlebedev.ru/country-list/xml/");
+//Обратите внимание на вложенность с помощью
+// echo '<pre>';  print_r($xml);  echo '</pre>';
+
+function xml2array ( $xmlObject, $out = array () )
+{
+    foreach ( (array) $xmlObject as $index => $node )
+        $out[$index] = ( is_object ( $node ) ) ? xml2array ( $node ) : $node;
+
+    return $out;
+}
+
+$array = xml2array($string);
+$array = $array['country'];
+
+foreach($array as $item){
+    $item = xml2array($item);
+}
+
+//   print_r($array);
+
+foreach($array['country'] as $item){
+   // print_r($item);
+    print_r($item['english']);
+    //echo '<option value="">'.$item['iso'].'</option>';
+} */
+?>
+
+<?php echo do_shortcode('[paynocchio_modal_forms]'); ?>
