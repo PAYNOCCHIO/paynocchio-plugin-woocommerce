@@ -26,7 +26,7 @@ class Woocommerce_Paynocchio_Shortcodes {
 
     static function paynocchio_payment_widget() {
         ob_start();
-        require(WOOCOMMERCE_PAYNOCCHIO_PATH . 'views/paynocchio-payment-widget.php');
+        require(WOOCOMMERCE_PAYNOCCHIO_PATH . 'views/paynocchio-kopybara-payment-widget.php');
         return ob_get_clean();
     }
 

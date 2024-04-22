@@ -639,7 +639,7 @@ input[type=range].styled-slider.slider-progress:active::-ms-fill-lower {
 }
 
 #bonuses-value {
-    @apply !cfps-bg-transparent cfps-w-[100px] cfps-border-0 cfps-p-0 cfps-font-semibold !cfps-mb-6 cfps-text-2xl cfps-block !cfps-shadow-none;
+    @apply !cfps-bg-transparent cfps-w-[100px] cfps-border-0 cfps-p-0 cfps-font-semibold cfps-text-2xl cfps-block !cfps-shadow-none;
 }
 
 .loader {
