@@ -49,22 +49,25 @@ if (is_user_logged_in()) {
         </div>
 
     <?php } else { ?>
-        <div class="cfps-text-lg cfps-mb-4 cfps-flex cfps-flex-row cfps-items-center cfps-gap-4">
-            <img src="<?php echo plugin_dir_url( WOOCOMMERCE_PAYNOCCHIO_BASENAME ) . 'assets/img/star.webp' ?>" class="!cfps-h-[25px] !cfps-ml-0"/>
-            <div>Earn <strong><?php echo WC()->cart->cart_contents_total * 0.1; ?> Bonuses</strong> with this purchase!</div>
-        </div>
+       <!-- <div class="cfps-text-lg cfps-mb-4 cfps-flex cfps-flex-row cfps-items-center cfps-gap-4">
+            <img src="<?php /*echo plugin_dir_url( WOOCOMMERCE_PAYNOCCHIO_BASENAME ) . 'assets/img/star.webp' */?>" class="!cfps-h-[25px] !cfps-ml-0"/>
+            <div>Earn <strong><?php /*echo WC()->cart->cart_contents_total * 0.1; */?> Bonuses</strong> with this purchase!</div>
+        </div>-->
         <section class="paynocchio <?php echo $paynocchio_classes; ?>">
             <div class="paynocchio-payment-block">
                 <div class="paynocchio_tiles">
-                    <div class="!cfps-max-w-full cfps-rounded-xl cfps-p-8 cfps-flex cfps-flex-row cfps-items-center cfps-justify-between cfps-gap-8 cfps-bg-gradient-to-r cfps-from-gray-200 cfps-to-gray-300">
+                    <div class="!cfps-max-w-full cfps-rounded-xl cfps-p-8 cfps-flex cfps-flex-row cfps-flex-wrap cfps-items-center
+                    cfps-justify-between cfps-gap-8 cfps-bg-gradient-to-r cfps-from-gray-200 cfps-to-gray-300">
                         <h2 class="!cfps-text-[#515151] cfps-text-2xl cfps-font-bold">Your Wallet</h2>
-                        <div>
-                            <p>Balance:</p>
-                            <p class="cfps-text-xl cfps-font-bold">$<span class="paynocchio-numbers paynocchio-balance-value"><?php echo $wallet['balance'] ?? 0; ?></span></p>
-                        </div>
-                        <div>
-                            <p>Bonuses:</p>
-                            <p class="cfps-text-xl cfps-font-bold"><span class="paynocchio-numbers paynocchio-bonus-value"><?php echo $wallet['bonuses'] ?? 0 ?></span></p>
+                        <div class="cfps-flex cfps-flex-row cfps-gap-8">
+                            <div>
+                                <p>Balance:</p>
+                                <p class="cfps-text-xl cfps-font-bold">$<span class="paynocchio-numbers paynocchio-balance-value"><?php echo $wallet['balance'] ?? 0; ?></span></p>
+                            </div>
+                            <div>
+                                <p>Bonuses:</p>
+                                <p class="cfps-text-xl cfps-font-bold"><span class="paynocchio-numbers paynocchio-bonus-value"><?php echo $wallet['bonuses'] ?? 0 ?></span></p>
+                            </div>
                         </div>
                         <div class=""><a href="#" class="btn-blue paynocchio_button" data-modal=".topUpModal">Add money</a></div>
                     </div>
@@ -76,7 +79,7 @@ if (is_user_logged_in()) {
                         $max_bonus = $cart_total;
                     }
                     ?>
-                    <div class="paynocchio-conversion-rate cfps-flex cfps-flex-row cfps-items-center cfps-gap-4 cfps-justify-between">
+                    <div class="paynocchio-conversion-rate cfps-flex cfps-flex-row cfps-flex-wrap cfps-items-center cfps-gap-4 cfps-justify-between">
                         <h3>
                             Apply available bonuses
                         </h3>

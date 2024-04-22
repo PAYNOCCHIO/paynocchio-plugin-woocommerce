@@ -309,7 +309,7 @@ Numbers animation
     @apply cfps-bg-transparent cfps-appearance-none cfps-cursor-pointer cfps-text-2xl cfps-leading-6 cfps-cursor-pointer cfps-text-zinc-500 cfps-pb-1 cfps-p-0 cfps-border-0 hover:cfps-text-zinc-400;
 }
 .modal .container .content {
-    @apply cfps-flex-1 cfps-p-4;
+    @apply cfps-flex-1 cfps-p-4 cfps-pt-16;
 }
 /*.modal .container .content .prompt-input input {
     @apply cfps-rounded cfps-border cfps-w-full cfps-mt-[15px] cfps-p-2.5 cfps-border-solid cfps-border-[#e6e9ec];
