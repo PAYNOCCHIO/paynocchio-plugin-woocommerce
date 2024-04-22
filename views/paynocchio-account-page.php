@@ -36,7 +36,6 @@ if (!defined('ABSPATH')) {
     $wallet = $paynocchio->get_paynocchio_wallet_info();
 
     global $current_user;
-    get_currentuserinfo();
 ?>
     <section class="paynocchio  <?php echo $paynocchio_classes; ?>">
         <div class="paynocchio-account">
