@@ -193,7 +193,7 @@ a {
 }
 
 .history-item {
-    @apply cfps-p-2 cfps-grid cfps-grid-cols-[1fr_100px] ;
+    @apply cfps-p-2 cfps-grid cfps-grid-cols-[50px_100px_1fr_100px] ;
 }
 
 .history-item:not(:last-child) {

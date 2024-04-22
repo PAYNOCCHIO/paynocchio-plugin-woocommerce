@@ -10,8 +10,9 @@ if (is_user_logged_in()) {
     $wallet = $paynocchio->get_paynocchio_wallet_info();
 
     $paynocchio_classes = '';
-    $paynocchio_classes .= get_option( 'woocommerce_paynocchio_settings')['darkmode'] == 'yes' ? 'paynocchio_dark_mode ' : '';
-    $paynocchio_classes .= get_option( 'woocommerce_paynocchio_settings')['rounded'] == 'yes' ? 'paynocchio_rounded ' : '';
+    $settigns = get_option( 'woocommerce_paynocchio_settings');
+    $paynocchio_classes .= array_key_exists('darkmode', $settigns) && $settigns['darkmode'] == 'yes' ? 'paynocchio_dark_mode ' : '';
+    $paynocchio_classes .= array_key_exists('rounded', $settigns) && $settigns['rounded'] == 'yes' ? 'paynocchio_rounded ' : '';
 ?>
 
 <div class="modal topUpModal <?php echo $paynocchio_classes; ?>">

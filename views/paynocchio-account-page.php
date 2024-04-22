@@ -6,18 +6,19 @@ if (!defined('ABSPATH')) {
 
 <?php
     $paynocchio_classes = '';
-    $paynocchio_classes .= get_option( 'woocommerce_paynocchio_settings')['darkmode'] == 'yes' ? 'paynocchio_dark_mode ' : '';
-    $paynocchio_classes .= get_option( 'woocommerce_paynocchio_settings')['rounded'] == 'yes' ? 'paynocchio_rounded ' : '';
+    $settigns = get_option( 'woocommerce_paynocchio_settings');
+    $paynocchio_classes .= array_key_exists('darkmode', $settigns) && $settigns['darkmode'] == 'yes' ? 'paynocchio_dark_mode ' : '';
+    $paynocchio_classes .= array_key_exists('rounded', $settigns) && $settigns['rounded'] == 'yes' ? 'paynocchio_rounded ' : '';
     $embleme_link = plugin_dir_url( WOOCOMMERCE_PAYNOCCHIO_BASENAME ) . 'assets/img/paynocchio_';
-    $embleme_link .= get_option( 'woocommerce_paynocchio_settings')['darkmode'] == 'yes' ? 'white.svg' : 'black.svg';
+    $embleme_link .= array_key_exists('darkmode', $settigns) && $settigns['darkmode'] == 'yes' ? 'white.svg' : 'black.svg';
 
     $accent_color = '#3b82f6';
-    if (get_option( 'woocommerce_paynocchio_settings')['accent_color']) {
+    if (array_key_exists('accent_color', $settigns)) {
         $accent_color = get_option( 'woocommerce_paynocchio_settings')['accent_color'];
     }
 
     $accent_text_color = '#ffffff';
-    if (get_option( 'woocommerce_paynocchio_settings')['accent_text_color']) {
+    if (array_key_exists('accent_text_color', $settigns)) {
         $accent_text_color = get_option( 'woocommerce_paynocchio_settings')['accent_text_color'];
     }
 ?>
@@ -158,7 +159,41 @@ if (!defined('ABSPATH')) {
                 <div class="paynocchio-my-orders-body paynocchio-tab-body">
                     <div class="paynocchio-profile-block">
                         <h2>My orders</h2>
-                        <p>No orders found!</p>
+                        <div class="history-list">
+
+                            <?php
+
+                            $orders = wc_get_orders([
+                                'numberposts' => -1,
+                                'orderby' => 'date',
+                                'order' => 'DESC',
+                                'customer_id'  => get_current_user_id(),
+                            ]);
+
+                            foreach ($orders as $order) {?>
+
+
+                                <div class="history-item">
+                                    <div class="history-info cfps-text-gray-500">
+                                        #<?php echo $order->get_id(); ?>
+                                    </div>
+                                    <div class="cfps-uppercase">
+                                        <?php echo $order->get_status(); ?>
+                                    </div>
+                                    <div class="history-info cfps-text-gray-500">
+                                        <?php
+                                        if( $date_completed = $order->get_date_completed() ){
+                                            // Display the localized formatted date
+                                            echo $date_completed->date_i18n('j F, Y');
+                                        }?>
+                                    </div>
+                                    <div class="history-amount">
+                                        <?php echo $order->get_total(); ?>
+                                        <?php echo $order->get_currency(); ?>
+                                    </div>
+                                </div>
+                            <?php } ?>
+                        </div>
                     </div>
                 </div>
 
@@ -238,31 +273,23 @@ if (!defined('ABSPATH')) {
                     <div class="paynocchio-profile-block">
                         <h2>History</h2>
                         <div class="history-list">
-
-                            <?php
-
-                            $orders = wc_get_orders([
-                                'numberposts' => -1,
-                                'orderby' => 'date',
-                                'order' => 'DESC',
-                                'customer_id'  => get_current_user_id(),
-                             ]);
-
-                            foreach ($orders as $order) { ?>
-
                             <div class="history-item">
                                 <div class="history-info cfps-text-gray-500">
-                                    #<?php echo $order->get_id(); ?>
-                                </div>
-                                <div class="history-info cfps-text-gray-500">
-                                    <?php echo $order->get_date_completed(); ?>
+                                    Today
                                 </div>
                                 <div class="history-amount">
-                                    <?php echo $order->get_total(); ?>
-                                    <?php echo $order->get_currency(); ?>
+                                    $0
                                 </div>
                             </div>
-                                <?php } ?>
+                            <div class="history-item">
+                                <div class="history-info">
+                                    <p class="cfps-font-semibold">NY - LA</p>
+                                    <p>January 3</p>
+                                </div>
+                                <div class="history-amount">
+                                    - $235.29
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
