@@ -324,7 +324,7 @@ import './topUpFormProcess'
         blockButton.click((evt) => setWalletStatus(evt, 'BLOCKED'))
         deleteButton.click((evt) => deleteWallet(evt))
 
-        $('a.tab-switcher').click(function() {
+        /*$('a.tab-switcher').click(function() {
             let link = $(this);
             let id = link.get(0).id;
             id = id.replace('_toggle','');
@@ -337,7 +337,7 @@ import './topUpFormProcess'
                     elem.fadeIn('fast').addClass('visible');
                 });
             }
-        });
+        });*/
 
         $('a.card-toggle').click(() => toggleVisibility('.paynocchio-card-container'));
 

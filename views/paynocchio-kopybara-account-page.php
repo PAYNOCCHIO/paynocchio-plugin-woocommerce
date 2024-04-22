@@ -100,11 +100,11 @@ if (array_key_exists('accent_text_color', $settigns)) {
                                 <div class="paynocchio-card">
                                     <img class="cfps-block !cfps-mx-auto !cfps-w-full !cfps-max-w-[350px]" src="<?php echo plugin_dir_url( WOOCOMMERCE_PAYNOCCHIO_BASENAME ) . 'assets/img/blank_card.webp' ?>" />
                                     <?php
-                                        if ($wallet['status'] == 'SUSPEND') {
-                                            echo '<div class="wallet_status">SUSPENDED</div>';
-                                        } elseif ($wallet['status'] == 'BLOCKED') {
-                                            echo '<div class="wallet_status">BLOCKED</div>';
-                                        }
+                                    if ($wallet['status'] == 'SUSPEND') {
+                                        echo '<div class="wallet_status">SUSPENDED</div>';
+                                    } elseif ($wallet['status'] == 'BLOCKED') {
+                                        echo '<div class="wallet_status">BLOCKED</div>';
+                                    }
                                     ?>
                                     <div class="paynocchio-balance-bonuses">
                                         <div class="paynocchio-balance">
@@ -177,31 +177,31 @@ if (array_key_exists('accent_text_color', $settigns)) {
                             </thead>
                             <tbody>
                             <?php
-                                $args = array(
-                                    'customer_id' => get_current_user_id(),
-                                    'limit' => -1, // to retrieve _all_ orders by this user
+                            $args = array(
+                                'customer_id' => get_current_user_id(),
+                                'limit' => -1, // to retrieve _all_ orders by this user
 
-                                );
-                                $orders = wc_get_orders($args);
+                            );
+                            $orders = wc_get_orders($args);
 
-                               // print_r($orders);
+                            // print_r($orders);
 
-                                foreach($orders as $order) {
+                            foreach($orders as $order) {
 
-                                    $date = strtotime($order->date_created);
-                                    $newformatdate = date('F j, Y',$date);
+                                $date = strtotime($order->date_created);
+                                $newformatdate = date('F j, Y',$date);
 
-                                    $bonuses_spent = 0;
-                                    $bonuses_spent_base = $order->get_meta( 'bonuses_value' );
-                                    if ($bonuses_spent_base) {
-                                        $bonuses_spent = $bonuses_spent_base;
-                                    } else {
-                                        $bonuses_spent = '';
-                                    }
+                                $bonuses_spent = 0;
+                                $bonuses_spent_base = $order->get_meta( 'bonuses_value' );
+                                if ($bonuses_spent_base) {
+                                    $bonuses_spent = $bonuses_spent_base;
+                                } else {
+                                    $bonuses_spent = '';
+                                }
 
-                                    $item_count = $order->get_item_count() - $order->get_item_count_refunded();
+                                $item_count = $order->get_item_count() - $order->get_item_count_refunded();
 
-                                    echo '<tr>
+                                echo '<tr>
                                         <td>#'.$order->id.'</td>
                                         <td>'.$newformatdate.'</td>
                                         <td class="cfps-capitalize">'.$order->status.'</td>
@@ -209,7 +209,7 @@ if (array_key_exists('accent_text_color', $settigns)) {
                                         <td class="cfps-text-gray-700">'.$bonuses_spent.'</td>
                                         <td class="cfps-text-green-700">+ '.$order->total * 0.1.'</td>
                                       </tr>';
-                                }
+                            }
                             ?>
                             </tbody>
                         </table>
@@ -326,7 +326,7 @@ if (array_key_exists('accent_text_color', $settigns)) {
     <?php
     /** Suspension and Deletion modals */
     ?>
-    <div class="modal suspendModal">
+    <div class="modal suspendModal <?php echo $paynocchio_classes; ?>">
         <div class="close-modal close"></div>
         <div class="container">
             <div class="header">
@@ -342,7 +342,7 @@ if (array_key_exists('accent_text_color', $settigns)) {
                     <strong>Are you sure you want to suspend your wallet?</strong>
                     <button id="suspend_button"
                             type="button"
-                            class="cfps-btn-primary close">
+                            class="cfps-btn-primary close cfps-rounded-lg">
                         Yes
                         <svg class="cfps-spinner cfps-hidden cfps-animate-spin cfps-ml-4 cfps-h-5 cfps-w-5 cfps-text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                             <circle class="cfps-opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
@@ -352,15 +352,15 @@ if (array_key_exists('accent_text_color', $settigns)) {
                     <?php wp_nonce_field( 'paynocchio_ajax_set_status', 'ajax-status-nonce' ); ?>
 
                     <button
-                        class="cfps-btn-primary close"
-                        type="button">No</button>
+                            class="cfps-btn-primary close cfps-rounded-lg"
+                            type="button">No</button>
                     <div class="message"></div>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="modal reactivateModal">
+    <div class="modal reactivateModal <?php echo $paynocchio_classes; ?>">
         <div class="close-modal close"></div>
         <div class="container">
             <div class="header">
@@ -375,7 +375,7 @@ if (array_key_exists('accent_text_color', $settigns)) {
                     <strong>Are you sure you want to reactivate your wallet?</strong>
                     <button id="reactivate_button"
                             type="button"
-                            class="cfps-btn-primary close">
+                            class="cfps-btn-primary close cfps-rounded-lg">
                         Yes
                         <svg class="cfps-spinner cfps-hidden cfps-animate-spin cfps-ml-4 cfps-h-5 cfps-w-5 cfps-text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                             <circle class="cfps-opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
@@ -385,15 +385,15 @@ if (array_key_exists('accent_text_color', $settigns)) {
                     <?php wp_nonce_field( 'paynocchio_ajax_set_status', 'ajax-status-nonce' ); ?>
 
                     <button
-                        class="cfps-btn-primary close"
-                        type="button">No</button>
+                            class="cfps-btn-primary close cfps-rounded-lg"
+                            type="button">No</button>
                     <div class="message"></div>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="modal blockModal">
+    <div class="modal blockModal <?php echo $paynocchio_classes; ?>">
         <div class="close-modal close"></div>
         <div class="container">
             <div class="header">
@@ -408,7 +408,7 @@ if (array_key_exists('accent_text_color', $settigns)) {
                     <strong>Are you sure you want to BLOCK your wallet?</strong>
                     <button id="block_button"
                             type="button"
-                            class="cfps-btn-primary close">
+                            class="cfps-btn-primary close cfps-rounded-lg">
                         Yes
                         <svg class="cfps-spinner cfps-hidden cfps-animate-spin cfps-ml-4 cfps-h-5 cfps-w-5 cfps-text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                             <circle class="cfps-opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
@@ -418,15 +418,15 @@ if (array_key_exists('accent_text_color', $settigns)) {
                     <?php wp_nonce_field( 'paynocchio_ajax_set_status', 'ajax-status-nonce' ); ?>
 
                     <button
-                        class="cfps-btn-primary close"
-                        type="button">No</button>
+                            class="cfps-btn-primary close cfps-rounded-lg"
+                            type="button">No</button>
                     <div class="message"></div>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="modal deleteModal">
+    <div class="modal deleteModal <?php echo $paynocchio_classes; ?>">
         <div class="close-modal close"></div>
         <div class="container">
             <div class="header">
@@ -441,7 +441,7 @@ if (array_key_exists('accent_text_color', $settigns)) {
                     <strong>Are you sure you want to DELETE your wallet?</strong>
                     <button id="delete_button"
                             type="button"
-                            class="cfps-btn-primary close">
+                            class="cfps-btn-primary close cfps-rounded-lg">
                         Yes
                         <svg class="cfps-spinner cfps-hidden cfps-animate-spin cfps-ml-4 cfps-h-5 cfps-w-5 cfps-text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                             <circle class="cfps-opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
@@ -451,8 +451,8 @@ if (array_key_exists('accent_text_color', $settigns)) {
                     <?php wp_nonce_field( 'paynocchio_ajax_delete_wallet', 'ajax-delete-nonce' ); ?>
 
                     <button
-                        class="cfps-btn-primary close"
-                        type="button">No</button>
+                            class="cfps-btn-primary close cfps-rounded-lg"
+                            type="button">No</button>
                     <div class="message"></div>
                 </div>
             </div>
@@ -462,35 +462,21 @@ if (array_key_exists('accent_text_color', $settigns)) {
     echo do_shortcode('[paynocchio_registration_block]');
 } ?>
 
-<?php
-// TODO
-/* PLEASE do not delete it yet, I will finalize it later
-$string = simplexml_load_file("https://www.artlebedev.ru/country-list/xml/");
-//Обратите внимание на вложенность с помощью
-// echo '<pre>';  print_r($xml);  echo '</pre>';
+<script>
+    jQuery('a.tab-switcher').click(function() {
+        let link = jQuery(this);
+        let id = link.get(0).id;
+        id = id.replace('_toggle','');
 
-function xml2array ( $xmlObject, $out = array () )
-{
-    foreach ( (array) $xmlObject as $index => $node )
-        $out[$index] = ( is_object ( $node ) ) ? xml2array ( $node ) : $node;
-
-    return $out;
-}
-
-$array = xml2array($string);
-$array = $array['country'];
-
-foreach($array as $item){
-    $item = xml2array($item);
-}
-
-//   print_r($array);
-
-foreach($array['country'] as $item){
-   // print_r($item);
-    print_r($item['english']);
-    //echo '<option value="">'.$item['iso'].'</option>';
-} */
-?>
+        let elem = jQuery('#paynocchio_' + id + '_body');
+        if (!elem.hasClass('visible')) {
+            jQuery('.paynocchio_tab_switchers a').removeClass('choosen');
+            link.addClass('choosen');
+            elem.siblings('.paynocchio-tab-body').removeClass('visible').fadeOut('fast', function () {
+                elem.fadeIn('fast').addClass('visible');
+            });
+        }
+    });
+</script>
 
 <?php echo do_shortcode('[paynocchio_modal_forms]'); ?>
