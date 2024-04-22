@@ -656,7 +656,7 @@ input[type=range].styled-slider.slider-progress:active::-ms-fill-lower {
 }
 
 .paynocchio-cart-wallet-widget {
-    @apply cfps-flex cfps-flex-row cfps-flex-wrap cfps-items-center cfps-relative cfps-gap-2 !cfps-text-base;
+    @apply cfps-flex cfps-flex-row cfps-items-center cfps-relative cfps-gap-2 !cfps-text-base;
 
 a {
     @apply cfps-text-black cfps-no-underline;

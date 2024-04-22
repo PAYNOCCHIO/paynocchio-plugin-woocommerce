@@ -65,7 +65,7 @@ $wallet_bal = 0;
             <?php } ?>
 
             <div class="cfps-pl-10 cfps-pb-6 cfps-text-center">
-                <p class="cfps-text-slate-500">I agree to <a href="#" class="cfps-text-slate-500 cfps-underline">Kopybara Terms & Conditions</a> and <a href="#" class="cfps-text-slate-500 cfps-underline">Rules of Paynocchio.Pay Priority program</a> </p>
+                <p class="cfps-text-slate-500">I agree to <a href="#" class="cfps-text-slate-500 cfps-underline">Paynocchio.Pay Terms & Conditions</a> and <a href="#" class="cfps-text-slate-500 cfps-underline">Rules of Paynocchio.Pay Priority program</a> </p>
             </div>
         <?php } else { ?>
             <button id="paynocchio_anonimous_activation_button"
