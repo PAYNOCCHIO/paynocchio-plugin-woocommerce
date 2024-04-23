@@ -416,12 +416,15 @@ import './topUpFormProcess'
                 const place_orderButton = $('#place_order');
                 const hidden = ($('.payment_box.payment_method_paynocchio').is(":hidden"));
 
-
                 if(place_orderButton && !hidden) {
-                    const balance_value = parseFloat($('.paynocchio-card-simulator .paynocchio-balance-value').text());
-                    const bonus_value = parseFloat($('.paynocchio-card-simulator .paynocchio-bonus-value').text());
+                    const balance_value = parseFloat($('.paynocchio-balance-value').text());
+                    const bonus_value = parseFloat($('.paynocchio-bonus-value').text());
                     const order_total = parseFloat($('.woocommerce-Price-amount').text().replace('$', ''))
                     const inputed_bonuses_value = parseFloat($('#bonuses-value').val());
+
+
+                    console.log(order_total)
+                    console.log(balance_value)
 
                     if( (balance_value + bonus_value) < order_total) {
                         place_orderButton.addClass('cfps-disabled')
