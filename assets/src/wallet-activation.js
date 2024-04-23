@@ -40,7 +40,8 @@ import './public.css';
             .always(function() {
                 $(`#${evt.target.id} .cfps-spinner`).addClass('cfps-hidden');
                 $(evt.target).removeClass('cfps-disabled')
-            });
+            })
+            .error(error => console.log(error.response));
     }
 
 
