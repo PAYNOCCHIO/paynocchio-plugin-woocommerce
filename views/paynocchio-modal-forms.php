@@ -78,8 +78,8 @@ if (is_user_logged_in()) {
                 The sending bank may charge a fee.<a href="#">Here's how to avoid it.</a> >
             </p>
 
-            <div class="autodeposit cfps-flex cfps-flex-row cfps-items-center cfps-mt-8 lg:cfps-mt-12 cfps-gap-x-2">
-                <img src="<?php echo plugin_dir_url( WOOCOMMERCE_PAYNOCCHIO_BASENAME ) . 'assets/img/i-gr.png' ?>"
+           <!-- <div class="autodeposit cfps-flex cfps-flex-row cfps-items-center cfps-mt-8 lg:cfps-mt-12 cfps-gap-x-2">
+                <img src="<?php /*echo plugin_dir_url( WOOCOMMERCE_PAYNOCCHIO_BASENAME ) . 'assets/img/i-gr.png' */?>"
                      class="cfps-h-[18px] cfps-w-[16px] cfps-mr-1 cfps-inline-block" />
                 Autodeposit
                 <div class="toggle-autodeposit">
@@ -88,7 +88,7 @@ if (is_user_logged_in()) {
                     <p>OFF</p>
                 </div>
                 <input type="hidden" value="0" name="autodeposit" id="autodeposit" />
-            </div>
+            </div>-->
         </div>
         <div class="footer">
             <div>

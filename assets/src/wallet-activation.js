@@ -56,7 +56,7 @@ import './public.css';
     $(document).ready(function() {
         //READY START
 
-        const checkout = window.location.pathname === '/checkout/';
+        const checkout = window.location.pathname === '/checkout/?activated=1';
 
         const activationButton = $("#paynocchio_activation_button");
 

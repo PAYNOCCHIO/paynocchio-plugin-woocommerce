@@ -14,49 +14,50 @@
 #paynocchio_auth_block {
     @apply cfps-bg-white cfps-drop-shadow cfps-py-4 cfps-mt-4;
 
-p {
-    @apply cfps-text-base;
-}
+    p {
+        @apply cfps-text-base;
+    }
 
-.paynocchio_form {
-    @apply cfps-hidden cfps-p-8 cfps-drop-shadow;
-}
+    .paynocchio_form {
+        @apply cfps-hidden cfps-p-8;
+    }
 
-.visible {
-    @apply cfps-block;
-}
+    .visible {
+        @apply cfps-block;
+    }
 
-form {
-    @apply cfps-flex cfps-flex-col cfps-gap-4;
-}
+    form {
+        @apply cfps-flex cfps-flex-col cfps-gap-4;
+    }
 
-.row {
-    @apply lg:cfps-grid lg:cfps-grid-cols-2 cfps-gap-4 cfps-flex cfps-flex-col;
-}
+    .row {
+       /* @apply lg:cfps-grid lg:cfps-grid-cols-2 cfps-gap-4 cfps-flex cfps-flex-col;*/
+        @apply cfps-flex cfps-flex-col cfps-gap-4;
+    }
 
-.col {
-    @apply cfps-flex cfps-flex-col;
-}
+    .col {
+        @apply cfps-flex cfps-flex-col;
+    }
 
-&:last-child {
-     @apply cfps-mb-0;
- }
+    &:last-child {
+         @apply cfps-mb-0;
+     }
 
-.paynocchio_input {
-    @apply cfps-border-0;
-}
+    .paynocchio_input {
+        @apply cfps-border-0 cfps-drop-shadow;
+    }
 
-.form-toggle-a {
-    @apply cfps-cursor-pointer cfps-underline;
-}
+    .form-toggle-a {
+        @apply cfps-cursor-pointer cfps-underline;
+    }
 
-input[type="checkbox"] {
-    @apply cfps-rounded cfps-p-2;
-}
+    input[type="checkbox"] {
+        @apply cfps-rounded cfps-p-2;
+    }
 
-h2 {
-    @apply cfps-text-2xl cfps-font-bold cfps-mb-4 cfps-text-center;
-}
+    h2 {
+        @apply cfps-text-2xl cfps-font-bold cfps-mb-4 cfps-text-center;
+    }
 }
 
 .cfps-btn-primary {
@@ -109,11 +110,15 @@ a {
 }
 
 .paynocchio-profile-info {
-    @apply cfps-grid cfps-items-center cfps-gap-x-6 cfps-grid-cols-[140px_1fr_140px] cfps-my-8 cfps-max-w-5xl cfps-mx-auto;
+    @apply /*cfps-grid cfps-items-center cfps-gap-x-6 cfps-grid-cols-[140px_1fr_140px]*/ cfps-my-8 cfps-max-w-5xl cfps-mx-auto;
 }
 
 .paynocchio-profile-img {
     @apply cfps-h-[140px] cfps-p-2;
+}
+
+.paynocchio-profile-text {
+    @apply cfps-p-2;
 }
 
 .paynocchio-profile-text h2 {
@@ -185,7 +190,7 @@ a {
 }
 
 .paynocchio-actions-btns {
-    @apply cfps-flex cfps-flex-row cfps-flex-wrap cfps-justify-between cfps-items-center cfps-gap-4;
+    @apply cfps-flex cfps-flex-row cfps-flex-wrap cfps-justify-center cfps-items-center cfps-gap-4;
 }
 
 .history-list {
@@ -658,45 +663,45 @@ input[type=range].styled-slider.slider-progress:active::-ms-fill-lower {
 .paynocchio-cart-wallet-widget {
     @apply cfps-flex cfps-flex-row cfps-items-center cfps-relative cfps-gap-2 !cfps-text-base;
 
-a {
-    @apply cfps-text-black cfps-no-underline;
-}
+    a {
+        @apply cfps-text-black cfps-no-underline cfps-font-black;
+    }
 
-.cart {
-    @apply cfps-flex cfps-flex-row cfps-items-center cfps-p-2 cfps-bg-zinc-100 cfps-text-zinc-950;
-}
+    .cart {
+        @apply cfps-flex cfps-flex-row cfps-items-center cfps-p-2 cfps-bg-zinc-100 cfps-text-zinc-950;
+    }
 
-.wallet {
-    @apply cfps-flex cfps-flex-row cfps-items-center cfps-p-2 cfps-bg-zinc-100 cfps-text-zinc-950;
-}
+    .wallet {
+        @apply cfps-flex cfps-flex-row cfps-items-center cfps-p-2 cfps-bg-zinc-100 cfps-text-zinc-950;
+    }
 
-.wallet .balance {
-    @apply cfps-flex cfps-flex-row cfps-items-center cfps-pr-2 cfps-mr-2 cfps-border-r cfps-border-zinc-300 cfps-gap-x-2;
-}
+    .wallet .balance {
+        @apply cfps-flex cfps-flex-row cfps-items-center cfps-pr-2 cfps-mr-2 cfps-border-r cfps-border-zinc-300 cfps-gap-x-2;
+    }
 
-.wallet .bonuses {
-    @apply cfps-flex cfps-flex-row cfps-items-center cfps-gap-x-2;
-}
+    .wallet .bonuses {
+        @apply cfps-flex cfps-flex-row cfps-items-center cfps-gap-x-2;
+    }
 
-.wallet .add_money_button {
-    @apply cfps-bg-zinc-300 cfps-rounded-3xl cfps-w-6 cfps-h-6 cfps-leading-6 cfps-text-center cfps-block cfps-ml-2 cfps-cursor-pointer;
-}
+    .wallet .add_money_button {
+        @apply cfps-bg-zinc-300 cfps-rounded-3xl cfps-w-6 cfps-h-6 cfps-leading-6 cfps-text-center cfps-block cfps-ml-2 cfps-cursor-pointer;
+    }
 
-.topup_mini_form {
-    @apply cfps-hidden cfps-absolute cfps-top-[110%] cfps-left-0;
-}
+    .topup_mini_form {
+        @apply cfps-hidden cfps-absolute cfps-top-[110%] cfps-right-0;
+    }
 
-.topup_mini_form input {
-    @apply !cfps-p-0 !cfps-bg-transparent !cfps-shadow-none;
-}
+    .topup_mini_form input {
+        @apply !cfps-p-0 !cfps-bg-transparent !cfps-shadow-none;
+    }
 
-.mini_form_top_up_button {
-    @apply cfps-border-0 cfps-py-2 cfps-px-4 cfps-bg-blue-500 cfps-text-white cfps-flex cfps-flex-row;
-}
+    .mini_form_top_up_button {
+        @apply cfps-border-0 cfps-py-2 cfps-px-4 cfps-bg-blue-500 cfps-text-white cfps-flex cfps-flex-row;
+    }
 
-.top_up_mini_form_wrapper {
-    @apply cfps-p-4 cfps-bg-white cfps-drop-shadow cfps-flex cfps-flex-row cfps-items-center cfps-gap-x-2 cfps-justify-between cfps-bg-zinc-100;
-}
+    .top_up_mini_form_wrapper {
+        @apply cfps-p-4 cfps-bg-white cfps-drop-shadow cfps-flex cfps-flex-row cfps-items-center cfps-gap-x-2 cfps-justify-between cfps-bg-zinc-100;
+    }
 }
 
 .paynocchio-profile-actions {

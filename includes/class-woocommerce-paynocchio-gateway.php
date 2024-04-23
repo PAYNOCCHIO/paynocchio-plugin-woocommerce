@@ -176,7 +176,7 @@ class Woocommerce_Paynocchio_Payment_Gateway extends WC_Payment_Gateway {
         ]);*/
 
         if ($wallet_response['balance'] + $wallet_response['bonuses'] < $customer_order->total) {
-            wc_add_notice( 'You balance is lack for $' . $customer_order->total - $wallet_response['balance'] . '. Please TopUp.', 'error' );
+            wc_add_notice( 'You balance is lack for $' . $customer_order->total - $wallet_response['balance'] . '. Please top up your wallet.', 'error' );
             $customer_order->add_order_note( 'Error: insufficient funds' );
             return;
         }

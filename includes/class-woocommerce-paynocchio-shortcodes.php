@@ -14,7 +14,7 @@ class Woocommerce_Paynocchio_Shortcodes {
 
     static function paynocchio_registration_block($attr) {
         ob_start();
-        require(WOOCOMMERCE_PAYNOCCHIO_PATH . 'views/paynocchio-registration-block.php');
+        require(WOOCOMMERCE_PAYNOCCHIO_PATH . 'views/paynocchio-kopybara-registration-block.php');
         return ob_get_clean();
     }
 

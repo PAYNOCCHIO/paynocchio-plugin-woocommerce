@@ -40,10 +40,10 @@ if (array_key_exists('accent_text_color', $settigns)) {
     <section class="paynocchio <?php echo $paynocchio_classes; ?>">
         <div class="paynocchio-new-account">
             <div class="paynocchio-account-menu">
-                <div class="paynocchio-profile-info">
-                    <div class="paynocchio-profile-img">
-                        <img src="<?php echo plugin_dir_url( WOOCOMMERCE_PAYNOCCHIO_BASENAME ) . 'assets/img/profile.png' ?>" />
-                    </div>
+                <div class="paynocchio-profile-info cfps-p-8">
+                    <!--<div class="paynocchio-profile-img">
+                        <img src="<?php /*echo plugin_dir_url( WOOCOMMERCE_PAYNOCCHIO_BASENAME ) . 'assets/img/profile.png' */?>" />
+                    </div>-->
                     <div class="paynocchio-profile-text">
                         <h2>
                             <?php echo $wallet['user']['first_name']. ' ' .$wallet['user']['last_name']; ?>
@@ -67,9 +67,6 @@ if (array_key_exists('accent_text_color', $settigns)) {
                         <a class="tab-switcher" id="account_details_toggle">Account Details</a>
                     </li>
                     <li>
-                        <a class="tab-switcher" id="wallet_settings_toggle">Settings</a>
-                    </li>
-                    <li>
                         <a href="<?php echo wp_logout_url('/') ?>">Log out</a>
                     </li>
                 </menu>
@@ -78,24 +75,11 @@ if (array_key_exists('accent_text_color', $settigns)) {
                 <div class="paynocchio_tab paynocchio-tab-body visible" id="paynocchio_bonuses_body">
                     <?php if (!get_user_meta(get_current_user_id(), PAYNOCCHIO_WALLET_KEY, true)) { ?>
                         <div class="paynocchio-profile-block">
-                            <div class="cfps-grid cfps-grid-cols-[24px_1fr] cfps-gap-x-6">
-                                <img src="<?php echo plugin_dir_url( WOOCOMMERCE_PAYNOCCHIO_BASENAME ) . 'assets/img/i.png' ?>" />
-                                <div class="">
-                                    <p class="cfps-mb-4">Join Paynocchio.Pay program to make quicker purchases, earn cashback bonuses, and buy premium tickets.</p>
-                                    <button id="paynocchio_activation_button" type="button" class="paynocchio_button paynocchio_colored cfps-btn-primary" value="">
-                                        Activate Paynocchio.Pay
-                                        <svg class="cfps-spinner cfps-hidden cfps-animate-spin cfps-ml-4 cfps-h-5 cfps-w-5 cfps-text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                            <circle class="cfps-opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                                            <path class="cfps-opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                                        </svg>
-                                    </button>
-                                    <?php wp_nonce_field( 'paynocchio_ajax_activation', 'ajax-activation-nonce' ); ?>
-                                </div>
-                            </div>
+                            <?php echo do_shortcode('[paynocchio_activation_block]'); ?>
                         </div>
                     <?php } else { ?>
                         <div class="paynocchio-profile-block <?php if ($wallet['status'] !== 'ACTIVE') { ?>cfps-disabled<?php } ?>">
-                            <h2>Paynocchio.Pay</h2>
+                            <!--<h2>Paynocchio.Pay</h2>-->
                             <div class="paynocchio-card-container">
                                 <div class="paynocchio-card">
                                     <img class="cfps-block !cfps-mx-auto !cfps-w-full !cfps-max-w-[350px]" src="<?php echo plugin_dir_url( WOOCOMMERCE_PAYNOCCHIO_BASENAME ) . 'assets/img/blank_card.webp' ?>" />
@@ -129,9 +113,9 @@ if (array_key_exists('accent_text_color', $settigns)) {
                                     </div>
                                 </div>
                             </div>
-                            <div class="paynocchio-actions-btns cfps-mt-8 lg:cfps-mt-16">
+                            <div class="paynocchio-actions-btns cfps-mt-8">
                                 <div class="autodeposit cfps-flex cfps-flex-row cfps-items-center cfps-gap-x-2">
-                                    <img src="<?php echo plugin_dir_url( WOOCOMMERCE_PAYNOCCHIO_BASENAME ) . 'assets/img/i-gr.png' ?>"
+                                   <!-- <img src="<?php /*echo plugin_dir_url( WOOCOMMERCE_PAYNOCCHIO_BASENAME ) . 'assets/img/i-gr.png' */?>"
                                          class="cfps-h-[18px] cfps-w-[16px] cfps-mr-1 cfps-inline-block" />
                                     Autodeposit
                                     <div class="toggle-autodeposit">
@@ -139,7 +123,7 @@ if (array_key_exists('accent_text_color', $settigns)) {
                                         <div class="toggler"></div>
                                         <p>OFF</p>
                                     </div>
-                                    <input type="hidden" value="0" name="autodeposit" id="autodeposit" />
+                                    <input type="hidden" value="0" name="autodeposit" id="autodeposit" />-->
                                 </div>
                                 <div class="paynocchio-actions-btns">
                                     <a href="#" class="paynocchio_button btn-blue paynocchio_colored" data-modal=".topUpModal">
@@ -154,10 +138,59 @@ if (array_key_exists('accent_text_color', $settigns)) {
                             </div>
                         </div>
 
-                        <div class="paynocchio-profile-block">
+                        <!--
                             <h2>Payments methods</h2>
                             <a href="" class="paynocchio_button btn-blue paynocchio_colored" data-modal=".paymentMethodModal">Add payment method</a>
-                        </div>
+                        </div>-->
+
+                        <?php if(isset($wallet['status'])) { ?>
+                            <div class="paynocchio-profile-block">
+                                <div class="paynocchio-profile-actions">
+                                    <div class="cfps-mb-4 cfps-flex cfps-flex-row cfps-gap-2">
+                                        <div>Wallet Status:</div>
+                                        <svg class="cfps-spinner cfps-hidden cfps-animate-spin cfps-ml-4 cfps-h-5 cfps-w-5 cfps-text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                            <circle class="cfps-opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                            <path class="cfps-opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                        </svg>
+                                        <span id="wallet_status" class="cfps-font-bold"><?php echo $wallet['status'] ?></span>
+                                    </div>
+                                    <?php if ($wallet['status'] !== 'BLOCKED') { ?>
+                                        <div class="paynocchio-actions-btns !cfps-justify-start">
+                                            <?php if($wallet['status'] === "ACTIVE") { ?>
+                                                <a href="#" class="paynocchio_button btn-blue paynocchio_colored" data-modal=".suspendModal">Suspend wallet</a>
+                                            <?php } elseif ($wallet['status'] === "SUSPEND") { ?>
+                                                <a href="#" class="paynocchio_button btn-blue paynocchio_colored" data-modal=".reactivateModal">Reactivate wallet</a>
+                                            <?php } ?>
+                                            <a href="#" class="paynocchio_button btn-gray" data-modal=".blockModal">
+                                                Block wallet
+                                            </a>
+                                        </div>
+
+                                       <!-- <label class="dropdown">
+                                            <div class="action-button">
+                                                Manage wallet
+                                            </div>
+
+                                            <input type="checkbox" class="wallet-input" />
+
+                                            <ul class="wallet-menu cfps-bg-white">
+                                                <?php /*if($wallet['status'] === "ACTIVE") { */?>
+                                                    <li><a href="#" data-modal=".suspendModal">Suspend wallet</a></li>
+                                                <?php /*}
+                                                if ($wallet['status'] === "SUSPEND") { */?>
+                                                    <li><a href="#" data-modal=".reactivateModal">Reactivate wallet</a></li>
+                                                <?php /*} */?>
+
+                                                <li><a class="cfps-text-red-500" href="#" data-modal=".blockModal">Block wallet</a></li>
+                                            </ul>
+                                        </label>-->
+                                    <?php } ?>
+                                    <?php if($wallet['status'] === 'BLOCKED') { ?>
+                                        <button data-modal=".deleteModal" class="cfps-btn-primary !cfps-rounded-lg">Delete Wallet</button>
+                                    <?php } ?>
+                                </div>
+                            </div>
+                        <?php } ?>
                     <?php } ?>
                 </div>
 
@@ -277,46 +310,6 @@ if (array_key_exists('accent_text_color', $settigns)) {
                         </form>
 
                         <?php do_action( 'woocommerce_after_edit_account_form' ); ?>
-                    </div>
-                </div>
-                <div class="paynocchio_tab paynocchio-tab-body" id="paynocchio_wallet_settings_body">
-                    <div class="paynocchio-profile-block woocommerce">
-                        <h2>Settings</h2>
-
-                        <?php if(isset($wallet['status'])) { ?>
-                            <div class="paynocchio-profile-actions">
-                                <div class="cfps-mb-4 cfps-text-gray-500">Wallet Status:
-                                    <svg class="cfps-spinner cfps-hidden cfps-animate-spin cfps-ml-4 cfps-h-5 cfps-w-5 cfps-text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                        <circle class="cfps-opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                                        <path class="cfps-opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                                    </svg>
-                                    <span id="wallet_status" class="cfps-font-bold"><?php echo $wallet['status'] ?></span></div>
-                                <?php if($wallet['status'] !== 'BLOCKED') { ?>
-                                    <label class="dropdown">
-                                        <div class="action-button">
-                                            Manage wallet
-                                        </div>
-
-                                        <input type="checkbox" class="wallet-input" />
-
-                                        <ul class="wallet-menu cfps-bg-white">
-                                            <?php if($wallet['status'] === "ACTIVE") { ?>
-                                                <li><a href="#" data-modal=".suspendModal">Suspend wallet</a></li>
-                                            <?php }
-                                            if ($wallet['status'] === "SUSPEND") { ?>
-                                                <li><a href="#" data-modal=".reactivateModal">Reactivate wallet</a></li>
-                                            <?php } ?>
-
-                                            <li><a class="cfps-text-red-500" href="#" data-modal=".blockModal">Block wallet</a></li>
-                                        </ul>
-                                    </label>
-                                <?php } ?>
-
-                                <?php if($wallet['status'] === 'BLOCKED') { ?>
-                                    <button data-modal=".deleteModal" class="cfps-btn-primary">Delete Wallet</button>
-                                <?php } ?>
-                            </div>
-                        <?php } ?>
                     </div>
                 </div>
             </div>
