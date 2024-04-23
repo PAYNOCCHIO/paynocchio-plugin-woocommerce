@@ -5,21 +5,22 @@ if (!defined('ABSPATH')) {
 ?>
 
 <?php
-$paynocchio_classes = '';
-$paynocchio_classes .= get_option( 'woocommerce_paynocchio_settings')['darkmode'] == 'yes' ? 'paynocchio_dark_mode ' : '';
-$paynocchio_classes .= get_option( 'woocommerce_paynocchio_settings')['rounded'] == 'yes' ? 'paynocchio_rounded ' : '';
-$embleme_link = plugin_dir_url( WOOCOMMERCE_PAYNOCCHIO_BASENAME ) . 'assets/img/paynocchio_';
-$embleme_link .= get_option( 'woocommerce_paynocchio_settings')['darkmode'] == 'yes' ? 'white.svg' : 'black.svg';
+    $paynocchio_classes = '';
+    $settigns = get_option( 'woocommerce_paynocchio_settings');
+    $paynocchio_classes .= array_key_exists('darkmode', $settigns) && $settigns['darkmode'] == 'yes' ? 'paynocchio_dark_mode ' : '';
+    $paynocchio_classes .= array_key_exists('rounded', $settigns) && $settigns['rounded'] == 'yes' ? 'paynocchio_rounded ' : '';
+    $embleme_link = plugin_dir_url( WOOCOMMERCE_PAYNOCCHIO_BASENAME ) . 'assets/img/paynocchio_';
+    $embleme_link .= array_key_exists('darkmode', $settigns) && $settigns['darkmode'] == 'yes' ? 'white.svg' : 'black.svg';
 
-$accent_color = '#3b82f6';
-if (get_option( 'woocommerce_paynocchio_settings')['accent_color']) {
-    $accent_color = get_option( 'woocommerce_paynocchio_settings')['accent_color'];
-}
+    $accent_color = '#3b82f6';
+    if (array_key_exists('accent_color', $settigns)) {
+        $accent_color = get_option( 'woocommerce_paynocchio_settings')['accent_color'];
+    }
 
-$accent_text_color = '#ffffff';
-if (get_option( 'woocommerce_paynocchio_settings')['accent_text_color']) {
-    $accent_text_color = get_option( 'woocommerce_paynocchio_settings')['accent_text_color'];
-}
+    $accent_text_color = '#ffffff';
+    if (array_key_exists('accent_text_color', $settigns)) {
+        $accent_text_color = get_option( 'woocommerce_paynocchio_settings')['accent_text_color'];
+    }
 ?>
 
     <style>
