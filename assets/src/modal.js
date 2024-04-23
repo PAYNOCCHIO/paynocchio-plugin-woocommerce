@@ -44,6 +44,7 @@ export default class Modal {
         this.options.element.getBoundingClientRect();
         this.options.element.classList.add('open');
         document.body.classList.add('paynocchio-modal-open');
+        document.body.append(this.options.element);
         if (this.options.onOpen) {
             this.options.onOpen(this);
         }
