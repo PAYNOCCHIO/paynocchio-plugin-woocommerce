@@ -73,7 +73,7 @@ const ActivationBlock = () => {
 
                 <div className="cfps-pl-10 cfps-pb-6 cfps-text-center">
                     <p className="cfps-text-slate-500">I agree to <a href="#"
-                                                                     className="cfps-text-slate-500 cfps-underline">Kopybara
+                                                                     className="cfps-text-slate-500 cfps-underline">Paynocchio
                         Terms & Conditions</a> and <a href="#" className="cfps-text-slate-500 cfps-underline">Rules of
                         Paynocchio.Pay Priority program</a></p>
                 </div>
