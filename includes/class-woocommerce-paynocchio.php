@@ -336,6 +336,10 @@ class Woocommerce_Paynocchio {
              $json_response = json_decode($wallet_response);
              if($json_response->status === 'success') {
                  add_user_meta($this->user_id, PAYNOCCHIO_WALLET_KEY, $json_response->wallet, true);
+             } else {
+                 wp_send_json([
+                     'response' => json_response,
+                 ]);
              }
          }
 
