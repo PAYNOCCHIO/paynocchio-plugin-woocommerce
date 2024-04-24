@@ -69,8 +69,8 @@ import './topUpFormProcess'
         const hidden = ($('.payment_box.payment_method_paynocchio').is(":hidden"));
 
         if(place_orderButton && !hidden) {
-            const balance_value = parseFloat($('.paynocchio-balance-value').text());
-            const bonus_value = parseFloat($('.paynocchio-bonus-value').text());
+            const balance_value = parseFloat($('.paynocchio-balance-value').first().text());
+            const bonus_value = parseFloat($('.paynocchio-bonus-value').first().text());
             const order_total = parseFloat($('.woocommerce-Price-amount').text().replace('$', ''))
             const inputed_bonuses_value = parseFloat($('#bonuses-value').val());
 
@@ -108,8 +108,6 @@ import './topUpFormProcess'
 
         $(`#${evt.target.id} .cfps-spinner`).removeClass('cfps-hidden');
 
-        console.log('amount', $('#top_up_amount').val())
-
         $.ajax({
             url: paynocchio_object.ajaxurl,
             type: 'POST',
@@ -123,7 +121,6 @@ import './topUpFormProcess'
                     $('.topUpModal .message').text('Success!');
                     updateWalletBalance();
                     //updateOrderButtonState();
-                    checkBalance();
                     $('.topUpModal').delay(1000).fadeOut('fast')
                     $('body').removeClass('paynocchio-modal-open');
                 }
@@ -135,6 +132,8 @@ import './topUpFormProcess'
                 $(evt.target).removeClass('cfps-disabled')
                 $('.topUpModal .message').text('');
             });
+
+        checkBalance();
     }
 
     /**
@@ -313,7 +312,10 @@ import './topUpFormProcess'
     /**
      * Balance polling
      */
-    setInterval(() => updateWalletBalance(), 5000)
+    setInterval(() => {
+        updateWalletBalance();
+        checkBalance();
+    }, 5000)
 
     /**
      * Triggers update_checkout
