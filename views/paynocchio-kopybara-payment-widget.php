@@ -23,6 +23,8 @@ if (is_user_logged_in()) {
     $embleme_link = plugin_dir_url( WOOCOMMERCE_PAYNOCCHIO_BASENAME ) . 'assets/img/paynocchio_';
     $embleme_link .= array_key_exists('darkmode', $settigns) && $settigns['darkmode'] == 'yes' ? 'white.svg' : 'black.svg';
 
+    $paynocchio_embleme_url = array_key_exists('embleme_url', $settigns) && $settigns['embleme_url'] ? $settigns['embleme_url'] : '';
+
     $accent_color = '#3b82f6';
     if (array_key_exists('accent_color', $settigns)) {
         $accent_color = get_option( 'woocommerce_paynocchio_settings')['accent_color'];
@@ -56,23 +58,61 @@ if (is_user_logged_in()) {
         </div>-->
         <section class="paynocchio <?php echo $paynocchio_classes; ?>">
             <div class="paynocchio-payment-block">
-                <div class="paynocchio_tiles">
+
+                <div class="paynocchio-card-container">
+                    <div class="paynocchio-card">
+                        <img class="cfps-block !cfps-mx-auto !cfps-w-full !cfps-max-w-[350px]" src="<?php echo plugin_dir_url( WOOCOMMERCE_PAYNOCCHIO_BASENAME ) . 'assets/img/blank_card.webp' ?>" />
+                        <?php if ($paynocchio_embleme_url) { ?>
+                            <img src="<?php echo $paynocchio_embleme_url; ?>" class="on_card_embleme" />
+                        <?php } ?>
+                        <?php
+                        if ($wallet['status'] == 'SUSPEND') {
+                            echo '<div class="wallet_status">SUSPENDED</div>';
+                        } elseif ($wallet['status'] == 'BLOCKED') {
+                            echo '<div class="wallet_status">BLOCKED</div>';
+                        }
+                        ?>
+                        <div class="paynocchio-balance-bonuses">
+                            <div class="paynocchio-balance">
+                                <div>
+                                    Balance
+                                </div>
+                                <div class="amount">
+                                    $<span class="paynocchio-numbers paynocchio-balance-value" data-balance="<?php echo $wallet['balance'] ?>"><?php echo $wallet['balance'] ?></span>
+                                </div>
+                            </div>
+                            <div class="paynocchio-bonuses">
+                                <div>
+                                    Bonuses
+                                </div>
+                                <div class="amount">
+                                    <span class="paynocchio-numbers paynocchio-bonus-value" data-bonus="<?php echo $wallet['bonuses'] ?>"><?php echo $wallet['bonuses'] ?></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="paynocchio_payment_card_button">
+                            <a href="#" class="btn-blue paynocchio_button" data-modal=".topUpModal">Add money</a>
+                        </div>
+                    </div>
+                </div>
+
+               <!-- <div class="paynocchio_tiles">
                     <div class="!cfps-max-w-full cfps-rounded-xl cfps-p-8 cfps-flex cfps-flex-row cfps-flex-wrap cfps-items-center
                     cfps-justify-between cfps-gap-8 cfps-bg-gradient-to-r cfps-from-gray-200 cfps-to-gray-300">
                         <h2 class="!cfps-text-[#515151] cfps-text-2xl cfps-font-bold">Your Wallet</h2>
                         <div class="cfps-flex cfps-flex-row cfps-gap-8">
                             <div>
                                 <p>Balance:</p>
-                                <p class="cfps-text-xl cfps-font-bold">$<span class="paynocchio-numbers paynocchio-balance-value" data-balance="<?php echo $wallet['balance'] ?? 0; ?>"><?php echo $wallet['balance'] ?? 0; ?></span></p>
+                                <p class="cfps-text-xl cfps-font-bold">$<span class="paynocchio-numbers paynocchio-balance-value" data-balance="<?php /*echo $wallet['balance'] ?? 0; */?>"><?php /*echo $wallet['balance'] ?? 0; */?></span></p>
                             </div>
                             <div>
                                 <p>Bonuses:</p>
-                                <p class="cfps-text-xl cfps-font-bold"><span class="paynocchio-numbers paynocchio-bonus-value" data-bonus="<?php echo $wallet['bonuses'] ?? 0 ?>"><?php echo $wallet['bonuses'] ?? 0 ?></span></p>
+                                <p class="cfps-text-xl cfps-font-bold"><span class="paynocchio-numbers paynocchio-bonus-value" data-bonus="<?php /*echo $wallet['bonuses'] ?? 0 */?>"><?php /*echo $wallet['bonuses'] ?? 0 */?></span></p>
                             </div>
                         </div>
                         <div class=""><a href="#" class="btn-blue paynocchio_button" data-modal=".topUpModal">Add money</a></div>
                     </div>
-                </div>
+                </div>-->
                 <?php if($wallet['bonuses']) {
                     if($wallet['bonuses'] < $cart_total) {
                         $max_bonus = $wallet['bonuses'];
@@ -101,7 +141,7 @@ if (is_user_logged_in()) {
                     </div>
                 <?php } ?>
                 <div class="cfps-flex cfps-flex-row cfps-gap-x-4 cfps-mt-8 cfps-text-sm cfps-flex-wrap">
-                    <a href="/paynocchio-account">Paynocchio Account</a>
+                    <a href="/account/">My Account</a>
                     <a href="<?php echo get_privacy_policy_url(); ?>">Privacy Policy</a>
                     <a href="<?php echo get_permalink( wc_terms_and_conditions_page_id() ); ?>">Terms and Conditions</a>
                 </div>

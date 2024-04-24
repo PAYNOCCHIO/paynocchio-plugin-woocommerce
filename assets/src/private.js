@@ -294,7 +294,7 @@ import './topUpFormProcess'
         const place_orderButton = $('#place_order');
         const hidden = ($('.payment_box.payment_method_paynocchio').is(":hidden"));
         if(place_orderButton && !hidden) {
-            setTimeout(() => {$(document.body).trigger('update_checkout');}, 100)
+            $(document.body).trigger('update_checkout');
         }
     }
 
@@ -423,8 +423,8 @@ import './topUpFormProcess'
                 const hidden = ($('.payment_box.payment_method_paynocchio').is(":hidden"));
 
                 if(place_orderButton && !hidden) {
-                    const balance_value = parseFloat($('.paynocchio-balance-value').first().data('balance'));
-                    const bonus_value = parseFloat($('.paynocchio-bonus-value').first().data('bonus'));
+                    const balance_value = parseFloat($('.paynocchio-balance-value').first().attr('data-balance'));
+                    const bonus_value = parseFloat($('.paynocchio-bonus-value').first().attr('data-bonus'));
                     const order_total = parseFloat($('.woocommerce-Price-amount').text().replace('$', ''))
                     const inputed_bonuses_value = parseFloat($('#bonuses-value').val());
 

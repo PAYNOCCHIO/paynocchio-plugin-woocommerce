@@ -31,7 +31,7 @@
     }
 
     .row {
-       /* @apply lg:cfps-grid lg:cfps-grid-cols-2 cfps-gap-4 cfps-flex cfps-flex-col;*/
+        /* @apply lg:cfps-grid lg:cfps-grid-cols-2 cfps-gap-4 cfps-flex cfps-flex-col;*/
         @apply cfps-flex cfps-flex-col cfps-gap-4;
     }
 
@@ -41,7 +41,7 @@
 
     &:last-child {
          @apply cfps-mb-0;
-     }
+    }
 
     .paynocchio_input {
         @apply cfps-border-0 cfps-drop-shadow;
@@ -92,13 +92,13 @@
 .paynocchio-account {
     @apply cfps-mt-4 cfps-p-4 cfps-bg-white cfps-drop-shadow;
 
-a {
-    @apply cfps-text-blue-500;
+    a {
+        @apply cfps-text-blue-500;
 
-&.cfps-btn-primary {
-     @apply cfps-text-white;
- }
-}
+        &.cfps-btn-primary {
+             @apply cfps-text-white;
+        }
+    }
 }
 
 .paynocchio-embleme {
@@ -372,8 +372,6 @@ Numbers animation
     @apply cfps-translate-y-0 cfps-transition-all cfps-duration-[0.5s] cfps-ease-[ease];
 }
 
-
-
 input {
     --tw-ring-color: transparent!important;
 }
@@ -447,6 +445,18 @@ input {
 
 .paynocchio-payment-block {
     @apply cfps-py-4 cfps-px-8 cfps-max-w-5xl cfps-mx-auto cfps-mt-4 cfps-mb-4 cfps-drop-shadow cfps-bg-white;
+    .paynocchio-card {
+        @apply cfps-relative ;
+    }
+    .paynocchio-balance-bonuses {
+        @apply cfps-text-black/80;
+    }
+    .paynocchio_payment_card_button {
+        @apply cfps-absolute cfps-right-[7%] cfps-bottom-[10%];
+    }
+    .on_card_embleme {
+        @apply !cfps-absolute cfps-w-[50px] cfps-h-[50px] cfps-right-[7%] cfps-top-[10%] !cfps-m-0 !cfps-p-0;
+    }
 }
 
 .paynocchio-payment-block .paynocchio_tiles {
@@ -721,42 +731,42 @@ input[type=range].styled-slider.slider-progress:active::-ms-fill-lower {
 }
 
 .paynocchio-profile-actions {
-.dropdown {
-    @apply cfps-relative cfps-inline-block;
-}
-.action-button {
-    @apply cfps-inline-block cfps-relative cfps-border cfps-rounded cfps-pr-6 cfps-pl-3 cfps-py-1 cfps-bg-blue-500 hover:cfps-bg-blue-600 cfps-text-white cfps-cursor-pointer cfps-text-nowrap;
+    .dropdown {
+        @apply cfps-relative cfps-inline-block;
+    }
+    .action-button {
+        @apply cfps-inline-block cfps-relative cfps-border cfps-rounded cfps-pr-6 cfps-pl-3 cfps-py-1 cfps-bg-blue-500 hover:cfps-bg-blue-600 cfps-text-white cfps-cursor-pointer cfps-text-nowrap;
 
-&:after {
-     @apply cfps-absolute cfps-content-[''] cfps-top-1/2 cfps-right-2 -cfps-translate-y-1/2 cfps-w-0 cfps-border-l-4 cfps-border-l-transparent cfps-border-r-4 cfps-border-r-transparent cfps-border-t-4 cfps-border-t-white;
- }
-}
+        &:after {
+             @apply cfps-absolute cfps-content-[''] cfps-top-1/2 cfps-right-2 -cfps-translate-y-1/2 cfps-w-0 cfps-border-l-4 cfps-border-l-transparent cfps-border-r-4 cfps-border-r-transparent cfps-border-t-4 cfps-border-t-white;
+        }
+    }
 
+    .wallet-input {
+        @apply cfps-hidden;
+    }
 
-.wallet-input {
-    @apply cfps-hidden;
-}
+    .wallet-menu {
+        @apply cfps-absolute cfps-w-full cfps-p-2 cfps-border cfps-rounded;
 
-.wallet-menu {
-    @apply cfps-absolute cfps-w-full cfps-p-2 cfps-border cfps-rounded;
+        li {
+            @apply cfps-px-2 cfps-cursor-pointer cfps-whitespace-nowrap;
+        }
+    }
 
-li {
-    @apply cfps-px-2 cfps-cursor-pointer cfps-whitespace-nowrap;
-}
-}
+    .wallet-input + .wallet-menu {
+        @apply cfps-hidden;
+    }
 
-.wallet-input + .wallet-menu {
-    @apply cfps-hidden;
-}
-
-.wallet-input:checked + .wallet-menu {
-    @apply cfps-block;
-}
+    .wallet-input:checked + .wallet-menu {
+        @apply cfps-block;
+    }
 }
 
 
 .paynocchio-new-account {
     @apply cfps-grid cfps-grid-cols-[384px_1fr] cfps-gap-8 cfps-items-start cfps-p-4 cfps-bg-gray-100 cfps-rounded-2xl;
+
     .paynocchio-account-menu {
 
         menu {
@@ -800,6 +810,10 @@ li {
         .wallet_status {
             @apply cfps-absolute cfps-left-[7%] cfps-top-[10%] cfps-font-black;
         }
+
+        .on_card_embleme {
+            @apply !cfps-absolute cfps-w-[50px] cfps-h-[50px] cfps-right-[7%] cfps-top-[10%] !cfps-m-0 !cfps-p-0;
+        }
     }
 
     .history_table {
@@ -812,6 +826,4 @@ li {
             @apply cfps-px-4 cfps-py-2 cfps-border-b-[1px] cfps-border-gray-200;
         }
     }
-
 }
-

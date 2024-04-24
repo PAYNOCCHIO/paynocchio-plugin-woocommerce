@@ -140,6 +140,12 @@ class Woocommerce_Paynocchio_Payment_Gateway extends WC_Payment_Gateway {
                 'type'		=> 'color',
                 'description' => __( 'Specify the text color for accent elements of the interface, such as buttons. Leave blank for default.', 'paynocchio' ),
             ),
+            'embleme_url' => array(
+                'title'		=> __( 'Embleme URL for Cards', 'paynocchio' ),
+                'label'		=> __( 'Embleme URL', 'paynocchio' ),
+                'type'		=> 'url',
+                'description' => __( 'Enter the URL of the logo that will be displayed on top of the card image on the payment and personal account pages. The aspect ratio is 1 to 1!', 'paynocchio' ),
+            ),
         );
     }
 

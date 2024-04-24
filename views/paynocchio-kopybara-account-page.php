@@ -12,6 +12,8 @@ if (!defined('ABSPATH')) {
     $embleme_link = plugin_dir_url( WOOCOMMERCE_PAYNOCCHIO_BASENAME ) . 'assets/img/paynocchio_';
     $embleme_link .= array_key_exists('darkmode', $settigns) && $settigns['darkmode'] == 'yes' ? 'white.svg' : 'black.svg';
 
+    $paynocchio_embleme_url = array_key_exists('embleme_url', $settigns) && $settigns['embleme_url'] ? $settigns['embleme_url'] : '';
+
     $accent_color = '#3b82f6';
     if (array_key_exists('accent_color', $settigns)) {
         $accent_color = get_option( 'woocommerce_paynocchio_settings')['accent_color'];
@@ -79,11 +81,12 @@ if (!defined('ABSPATH')) {
                         </div>
                     <?php } else { ?>
                         <div class="paynocchio-profile-block <?php if ($wallet['status'] !== 'ACTIVE') { ?>cfps-disabled<?php } ?>">
-                            <!--<h2>Paynocchio.Pay</h2>-->
                             <div class="paynocchio-card-container">
                                 <div class="paynocchio-card">
                                     <img class="cfps-block !cfps-mx-auto !cfps-w-full !cfps-max-w-[350px]" src="<?php echo plugin_dir_url( WOOCOMMERCE_PAYNOCCHIO_BASENAME ) . 'assets/img/blank_card.webp' ?>" />
-                                    <?php
+                                    <?php if ($paynocchio_embleme_url) { ?>
+                                    <img src="<?php echo $paynocchio_embleme_url; ?>" class="on_card_embleme" />
+                                    <?php }
                                     if ($wallet['status'] == 'SUSPEND') {
                                         echo '<div class="wallet_status">SUSPENDED</div>';
                                     } elseif ($wallet['status'] == 'BLOCKED') {
@@ -138,11 +141,6 @@ if (!defined('ABSPATH')) {
                             </div>
                         </div>
 
-                        <!--
-                            <h2>Payments methods</h2>
-                            <a href="" class="paynocchio_button btn-blue paynocchio_colored" data-modal=".paymentMethodModal">Add payment method</a>
-                        </div>-->
-
                         <?php if(isset($wallet['status'])) { ?>
                             <div class="paynocchio-profile-block">
                                 <div class="paynocchio-profile-actions">
@@ -165,25 +163,6 @@ if (!defined('ABSPATH')) {
                                                 Block wallet
                                             </a>
                                         </div>
-
-                                       <!-- <label class="dropdown">
-                                            <div class="action-button">
-                                                Manage wallet
-                                            </div>
-
-                                            <input type="checkbox" class="wallet-input" />
-
-                                            <ul class="wallet-menu cfps-bg-white">
-                                                <?php /*if($wallet['status'] === "ACTIVE") { */?>
-                                                    <li><a href="#" data-modal=".suspendModal">Suspend wallet</a></li>
-                                                <?php /*}
-                                                if ($wallet['status'] === "SUSPEND") { */?>
-                                                    <li><a href="#" data-modal=".reactivateModal">Reactivate wallet</a></li>
-                                                <?php /*} */?>
-
-                                                <li><a class="cfps-text-red-500" href="#" data-modal=".blockModal">Block wallet</a></li>
-                                            </ul>
-                                        </label>-->
                                     <?php } ?>
                                     <?php if($wallet['status'] === 'BLOCKED') { ?>
                                         <button data-modal=".deleteModal" class="cfps-btn-primary !cfps-rounded-lg">Delete Wallet</button>
@@ -323,7 +302,7 @@ if (!defined('ABSPATH')) {
         <div class="close-modal close"></div>
         <div class="container">
             <div class="header">
-                <h3>Suspend Paynocchio Wallet</h3>
+                <h3>Suspend your Wallet</h3>
                 <button class="close">&times;</button>
             </div>
             <div class="content">
@@ -357,7 +336,7 @@ if (!defined('ABSPATH')) {
         <div class="close-modal close"></div>
         <div class="container">
             <div class="header">
-                <h3>Reactivate Paynocchio Wallet</h3>
+                <h3>Reactivate your Wallet</h3>
                 <button class="close">&times;</button>
             </div>
             <div class="content">
@@ -391,7 +370,7 @@ if (!defined('ABSPATH')) {
         <div class="close-modal close"></div>
         <div class="container">
             <div class="header">
-                <h3>Block Paynocchio Wallet</h3>
+                <h3>Block your Wallet</h3>
                 <button class="close">&times;</button>
             </div>
             <div class="content">
@@ -424,7 +403,7 @@ if (!defined('ABSPATH')) {
         <div class="close-modal close"></div>
         <div class="container">
             <div class="header">
-                <h3>Delete Paynocchio Wallet</h3>
+                <h3>Delete your Wallet</h3>
                 <button class="close">&times;</button>
             </div>
             <div class="content">

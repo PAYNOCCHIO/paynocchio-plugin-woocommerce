@@ -6,13 +6,27 @@ if (!defined('ABSPATH')) {
 $wallet_bal = 0;
 ?>
 
+<?php
+    $paynocchio_classes = '';
+    $settigns = get_option( 'woocommerce_paynocchio_settings');
+    $paynocchio_embleme_url = array_key_exists('embleme_url', $settigns) && $settigns['embleme_url'] ? $settigns['embleme_url'] : '';
+?>
+
     <section class="paynocchio">
         <div class="article-body cfps-max-w-4xl cfps-mx-auto cfps-mt-4">
             <div class="cfps-my-10">
-                <img
+               <!-- <img
                     class="cfps-block !cfps-mx-auto !cfps-w-full !cfps-max-w-[350px]"
-                    src="<?php echo plugin_dir_url( WOOCOMMERCE_PAYNOCCHIO_BASENAME ) . 'assets/img/card.webp' ?>"
-                    alt="" />
+                    src="<?php /*echo plugin_dir_url( WOOCOMMERCE_PAYNOCCHIO_BASENAME ) . 'assets/img/card.webp' */?>"
+                    alt="" />-->
+                <div class="paynocchio-card-container">
+                    <div class="paynocchio-card">
+                        <img class="cfps-block !cfps-mx-auto !cfps-w-full !cfps-max-w-[350px]" src="<?php echo plugin_dir_url( WOOCOMMERCE_PAYNOCCHIO_BASENAME ) . 'assets/img/card.webp' ?>" />
+                        <?php if ($paynocchio_embleme_url) { ?>
+                            <img src="<?php echo $paynocchio_embleme_url; ?>" class="on_card_embleme" />
+                        <?php } ?>
+                    </div>
+                </div>
             </div>
             <div class="cfps-grid cfps-grid-cols-[1fr_1fr] cfps-gap-x-6 cfps-gap-y-12 cfps-mb-10 cfps-p-8 cfps-items-top">
                 <div class="cfps-grid cfps-grid-cols-[50px_1fr] cfps-gap-6 cfps-items-top">
@@ -58,7 +72,7 @@ $wallet_bal = 0;
                         <button id="paynocchio_activation_button"
                                 type="button"
                                 class="cfps-btn-primary cfps-rounded-lg">
-                            Activate Paynocchio.Pay
+                            Activate your Wallet
                             <svg class="cfps-spinner cfps-hidden cfps-animate-spin cfps-ml-4 cfps-h-5 cfps-w-5 cfps-text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                                 <circle class="cfps-opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                                 <path class="cfps-opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
@@ -68,7 +82,7 @@ $wallet_bal = 0;
                     </div>
                 <?php } else { ?>
                     <div class="cfps-flex cfps-justify-center cfps-my-10">
-                        <a href="/<?php echo WOOCOMMERCE_PAYNOCCHIO_ACCOUNT_PAGE_SLUG; ?>" class="cfps-btn-primary">Go to Paynocchio.Pay</a>
+                        <a href="/<?php echo WOOCOMMERCE_PAYNOCCHIO_ACCOUNT_PAGE_SLUG; ?>" class="cfps-btn-primary">Go to Account</a>
                     </div>
                 <?php } ?>
 
