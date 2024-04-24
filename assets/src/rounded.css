@@ -13,7 +13,10 @@
 }
 
 .modal.paynocchio_rounded {
-    .container,
+    .container {
+        @apply !cfps-rounded-xl;
+    }
+
     .card-variants .card-var,
     .modal-add-card input[type='text'],
     .modal-add-card select,

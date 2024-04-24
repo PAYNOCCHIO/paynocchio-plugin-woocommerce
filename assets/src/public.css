@@ -6,9 +6,9 @@
 @tailwind utilities;
 
 .paynocchio, .paynocchio-modal-open {
-#payment .payment_methods li img {
-    @apply cfps-float-none cfps-max-h-none;
-}
+    #payment .payment_methods li img {
+        @apply cfps-float-none cfps-max-h-none;
+    }
 }
 
 #paynocchio_auth_block {
@@ -291,31 +291,47 @@ Numbers animation
     @apply cfps-w-full cfps-h-full cfps-bg-[rgba(0,0,0,0.5)] cfps-fixed cfps-hidden cfps-z-[9999] cfps-justify-center
     cfps-overflow-auto cfps-left-0 cfps-top-0 cfps-items-start;
 }
+
 .modal .close-modal {
     @apply cfps-w-full cfps-h-full cfps-fixed cfps-left-0 cfps-top-0;
 }
+
 .modal .container {
     @apply cfps-flex cfps-bg-white cfps-drop-shadow cfps-overflow-hidden cfps-mx-0 cfps-my-20;
     flex-flow: column;
 }
+
+.modal.suspendModal .container,
+.modal.reactivateModal .container,
+.modal.blockModal .container,
+.modal.deleteModal .container {
+    @apply !cfps-w-full !cfps-max-w-[350px];
+}
+
 .modal .container.zoom {
     @apply cfps-scale-50;
 }
+
 .modal .container.slide {
     @apply cfps-translate-y-[-1000px];
 }
+
 .modal .container .header {
     @apply cfps-flex cfps-font-semibold cfps-justify-between cfps-items-center cfps-p-4;
 }
+
 .modal .container .header h3 {
     @apply cfps-font-medium cfps-text-xl cfps-m-0 cfps-p-0;
 }
+
 .modal .container .header button {
     @apply cfps-bg-transparent cfps-appearance-none cfps-cursor-pointer cfps-text-2xl cfps-leading-6 cfps-cursor-pointer cfps-text-zinc-500 cfps-pb-1 cfps-p-0 cfps-border-0 hover:cfps-text-zinc-400;
 }
+
 .modal .container .content {
     @apply cfps-flex-1 cfps-p-4 cfps-pt-16;
 }
+
 /*.modal .container .content .prompt-input input {
     @apply cfps-rounded cfps-border cfps-w-full cfps-mt-[15px] cfps-p-2.5 cfps-border-solid cfps-border-[#e6e9ec];
 }*/

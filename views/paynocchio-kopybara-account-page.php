@@ -327,26 +327,26 @@ if (!defined('ABSPATH')) {
                 <button class="close">&times;</button>
             </div>
             <div class="content">
-                <p>Suspension blocks all transactions until further actions.</p>
-                <p>Lorem ipsum.</p>
+                <p class="cfps-mb-4">Suspension blocks all transactions until further actions.</p>
+                <p>
+                    <strong>Are you sure you want to suspend your wallet?</strong>
+                </p>
             </div>
             <div class="footer">
                 <div>
-                    <strong>Are you sure you want to suspend your wallet?</strong>
                     <button id="suspend_button"
                             type="button"
                             class="cfps-btn-primary close cfps-rounded-lg">
-                        Yes
+                        Suspend
                         <svg class="cfps-spinner cfps-hidden cfps-animate-spin cfps-ml-4 cfps-h-5 cfps-w-5 cfps-text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                             <circle class="cfps-opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                             <path class="cfps-opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                         </svg>
                     </button>
                     <?php wp_nonce_field( 'paynocchio_ajax_set_status', 'ajax-status-nonce' ); ?>
-
                     <button
-                            class="cfps-btn-primary close cfps-rounded-lg"
-                            type="button">No</button>
+                            class="cfps-btn-primary close cfps-rounded-lg btn-gray"
+                            type="button">Cancel</button>
                     <div class="message"></div>
                 </div>
             </div>
@@ -361,25 +361,26 @@ if (!defined('ABSPATH')) {
                 <button class="close">&times;</button>
             </div>
             <div class="content">
-                <p>After reactivating the wallet you can continue shopping.</p>
+                <p class="cfps-mb-4">After reactivating the wallet you can continue shopping.</p>
+                <p>
+                    <strong>Are you sure you want to reactivate your wallet?</strong>
+                </p>
             </div>
             <div class="footer">
                 <div>
-                    <strong>Are you sure you want to reactivate your wallet?</strong>
                     <button id="reactivate_button"
                             type="button"
                             class="cfps-btn-primary close cfps-rounded-lg">
-                        Yes
+                        Reactivate
                         <svg class="cfps-spinner cfps-hidden cfps-animate-spin cfps-ml-4 cfps-h-5 cfps-w-5 cfps-text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                             <circle class="cfps-opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                             <path class="cfps-opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                         </svg>
                     </button>
                     <?php wp_nonce_field( 'paynocchio_ajax_set_status', 'ajax-status-nonce' ); ?>
-
                     <button
-                            class="cfps-btn-primary close cfps-rounded-lg"
-                            type="button">No</button>
+                            class="cfps-btn-primary close cfps-rounded-lg btn-gray"
+                            type="button">Cancel</button>
                     <div class="message"></div>
                 </div>
             </div>
@@ -394,15 +395,15 @@ if (!defined('ABSPATH')) {
                 <button class="close">&times;</button>
             </div>
             <div class="content">
-                <p class="cfps-font-bold cfps-text-red-500">Attention!</p>
+                <p class="cfps-mb-4">Are you sure you want to BLOCK your wallet?</p>
+                <p class="cfps-font-bold">Attention! This action cannot be undone.</p>
             </div>
             <div class="footer">
                 <div>
-                    <strong>Are you sure you want to BLOCK your wallet?</strong>
                     <button id="block_button"
                             type="button"
                             class="cfps-btn-primary close cfps-rounded-lg">
-                        Yes
+                        Block
                         <svg class="cfps-spinner cfps-hidden cfps-animate-spin cfps-ml-4 cfps-h-5 cfps-w-5 cfps-text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                             <circle class="cfps-opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                             <path class="cfps-opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
@@ -411,8 +412,8 @@ if (!defined('ABSPATH')) {
                     <?php wp_nonce_field( 'paynocchio_ajax_set_status', 'ajax-status-nonce' ); ?>
 
                     <button
-                            class="cfps-btn-primary close cfps-rounded-lg"
-                            type="button">No</button>
+                            class="cfps-btn-primary close cfps-rounded-lg btn-gray"
+                            type="button">Cancel</button>
                     <div class="message"></div>
                 </div>
             </div>
@@ -435,7 +436,7 @@ if (!defined('ABSPATH')) {
                     <button id="delete_button"
                             type="button"
                             class="cfps-btn-primary close cfps-rounded-lg">
-                        Yes
+                        Delete
                         <svg class="cfps-spinner cfps-hidden cfps-animate-spin cfps-ml-4 cfps-h-5 cfps-w-5 cfps-text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                             <circle class="cfps-opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                             <path class="cfps-opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
@@ -444,8 +445,8 @@ if (!defined('ABSPATH')) {
                     <?php wp_nonce_field( 'paynocchio_ajax_delete_wallet', 'ajax-delete-nonce' ); ?>
 
                     <button
-                            class="cfps-btn-primary close cfps-rounded-lg"
-                            type="button">No</button>
+                            class="cfps-btn-primary close cfps-rounded-lg btn-gray"
+                            type="button">Cancel</button>
                     <div class="message"></div>
                 </div>
             </div>
