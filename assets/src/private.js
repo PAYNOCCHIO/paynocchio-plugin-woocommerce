@@ -100,6 +100,7 @@ import './topUpFormProcess'
                     updateOrderButtonState();
                     $('.topUpModal').delay(1000).fadeOut('fast')
                     $('body').removeClass('paynocchio-modal-open');
+                    $('.topUpModal').remove();
                 }
             }
         })
@@ -354,6 +355,8 @@ import './topUpFormProcess'
 
         // WOOCOMMERCE CHECKOUT SCRIPT
         $(document).on( "updated_checkout", function() {
+            Modal.initElements();
+
             const topUpButton = $("#top_up_button");
             const withdrawButton = $("#withdraw_button");
 
@@ -361,8 +364,6 @@ import './topUpFormProcess'
             withdrawButton.click((evt) => withdrawWallet(evt))
 
             updateWalletBalance();
-
-            Modal.initElements();
 
             const ans = getParameterByName('ans');
 
