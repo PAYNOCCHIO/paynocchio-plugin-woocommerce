@@ -61,6 +61,33 @@ import './topUpFormProcess'
     }
 
     /**
+     * Hide Place order button if no money
+     * @type {define.amd.jQuery|HTMLElement|*}
+     */
+    function checkBalance() {
+        const place_orderButton = $('#place_order');
+        const hidden = ($('.payment_box.payment_method_paynocchio').is(":hidden"));
+
+        if(place_orderButton && !hidden) {
+            const balance_value = parseFloat($('.paynocchio-balance-value').text());
+            const bonus_value = parseFloat($('.paynocchio-bonus-value').text());
+            const order_total = parseFloat($('.woocommerce-Price-amount').text().replace('$', ''))
+            const inputed_bonuses_value = parseFloat($('#bonuses-value').val());
+
+            if( (balance_value + bonus_value) < order_total) {
+                place_orderButton.addClass('cfps-disabled')
+                place_orderButton.text('Please TopUp your Wallet')
+            } else if ((balance_value + bonus_value) >= order_total && (inputed_bonuses_value + balance_value) < order_total) {
+                place_orderButton.addClass('cfps-disabled')
+                place_orderButton.text('Please TopUp your Wallet or use your Bonuses')
+            } else {
+                place_orderButton.removeClass('cfps-disabled')
+                place_orderButton.text('Place order')
+            }
+        }
+    }
+
+    /**
      * Function to make block visibility work
      * @param blockClass
      */
@@ -81,6 +108,8 @@ import './topUpFormProcess'
 
         $(`#${evt.target.id} .cfps-spinner`).removeClass('cfps-hidden');
 
+        console.log('amount', $('#top_up_amount').val())
+
         $.ajax({
             url: paynocchio_object.ajaxurl,
             type: 'POST',
@@ -93,7 +122,8 @@ import './topUpFormProcess'
                 if (data.response.status_code === 200){
                     $('.topUpModal .message').text('Success!');
                     updateWalletBalance();
-                    updateOrderButtonState();
+                    //updateOrderButtonState();
+                    checkBalance();
                     $('.topUpModal').delay(1000).fadeOut('fast')
                     $('body').removeClass('paynocchio-modal-open');
                 }
@@ -177,7 +207,7 @@ import './topUpFormProcess'
                 if (data.response.status_code === 200) {
                     $(`#${evt.target.id} .cfps-check`).removeClass('cfps-hidden');
                     updateWalletBalance();
-                    updateOrderButtonState();
+                    //updateOrderButtonState();
                     $('.topup_mini_form').delay(2000).fadeOut('fast', function() {
                         $('#show_mini_modal').css('transform','rotate(0deg)');
                         $('#top_up_amount_mini_form').val('');
@@ -231,7 +261,7 @@ import './topUpFormProcess'
                         $('#withdraw_amount').val('');
                         $('.withdrawModal .message').text('Success!');
                         updateWalletBalance();
-                        updateOrderButtonState();
+                        //updateOrderButtonState();
                         $('.withdrawModal').delay(1000).fadeOut('fast')
                         $('body').removeClass('paynocchio-modal-open');
                     }
@@ -285,11 +315,16 @@ import './topUpFormProcess'
      */
     setInterval(() => updateWalletBalance(), 5000)
 
+    /**
+     * Triggers update_checkout
+     * Why?
+     * */
     function updateOrderButtonState() {
         const place_orderButton = $('#place_order');
         const hidden = ($('.payment_box.payment_method_paynocchio').is(":hidden"));
         if(place_orderButton && !hidden) {
-            $(document.body).trigger('update_checkout');
+            //$(document.body).trigger('update_checkout');
+
         }
     }
 
@@ -316,8 +351,8 @@ import './topUpFormProcess'
         const blockButton = $("#block_button");
         const deleteButton = $("#delete_button");
 
-        topUpButton.click((evt) => topUpWallet(evt))
-        topUpButtonMiniForm.click((evt) => topUpWalletMiniForm(evt))
+        topUpButton.click((evt) => topUpWallet(evt, true))
+        topUpButtonMiniForm.click((evt) => topUpWalletMiniForm(evt, true))
         withdrawButton.click((evt) => withdrawWallet(evt))
         suspendButton.click((evt) => setWalletStatus(evt, 'SUSPEND'))
         activateButton.click((evt) => setWalletStatus(evt, 'ACTIVE'))
@@ -408,36 +443,6 @@ import './topUpFormProcess'
                 });
             });
 
-            /**
-             * Hide Place order button if no money
-             * @type {define.amd.jQuery|HTMLElement|*}
-             */
-            function checkBalance() {
-                const place_orderButton = $('#place_order');
-                const hidden = ($('.payment_box.payment_method_paynocchio').is(":hidden"));
-
-                if(place_orderButton && !hidden) {
-                    const balance_value = parseFloat($('.paynocchio-balance-value').text());
-                    const bonus_value = parseFloat($('.paynocchio-bonus-value').text());
-                    const order_total = parseFloat($('.woocommerce-Price-amount').text().replace('$', ''))
-                    const inputed_bonuses_value = parseFloat($('#bonuses-value').val());
-
-
-                    console.log(order_total)
-                    console.log(balance_value)
-
-                    if( (balance_value + bonus_value) < order_total) {
-                        place_orderButton.addClass('cfps-disabled')
-                        place_orderButton.text('Please TopUp your Wallet')
-                    } else if ((balance_value + bonus_value) >= order_total && (inputed_bonuses_value + balance_value) < order_total) {
-                        place_orderButton.addClass('cfps-disabled')
-                        place_orderButton.text('Please TopUp your Wallet or use your Bonuses')
-                    } else {
-                        place_orderButton.removeClass('cfps-disabled')
-                        place_orderButton.text('Place order')
-                    }
-                }
-            }
             checkBalance()
 
             $("#bonuses-value").on("change", function() {

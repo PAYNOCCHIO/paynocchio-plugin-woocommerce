@@ -48,6 +48,11 @@ class Woocommerce_Paynocchio_Payment_Gateway extends WC_Payment_Gateway {
 
     } // Here is the  End __construct()
 
+    public function get_test_mode()
+    {
+        return $this->testmode;
+    }
+
     // administration fields for specific Gateway
     public function init_form_fields() {
 
@@ -274,7 +279,7 @@ class Woocommerce_Paynocchio_Payment_Gateway extends WC_Payment_Gateway {
          * */
         if( $this->description ) {
             // you can instructions for test mode, I mean test card numbers etc.
-            if( $this->testmode ) {
+            if( $this->get_test_mode() ) {
                 $this->description .= '<p style="color:#1db954;font-weight:bold">TEST MODE ENABLED.</p>';
             }
             // display the description with <p> tags etc.

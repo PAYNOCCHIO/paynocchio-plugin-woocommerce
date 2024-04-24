@@ -1,1 +1,158 @@
-(()=>{"use strict";(e=>{const o=o=>{e(`${o} > div.visible`).fadeOut("fast",(function(){e(`${o} > div:not(.visible)`).fadeIn("fast"),e(`${o} > div`).toggleClass("visible")}))},a=(o,a)=>{e(o.target).addClass("cfps-disabled"),e(`#${o.target.id} .cfps-spinner`).removeClass("cfps-hidden"),e.ajax({url:paynocchio_object.ajaxurl,type:"POST",data:{action:"paynocchio_ajax_activation","ajax-activation-nonce":e("#ajax-activation-nonce").val()},success:function(e){e.success&&(a?document.location.href=a:document.location.reload())}}).always((function(){e(`#${o.target.id} .cfps-spinner`).addClass("cfps-hidden"),e(o.target).removeClass("cfps-disabled")})).error((e=>console.log(e.response)))};e(document).ready((function(){const t="/checkout/?activated=1"===window.location.pathname,c=e("#paynocchio_activation_button");t||c.click((e=>a(e))),e(".form-toggle-a").click((()=>o("#login-signup-forms"))),e("form.checkout").on("change",'input[name="payment_method"]',(function(){e(document.body).trigger("update_checkout")})),e(document).on("updated_checkout",(function(){const t=e("#paynocchio_auth_block").length,c=e("#place_order"),n=e(".payment_box.payment_method_paynocchio").is(":hidden"),i=e(".payment_box.payment_method_paynocchio .paynocchio").length;c&&!n&&(i&&(c.addClass("cfps-disabled"),c.text("Please activate the Wallet first")),t&&(c.addClass("cfps-disabled"),c.text("Please login or register"))),e("#paynocchio_activation_button").click((e=>a(e))),e(".form-toggle-a").click((()=>o("#login-signup-forms"))),function(e,o=window.location.href){e=e.replace(/[\[\]]/g,"\\$&");const a=new RegExp("[?&]"+e+"(=([^&#]*)|&|#|$)").exec(o);return a?a[2]?decodeURIComponent(a[2].replace(/\+/g," ")):"":null}("ans")&&e(".woocommerce-notices-wrapper:first-child").prepend('<div class="woocommerce-message" role="alert">Registration complete. Please check your email, then visit this page again.</div>')}))}))})(jQuery)})();
+/******/ (() => { // webpackBootstrap
+/******/ 	"use strict";
+/******/ 	var __webpack_modules__ = ({
+
+/***/ "./assets/src/public.css":
+/*!*******************************!*\
+  !*** ./assets/src/public.css ***!
+  \*******************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+// extracted by mini-css-extract-plugin
+
+
+/***/ })
+
+/******/ 	});
+/************************************************************************/
+/******/ 	// The module cache
+/******/ 	var __webpack_module_cache__ = {};
+/******/ 	
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/ 		// Check if module is in cache
+/******/ 		var cachedModule = __webpack_module_cache__[moduleId];
+/******/ 		if (cachedModule !== undefined) {
+/******/ 			return cachedModule.exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = __webpack_module_cache__[moduleId] = {
+/******/ 			// no module.id needed
+/******/ 			// no module.loaded needed
+/******/ 			exports: {}
+/******/ 		};
+/******/ 	
+/******/ 		// Execute the module function
+/******/ 		__webpack_modules__[moduleId](module, module.exports, __webpack_require__);
+/******/ 	
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/ 	
+/************************************************************************/
+/******/ 	/* webpack/runtime/make namespace object */
+/******/ 	(() => {
+/******/ 		// define __esModule on exports
+/******/ 		__webpack_require__.r = (exports) => {
+/******/ 			if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+/******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
+/******/ 			}
+/******/ 			Object.defineProperty(exports, '__esModule', { value: true });
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/************************************************************************/
+var __webpack_exports__ = {};
+// This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
+(() => {
+/*!*****************************************!*\
+  !*** ./assets/src/wallet-activation.js ***!
+  \*****************************************/
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _public_css__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./public.css */ "./assets/src/public.css");
+
+($ => {
+  /**
+   * Function to make block visibility work
+   * @param blockClass
+   */
+  const toggleVisibility = blockClass => {
+    $(`${blockClass} > div.visible`).fadeOut('fast', function () {
+      $(`${blockClass} > div:not(.visible)`).fadeIn('fast');
+      $(`${blockClass} > div`).toggleClass('visible');
+    });
+  };
+
+  /**
+   * Wallet Activation function
+   * @param evt
+   * @param path
+   */
+  const activateWallet = (evt, path) => {
+    $(evt.target).addClass('cfps-disabled');
+    $(`#${evt.target.id} .cfps-spinner`).removeClass('cfps-hidden');
+    $.ajax({
+      url: paynocchio_object.ajaxurl,
+      type: 'POST',
+      data: {
+        'action': 'paynocchio_ajax_activation',
+        'ajax-activation-nonce': $('#ajax-activation-nonce').val()
+      },
+      success: function (data) {
+        if (data.success) {
+          path ? document.location.href = path : document.location.reload();
+        }
+      }
+    }).always(function () {
+      $(`#${evt.target.id} .cfps-spinner`).addClass('cfps-hidden');
+      $(evt.target).removeClass('cfps-disabled');
+    }).error(error => console.log(error.response));
+  };
+  function getParameterByName(name, url = window.location.href) {
+    name = name.replace(/[\[\]]/g, '\\$&');
+    const regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
+      results = regex.exec(url);
+    if (!results) return null;
+    if (!results[2]) return '';
+    return decodeURIComponent(results[2].replace(/\+/g, ' '));
+  }
+  $(document).ready(function () {
+    //READY START
+
+    const checkout = window.location.pathname === '/checkout/?activated=1';
+    const activationButton = $("#paynocchio_activation_button");
+    if (!checkout) {
+      activationButton.click(evt => activateWallet(evt));
+    }
+    $('.form-toggle-a').click(() => toggleVisibility('#login-signup-forms'));
+
+    /**
+     * Trigger update checkout when payment method changed
+     */
+    $('form.checkout').on('change', 'input[name="payment_method"]', function () {
+      $(document.body).trigger('update_checkout');
+    });
+    // WOOCOMMERCE CHECKOUT SCRIPT
+    $(document).on("updated_checkout", function () {
+      const paynocchio_auth_block = $('#paynocchio_auth_block').length;
+      const place_orderButton = $('#place_order');
+      const payment_hidden = $('.payment_box.payment_method_paynocchio').is(":hidden");
+      const activation_block = $('.payment_box.payment_method_paynocchio .paynocchio').length;
+      if (place_orderButton && !payment_hidden) {
+        if (activation_block) {
+          place_orderButton.addClass('cfps-disabled');
+          place_orderButton.text('Please activate the Wallet first');
+        }
+        if (paynocchio_auth_block) {
+          place_orderButton.addClass('cfps-disabled');
+          place_orderButton.text('Please login or register');
+        }
+      }
+      const activationButton = $("#paynocchio_activation_button");
+      activationButton.click(evt => activateWallet(evt));
+      $('.form-toggle-a').click(() => toggleVisibility('#login-signup-forms'));
+      const ans = getParameterByName('ans');
+      if (ans) {
+        $('.woocommerce-notices-wrapper:first-child').prepend('<div class="woocommerce-message" role="alert">Registration complete. Please check your email, then visit this page again.</div>');
+      }
+    });
+    // WOOCOMMERCE CHECKOUT SCRIPT END
+    //READY END
+  });
+})(jQuery);
+})();
+
+/******/ })()
+;
+//# sourceMappingURL=public.js.map

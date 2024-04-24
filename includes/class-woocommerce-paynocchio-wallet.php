@@ -32,6 +32,11 @@ class Woocommerce_Paynocchio_Wallet {
             'Content-Type: application/json'
         ];
 
+        $WPPPG = new Woocommerce_Paynocchio_Payment_Gateway;
+        $test_mode = $WPPPG->get_test_mode() ? 'on' : 'off';
+
+        $headers[] = 'X-TEST-MODE-SWITCH:'. $test_mode;
+
         if($simple) {
             $headers[] = 'X-Company-Signature:'. $this->simpleSignature;
         } else {

@@ -416,14 +416,14 @@ class Woocommerce_Paynocchio {
             wp_die();
         }
 
-
          if(get_user_meta($this->user_id, PAYNOCCHIO_WALLET_KEY)) {
              $wallet = new Woocommerce_Paynocchio_Wallet($this->get_uuid());
              $wallet_response = $wallet->topUpWallet(get_user_meta($this->user_id, PAYNOCCHIO_WALLET_KEY, true), $amount);
          }
 
         wp_send_json([
-            'response' => $wallet_response
+            'response' => $wallet_response,
+            'amount' => $amount,
         ]);
         wp_die();
     }
