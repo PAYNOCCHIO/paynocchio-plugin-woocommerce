@@ -44,7 +44,9 @@ export default class Modal {
         this.options.element.getBoundingClientRect();
         this.options.element.classList.add('open');
         document.body.classList.add('paynocchio-modal-open');
-        //document.body.append(this.options.element);
+        if(this.options.element.parentNode !== document.body) {
+            document.body.append(this.options.element);
+        }
         if (this.options.onOpen) {
             this.options.onOpen(this);
         }
@@ -59,7 +61,6 @@ export default class Modal {
         this.options.element.style.display = 'none';
         if (this.options.onClose) {
             this.options.onClose(this);
-            //document.body.remove(this.options.element);
         }
     }
 
