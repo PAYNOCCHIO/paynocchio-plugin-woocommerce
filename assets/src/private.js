@@ -83,7 +83,6 @@ import './topUpFormProcess'
     const topUpWallet = (evt) => {
         $(evt.target).addClass('cfps-disabled')
 
-        const amount = $('#top_up_amount').data('value');
         $(`#${evt.target.id} .cfps-spinner`).removeClass('cfps-hidden');
 
         $.ajax({
@@ -92,7 +91,7 @@ import './topUpFormProcess'
             data: {
                 'action': 'paynocchio_ajax_top_up',
                 'ajax-top-up-nonce': $('#ajax-top-up-nonce').val(),
-                amount,
+                'amount': $('#top_up_amount').val(),
             },
             success: function(data){
                 if (data.response.status_code === 200){

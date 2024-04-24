@@ -53,7 +53,7 @@ if (is_user_logged_in()) {
             <div class="top-up-amount-container cfps-mt-8 lg:cfps-mt-12 cfps-flex cfps-flex-row">
                 <span class="cfps-text-3xl">$</span>
                 <input type="number" step="0.01" class="!cfps-bg-transparent !cfps-border-0 !cfps-shadow-none cfps-text-3xl !cfps-p-0 focus:!cfps-outline-none"
-                       name="amount" id="top_up_amount" placeholder="0" data-value="" />
+                       name="amount" id="top_up_amount" placeholder="0" />
                 <?php wp_nonce_field( 'paynocchio_ajax_top_up', 'ajax-top-up-nonce' ); ?>
             </div>
 
