@@ -25,7 +25,7 @@ $amount = WC()->cart->cart_contents_total;
         <div class="wallet paynocchio-wallet <?php if ($wallet['status'] !== 'ACTIVE') { ?>cfps-disabled<?php } ?> cfps-bg-white cfps-rounded-lg cfps-p-2"  alt="Balance" title="Balance">
             <div class="cfps-flex cfps-flex-row cfps-items-center cfps-pr-2 cfps-mr-2 cfps-border-r cfps-border-slate-300 cfps-gap-x-2">
                 <img src="<?php echo plugin_dir_url( WOOCOMMERCE_PAYNOCCHIO_BASENAME ) . 'assets/img/wallet.svg' ?>" class="!cfps-h-[25px] cfps-w-auto"/>
-                <p class="cfps-font-semibold">$<span class="paynocchio-numbers paynocchio-balance-value"><?php echo $wallet['balance'] ?? 0 ?></span></p>
+                <p class="cfps-font-semibold">$<span class="paynocchio-numbers paynocchio-balance-value" data-balance="<?php echo $wallet['balance'] ?? 0 ?>"><?php echo $wallet['balance'] ?? 0 ?></span></p>
                 <a title="Add money" alt="Add money"
                    class="cfps-bg-slate-300 cfps-rounded-3xl cfps-w-6 cfps-h-6 cfps-leading-6 cfps-text-center cfps-block cfps-ml-2 cfps-cursor-pointer"
                    id="show_mini_modal">+</a>
@@ -33,7 +33,7 @@ $amount = WC()->cart->cart_contents_total;
             <div class="cfps-flex cfps-flex-row cfps-items-center cfps-gap-x-2" alt="Bonuses" title="Bonuses">
                 <img src="<?php echo plugin_dir_url( WOOCOMMERCE_PAYNOCCHIO_BASENAME ) . 'assets/img/bonuses.svg' ?>" class="!cfps-h-[25px] cfps-w-auto"/>
                 <!--<p>Bonus:</p>-->
-                <p class="cfps-font-semibold"><span class="paynocchio-numbers paynocchio-bonus-value"><?php echo $wallet['bonuses'] ?? 0 ?></span></p>
+                <p class="cfps-font-semibold"><span class="paynocchio-numbers paynocchio-bonus-value" data-bonus="<?php echo $wallet['bonuses'] ?? 0 ?>"><?php echo $wallet['bonuses'] ?? 0 ?></span></p>
             </div>
         </div>
 

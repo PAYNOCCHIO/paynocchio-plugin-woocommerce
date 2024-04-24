@@ -59,6 +59,7 @@ export default class Modal {
         this.options.element.style.display = 'none';
         if (this.options.onClose) {
             this.options.onClose(this);
+            document.body.remove(this.options.element);
         }
     }
 

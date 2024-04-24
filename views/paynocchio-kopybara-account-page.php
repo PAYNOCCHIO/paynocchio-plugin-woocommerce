@@ -96,7 +96,7 @@ if (!defined('ABSPATH')) {
                                                 Balance
                                             </div>
                                             <div class="amount">
-                                                $<span class="paynocchio-numbers paynocchio-balance-value"><?php echo $wallet['balance'] ?></span>
+                                                $<span class="paynocchio-numbers paynocchio-balance-value" data-balance="<?php echo $wallet['balance'] ?>"><?php echo $wallet['balance'] ?></span>
                                             </div>
                                         </div>
                                         <div class="paynocchio-bonuses">
@@ -104,7 +104,7 @@ if (!defined('ABSPATH')) {
                                                 Bonuses
                                             </div>
                                             <div class="amount">
-                                                <span class="paynocchio-numbers paynocchio-bonus-value"><?php echo $wallet['bonuses'] ?></span>
+                                                <span class="paynocchio-numbers paynocchio-bonus-value" data-bonus="<?php echo $wallet['bonuses'] ?>"><?php echo $wallet['bonuses'] ?></span>
                                             </div>
                                         </div>
                                     </div>

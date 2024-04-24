@@ -53,7 +53,7 @@ if (is_user_logged_in()) {
             <div class="top-up-amount-container cfps-mt-8 lg:cfps-mt-12 cfps-flex cfps-flex-row">
                 <span class="cfps-text-3xl">$</span>
                 <input type="number" step="0.01" class="!cfps-bg-transparent !cfps-border-0 !cfps-shadow-none cfps-text-3xl !cfps-p-0 focus:!cfps-outline-none"
-                       name="amount" id="top_up_amount" placeholder="0" />
+                       name="amount" id="top_up_amount" placeholder="0" data-value="" />
                 <?php wp_nonce_field( 'paynocchio_ajax_top_up', 'ajax-top-up-nonce' ); ?>
             </div>
 
@@ -194,7 +194,7 @@ if (is_user_logged_in()) {
             <button class="close">&times;</button>
         </div>
         <div id="witdrawForm" class="content">
-            <div class="cfps-mb-8 cfps-text-xl">Current balance: <span class="cfps-font-semibold">$<span class="paynocchio-numbers paynocchio-balance-value"><?php echo $wallet['balance'] ;?></span></span></div>
+            <div class="cfps-mb-8 cfps-text-xl">Current balance: <span class="cfps-font-semibold">$<span class="paynocchio-numbers paynocchio-balance-value" data-balance="<?php echo $wallet['balance'] ;?>"><?php echo $wallet['balance'] ;?></span></span></div>
             <div class="withdraw-amount-container cfps-mb-8 cfps-flex">
                 <p class="cfps-text-3xl">$</p>
                 <input type="number" step="0.01" class="!cfps-bg-transparent !cfps-border-0 !cfps-shadow-none cfps-text-3xl !cfps-p-0 focus:!cfps-outline-none"
