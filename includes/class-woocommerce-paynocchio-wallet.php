@@ -28,7 +28,7 @@ class Woocommerce_Paynocchio_Wallet {
 
     private function sendRequest(string $method, string $url, string $body = "", bool $simple = false): array {
         $headers = [
-            'X-API-KEY: X-API-KEY',
+            //'X-API-KEY: X-API-KEY',
             'Content-Type: application/json'
         ];
 
@@ -62,7 +62,6 @@ class Woocommerce_Paynocchio_Wallet {
         $response = curl_exec($curl);
         $httpCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
 
-
         curl_close($curl);
 
         return [
@@ -71,19 +70,44 @@ class Woocommerce_Paynocchio_Wallet {
         ];
     }
 
-    public function createSignature() {
-        $signature = hash("sha256", $this->secret . "|" . $this->envId . "|" . $this->userId);
-        // Add code to create a signature from the data
-        return $signature;
+    public function get_userId()
+    {
+        return $this->userId;
+    }
+
+    public function get_secret()
+    {
+        return $this->secret;
+    }
+
+    public function get_env()
+    {
+        return $this->envId;
     }
 
     /**
-    *  Signature for Order requests
+     *  X-Wallet-Signature
+     */
+    public function createSignature()
+    {
+        return hash("sha256", $this->secret . "|" . $this->envId . "|" . $this->userId);
+    }
+    /**
+    *  X-Company-Signature
     */
     public function createSimpleSignature() {
         $signature = hash("sha256", $this->secret . "|" . $this->envId);
         return $signature;
     }
+
+    /** Get Signature
+     * @param false $simple
+     * @return bool|string
+     */
+    /*public function getSignature($simple = false): bool|string
+    {
+        return $simple ? $this->simpleSignature : $this->signature;
+    }*/
 
     /**
      *  Get Wallet by ID
@@ -251,6 +275,7 @@ class Woocommerce_Paynocchio_Wallet {
                 'bonuses' => $json_response->rewarding_balance,
                 'number' => $json_response->number,
                 'status' => $json_response->status->code,
+                'signature' => $this->signature,
             ];
         }
 

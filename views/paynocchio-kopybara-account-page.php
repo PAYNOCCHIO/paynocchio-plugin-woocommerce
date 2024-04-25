@@ -71,6 +71,19 @@ if (!defined('ABSPATH')) {
                 </menu>
             </div>
             <div class="paynocchio-account-content">
+                <?php
+                /**
+                 * Debug
+                 */
+                /*print_r($wallet);
+
+                echo '<br/><br/>secret: ' .$wallet['secret'];
+                echo '<br/><br/>env_uuid: ' .$wallet['env'];
+                echo '<br/><br/>user_uuid: ' .$wallet['user_uuid'];
+
+                echo '<br/><br/>HASH: '.hash("sha256", $wallet['secret'] . "|" . $wallet['env'] . "|" . $wallet['user_uuid']);*/
+
+                ?>
                 <div class="paynocchio_tab paynocchio-tab-body visible" id="paynocchio_bonuses_body">
                     <?php if (!get_user_meta(get_current_user_id(), PAYNOCCHIO_WALLET_KEY, true)) { ?>
                         <div class="paynocchio-profile-block">
