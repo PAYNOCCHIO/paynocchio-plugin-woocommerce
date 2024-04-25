@@ -11,7 +11,7 @@ $amount = WC()->cart->cart_contents_total;
 
 <div class="paynocchio-cart-wallet-widget cfps-flex cfps-flex-row cfps-items-center cfps-relative cfps-text-black">
     <div class="cart cfps-bg-white cfps-rounded-lg cfps-p-2">
-        <a href="/account/" alt="Account" title="Account">
+        <a href="/wallet-account/" alt="Account" title="Account">
             <div class="cfps-flex cfps-flex-row cfps-items-center">
                 <img src="<?php echo plugin_dir_url( WOOCOMMERCE_PAYNOCCHIO_BASENAME ) . 'assets/img/profile_black.png' ?>" class="!cfps-h-[25px] cfps-w-auto"/>
             </div>
