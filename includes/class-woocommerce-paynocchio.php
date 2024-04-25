@@ -326,7 +326,7 @@ class Woocommerce_Paynocchio {
 
     public function paynocchio_bonuses_wallet_endpoint()
     {
-        add_rewrite_endpoint( 'bonuses-wallet',EP_ROOT | EP_PAGES  );
+        add_rewrite_endpoint( 'bonuses-wallet',EP_PAGES  );
     }
 
     public function woocommerce_paynocchio_bonuses_wallet_endpoint_content() {
