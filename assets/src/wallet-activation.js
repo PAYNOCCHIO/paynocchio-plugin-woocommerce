@@ -32,8 +32,8 @@ import './public.css';
                 'ajax-activation-nonce': $('#ajax-activation-nonce').val(),
             },
             success: function(data){
-                console.log(JSON.parse(data.response.response))
                 if (data.success){
+                    $('#response_message').text('Success');
                     path ? document.location.href = path : document.location.reload();
                 } else {
                     $('#response_message').text(JSON.parse(data.response.response).detail);

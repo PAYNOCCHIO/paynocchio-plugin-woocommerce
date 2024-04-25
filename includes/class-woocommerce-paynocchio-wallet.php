@@ -28,7 +28,7 @@ class Woocommerce_Paynocchio_Wallet {
 
     private function sendRequest(string $method, string $url, string $body = "", bool $simple = false): array {
         $headers = [
-            //'X-API-KEY: X-API-KEY',
+            'X-API-KEY: X-API-KEY',
             'Content-Type: application/json'
         ];
 

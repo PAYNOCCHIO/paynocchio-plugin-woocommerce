@@ -675,7 +675,9 @@ class Woocommerce_Paynocchio {
                 ];
 
             $user_paynocchio_wallet_id = get_user_meta($current_user->ID, PAYNOCCHIO_WALLET_KEY, true);
-            $user_paynocchio_wallet = new Woocommerce_Paynocchio_Wallet(get_user_meta(get_current_user_id(), PAYNOCCHIO_USER_UUID_KEY, true));
+            $user_uuid = get_user_meta($current_user->ID, PAYNOCCHIO_USER_UUID_KEY, true);
+
+            $user_paynocchio_wallet = new Woocommerce_Paynocchio_Wallet($user_uuid);
             /*$wallet['signature'] = $user_paynocchio_wallet->getSignature();
             $wallet['secret'] = $user_paynocchio_wallet->get_secret();
             $wallet['env'] = $user_paynocchio_wallet->get_env();
