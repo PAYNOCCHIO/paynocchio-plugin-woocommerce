@@ -53,9 +53,6 @@ if (!defined('ABSPATH')) {
                         <p>
                             <?php echo $current_user->user_email; ?>
                         </p>
-                        <a href="/loyalty-club/" class="cfps-text-blue-500">
-                            Start earning bonuses
-                        </a>
                     </div>
                 </div>
                 <menu class="paynocchio_tab_switchers">

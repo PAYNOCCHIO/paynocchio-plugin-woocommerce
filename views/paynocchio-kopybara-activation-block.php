@@ -29,7 +29,7 @@ $wallet_bal = 0;
                 </div>
             </div>
             <div class="cfps-grid cfps-grid-cols-[1fr_1fr] cfps-gap-x-6 cfps-gap-y-12 cfps-mb-10 cfps-p-8 cfps-items-top">
-                <div class="cfps-grid cfps-grid-cols-[50px_1fr] cfps-gap-6 cfps-items-top">
+                <?php /*<div class="cfps-grid cfps-grid-cols-[50px_1fr] cfps-gap-6 cfps-items-top">
                     <div>
                         <img src="<?php echo plugin_dir_url( WOOCOMMERCE_PAYNOCCHIO_BASENAME ) . 'assets/img/icon_welcome.svg' ?>" alt="" />
                     </div>
@@ -37,17 +37,17 @@ $wallet_bal = 0;
                         <h2 class="cfps-h2 cfps-mb-0">Welcome bonus</h2>
                         <p class="cfps-text-base">Earn 75 bonuses for signing up.</p>
                     </div>
-                </div>
+                </div>*/ ?>
                 <div class="cfps-grid cfps-grid-cols-[50px_1fr] cfps-gap-6 cfps-items-top">
                     <div>
                         <img src="<?php echo plugin_dir_url( WOOCOMMERCE_PAYNOCCHIO_BASENAME ) . 'assets/img/icon_buy.svg' ?>" alt="" />
                     </div>
                     <div>
-                        <h2 class="cfps-h2 cfps-mb-0">Buy the ticket</h2>
-                        <p class="cfps-text-base">Earn 1 bonus for every 1$ spent.</p>
+                        <h2 class="cfps-h2 cfps-mb-0">Purchase bonus</h2>
+                        <p class="cfps-text-base">Earn 1 bonus for every 1$ purchase.</p>
                     </div>
                 </div>
-                <div class="cfps-grid cfps-grid-cols-[50px_1fr] cfps-gap-6 cfps-items-top">
+                <?php /*<div class="cfps-grid cfps-grid-cols-[50px_1fr] cfps-gap-6 cfps-items-top">
                     <div>
                         <img src="<?php echo plugin_dir_url( WOOCOMMERCE_PAYNOCCHIO_BASENAME ) . 'assets/img/icon_birthday.svg' ?>" alt="" />
                     </div>
@@ -55,7 +55,7 @@ $wallet_bal = 0;
                         <h2 class="cfps-h2 cfps-mb-0">Birthday bonus</h2>
                         <p class="cfps-text-base">Earn bonuses to celebrate your birthday.</p>
                     </div>
-                </div>
+                </div>*/ ?>
                 <div class="cfps-grid cfps-grid-cols-[50px_1fr] cfps-gap-6 cfps-items-top">
                     <div>
                         <img src="<?php echo plugin_dir_url( WOOCOMMERCE_PAYNOCCHIO_BASENAME ) . 'assets/img/icon_topup.svg' ?>" alt="" />

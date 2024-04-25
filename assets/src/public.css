@@ -235,14 +235,6 @@
     @apply cfps-text-base lg:cfps-text-3xl;
 }
 
-.paynocchio-card-number-mask {
-    @apply cfps-absolute cfps-text-white cfps-text-base lg:cfps-text-xl cfps-z-20 cfps-bottom-[7%] cfps-left-[7%];
-}
-
-.paynocchio-card-number {
-    @apply cfps-absolute cfps-text-white cfps-text-base lg:cfps-text-xl cfps-flex cfps-flex-row cfps-gap-2 lg:cfps-gap-6 cfps-z-20 cfps-top-[50%] cfps-left-[7%];
-}
-
 
 /**
 Numbers animation
@@ -445,18 +437,6 @@ input {
 
 .paynocchio-payment-block {
     @apply cfps-py-4 cfps-px-8 cfps-max-w-5xl cfps-mx-auto cfps-mt-4 cfps-mb-4 cfps-drop-shadow cfps-bg-white;
-    .paynocchio-card {
-        @apply cfps-relative ;
-    }
-    .paynocchio-balance-bonuses {
-        @apply cfps-text-black/80;
-    }
-    .paynocchio_payment_card_button {
-        @apply cfps-absolute cfps-right-[7%] cfps-bottom-[10%];
-    }
-    .on_card_embleme {
-        @apply !cfps-absolute cfps-w-[50px] cfps-h-[50px] cfps-right-[7%] cfps-top-[10%] !cfps-m-0 !cfps-p-0;
-    }
 }
 
 .paynocchio-payment-block .paynocchio_tiles {
@@ -797,24 +777,7 @@ input[type=range].styled-slider.slider-progress:active::-ms-fill-lower {
         @apply cfps-rounded-xl cfps-drop-shadow-sm;
     }
 
-    .paynocchio-card {
-        @apply cfps-relative cfps-text-black/80;
-        .paynocchio-balance-bonuses {
-            @apply cfps-text-black/80;
-        }
 
-        .paynocchio-card-number {
-            @apply cfps-top-[75%] cfps-text-black/80;
-        }
-
-        .wallet_status {
-            @apply cfps-absolute cfps-left-[7%] cfps-top-[10%] cfps-font-black;
-        }
-
-        .on_card_embleme {
-            @apply !cfps-absolute cfps-w-[50px] cfps-h-[50px] cfps-right-[7%] cfps-top-[10%] !cfps-m-0 !cfps-p-0;
-        }
-    }
 
     .history_table {
         @apply cfps-rounded-lg cfps-border-[1px] cfps-border-gray-200 cfps-w-full;
@@ -827,3 +790,34 @@ input[type=range].styled-slider.slider-progress:active::-ms-fill-lower {
         }
     }
 }
+
+.paynocchio-card {
+    @apply cfps-relative cfps-text-black/80;
+    .paynocchio-balance-bonuses {
+        @apply cfps-text-black/80;
+    }
+
+    .paynocchio-card-number {
+        @apply cfps-absolute cfps-text-base lg:cfps-text-xl cfps-flex cfps-flex-row cfps-gap-2 lg:cfps-gap-6 cfps-z-20 cfps-left-[7%] cfps-bottom-[15%] cfps-text-black/80;
+    }
+
+    .wallet_status {
+        @apply cfps-absolute cfps-left-[7%] cfps-top-[10%] cfps-font-black;
+    }
+
+    .on_card_embleme {
+        @apply !cfps-absolute cfps-w-[50px] cfps-h-[50px] cfps-right-[7%] cfps-top-[10%] !cfps-m-0 !cfps-p-0;
+    }
+
+    .paynocchio-balance-bonuses {
+        @apply cfps-text-black/80;
+    }
+    .paynocchio_payment_card_button {
+        @apply cfps-absolute cfps-right-[7%] cfps-bottom-[10%];
+    }
+
+    .paynocchio-card-number-mask {
+        @apply cfps-absolute cfps-text-white cfps-text-base lg:cfps-text-xl cfps-z-20 cfps-bottom-[7%] cfps-left-[7%];
+    }
+}
+
