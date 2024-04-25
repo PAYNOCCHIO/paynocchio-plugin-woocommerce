@@ -308,6 +308,27 @@ class Woocommerce_Paynocchio {
         $this->loader->add_action( 'woocommerce_add_to_cart_redirect', $plugin_public, 'redirect_checkout_add_cart' );
 
         $this->loader->add_filter( 'body_class', $plugin_public, 'paynocchio_body_class' );
+
+        add_filter ( 'woocommerce_account_menu_items', [$this,'paynocchio_bonuses_wallet'], 40 );
+        // register permalink endpoint
+        add_action( 'init', [$this, 'paynocchio_bonuses_wallet_endpoint'] );
+        // content for the new page in My Account, woocommerce_account_{ENDPOINT NAME}_endpoint
+        add_action( 'woocommerce_account_paynocchio_bonuses_wallet_endpoint', [$this,'woocommerce_paynocchio_bonuses_wallet_endpoint_content'] );
+    }
+
+    public function paynocchio_bonuses_wallet( $menu_links ){
+        $menu_links = array_slice( $menu_links, 0, 5, true )
+            + array( 'bonuses_wallet' => 'Wallet' )
+            + array_slice( $menu_links, 5, NULL, true );
+        return $menu_links;
+    }
+
+    public function paynocchio_bonuses_wallet_endpoint() {
+        add_rewrite_endpoint( 'bonuses_wallet', EP_PAGES );
+    }
+
+    public function woocommerce_paynocchio_bonuses_wallet_endpoint_content() {
+        echo '123123';
     }
 
     /**
