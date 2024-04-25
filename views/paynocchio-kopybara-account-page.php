@@ -165,7 +165,11 @@ if (!defined('ABSPATH')) {
                                         </div>
                                     <?php } ?>
                                     <?php if($wallet['status'] === 'BLOCKED') { ?>
-                                        <button data-modal=".deleteModal" class="cfps-btn-primary !cfps-rounded-lg">Delete Wallet</button>
+                                            <div class="cfps-flex cfps-flex-row cfps-gap-8 cfps-items-center">
+                                                <button data-modal=".deleteModal" class="cfps-btn-primary !cfps-rounded-lg cfps-whitespace-nowrap">Delete Wallet</button>
+                                                <div class="">If you have blocked your wallet by accident, please contact <a href="mailto:support@kopybara.com" class="cfps-text-blue-500">technical support</a> before deleting your wallet!</div>
+                                            </div>
+
                                     <?php } ?>
                                 </div>
                             </div>
@@ -407,11 +411,12 @@ if (!defined('ABSPATH')) {
                 <button class="close">&times;</button>
             </div>
             <div class="content">
-                <p class="cfps-font-bold cfps-text-red-500">Attention!</p>
+                <p class="cfps-mb-4">Are you sure you want to DELETE your wallet?</p>
+                <p class="cfps-font-bold">Attention! If you have blocked your wallet by accident, please contact <a href="mailto:support@kopybara.com" class="cfps-text-blue-500">technical support</a> before deleting your wallet!</p>
             </div>
             <div class="footer">
                 <div>
-                    <strong>Are you sure you want to DELETE your wallet?</strong>
+
                     <button id="delete_button"
                             type="button"
                             class="cfps-btn-primary close cfps-rounded-lg">
