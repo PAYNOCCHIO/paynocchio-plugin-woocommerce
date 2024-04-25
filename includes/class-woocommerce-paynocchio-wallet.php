@@ -115,9 +115,7 @@ class Woocommerce_Paynocchio_Wallet {
     public function getWalletById(string $walletId): array {
         $url = '/wallet/' . $walletId . '?environment_uuid=' . $this->envId;
 
-        $response = $this->sendRequest('GET', $url);
-
-        return $response;
+        return $this->sendRequest('GET', $url);
     }
 
     /**
@@ -141,14 +139,6 @@ class Woocommerce_Paynocchio_Wallet {
         } else {
             return json_encode($response);
         }
-    }
-
-    /**
-     * Get Wallet ID
-     */
-
-    public function getWalletId() {
-        return $this->walletId;
     }
 
     /**
@@ -256,9 +246,7 @@ class Woocommerce_Paynocchio_Wallet {
     public function getOrderById(string $orderId): array {
         $url = '/orders/' . $orderId;
 
-        $response = $this->sendRequest('GET', $url);
-
-        return $response;
+        return $this->sendRequest('GET', $url);
     }
 
     /**
@@ -304,8 +292,8 @@ class Woocommerce_Paynocchio_Wallet {
     /**
     *  Update Wallet Status
     */
-    public function updateWalletStatus(string $wallet_id, string $status) {
-
+    public function updateWalletStatus(string $wallet_id, string $status)
+    {
         $data = [
             PAYNOCCHIO_ENV_KEY => $this->envId,
             'uuid' => $wallet_id,
@@ -313,5 +301,17 @@ class Woocommerce_Paynocchio_Wallet {
         ];
 
         return $this->sendRequest('PATCH', '/wallet/', json_encode($data), true);
+    }
+
+    /**
+     * Get Wallet Structure
+     * This needed to check conversion rates
+     */
+
+    public function getEnvironmentStructure(): array
+    {
+        $url = '/wallet/environment-structure/' . $this->userId . '?environment_uuid=' . $this->envId;
+
+        return $this->sendRequest('GET', $url);
     }
 }
