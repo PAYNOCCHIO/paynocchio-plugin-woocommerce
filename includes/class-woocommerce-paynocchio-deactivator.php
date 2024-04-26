@@ -40,8 +40,8 @@ class Woocommerce_Paynocchio_Deactivator {
             delete_user_meta(get_current_user_id(), PAYNOCCHIO_USER_UUID_KEY);
         }
 
-        if(get_user_meta(get_current_user_id(), 'paynocchio_wallet_id')) {
-            delete_user_meta(get_current_user_id(), 'paynocchio_wallet_id');
+        if(get_user_meta(get_current_user_id(), PAYNOCCHIO_WALLET_KEY)) {
+            delete_user_meta(get_current_user_id(), PAYNOCCHIO_WALLET_KEY);
         }
 
         flush_rewrite_rules();
