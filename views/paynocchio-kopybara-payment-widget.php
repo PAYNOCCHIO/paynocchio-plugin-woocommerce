@@ -141,7 +141,7 @@ if (is_user_logged_in()) {
                     </div>
                 <?php } ?>
                 <div class="cfps-flex cfps-flex-row cfps-gap-x-4 cfps-mt-8 cfps-text-sm cfps-flex-wrap">
-                    <a href="/wallet-account/">My Account</a>
+                    <a href="<?php echo wc_get_page_permalink('myaccount') . WOOCOMMERCE_PAYNOCCHIO_ACCOUNT_PAGE_SLUG ?>">My Account</a>
                     <a href="<?php echo get_privacy_policy_url(); ?>">Privacy Policy</a>
                     <a href="<?php echo get_permalink( wc_terms_and_conditions_page_id() ); ?>">Terms and Conditions</a>
                 </div>
