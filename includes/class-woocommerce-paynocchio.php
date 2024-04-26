@@ -287,33 +287,35 @@ class Woocommerce_Paynocchio {
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_styles' );
 
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_scripts' );
-        add_action( 'wp_ajax_nopriv_paynocchio_ajax_login', [$this, 'paynocchio_ajax_login']);
-        add_action( 'wp_ajax_paynocchio_ajax_activation', [$this, 'paynocchio_ajax_activation']);
-        add_action( 'wp_ajax_paynocchio_ajax_registration', [$this, 'paynocchio_ajax_registration']);
-        add_action( 'wp_ajax_nopriv_paynocchio_ajax_registration', [$this, 'paynocchio_ajax_registration']);
-        add_action( 'wp_ajax_nopriv_paynocchio_ajax_activation', [$this, 'paynocchio_ajax_activation']);
-        add_action( 'wp_ajax_paynocchio_ajax_top_up', [$this, 'paynocchio_ajax_top_up']);
-        add_action( 'wp_ajax_nopriv_paynocchio_ajax_top_up', [$this, 'paynocchio_ajax_top_up']);
-        add_action( 'wp_ajax_paynocchio_ajax_set_status', [$this, 'paynocchio_ajax_set_status']);
-        add_action( 'wp_ajax_nopriv_paynocchio_ajax_set_status', [$this, 'paynocchio_ajax_set_status']);
-        add_action( 'wp_ajax_paynocchio_ajax_delete_wallet', [$this, 'paynocchio_ajax_delete_wallet']);
-        add_action( 'wp_ajax_nopriv_paynocchio_ajax_delete_wallet', [$this, 'paynocchio_ajax_delete_wallet']);
-        add_action( 'wp_ajax_paynocchio_ajax_check_balance', [$this, 'paynocchio_ajax_check_balance']);
-        add_action( 'wp_ajax_nopriv_paynocchio_ajax_check_balance', [$this, 'paynocchio_ajax_check_balance']);
-        add_action( 'wp_ajax_paynocchio_ajax_get_user_wallet', [$this, 'paynocchio_ajax_get_user_wallet']);
-        add_action( 'wp_ajax_nopriv_paynocchio_ajax_get_user_wallet', [$this, 'paynocchio_ajax_get_user_wallet']);
-        add_action( 'wp_ajax_paynocchio_ajax_withdraw', [$this, 'paynocchio_ajax_withdraw']);
-        add_action( 'wp_ajax_nopriv_paynocchio_ajax_withdraw', [$this, 'paynocchio_ajax_withdraw']);
+        $this->loader->add_action( 'wp_ajax_nopriv_paynocchio_ajax_login', $this, 'paynocchio_ajax_login');
+        $this->loader->add_action( 'wp_ajax_paynocchio_ajax_activation', $this,'paynocchio_ajax_activation');
+        $this->loader->add_action( 'wp_ajax_nopriv_paynocchio_ajax_activation', $this, 'paynocchio_ajax_activation');
+        $this->loader->add_action( 'wp_ajax_paynocchio_ajax_registration', $this,'paynocchio_ajax_registration');
+        $this->loader->add_action( 'wp_ajax_nopriv_paynocchio_ajax_registration', $this, 'paynocchio_ajax_registration');
+        $this->loader->add_action( 'wp_ajax_paynocchio_ajax_top_up', $this,'paynocchio_ajax_top_up');
+        $this->loader->add_action( 'wp_ajax_nopriv_paynocchio_ajax_top_up', $this,'paynocchio_ajax_top_up');
+        $this->loader->add_action( 'wp_ajax_paynocchio_ajax_set_status', $this, 'paynocchio_ajax_set_status');
+        $this->loader->add_action( 'wp_ajax_nopriv_paynocchio_ajax_set_status', $this, 'paynocchio_ajax_set_status');
+        $this->loader->add_action( 'wp_ajax_paynocchio_ajax_delete_wallet', $this, 'paynocchio_ajax_delete_wallet');
+        $this->loader->add_action( 'wp_ajax_nopriv_paynocchio_ajax_delete_wallet', $this, 'paynocchio_ajax_delete_wallet');
+        $this->loader->add_action( 'wp_ajax_paynocchio_ajax_check_balance', $this, 'paynocchio_ajax_check_balance');
+        $this->loader->add_action( 'wp_ajax_nopriv_paynocchio_ajax_check_balance', $this, 'paynocchio_ajax_check_balance');
+        $this->loader->add_action( 'wp_ajax_paynocchio_ajax_get_user_wallet', $this, 'paynocchio_ajax_get_user_wallet');
+        $this->loader->add_action( 'wp_ajax_nopriv_paynocchio_ajax_get_user_wallet', $this, 'paynocchio_ajax_get_user_wallet');
+        $this->loader->add_action( 'wp_ajax_paynocchio_ajax_withdraw', $this, 'paynocchio_ajax_withdraw');
+        $this->loader->add_action( 'wp_ajax_nopriv_paynocchio_ajax_withdraw', $this, 'paynocchio_ajax_withdraw');
 
         $this->loader->add_action( 'woocommerce_add_to_cart_redirect', $plugin_public, 'redirect_checkout_add_cart' );
 
         $this->loader->add_filter( 'body_class', $plugin_public, 'paynocchio_body_class' );
 
-        add_filter ( 'woocommerce_account_menu_items', [$this,'paynocchio_bonuses_wallet'], 40 );
+        $this->loader->add_filter ( 'woocommerce_account_menu_items', $this, 'paynocchio_bonuses_wallet' );
         // register permalink endpoint
-        add_action( 'init', [$this, 'paynocchio_bonuses_wallet_endpoint'] );
+        $this->loader->add_action( 'init', $this, 'paynocchio_bonuses_wallet_endpoint');
         // content for the new page in My Account, woocommerce_account_{ENDPOINT NAME}_endpoint
-        add_action( 'woocommerce_account_bonuses-wallet_endpoint', [$this,'woocommerce_paynocchio_bonuses_wallet_endpoint_content'] );
+        $this->loader->add_action( 'woocommerce_account_bonuses-wallet_endpoint', $this, 'woocommerce_paynocchio_bonuses_wallet_endpoint_content' );
+        $this->loader->add_filter( 'query_vars', $this, 'paynocchio_add_custom_query_vars' );
+
     }
 
     public function paynocchio_bonuses_wallet( $menu_links )
@@ -326,11 +328,16 @@ class Woocommerce_Paynocchio {
 
     public function paynocchio_bonuses_wallet_endpoint()
     {
-        add_rewrite_endpoint( 'bonuses-wallet',EP_PAGES  );
+        add_rewrite_endpoint( 'bonuses-wallet',EP_ROOT | EP_PAGES  );
     }
 
+    public function paynocchio_add_custom_query_vars( $vars ) {
+    $vars[] = 'bonuses-wallet';
+    return $vars;
+}
+
     public function woocommerce_paynocchio_bonuses_wallet_endpoint_content() {
-        echo '123123';
+        echo '<div>123123</div>';
     }
 
     /**
