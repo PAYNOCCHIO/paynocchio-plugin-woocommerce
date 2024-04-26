@@ -37,5 +37,7 @@ class Woocommerce_Paynocchio_Activator {
             deactivate_plugins( plugin_basename( __FILE__ ) );
             wp_die( __( 'Please install and Activate WooCommerce first.', 'woocommerce-paynocchio' ), 'Plugin dependency check', array( 'back_link' => true ) );
         }
+
+        flush_rewrite_rules();
 	}
 }
