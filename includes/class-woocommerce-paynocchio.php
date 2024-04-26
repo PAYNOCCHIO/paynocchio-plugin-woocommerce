@@ -231,6 +231,7 @@ class Woocommerce_Paynocchio {
         add_shortcode( 'paynocchio_kopybara_cart_wallet_widget', [ 'Woocommerce_Paynocchio_Shortcodes', 'paynocchio_kopybara_cart_wallet_widget' ] );
         add_shortcode( 'paynocchio_payment_widget', [ 'Woocommerce_Paynocchio_Shortcodes', 'paynocchio_payment_widget' ] );
         add_shortcode( 'paynocchio_modal_forms', [ 'Woocommerce_Paynocchio_Shortcodes', 'paynocchio_modal_forms' ] );
+        add_shortcode( 'paynocchio_wallet_management_page', [ 'Woocommerce_Paynocchio_Shortcodes', 'paynocchio_wallet_management_page' ] );
 
 	}
 
@@ -321,7 +322,7 @@ class Woocommerce_Paynocchio {
     public function paynocchio_bonuses_wallet( $menu_links )
     {
         $menu_links = array_slice( $menu_links, 0, 5, true )
-            + array( 'bonuses-wallet' => 'Wallet' )
+            + array( 'bonuses-wallet' => 'Wallet and Bonuses' )
             + array_slice( $menu_links, 5, NULL, true );
         return $menu_links;
     }
@@ -332,12 +333,12 @@ class Woocommerce_Paynocchio {
     }
 
     public function paynocchio_add_custom_query_vars( $vars ) {
-    $vars[] = 'bonuses-wallet';
-    return $vars;
-}
+        $vars[] = 'bonuses-wallet';
+        return $vars;
+    }
 
     public function woocommerce_paynocchio_bonuses_wallet_endpoint_content() {
-        echo '<div>123123</div>';
+        echo do_shortcode('[paynocchio_wallet_management_page]');
     }
 
     /**

@@ -47,4 +47,10 @@ class Woocommerce_Paynocchio_Shortcodes {
         require(WOOCOMMERCE_PAYNOCCHIO_PATH . 'views/paynocchio-kopybara-cart-wallet-widget.php');
         return ob_get_clean();
     }
+
+    static function paynocchio_wallet_management_page () {
+        ob_start();
+        require(WOOCOMMERCE_PAYNOCCHIO_PATH . 'views/paynocchio-wallet-management-page.php');
+        return ob_get_clean();
+    }
 }
