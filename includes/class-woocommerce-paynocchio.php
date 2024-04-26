@@ -322,20 +322,20 @@ class Woocommerce_Paynocchio {
     public function paynocchio_bonuses_wallet( $menu_links )
     {
         $menu_links = array_slice( $menu_links, 0, 5, true )
-            + array( 'bonuses-wallet' => 'Wallet and Bonuses' )
+            + array( WOOCOMMERCE_PAYNOCCHIO_ACCOUNT_PAGE_SLUG => 'Wallet and Bonuses' )
             + array_slice( $menu_links, 5, NULL, true );
         return $menu_links;
     }
 
     public function paynocchio_bonuses_wallet_endpoint()
     {
-        add_rewrite_endpoint( 'bonuses-wallet',EP_ROOT | EP_PAGES  );
+        add_rewrite_endpoint( WOOCOMMERCE_PAYNOCCHIO_ACCOUNT_PAGE_SLUG,EP_ROOT | EP_PAGES  );
     }
 
     public function paynocchio_add_custom_query_vars( $vars ) {
-        $vars[] = 'bonuses-wallet';
-        return $vars;
-    }
+    $vars[] = WOOCOMMERCE_PAYNOCCHIO_ACCOUNT_PAGE_SLUG;
+    return $vars;
+}
 
     public function woocommerce_paynocchio_bonuses_wallet_endpoint_content() {
         echo do_shortcode('[paynocchio_wallet_management_page]');

@@ -41,7 +41,9 @@ const WOOCOMMERCE_PAYNOCCHIO_VERSION = '1.0.0';
  * Paynocchio page activation slug
  */
 const WOOCOMMERCE_PAYNOCCHIO_ACTIVATION_PAGE_SLUG = 'paynocchio-activation';
-const WOOCOMMERCE_PAYNOCCHIO_ACCOUNT_PAGE_SLUG = 'paynocchio-account';
+const WOOCOMMERCE_PAYNOCCHIO_ACCOUNT_PAGE_SLUG = 'bonuses-wallet';
+
+define("WOOCOMMERCE_ACCOUNT_LINK", wc_get_page_permalink('myaccount') . '/' . WOOCOMMERCE_PAYNOCCHIO_ACCOUNT_PAGE_SLUG);
 
 /**
  * Paynocchio params names
