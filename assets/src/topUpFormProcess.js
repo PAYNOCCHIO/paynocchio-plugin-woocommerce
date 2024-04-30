@@ -7,7 +7,7 @@ import setTopUpBonuses from "./js/setTopUpBonuses";
         $('.top-up-variants > a').click(function() {
             let amount = $(this).get(0).id.replace('variant_','');
             $('#top_up_amount').val(amount);
-            setTopUpBonuses(amount, 0.01)
+            setTopUpBonuses(amount, 0.1)
         });
 
         $('.toggle-autodeposit').click(function () {
