@@ -100,7 +100,9 @@ import './topUpFormProcess'
                     updateOrderButtonState();
                     $('.topUpModal').delay(1000).fadeOut('fast')
                     $('body').removeClass('paynocchio-modal-open');
-                    $('.topUpModal').remove();
+                    if($('body').hasClass('woocommerce-checkout')){
+                        $('.topUpModal').remove();
+                    }
                 }
             }
         })
