@@ -2,8 +2,11 @@ import './public.css';
 
 import Modal from './modal'
 import './topUpFormProcess'
+import setTopUpBonuses from "./js/setTopUpBonuses";
 
 (( $ ) => {
+
+    const PERCENT = 0.1;
 
     const createWebSocket = (wallet) => {
         let ws = new WebSocket(`wss://wallet.stage.paynocchio.com/ws/wallet-socket/${wallet}`);
@@ -290,7 +293,7 @@ import './topUpFormProcess'
     /**
      * Balance polling
      */
-    setInterval(() => updateWalletBalance(), 5000)
+    setInterval(() => updateWalletBalance(), 1000)
 
     function updateOrderButtonState() {
         const place_orderButton = $('#place_order');
@@ -355,6 +358,12 @@ import './topUpFormProcess'
             $(document.body).trigger('update_checkout');
         });
 
+        $('#top_up_amount').keyup((env) => {
+            setTopUpBonuses(env.target.value, PERCENT)
+        })
+
+
+
         // WOOCOMMERCE CHECKOUT SCRIPT
         $(document).on( "updated_checkout", function() {
             Modal.initElements();
@@ -394,6 +403,7 @@ import './topUpFormProcess'
             $('.top-up-variants > a').click(function() {
                 let amount = $(this).get(0).id.replace('variant_','');
                 $('#top_up_amount').val(amount);
+                setTopUpBonuses(amount, PERCENT)
             });
 
             $('.toggle-autodeposit').click(function () {
@@ -461,8 +471,7 @@ import './topUpFormProcess'
 
 
             $('#top_up_amount').keyup((env) => {
-                $('#top_up_amount').attr('data-value', env.target.value)
-                console.log(env.target.value)
+                setTopUpBonuses(env.target.value, PERCENT)
             })
 
         });

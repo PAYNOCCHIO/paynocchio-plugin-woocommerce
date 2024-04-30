@@ -55,6 +55,7 @@ if (is_user_logged_in()) {
                 <input type="number" step="0.01" class="!cfps-bg-transparent !cfps-border-0 !cfps-shadow-none cfps-text-3xl !cfps-p-0 focus:!cfps-outline-none"
                        name="amount" id="top_up_amount" placeholder="0" />
                 <?php wp_nonce_field( 'paynocchio_ajax_top_up', 'ajax-top-up-nonce' ); ?>
+                <div class="cfps-p-2">You will get <span class="cfps-text-green-600" id="bonusesCounter">0</span> bonuses for TopUp</div>
             </div>
 
             <div class="top-up-variants">
