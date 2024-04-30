@@ -321,9 +321,9 @@ class Woocommerce_Paynocchio {
 
     public function paynocchio_bonuses_wallet( $menu_links )
     {
-        $menu_links = array_slice( $menu_links, 0, 5, true )
+        $menu_links = array_slice( $menu_links, 0, 0, true )
             + array( WOOCOMMERCE_PAYNOCCHIO_ACCOUNT_PAGE_SLUG => 'Wallet and Bonuses' )
-            + array_slice( $menu_links, 5, NULL, true );
+            + array_slice( $menu_links, 0, NULL, true );
         return $menu_links;
     }
 
