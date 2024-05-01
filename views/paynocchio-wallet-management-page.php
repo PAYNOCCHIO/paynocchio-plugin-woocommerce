@@ -1,8 +1,10 @@
 <?php
     $paynocchio = new Woocommerce_Paynocchio();
     $wallet = $paynocchio->get_paynocchio_wallet_info();
+print_r($wallet);
 
-    $paynocchio_classes = '';
+
+$paynocchio_classes = '';
     $settigns = get_option( 'woocommerce_paynocchio_settings');
     $paynocchio_classes .= array_key_exists('darkmode', $settigns) && $settigns['darkmode'] == 'yes' ? 'paynocchio_dark_mode ' : '';
     $paynocchio_classes .= array_key_exists('rounded', $settigns) && $settigns['rounded'] == 'yes' ? 'paynocchio_rounded ' : '';
