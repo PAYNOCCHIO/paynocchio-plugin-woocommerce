@@ -263,7 +263,6 @@ class Woocommerce_Paynocchio_Wallet {
                 'bonuses' => $json_response->rewarding_balance,
                 'number' => $json_response->number,
                 'status' => $json_response->status->code,
-                'signature' => $this->signature,
             ];
         }
 
