@@ -68,7 +68,7 @@ $amount = WC()->cart->cart_contents_total;
 
         </div>
         <?php } else {?>
-        <a href="/support">Please contact support</a>
+            <div>Please contact <b><?php echo get_bloginfo('name') ?></b> support</div>
         <?php } ?>
     <?php } ?>
 </div>

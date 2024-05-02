@@ -43,60 +43,61 @@ if (is_user_logged_in()) {
         }
     </style>
 
-    <?php if ($wallet['status'] !== 'ACTIVE') { ?>
-        <div>
-            <p>Current Wallet is <?php echo $wallet['status'] ?></p>
-            <?php if ($wallet['status'] !== 'BLOCKED') { ?>
-                <p>You can manage it at your wallet <a href="/<?php echo WOOCOMMERCE_PAYNOCCHIO_ACCOUNT_PAGE_SLUG ?>">account page</a>.</p>
-            <?php } ?>
-        </div>
+   <?php if($wallet['code'] !== 500) { ?>
+        <?php if ($wallet['status'] !== 'ACTIVE') { ?>
+            <div>
+                <p>Current Wallet is <?php echo $wallet['status'] ?></p>
+                <?php if ($wallet['status'] !== 'BLOCKED') { ?>
+                    <p>You can manage it at your wallet <a href="/<?php echo WOOCOMMERCE_PAYNOCCHIO_ACCOUNT_PAGE_SLUG ?>">account page</a>.</p>
+                <?php } ?>
+            </div>
 
-    <?php } else { ?>
-       <!-- <div class="cfps-text-lg cfps-mb-4 cfps-flex cfps-flex-row cfps-items-center cfps-gap-4">
+        <?php } else { ?>
+            <!-- <div class="cfps-text-lg cfps-mb-4 cfps-flex cfps-flex-row cfps-items-center cfps-gap-4">
             <img src="<?php /*echo plugin_dir_url( WOOCOMMERCE_PAYNOCCHIO_BASENAME ) . 'assets/img/star.webp' */?>" class="!cfps-h-[25px] !cfps-ml-0"/>
             <div>Earn <strong><?php /*echo WC()->cart->cart_contents_total * 0.1; */?> Bonuses</strong> with this purchase!</div>
         </div>-->
-        <section class="paynocchio <?php echo $paynocchio_classes; ?>">
-            <div class="paynocchio-payment-block">
+            <section class="paynocchio <?php echo $paynocchio_classes; ?>">
+                <div class="paynocchio-payment-block">
 
-                <div class="paynocchio-card-container">
-                    <div class="paynocchio-card">
-                        <img class="cfps-block !cfps-mx-auto !cfps-w-full !cfps-max-w-[350px]" src="<?php echo plugin_dir_url( WOOCOMMERCE_PAYNOCCHIO_BASENAME ) . 'assets/img/blank_card.webp' ?>" />
-                        <?php if ($paynocchio_embleme_url) { ?>
-                            <img src="<?php echo $paynocchio_embleme_url; ?>" class="on_card_embleme" />
-                        <?php } ?>
-                        <?php
-                        if ($wallet['status'] == 'SUSPEND') {
-                            echo '<div class="wallet_status">SUSPENDED</div>';
-                        } elseif ($wallet['status'] == 'BLOCKED') {
-                            echo '<div class="wallet_status">BLOCKED</div>';
-                        }
-                        ?>
-                        <div class="paynocchio-balance-bonuses">
-                            <div class="paynocchio-balance">
-                                <div>
-                                    Balance
+                    <div class="paynocchio-card-container">
+                        <div class="paynocchio-card">
+                            <img class="cfps-block !cfps-mx-auto !cfps-w-full !cfps-max-w-[350px]" src="<?php echo plugin_dir_url( WOOCOMMERCE_PAYNOCCHIO_BASENAME ) . 'assets/img/blank_card.webp' ?>" />
+                            <?php if ($paynocchio_embleme_url) { ?>
+                                <img src="<?php echo $paynocchio_embleme_url; ?>" class="on_card_embleme" />
+                            <?php } ?>
+                            <?php
+                            if ($wallet['status'] == 'SUSPEND') {
+                                echo '<div class="wallet_status">SUSPENDED</div>';
+                            } elseif ($wallet['status'] == 'BLOCKED') {
+                                echo '<div class="wallet_status">BLOCKED</div>';
+                            }
+                            ?>
+                            <div class="paynocchio-balance-bonuses">
+                                <div class="paynocchio-balance">
+                                    <div>
+                                        Balance
+                                    </div>
+                                    <div class="amount">
+                                        $<span class="paynocchio-numbers paynocchio-balance-value" data-balance="<?php echo $wallet['balance'] ?>"><?php echo $wallet['balance'] ?></span>
+                                    </div>
                                 </div>
-                                <div class="amount">
-                                    $<span class="paynocchio-numbers paynocchio-balance-value" data-balance="<?php echo $wallet['balance'] ?>"><?php echo $wallet['balance'] ?></span>
+                                <div class="paynocchio-bonuses">
+                                    <div>
+                                        Bonuses
+                                    </div>
+                                    <div class="amount">
+                                        <span class="paynocchio-numbers paynocchio-bonus-value" data-bonus="<?php echo $wallet['bonuses'] ?>"><?php echo $wallet['bonuses'] ?></span>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="paynocchio-bonuses">
-                                <div>
-                                    Bonuses
-                                </div>
-                                <div class="amount">
-                                    <span class="paynocchio-numbers paynocchio-bonus-value" data-bonus="<?php echo $wallet['bonuses'] ?>"><?php echo $wallet['bonuses'] ?></span>
-                                </div>
+                            <div class="paynocchio_payment_card_button">
+                                <a href="#" class="btn-blue paynocchio_button" data-modal=".topUpModal">Add money</a>
                             </div>
-                        </div>
-                        <div class="paynocchio_payment_card_button">
-                            <a href="#" class="btn-blue paynocchio_button" data-modal=".topUpModal">Add money</a>
                         </div>
                     </div>
-                </div>
 
-               <!-- <div class="paynocchio_tiles">
+                    <!-- <div class="paynocchio_tiles">
                     <div class="!cfps-max-w-full cfps-rounded-xl cfps-p-8 cfps-flex cfps-flex-row cfps-flex-wrap cfps-items-center
                     cfps-justify-between cfps-gap-8 cfps-bg-gradient-to-r cfps-from-gray-200 cfps-to-gray-300">
                         <h2 class="!cfps-text-[#515151] cfps-text-2xl cfps-font-bold">Your Wallet</h2>
@@ -113,41 +114,44 @@ if (is_user_logged_in()) {
                         <div class=""><a href="#" class="btn-blue paynocchio_button" data-modal=".topUpModal">Add money</a></div>
                     </div>
                 </div>-->
-                <?php if($wallet['bonuses']) {
-                    if($wallet['bonuses'] < $cart_total) {
-                        $max_bonus = $wallet['bonuses'];
-                    } else {
-                        $max_bonus = $cart_total;
-                    }
-                    ?>
-                    <div class="paynocchio-conversion-rate cfps-flex cfps-flex-row cfps-flex-wrap cfps-items-center cfps-gap-4 cfps-justify-between">
-                        <h3>
-                            Apply available bonuses
-                        </h3>
+                    <?php if($wallet['bonuses']) {
+                        if($wallet['bonuses'] < $cart_total) {
+                            $max_bonus = $wallet['bonuses'];
+                        } else {
+                            $max_bonus = $cart_total;
+                        }
+                        ?>
+                        <div class="paynocchio-conversion-rate cfps-flex cfps-flex-row cfps-flex-wrap cfps-items-center cfps-gap-4 cfps-justify-between">
+                            <h3>
+                                Apply available bonuses
+                            </h3>
 
-                        <div class="cfps-flex cfps-flex-row cfps-items-center cfps-gap-4">
-                            <input id="bonuses-input" type="range" min="0" max="<?php echo $max_bonus; ?>" step="1" value="0" class="styled-slider slider-progress" />
-                            <?php
-                            woocommerce_form_field( 'bonusesvalue', [
-                                'type'        => 'number',
-                                'id'          => 'bonuses-value',
-                                'label'       => '',
-                                'placeholder' => '',
-                                'default'     => '',
-                                'input_class' => ['short focus:!cfps-outline-none !cfps-mb-0'],
-                            ] );
-                            ?>
+                            <div class="cfps-flex cfps-flex-row cfps-items-center cfps-gap-4">
+                                <input id="bonuses-input" type="range" min="0" max="<?php echo $max_bonus; ?>" step="1" value="0" class="styled-slider slider-progress" />
+                                <?php
+                                woocommerce_form_field( 'bonusesvalue', [
+                                    'type'        => 'number',
+                                    'id'          => 'bonuses-value',
+                                    'label'       => '',
+                                    'placeholder' => '',
+                                    'default'     => '',
+                                    'input_class' => ['short focus:!cfps-outline-none !cfps-mb-0'],
+                                ] );
+                                ?>
+                            </div>
                         </div>
+                    <?php } ?>
+                    <div class="cfps-flex cfps-flex-row cfps-gap-x-4 cfps-mt-8 cfps-text-sm cfps-flex-wrap">
+                        <a href="<?php echo wc_get_page_permalink('myaccount') . WOOCOMMERCE_PAYNOCCHIO_ACCOUNT_PAGE_SLUG ?>">My Account</a>
+                        <a href="<?php echo get_privacy_policy_url(); ?>">Privacy Policy</a>
+                        <a href="<?php echo get_permalink( wc_terms_and_conditions_page_id() ); ?>">Terms and Conditions</a>
                     </div>
-                <?php } ?>
-                <div class="cfps-flex cfps-flex-row cfps-gap-x-4 cfps-mt-8 cfps-text-sm cfps-flex-wrap">
-                    <a href="<?php echo wc_get_page_permalink('myaccount') . WOOCOMMERCE_PAYNOCCHIO_ACCOUNT_PAGE_SLUG ?>">My Account</a>
-                    <a href="<?php echo get_privacy_policy_url(); ?>">Privacy Policy</a>
-                    <a href="<?php echo get_permalink( wc_terms_and_conditions_page_id() ); ?>">Terms and Conditions</a>
                 </div>
-            </div>
-        </section>
-    <?php }  ?>
+            </section>
+        <?php }  ?>
+        <?php } else { ?>
+        <b>Paynocchio.Pay is currently unavailable</b>
+        <?php } ?>
 
 <?php } ?>
 <?php echo do_shortcode('[paynocchio_modal_forms]'); ?>

@@ -126,7 +126,7 @@ $paynocchio_classes = '';
             <div>
                 For some reason our wallet system returns <span id="wallet_status" class="cfps-font-bold"><?php echo $wallet['status'] ?></span>
             </div>
-        <div>Please <a href="/contact">contact support</a></div>
+            <div>Please contact <b><?php echo get_bloginfo('name') ?></b> support</div>
 
         <?php } ?>
 

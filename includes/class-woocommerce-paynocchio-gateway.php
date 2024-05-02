@@ -280,31 +280,36 @@ class Woocommerce_Paynocchio_Payment_Gateway extends WC_Payment_Gateway {
      */
     public function payment_fields() {
 
-        /*
+        $paynocchio = new Woocommerce_Paynocchio();
+        $wallet = $paynocchio->get_paynocchio_wallet_info();
+
+        if($wallet['code'] !== 500) {
+            /*
          * Display description above form
          * */
-        if( $this->description ) {
-            // you can instructions for test mode, I mean test card numbers etc.
-            if( $this->get_test_mode() ) {
-                $this->description .= '<p style="color:#1db954;font-weight:bold">TEST MODE ENABLED.</p>';
+            if( $this->description ) {
+                // you can instructions for test mode, I mean test card numbers etc.
+                if( $this->get_test_mode() ) {
+                    $this->description .= '<p style="color:#1db954;font-weight:bold">TEST MODE ENABLED.</p>';
+                }
+                // display the description with <p> tags etc.
+                echo wpautop( wp_kses_post( $this->description ) );
             }
-            // display the description with <p> tags etc.
-            echo wpautop( wp_kses_post( $this->description ) );
-        }
 
-        if(is_user_logged_in()) {
-            if (!get_user_meta(get_current_user_id(), PAYNOCCHIO_WALLET_KEY)) {
-                echo do_shortcode('[paynocchio_activation_block register_redirect="/checkout?ans=checkemail" login_redirect="/checkout#payment_method_paynocchio"]');
+            if(is_user_logged_in()) {
+                if (!get_user_meta(get_current_user_id(), PAYNOCCHIO_WALLET_KEY)) {
+                    echo do_shortcode('[paynocchio_activation_block register_redirect="/checkout?ans=checkemail" login_redirect="/checkout#payment_method_paynocchio"]');
+                } else {
+                    echo do_shortcode('[paynocchio_payment_widget]');
+                }
             } else {
-                echo do_shortcode('[paynocchio_payment_widget]');
-            }
-        } else {
-            echo do_shortcode('[paynocchio_registration_block 
+                echo do_shortcode('[paynocchio_registration_block 
             register_redirect="/checkout?ans=checkemail" 
             login_redirect="/checkout#payment_method_paynocchio"]');
+            }
+        } else {
+            echo '<div>Unfortunately Paynocchio.Pay is currently unavailable. Please contact <b>'.get_bloginfo('name').'</b> support.</div>';
         }
-
-
     }
 
     /*public function do_ssl_check() {
