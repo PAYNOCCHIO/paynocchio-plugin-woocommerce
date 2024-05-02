@@ -170,10 +170,10 @@ import setTopUpBonuses from "./js/setTopUpBonuses";
      * @param path
      */
     const topUpWalletMiniForm = (evt) => {
+        $(`.topup_mini_form .cfps-spinner`).removeClass('cfps-hidden');
+        $(`.topup_mini_form .cfps-check`).addClass('cfps-hidden');
+        $(`.topup_mini_form .cfps-cross`).addClass('cfps-hidden');
         $(evt.target).addClass('cfps-disabled')
-        $(`#${evt.target.id} .cfps-spinner`).removeClass('cfps-hidden');
-        $(`#${evt.target.id} .cfps-check`).addClass('cfps-hidden');
-        $(`#${evt.target.id} .cfps-cross`).addClass('cfps-hidden');
 
         $.ajax({
             url: paynocchio_object.ajaxurl,
@@ -185,13 +185,14 @@ import setTopUpBonuses from "./js/setTopUpBonuses";
             },
             success: function(data){
                 if (data.response.status_code === 200) {
-                    $(`#${evt.target.id} .cfps-check`).removeClass('cfps-hidden');
+                    $(`.topup_mini_form .cfps-check`).removeClass('cfps-hidden');
                     updateWalletBalance();
                     updateOrderButtonState();
                     $('.topup_mini_form').delay(2000).fadeOut('fast', function() {
                         $('#show_mini_modal').css('transform','rotate(0deg)');
                         $('#top_up_amount_mini_form').val('');
-                        $(`#${evt.target.id} .cfps-check`).addClass('cfps-hidden');
+                        $(`.topup_mini_form .cfps-check`).addClass('cfps-hidden');
+                        $(evt.target).removeClass('cfps-disabled')
                     });
 
                 } else {
@@ -201,10 +202,10 @@ import setTopUpBonuses from "./js/setTopUpBonuses";
         })
             .error(function () {
                 (error) => console.log(error);
-                $(`#${evt.target.id} .cfps-cross`).removeClass('cfps-hidden');
+                $(`.topup_mini_form .cfps-cross`).removeClass('cfps-hidden');
             })
             .always(function() {
-                $(`#${evt.target.id} .cfps-spinner`).addClass('cfps-hidden');
+                $(`.topup_mini_form .cfps-spinner`).addClass('cfps-hidden');
                 $(evt.target).removeClass('cfps-disabled')
             });
     }
