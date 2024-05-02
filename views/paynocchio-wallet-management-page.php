@@ -1,8 +1,6 @@
 <?php
     $paynocchio = new Woocommerce_Paynocchio();
     $wallet = $paynocchio->get_paynocchio_wallet_info();
-print_r($wallet);
-
 
 $paynocchio_classes = '';
     $settigns = get_option( 'woocommerce_paynocchio_settings');
