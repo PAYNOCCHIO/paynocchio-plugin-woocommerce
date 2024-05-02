@@ -13,6 +13,18 @@ if (is_user_logged_in()) {
     $settigns = get_option( 'woocommerce_paynocchio_settings');
     $paynocchio_classes .= array_key_exists('darkmode', $settigns) && $settigns['darkmode'] == 'yes' ? 'paynocchio_dark_mode ' : '';
     $paynocchio_classes .= array_key_exists('rounded', $settigns) && $settigns['rounded'] == 'yes' ? 'paynocchio_rounded ' : '';
+    $paynocchio_rounded_class = array_key_exists('rounded', $settigns) && $settigns['rounded'] == 'yes' ? 'cfps-rounded-lg' : '';
+    $paynocchio_embleme_url = array_key_exists('embleme_url', $settigns) && $settigns['embleme_url'] ? $settigns['embleme_url'] : '';
+
+    $accent_color = '#3b82f6';
+    if (array_key_exists('accent_color', $settigns)) {
+        $accent_color = get_option( 'woocommerce_paynocchio_settings')['accent_color'];
+    }
+
+    $accent_text_color = '#ffffff';
+    if (array_key_exists('accent_text_color', $settigns)) {
+        $accent_text_color = get_option( 'woocommerce_paynocchio_settings')['accent_text_color'];
+    }
 ?>
 
 <div class="modal topUpModal <?php echo $paynocchio_classes; ?>">
@@ -50,12 +62,14 @@ if (is_user_logged_in()) {
             </div>
             <input type="hidden" id="source-card" name="source-card" value="" />
 
-            <div class="top-up-amount-container cfps-mt-8 lg:cfps-mt-12 cfps-flex cfps-flex-row">
-                <span class="cfps-text-3xl">$</span>
-                <input type="number" step="0.01" class="!cfps-bg-transparent !cfps-border-0 !cfps-shadow-none cfps-text-3xl !cfps-p-0 focus:!cfps-outline-none"
-                       name="amount" id="top_up_amount" placeholder="0" />
-                <?php wp_nonce_field( 'paynocchio_ajax_top_up', 'ajax-top-up-nonce' ); ?>
-                <div class="cfps-p-2">You will get <span class="cfps-text-green-600" id="bonusesCounter">0</span> bonuses for TopUp</div>
+            <div class="top-up-amount-container cfps-mt-8 lg:cfps-mt-12 cfps-flex cfps-flex-row cfps-justify-between">
+                <div>
+                    <span class="cfps-text-3xl">$</span>
+                    <input type="number" step="0.01" class="cfps-max-w-32 !cfps-bg-transparent !cfps-border-0 !cfps-shadow-none cfps-text-3xl !cfps-p-0 focus:!cfps-outline-none"
+                           name="amount" id="top_up_amount" placeholder="0" />
+                    <?php wp_nonce_field( 'paynocchio_ajax_top_up', 'ajax-top-up-nonce' ); ?>
+                </div>
+                <div class="cfps-p-2 cfps-bg-gray-100 cfps-drop-shadow <?php echo $paynocchio_rounded_class; ?>">You earn <span class="cfps-font-black" id="bonusesCounter">0</span> bonuses for top up</div>
             </div>
 
             <div class="top-up-variants">

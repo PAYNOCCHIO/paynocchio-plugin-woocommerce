@@ -9,7 +9,20 @@ $wallet_bal = 0;
 <?php
     $paynocchio_classes = '';
     $settigns = get_option( 'woocommerce_paynocchio_settings');
+    $paynocchio_classes .= array_key_exists('darkmode', $settigns) && $settigns['darkmode'] == 'yes' ? 'paynocchio_dark_mode ' : '';
+    $paynocchio_classes .= array_key_exists('rounded', $settigns) && $settigns['rounded'] == 'yes' ? 'paynocchio_rounded ' : '';
+    $paynocchio_rounded_class = array_key_exists('rounded', $settigns) && $settigns['rounded'] == 'yes' ? 'cfps-rounded-lg' : '';
     $paynocchio_embleme_url = array_key_exists('embleme_url', $settigns) && $settigns['embleme_url'] ? $settigns['embleme_url'] : '';
+
+    $accent_color = '#3b82f6';
+    if (array_key_exists('accent_color', $settigns)) {
+        $accent_color = get_option( 'woocommerce_paynocchio_settings')['accent_color'];
+    }
+
+    $accent_text_color = '#ffffff';
+    if (array_key_exists('accent_text_color', $settigns)) {
+        $accent_text_color = get_option( 'woocommerce_paynocchio_settings')['accent_text_color'];
+    }
 ?>
 
     <section class="paynocchio">
@@ -20,11 +33,34 @@ $wallet_bal = 0;
                     src="<?php /*echo plugin_dir_url( WOOCOMMERCE_PAYNOCCHIO_BASENAME ) . 'assets/img/card.webp' */?>"
                     alt="" />-->
                 <div class="paynocchio-card-container">
-                    <div class="paynocchio-card">
-                        <img class="cfps-block !cfps-mx-auto !cfps-w-full !cfps-max-w-[350px]" src="<?php echo plugin_dir_url( WOOCOMMERCE_PAYNOCCHIO_BASENAME ) . 'assets/img/card.webp' ?>" />
+                    <div class="paynocchio-card" style="color:<?php echo $accent_text_color; ?>; background:<?php echo $accent_color; ?>">
                         <?php if ($paynocchio_embleme_url) { ?>
                             <img src="<?php echo $paynocchio_embleme_url; ?>" class="on_card_embleme" />
                         <?php } ?>
+                        <div class="paynocchio-balance-bonuses">
+                            <div class="paynocchio-balance">
+                                <div>
+                                    Balance
+                                </div>
+                                <div class="amount">
+                                    $0
+                                </div>
+                            </div>
+                            <div class="paynocchio-bonuses">
+                                <div>
+                                    Bonuses
+                                </div>
+                                <div class="amount">
+                                    0
+                                </div>
+                            </div>
+                        </div>
+                        <div class="paynocchio-card-number">
+                            <div>• • • •</div>
+                            <div>• • • •</div>
+                            <div>• • • •</div>
+                            <div>• • • •</div>
+                        </div>
                     </div>
                 </div>
             </div>

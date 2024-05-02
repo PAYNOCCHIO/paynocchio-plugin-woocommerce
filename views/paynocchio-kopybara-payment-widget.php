@@ -20,9 +20,7 @@ if (is_user_logged_in()) {
     $settigns = get_option( 'woocommerce_paynocchio_settings');
     $paynocchio_classes .= array_key_exists('darkmode', $settigns) && $settigns['darkmode'] == 'yes' ? 'paynocchio_dark_mode ' : '';
     $paynocchio_classes .= array_key_exists('rounded', $settigns) && $settigns['rounded'] == 'yes' ? 'paynocchio_rounded ' : '';
-    $embleme_link = plugin_dir_url( WOOCOMMERCE_PAYNOCCHIO_BASENAME ) . 'assets/img/paynocchio_';
-    $embleme_link .= array_key_exists('darkmode', $settigns) && $settigns['darkmode'] == 'yes' ? 'white.svg' : 'black.svg';
-
+    $paynocchio_rounded_class = array_key_exists('rounded', $settigns) && $settigns['rounded'] == 'yes' ? 'cfps-rounded-lg' : '';
     $paynocchio_embleme_url = array_key_exists('embleme_url', $settigns) && $settigns['embleme_url'] ? $settigns['embleme_url'] : '';
 
     $accent_color = '#3b82f6';
@@ -61,8 +59,7 @@ if (is_user_logged_in()) {
                 <div class="paynocchio-payment-block">
 
                     <div class="paynocchio-card-container">
-                        <div class="paynocchio-card">
-                            <img class="cfps-block !cfps-mx-auto !cfps-w-full !cfps-max-w-[350px]" src="<?php echo plugin_dir_url( WOOCOMMERCE_PAYNOCCHIO_BASENAME ) . 'assets/img/blank_card.webp' ?>" />
+                        <div class="paynocchio-card" style="color:<?php echo $accent_text_color; ?>; background:<?php echo $accent_color; ?>">
                             <?php if ($paynocchio_embleme_url) { ?>
                                 <img src="<?php echo $paynocchio_embleme_url; ?>" class="on_card_embleme" />
                             <?php } ?>
@@ -91,8 +88,11 @@ if (is_user_logged_in()) {
                                     </div>
                                 </div>
                             </div>
+                            <div class="paynocchio-card-number">
+                                <div><?php echo chunk_split(strval($wallet['card_number']), 4, '</div><div>'); ?></div>
+                            </div>
                             <div class="paynocchio_payment_card_button">
-                                <a href="#" class="btn-blue paynocchio_button" data-modal=".topUpModal">Add money</a>
+                                <a href="#" class="paynocchio_button" data-modal=".topUpModal" style="color:<?php echo $accent_color; ?>; background:<?php echo $accent_text_color; ?>">Add money</a>
                             </div>
                         </div>
                     </div>
@@ -150,7 +150,16 @@ if (is_user_logged_in()) {
             </section>
         <?php }  ?>
         <?php } else { ?>
-        <b>Paynocchio.Pay is currently unavailable</b>
+        <div class="paynocchio_error_notification <?php echo $paynocchio_rounded_class; ?>">
+            <svg class="cfps-max-w-[100px] cfps-mx-auto cfps-mb-4" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M0 0h24v24H0z" fill="none"></path>
+                <path d="M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10-4.477 10-10 10zm-1-7v2h2v-2h-2zm0-8v6h2V7h-2z" fill="#d4d4d4" class="fill-000000"></path>
+            </svg>
+            <div class="cfps-mb-4">
+                <b><?php echo get_bloginfo('name') ?></b> wallet system is currently unavailable
+            </div>
+            <div>To solve the problem, please contact <b><?php echo get_bloginfo('name') ?></b> support</div>
+        </div>
         <?php } ?>
 
 <?php } ?>

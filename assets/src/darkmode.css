@@ -78,3 +78,7 @@
         }
     }
 }
+
+.paynocchio-profile-block.paynocchio_dark_mode {
+    @apply cfps-bg-zinc-800 cfps-text-white;
+}

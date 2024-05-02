@@ -7,9 +7,14 @@ if (!defined('ABSPATH')) {
 <?php
 global $woocommerce;
 $amount = WC()->cart->cart_contents_total;
+
+$paynocchio_classes = '';
+$settigns = get_option( 'woocommerce_paynocchio_settings');
+$paynocchio_classes .= array_key_exists('darkmode', $settigns) && $settigns['darkmode'] == 'yes' ? 'paynocchio_dark_mode ' : '';
+$paynocchio_classes .= array_key_exists('rounded', $settigns) && $settigns['rounded'] == 'yes' ? 'paynocchio_rounded ' : '';
 ?>
 
-<div class="paynocchio-cart-wallet-widget cfps-flex cfps-flex-row cfps-items-center cfps-relative cfps-text-black">
+<div class="paynocchio-cart-wallet-widget cfps-flex cfps-flex-row cfps-items-center cfps-relative cfps-text-black <?php echo $paynocchio_classes; ?>">
     <div class="cart cfps-bg-white cfps-rounded-lg cfps-p-2">
         <a href="<?php echo wc_get_page_permalink('myaccount') . WOOCOMMERCE_PAYNOCCHIO_ACCOUNT_PAGE_SLUG ?>" alt="Account" title="Account">
             <div class="cfps-flex cfps-flex-row cfps-items-center">
@@ -24,7 +29,7 @@ $amount = WC()->cart->cart_contents_total;
         ?>
 
     <?php if ($wallet['code'] !== 500) { ?>
-        <div class="wallet paynocchio-wallet <?php if ($wallet['status'] !== 'ACTIVE') { ?>cfps-disabled<?php } ?> cfps-bg-white cfps-rounded-lg cfps-p-2"  alt="Balance" title="Balance">
+        <div class="wallet paynocchio-wallet <?php if ($wallet['status'] !== 'ACTIVE') { ?>cfps-disabled<?php } ?> cfps-p-2"  alt="Balance" title="Balance">
             <div class="cfps-flex cfps-flex-row cfps-items-center cfps-pr-2 cfps-mr-2 cfps-border-r cfps-border-slate-300 cfps-gap-x-2">
                 <img src="<?php echo plugin_dir_url( WOOCOMMERCE_PAYNOCCHIO_BASENAME ) . 'assets/img/wallet.svg' ?>" class="!cfps-h-[25px] cfps-w-auto"/>
                 <p class="cfps-font-semibold">$<span class="paynocchio-numbers paynocchio-balance-value" data-balance="<?php echo $wallet['balance'] ?? 0 ?>"><?php echo $wallet['balance'] ?? 0 ?></span></p>
@@ -68,7 +73,7 @@ $amount = WC()->cart->cart_contents_total;
 
         </div>
         <?php } else {?>
-            <div>Please contact <b><?php echo get_bloginfo('name') ?></b> support</div>
+            <div class="wallet paynocchio-wallet cfps-gap-2">Error. Please contact <strong><?php echo get_bloginfo('name') ?></strong> support</div>
         <?php } ?>
     <?php } ?>
 </div>

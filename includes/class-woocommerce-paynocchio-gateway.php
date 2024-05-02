@@ -165,6 +165,9 @@ class Woocommerce_Paynocchio_Payment_Gateway extends WC_Payment_Gateway {
         $user_uuid = get_user_meta($customer_order->get_user_id(), PAYNOCCHIO_WALLET_KEY, true);
         $user_paynocchio_wallet = new Woocommerce_Paynocchio_Wallet($user_uuid);
 
+        $paynocchio = new Woocommerce_Paynocchio();
+        $wallet = $paynocchio->get_paynocchio_wallet_info();
+
         $fullAmount = $customer_order->total;
         $amount = $customer_order->total;
 
@@ -186,43 +189,50 @@ class Woocommerce_Paynocchio_Payment_Gateway extends WC_Payment_Gateway {
             'bonuses' => $wallet_response['bonuses'],
         ]);*/
 
-        if ($wallet_response['balance'] + $wallet_response['bonuses'] < $customer_order->total) {
-            wc_add_notice( 'You balance is lack for $' . $customer_order->total - $wallet_response['balance'] . '. Please top up your wallet.', 'error' );
-            $customer_order->add_order_note( 'Error: insufficient funds' );
-            return;
-        }
+        if ($wallet['code'] !== 500) {
 
-        if ($wallet_response['balance'] + $wallet_response['bonuses'] >= $customer_order->total && ($wallet_response['balance'] + $bonusAmount) < $customer_order->total) {
-            wc_add_notice( 'Please TopUp or use your Bonuses.', 'error' );
-            $customer_order->add_order_note( 'Error: insufficient funds' );
-            return;
-        }
+            if ($wallet_response['balance'] + $wallet_response['bonuses'] < $customer_order->total) {
+                wc_add_notice('You balance is lack for $' . $customer_order->total - $wallet_response['balance'] . '. Please top up your wallet.', 'error');
+                $customer_order->add_order_note('Error: insufficient funds');
+                return;
+            }
 
-        if ( $response['status_code'] === 200) {
+            if ($wallet_response['balance'] + $wallet_response['bonuses'] >= $customer_order->total && ($wallet_response['balance'] + $bonusAmount) < $customer_order->total) {
+                wc_add_notice('Please TopUp or use your Bonuses.', 'error');
+                $customer_order->add_order_note('Error: insufficient funds');
+                return;
+            }
 
-            // Payment successful
-            $customer_order->add_order_note( __( 'Paynocchio complete payment.', 'paynocchio' ) );
+            if ($response['status_code'] === 200) {
 
-            // paid order marked
-            $customer_order->payment_complete();
+                // Payment successful
+                $customer_order->add_order_note(__('Paynocchio complete payment.', 'paynocchio'));
 
-            /**
-             * Set COMPLETED status for Orders
-             */
-            //$customer_order->update_status( "completed" );
+                // paid order marked
+                $customer_order->payment_complete();
 
-            // this is important part for empty cart
-            $woocommerce->cart->empty_cart();
-            // Redirect to thank you page
-            //print_r($bonusAmount);
-            return array(
-                'result'   => 'success',
-                'redirect' => $this->get_return_url( $customer_order ),
-            );
+                /**
+                 * Set COMPLETED status for Orders
+                 */
+                //$customer_order->update_status( "completed" );
+
+                // this is important part for empty cart
+                $woocommerce->cart->empty_cart();
+                // Redirect to thank you page
+                //print_r($bonusAmount);
+                return array(
+                    'result' => 'success',
+                    'redirect' => $this->get_return_url($customer_order),
+                );
+            } else {
+                //transiction fail
+                wc_add_notice('Please try again.', 'error');
+                $customer_order->add_order_note('Error: ' . json_decode($response['detail'])->msg);
+            }
         } else {
-            //transiction fail
-            wc_add_notice( 'Please try again.', 'error' );
-            $customer_order->add_order_note( 'Error: '. json_decode($response['detail'])->msg );
+            wc_add_notice('An error in the operation of the wallet system. Please contact support.', 'error');
+            $customer_order->add_order_note('Error: Internal Server Error');
+            return;
         }
 
     }
@@ -308,7 +318,16 @@ class Woocommerce_Paynocchio_Payment_Gateway extends WC_Payment_Gateway {
             login_redirect="/checkout#payment_method_paynocchio"]');
             }
         } else {
-            echo '<div>Unfortunately Paynocchio.Pay is currently unavailable. Please contact <b>'.get_bloginfo('name').'</b> support.</div>';
+            echo '<div class="paynocchio_error_notification">
+                    <svg class="cfps-max-w-[100px] cfps-mx-auto cfps-mb-4" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M0 0h24v24H0z" fill="none"></path>
+                        <path d="M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10-4.477 10-10 10zm-1-7v2h2v-2h-2zm0-8v6h2V7h-2z" fill="#d4d4d4" class="fill-000000"></path>
+                    </svg>
+                    <div class="cfps-mb-4">
+                        If you see this page, our wallet service issues an error.
+                    </div>
+                    <div>To solve the problem, please contact <b>'.get_bloginfo('name').'</b> support</div>
+                </div>';
         }
     }
 

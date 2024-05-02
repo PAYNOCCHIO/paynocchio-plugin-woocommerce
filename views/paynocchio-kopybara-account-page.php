@@ -9,9 +9,7 @@ if (!defined('ABSPATH')) {
     $settigns = get_option( 'woocommerce_paynocchio_settings');
     $paynocchio_classes .= array_key_exists('darkmode', $settigns) && $settigns['darkmode'] == 'yes' ? 'paynocchio_dark_mode ' : '';
     $paynocchio_classes .= array_key_exists('rounded', $settigns) && $settigns['rounded'] == 'yes' ? 'paynocchio_rounded ' : '';
-    $embleme_link = plugin_dir_url( WOOCOMMERCE_PAYNOCCHIO_BASENAME ) . 'assets/img/paynocchio_';
-    $embleme_link .= array_key_exists('darkmode', $settigns) && $settigns['darkmode'] == 'yes' ? 'white.svg' : 'black.svg';
-
+    $paynocchio_rounded_class = array_key_exists('rounded', $settigns) && $settigns['rounded'] == 'yes' ? 'cfps-rounded-lg' : '';
     $paynocchio_embleme_url = array_key_exists('embleme_url', $settigns) && $settigns['embleme_url'] ? $settigns['embleme_url'] : '';
 
     $accent_color = '#3b82f6';
@@ -43,9 +41,6 @@ if (!defined('ABSPATH')) {
         <div class="paynocchio-new-account">
             <div class="paynocchio-account-menu">
                 <div class="paynocchio-profile-info cfps-p-8">
-                    <!--<div class="paynocchio-profile-img">
-                        <img src="<?php /*echo plugin_dir_url( WOOCOMMERCE_PAYNOCCHIO_BASENAME ) . 'assets/img/profile.png' */?>" />
-                    </div>-->
                     <div class="paynocchio-profile-text">
                         <h2>
                             <?php echo $wallet['user']['first_name']. ' ' .$wallet['user']['last_name']; ?>
@@ -92,8 +87,7 @@ if (!defined('ABSPATH')) {
                     <?php } else { ?>
                         <div class="paynocchio-profile-block <?php if ($wallet['status'] !== 'ACTIVE') { ?>cfps-disabled<?php } ?>">
                             <div class="paynocchio-card-container">
-                                <div class="paynocchio-card">
-                                    <img class="cfps-block !cfps-mx-auto !cfps-w-full !cfps-max-w-[350px]" src="<?php echo plugin_dir_url( WOOCOMMERCE_PAYNOCCHIO_BASENAME ) . 'assets/img/blank_card.webp' ?>" />
+                                <div class="paynocchio-card" style="color:<?php echo $accent_text_color; ?>; background:<?php echo $accent_color; ?>">
                                     <?php if ($paynocchio_embleme_url) { ?>
                                     <img src="<?php echo $paynocchio_embleme_url; ?>" class="on_card_embleme" />
                                     <?php }
@@ -139,7 +133,7 @@ if (!defined('ABSPATH')) {
                                     <input type="hidden" value="0" name="autodeposit" id="autodeposit" />-->
                                 </div>
                                 <div class="paynocchio-actions-btns">
-                                    <a href="#" class="paynocchio_button btn-blue paynocchio_colored" data-modal=".topUpModal">
+                                    <a href="#" class="paynocchio_button paynocchio_colored" data-modal=".topUpModal">
                                         <img src="<?php echo plugin_dir_url( WOOCOMMERCE_PAYNOCCHIO_BASENAME ) . 'assets/img/plus.png' ?>"
                                              class="cfps-h-[24px] cfps-w-[24px] cfps-mr-1 cfps-inline-block" />
                                         Add money
