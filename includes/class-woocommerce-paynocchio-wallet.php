@@ -270,7 +270,8 @@ class Woocommerce_Paynocchio_Wallet {
             'balance' => 0,
             'bonuses' => 0,
             'number' => 0,
-            'status' => 'ERROR',
+            'status' => $user_paynocchio_wallet['response'],
+            'code' => $user_paynocchio_wallet['status_code'],
         ];
     }
 

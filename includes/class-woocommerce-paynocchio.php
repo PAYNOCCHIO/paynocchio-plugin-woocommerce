@@ -698,6 +698,7 @@ class Woocommerce_Paynocchio {
                     $wallet['bonuses'] = $wallet_bal_bon['bonuses'];
                     $wallet['card_number'] = $wallet_bal_bon['number'];
                     $wallet['status'] = $wallet_bal_bon['status'];
+                    $wallet['code'] = $wallet_bal_bon['code'];
                 }
             }
 

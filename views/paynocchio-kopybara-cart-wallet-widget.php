@@ -22,6 +22,8 @@ $amount = WC()->cart->cart_contents_total;
         $paynocchio = new Woocommerce_Paynocchio();
         $wallet = $paynocchio->get_paynocchio_wallet_info();
         ?>
+
+    <?php if ($wallet['code'] !== 500) { ?>
         <div class="wallet paynocchio-wallet <?php if ($wallet['status'] !== 'ACTIVE') { ?>cfps-disabled<?php } ?> cfps-bg-white cfps-rounded-lg cfps-p-2"  alt="Balance" title="Balance">
             <div class="cfps-flex cfps-flex-row cfps-items-center cfps-pr-2 cfps-mr-2 cfps-border-r cfps-border-slate-300 cfps-gap-x-2">
                 <img src="<?php echo plugin_dir_url( WOOCOMMERCE_PAYNOCCHIO_BASENAME ) . 'assets/img/wallet.svg' ?>" class="!cfps-h-[25px] cfps-w-auto"/>
@@ -65,5 +67,8 @@ $amount = WC()->cart->cart_contents_total;
             </div>
 
         </div>
+        <?php } else {?>
+        <a href="/support">Please contact support</a>
+        <?php } ?>
     <?php } ?>
 </div>
