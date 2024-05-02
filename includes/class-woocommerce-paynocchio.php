@@ -674,14 +674,15 @@ class Woocommerce_Paynocchio {
     public function get_paynocchio_wallet_info() {
 
         if (is_user_logged_in()) {
-            $wallet = [];
+            $wallet = [
+                'code' => 404,
+            ];
 
             $current_user = wp_get_current_user();
 
             $wallet['user'] = [
                 'first_name' => $current_user->first_name,
                 'last_name' => $current_user->last_name,
-                'code' => 404,
             ];
 
             $user_paynocchio_wallet_id = get_user_meta($current_user->ID, PAYNOCCHIO_WALLET_KEY, true);
