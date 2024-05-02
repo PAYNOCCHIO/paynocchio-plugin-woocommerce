@@ -681,6 +681,7 @@ class Woocommerce_Paynocchio {
             $wallet['user'] = [
                 'first_name' => $current_user->first_name,
                 'last_name' => $current_user->last_name,
+                'code' => 404,
             ];
 
             $user_paynocchio_wallet_id = get_user_meta($current_user->ID, PAYNOCCHIO_WALLET_KEY, true);
