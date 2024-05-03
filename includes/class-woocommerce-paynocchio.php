@@ -410,9 +410,9 @@ class Woocommerce_Paynocchio {
                 'user_email' => $user_email,
             );
             $result = wp_insert_user( $info );
-            //add_filter( 'wp_new_user_notification_email', [$this, 'custom_wp_new_user_notification_email'], 10, 3 );
+            add_filter( 'wp_new_user_notification_email', $user_email, 'user');
 
-            do_action( 'user_register', $result, $info );
+            //do_action( 'user_register', $result, $info );
 
             if(is_wp_error( $result)) {
                 wp_send_json_error([
