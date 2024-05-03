@@ -292,10 +292,8 @@ class Woocommerce_Paynocchio_Payment_Gateway extends WC_Payment_Gateway {
 
         $paynocchio = new Woocommerce_Paynocchio();
         $wallet = $paynocchio->get_paynocchio_wallet_info();
-        print_r($wallet);
 
-
-            /*
+        /*
          * Display description above form
          * */
             if( $this->description ) {
