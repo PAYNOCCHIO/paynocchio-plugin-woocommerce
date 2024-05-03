@@ -421,7 +421,7 @@ class Woocommerce_Paynocchio {
                 wp_set_current_user($result);
                 wp_set_auth_cookie($result);
 
-                do_action( 'user_register', $result, $info );
+                wp_send_new_user_notifications($result, 'user');
 
                 wp_send_json_success();
             }

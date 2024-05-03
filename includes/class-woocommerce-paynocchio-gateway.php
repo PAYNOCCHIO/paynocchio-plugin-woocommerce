@@ -292,8 +292,9 @@ class Woocommerce_Paynocchio_Payment_Gateway extends WC_Payment_Gateway {
 
         $paynocchio = new Woocommerce_Paynocchio();
         $wallet = $paynocchio->get_paynocchio_wallet_info();
+        print_r($wallet);
 
-        if($wallet['code'] !== 500) {
+
             /*
          * Display description above form
          * */
@@ -310,25 +311,26 @@ class Woocommerce_Paynocchio_Payment_Gateway extends WC_Payment_Gateway {
                 if (!get_user_meta(get_current_user_id(), PAYNOCCHIO_WALLET_KEY)) {
                     echo do_shortcode('[paynocchio_activation_block register_redirect="/checkout?ans=checkemail" login_redirect="/checkout#payment_method_paynocchio"]');
                 } else {
-                    echo do_shortcode('[paynocchio_payment_widget]');
+                    if($wallet['code'] !== 500) {
+                        echo do_shortcode('[paynocchio_payment_widget]');
+                    } else {
+                        echo '<div class="paynocchio_error_notification">
+                        <svg class="cfps-max-w-[100px] cfps-mx-auto cfps-mb-4" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M0 0h24v24H0z" fill="none"></path>
+                            <path d="M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10-4.477 10-10 10zm-1-7v2h2v-2h-2zm0-8v6h2V7h-2z" fill="#d4d4d4" class="fill-000000"></path>
+                        </svg>
+                        <div class="cfps-mb-4">
+                            If you see this page, our wallet service issues an error.
+                        </div>
+                        <div>To solve the problem, please contact <b>'.get_bloginfo('name').'</b> support</div>
+                    </div>';
+                    }
                 }
             } else {
                 echo do_shortcode('[paynocchio_registration_block 
             register_redirect="/checkout?ans=checkemail" 
             login_redirect="/checkout#payment_method_paynocchio"]');
             }
-        } else {
-            echo '<div class="paynocchio_error_notification">
-                    <svg class="cfps-max-w-[100px] cfps-mx-auto cfps-mb-4" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M0 0h24v24H0z" fill="none"></path>
-                        <path d="M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10-4.477 10-10 10zm-1-7v2h2v-2h-2zm0-8v6h2V7h-2z" fill="#d4d4d4" class="fill-000000"></path>
-                    </svg>
-                    <div class="cfps-mb-4">
-                        If you see this page, our wallet service issues an error.
-                    </div>
-                    <div>To solve the problem, please contact <b>'.get_bloginfo('name').'</b> support</div>
-                </div>';
-        }
     }
 
     /*public function do_ssl_check() {
