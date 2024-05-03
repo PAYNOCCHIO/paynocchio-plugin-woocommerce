@@ -689,12 +689,16 @@ class Woocommerce_Paynocchio {
             $user_uuid = get_user_meta($current_user->ID, PAYNOCCHIO_USER_UUID_KEY, true);
 
             $user_paynocchio_wallet = new Woocommerce_Paynocchio_Wallet($user_uuid);
-            /*$wallet['signature'] = $user_paynocchio_wallet->getSignature();
-            $wallet['secret'] = $user_paynocchio_wallet->get_secret();
-            $wallet['env'] = $user_paynocchio_wallet->get_env();
-            $wallet['wallet_userID'] = $user_paynocchio_wallet->get_userId();
-            $wallet['user_uuid'] = $this->get_uuid();*/
+
+            //$wallet['x-wallet-signature'] = $user_paynocchio_wallet->getSignature();
+            //$wallet['x-company-signature'] = $user_paynocchio_wallet->getSignature(true);
+            //$wallet['secret'] = $user_paynocchio_wallet->get_secret();
+            //$wallet['env'] = $user_paynocchio_wallet->get_env();
+           // $wallet['wallet_uuid'] = $user_paynocchio_wallet->wallet_uuid();
+            //$wallet['user_uuid'] = $this->get_uuid();
+
             if($user_paynocchio_wallet_id) {
+                $wallet_structure = $user_paynocchio_wallet->getEnvironmentStructure();
                 $wallet_bal_bon = $user_paynocchio_wallet->getWalletBalance($user_paynocchio_wallet_id);
                 if($wallet_bal_bon) {
                     $wallet['balance'] = $wallet_bal_bon['balance'];
@@ -702,6 +706,7 @@ class Woocommerce_Paynocchio {
                     $wallet['card_number'] = $wallet_bal_bon['number'];
                     $wallet['status'] = $wallet_bal_bon['status'];
                     $wallet['code'] = $wallet_bal_bon['code'];
+                    //$wallet['structure'] = $wallet_structure;
                 }
             }
 

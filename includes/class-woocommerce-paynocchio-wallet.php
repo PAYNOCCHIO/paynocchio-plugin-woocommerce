@@ -85,6 +85,11 @@ class Woocommerce_Paynocchio_Wallet {
         return $this->envId;
     }
 
+    public function wallet_uuid()
+    {
+        return get_user_meta(get_current_user_id(), PAYNOCCHIO_WALLET_KEY, true);
+    }
+
     /**
      *  X-Wallet-Signature
      */
@@ -104,10 +109,10 @@ class Woocommerce_Paynocchio_Wallet {
      * @param false $simple
      * @return bool|string
      */
-    /*public function getSignature($simple = false): bool|string
+    public function getSignature($simple = false): bool|string
     {
         return $simple ? $this->simpleSignature : $this->signature;
-    }*/
+    }
 
     /**
      *  Get Wallet by ID
@@ -244,7 +249,7 @@ class Woocommerce_Paynocchio_Wallet {
      *  Get Order by ID
      */
     public function getOrderById(string $orderId): array {
-        $url = '/orders/' . $orderId;
+        $url = '/orders/' . $orderId .'/?environment_uuid='.$this->envId;
 
         return $this->sendRequest('GET', $url);
     }
@@ -316,7 +321,7 @@ class Woocommerce_Paynocchio_Wallet {
 
     public function getEnvironmentStructure(): array
     {
-        $url = '/wallet/environment-structure/' . $this->userId . '?environment_uuid=' . $this->envId;
+        $url = '/wallet/environment-structure/?user_uuid=' . $this->userId . '&environment_uuid=' . $this->envId;
 
         return $this->sendRequest('GET', $url);
     }
