@@ -410,9 +410,6 @@ class Woocommerce_Paynocchio {
                 'user_email' => $user_email,
             );
             $result = wp_insert_user( $info );
-            add_filter( 'wp_new_user_notification_email', $user_email, 'user');
-
-            //do_action( 'user_register', $result, $info );
 
             if(is_wp_error( $result)) {
                 wp_send_json_error([
@@ -423,6 +420,8 @@ class Woocommerce_Paynocchio {
 
                 wp_set_current_user($result);
                 wp_set_auth_cookie($result);
+
+                do_action( 'user_register', $result, $info );
 
                 wp_send_json_success();
             }
