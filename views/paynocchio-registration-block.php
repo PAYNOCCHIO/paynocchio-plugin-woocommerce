@@ -64,7 +64,7 @@ if (!defined('ABSPATH')) {
             <div class="paynocchio_form paynocchio_register_form">
                 <h2 class="cfps-text-center">Join "<?php bloginfo('title') ?>" for your convenience!</h2>
                 <p class="cfps-text-center !cfps-mb-8">Already registered? <a class="form-toggle-a">Log in!</a></p>
-                <form name="registerform" id="registerform" action="<?php bloginfo('url') ?>/wp-login.php?action=register" method="post" novalidate="novalidate">
+                <form name="registerform" id="registerform">
                     <div class="row">
                         <div class="col">
                             <label for="user_login" class="for_input">Username</label>

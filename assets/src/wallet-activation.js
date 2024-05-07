@@ -78,6 +78,38 @@ import './public.css';
         });
         // WOOCOMMERCE CHECKOUT SCRIPT
         $(document).on( "updated_checkout", function() {
+
+            $('#wp-submit-registration').click((evt) => {
+                $.ajax({
+                    url: paynocchio_object.ajaxurl,
+                    type: 'POST',
+                    data: {
+                        'action': 'paynocchio_ajax_registration',
+                        'ajax-registration-nonce': $('#ajax-registration-nonce').val(),
+                        'login': $('#user_login').val(),
+                        'email': $('#user_email').val(),
+                    },
+                    success: function(data){
+                        console.log(data)
+                        if(data.success) {
+                            $('#register_messages').text('Please check your email to confirm registration.')
+                        } else {
+                            if(data.data.message === "Sorry, that email address is already used!") {
+                                $('#register_messages').html("<p>Sorry, this email address is already registered.</p>" +
+                                    "<p>Please <a style='color:#0c88b4' href='/account'>log in</a> or <a style='color:#0c88b4' href='/account'>restore password</a>.</p>" +
+                                    "<p>For any case please <a style='color:#0c88b4' href='mailto:support@kopybara.com'>contact support</a>.</p>" + ""
+                                );
+                            } else {
+                                $('#register_messages').text(data.data.message);
+                            }
+                        }
+                    },
+                    error: (error) => console.log(error),
+                })
+
+            });
+
+
             const paynocchio_auth_block = $('#paynocchio_auth_block').length
             const place_orderButton = $('#place_order');
 

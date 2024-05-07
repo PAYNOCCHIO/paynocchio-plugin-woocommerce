@@ -391,6 +391,7 @@ class Woocommerce_Paynocchio {
     {
         $nonce = isset( $_POST['ajax-registration-nonce'] ) ? sanitize_text_field( $_POST['ajax-registration-nonce'] ) : '';
         $user_email = isset( $_POST['email'] ) ? sanitize_text_field( $_POST['email'] ) : '';
+        $user_login = isset( $_POST['login'] ) ? sanitize_text_field( $_POST['login'] ) : '';
 
         if ( ! wp_verify_nonce( $nonce, 'paynocchio_ajax_registration' ) ) {
             wp_send_json( array(
@@ -402,10 +403,17 @@ class Woocommerce_Paynocchio {
         }
 
         if($user_email) {
+
+            if(!is_email($user_email)) {
+                wp_send_json_error([
+                    'message' => 'Please enter valid email',
+                ]);
+            }
+
             $user_pass = wp_generate_uuid4();
 
             $info = array(
-                'user_login'  =>  $user_email,
+                'user_login'  =>  $user_login,
                 'user_pass'  =>  $user_pass,
                 'user_email' => $user_email,
             );
@@ -418,8 +426,8 @@ class Woocommerce_Paynocchio {
 
             } else {
 
-                wp_set_current_user($result);
-                wp_set_auth_cookie($result);
+                //wp_set_current_user($result);
+                //wp_set_auth_cookie($result);
 
                 wp_send_new_user_notifications($result, 'user');
 
