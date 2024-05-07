@@ -38,7 +38,10 @@
     <?php if ($wallet['code'] !== 500) { ?>
         <div class="paynocchio-profile-block <?php echo $paynocchio_rounded_class; ?> <?php echo $paynocchio_darkmode_class; ?> <?php if ($wallet['status'] !== 'ACTIVE') { ?>cfps-disabled<?php } ?>">
             <?php if(get_transient('first_time_active')) { ?>
-                CONGRATS! You have activated your Bonuses Wallet!
+                <div class="congratz">
+                    <img src="<?php echo plugin_dir_url( WOOCOMMERCE_PAYNOCCHIO_BASENAME ) . 'assets/img/star.webp' ?>" class="!cfps-h-[25px] !cfps-ml-0"/>
+                    <div>Congratulations! Now you have the Wallet with which you can return up to 10% in rewards!</div>
+                </div>
             <?php } ?>
             <div class="paynocchio-card-container">
                 <div class="paynocchio-card" style="color:<?php echo $accent_text_color; ?>; background:<?php echo $accent_color; ?>">

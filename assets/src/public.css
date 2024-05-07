@@ -818,3 +818,7 @@ input[type=range].styled-slider.slider-progress:active::-ms-fill-lower {
 .paynocchio_error_notification {
     @apply cfps-bg-gray-100 cfps-text-black cfps-p-8 cfps-text-center;
 }
+
+.congratz {
+    @apply cfps-bg-gray-100 cfps-text-black cfps-p-4 cfps-text-center cfps-rounded-lg cfps-font-bold cfps-flex cfps-items-center cfps-flex-row cfps-justify-start cfps-gap-4;
+}

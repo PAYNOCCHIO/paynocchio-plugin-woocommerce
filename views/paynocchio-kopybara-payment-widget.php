@@ -57,7 +57,11 @@ if (is_user_logged_in()) {
         </div>-->
             <section class="paynocchio <?php echo $paynocchio_classes; ?>">
                 <div class="paynocchio-payment-block">
-
+                    <?php if(get_transient('first_time_active')) { ?>
+                        <div class="congratz !cfps-justify-center">
+                            <div>Congratulations! Your Wallet has been activated!</div>
+                        </div>
+                    <?php } ?>
                     <div class="paynocchio-card-container">
                         <div class="paynocchio-card" style="color:<?php echo $accent_text_color; ?>; background:<?php echo $accent_color; ?>">
                             <?php if ($paynocchio_embleme_url) { ?>
