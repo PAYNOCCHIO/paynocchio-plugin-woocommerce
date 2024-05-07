@@ -52,6 +52,9 @@ if (is_user_logged_in()) {
 <?php } else { ?>
 
 <section class="paynocchio <?php echo $paynocchio_classes; ?>">
+    <?php if(get_transient('first_time_active')) { ?>
+        CONGRATS! You have activated your Bonuses Wallet!
+    <?php } ?>
     <div class="paynocchio-payment-block">
         <div class="paynocchio-embleme">
             <img src="<?php echo $embleme_link; ?>" />

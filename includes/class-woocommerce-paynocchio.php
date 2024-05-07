@@ -376,6 +376,7 @@ class Woocommerce_Paynocchio {
          }
 
          if($json_response->status === 'success') {
+             set_transient('first_time_active', true, 300);
              wp_send_json_success();
          }
         wp_die();

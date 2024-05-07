@@ -37,6 +37,9 @@
 <?php } else { ?>
     <?php if ($wallet['code'] !== 500) { ?>
         <div class="paynocchio-profile-block <?php echo $paynocchio_rounded_class; ?> <?php echo $paynocchio_darkmode_class; ?> <?php if ($wallet['status'] !== 'ACTIVE') { ?>cfps-disabled<?php } ?>">
+            <?php if(get_transient('first_time_active')) { ?>
+                CONGRATS! You have activated your Bonuses Wallet!
+            <?php } ?>
             <div class="paynocchio-card-container">
                 <div class="paynocchio-card" style="color:<?php echo $accent_text_color; ?>; background:<?php echo $accent_color; ?>">
                     <?php if ($paynocchio_embleme_url) { ?>
