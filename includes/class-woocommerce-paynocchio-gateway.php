@@ -326,7 +326,7 @@ class Woocommerce_Paynocchio_Payment_Gateway extends WC_Payment_Gateway {
                 }
             } else {
                 echo do_shortcode('[paynocchio_registration_block 
-            register_redirect="/checkout?ans=checkemail" 
+            register_redirect="/checkout?step=2&ans=checkemail" 
             login_redirect="/checkout#payment_method_paynocchio"]');
             }
     }
