@@ -20,7 +20,7 @@ if (!defined('ABSPATH')) {
             <div class="cfps-flex cfps-flex-row cfps-items-center cfps-flex-nowrap">
                 <img src="<?php echo plugin_dir_url( WOOCOMMERCE_PAYNOCCHIO_BASENAME ) . 'assets/img/cart.svg' ?>" class="!cfps-h-[25px] cfps-w-auto cfps-mr-2"/>
                 <?php if (!is_user_logged_in()) { ?>
-                    <div>Your cart: <span class="cfps-font-semibold">$<?php echo $amount; ?></span></div>
+                    <div>Your order: <span class="cfps-font-semibold">$<?php echo $amount; ?></span></div>
                 <?php } else { ?>
                     <div class="cfps-font-semibold">$<?php echo $amount; ?></div>
                 <?php } ?>
@@ -78,7 +78,7 @@ if (!defined('ABSPATH')) {
                 <button id="top_up_mini_form_button"
                         type="button"
                         class="cfps-border-0 cfps-rounded-lg cfps-p-2 cfps-bg-blue-500 cfps-text-white cfps-flex cfps-flex-row">
-                    <div class="cfps-whitespace-nowrap">Top up</div>
+                    <div class="cfps-whitespace-nowrap">Add money</div>
                     <svg class="cfps-spinner cfps-hidden cfps-animate-spin cfps-ml-4 cfps-h-5 cfps-w-5 cfps-text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                         <circle class="cfps-opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                         <path class="cfps-opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>

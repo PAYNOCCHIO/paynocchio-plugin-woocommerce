@@ -70,7 +70,7 @@ import './public.css';
             },
             success: function(data){
                 if (data.success){
-                    $('#response_message').text('Success');
+                    $('#response_message').text('Activation processing');
                     path ? document.location.href = path : document.location.reload();
                 } else {
                     $('#response_message').text(JSON.parse(data.response.response).detail);

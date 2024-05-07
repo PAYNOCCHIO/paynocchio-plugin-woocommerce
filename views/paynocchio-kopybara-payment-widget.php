@@ -92,28 +92,17 @@ if (is_user_logged_in()) {
                                 <div><?php echo chunk_split(strval($wallet['card_number']), 4, '</div><div>'); ?></div>
                             </div>
                             <div class="paynocchio_payment_card_button">
-                                <a href="#" class="paynocchio_button" data-modal=".topUpModal" style="color:<?php echo $accent_color; ?>; background:<?php echo $accent_text_color; ?>">Add money</a>
+                                <a href="#" class="paynocchio_button cfps-flex cfps-flex-row cfps-items-center" data-modal=".topUpModal" style="color:<?php echo $accent_color; ?>; background:<?php echo $accent_text_color; ?>">
+                                    <svg class="cfps-h-[20px] cfps-w-[20px] cfps-mr-1 cfps-inline-block" enable-background="new 0 0 50 50" version="1.1" viewBox="0 0 50 50" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                                        <rect fill="none" height="50" width="50"/>
+                                        <line fill="none" stroke="#1a85f9" stroke-miterlimit="10" stroke-width="4" x1="9" x2="41" y1="25" y2="25"/>
+                                        <line fill="none" stroke="#1a85f9" stroke-miterlimit="10" stroke-width="4" x1="25" x2="25" y1="9" y2="41"/>
+                                    </svg>
+                                    Add money
+                                </a>
                             </div>
                         </div>
                     </div>
-
-                    <!-- <div class="paynocchio_tiles">
-                    <div class="!cfps-max-w-full cfps-rounded-xl cfps-p-8 cfps-flex cfps-flex-row cfps-flex-wrap cfps-items-center
-                    cfps-justify-between cfps-gap-8 cfps-bg-gradient-to-r cfps-from-gray-200 cfps-to-gray-300">
-                        <h2 class="!cfps-text-[#515151] cfps-text-2xl cfps-font-bold">Your Wallet</h2>
-                        <div class="cfps-flex cfps-flex-row cfps-gap-8">
-                            <div>
-                                <p>Balance:</p>
-                                <p class="cfps-text-xl cfps-font-bold">$<span class="paynocchio-numbers paynocchio-balance-value" data-balance="<?php /*echo $wallet['balance'] ?? 0; */?>"><?php /*echo $wallet['balance'] ?? 0; */?></span></p>
-                            </div>
-                            <div>
-                                <p>Bonuses:</p>
-                                <p class="cfps-text-xl cfps-font-bold"><span class="paynocchio-numbers paynocchio-bonus-value" data-bonus="<?php /*echo $wallet['bonuses'] ?? 0 */?>"><?php /*echo $wallet['bonuses'] ?? 0 */?></span></p>
-                            </div>
-                        </div>
-                        <div class=""><a href="#" class="btn-blue paynocchio_button" data-modal=".topUpModal">Add money</a></div>
-                    </div>
-                </div>-->
                     <?php if($wallet['bonuses']) {
                         if($wallet['bonuses'] < $cart_total) {
                             $max_bonus = $wallet['bonuses'];

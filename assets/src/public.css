@@ -811,7 +811,7 @@ input[type=range].styled-slider.slider-progress:active::-ms-fill-lower {
     }
 
     .paynocchio_payment_card_button {
-        @apply cfps-absolute cfps-right-[7%] cfps-bottom-[15%] cfps-z-20;
+        @apply cfps-absolute cfps-right-[7%] cfps-bottom-[12%] cfps-z-20;
     }
 }
 
