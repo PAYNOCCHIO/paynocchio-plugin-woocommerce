@@ -81,7 +81,9 @@ if (!defined('ABSPATH')) {
                         </p>
                         <input type="hidden" name="redirect_to" value="<?php bloginfo('url') ?><?php echo $attr['register_redirect'] ?? ''; ?>">
                         <p class="submit">
-                            <input type="button" name="wp-submit" id="wp-submit-registration" class="paynocchio_button cfps-w-full paynocchio_colored" value="Register">
+                            <button type="button" id="wp-submit-registration" class="paynocchio_button cfps-w-full cfps-cursor-pointer paynocchio_colored">
+                                Register
+                            </button>
                         </p>
                     </form>
                     <div id="register_messages"></div>

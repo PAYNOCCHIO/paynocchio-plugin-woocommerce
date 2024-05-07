@@ -15,6 +15,43 @@ import './public.css';
     }
 
     /**
+     * Register function
+     */
+    const register = (evt) => {
+        evt.preventDefault();
+        if(!$('#user_login').val() && !$('#user_email').val()) {
+            $('#register_messages').text('Email and login are required');
+        } else {
+            $.ajax({
+                url: paynocchio_object.ajaxurl,
+                type: 'POST',
+                data: {
+                    'action': 'paynocchio_ajax_registration',
+                    'ajax-registration-nonce': $('#ajax-registration-nonce').val(),
+                    'login': $('#user_login').val(),
+                    'email': $('#user_email').val(),
+                },
+                success: function(data){
+                    console.log(data)
+                    if(data.success) {
+                        $('#register_messages').text('Please check your email to confirm registration.')
+                    } else {
+                        if(data.data.message === "Sorry, that email address is already used!") {
+                            $('#register_messages').html("<p>Sorry, this email address is already registered.</p>" +
+                                "<p>Please <a style='color:#0c88b4' href='/account'>log in</a> or <a style='color:#0c88b4' href='/account'>restore password</a>.</p>" +
+                                "<p>For any case please <a style='color:#0c88b4' href='mailto:support@kopybara.com'>contact support</a>.</p>" + ""
+                            );
+                        } else {
+                            $('#register_messages').text(data.data.message);
+                        }
+                    }
+                },
+                error: (error) => console.log(error),
+            })
+        }
+    }
+
+    /**
      * Wallet Activation function
      * @param evt
      * @param path
@@ -60,6 +97,8 @@ import './public.css';
     $(document).ready(function() {
         //READY START
 
+        $('#wp-submit-registration').click((evt) => register(evt));
+
         const checkout = window.location.pathname === '/checkout/?activated=1';
 
         const activationButton = $("#paynocchio_activation_button");
@@ -79,35 +118,7 @@ import './public.css';
         // WOOCOMMERCE CHECKOUT SCRIPT
         $(document).on( "updated_checkout", function() {
 
-            $('#wp-submit-registration').click((evt) => {
-                $.ajax({
-                    url: paynocchio_object.ajaxurl,
-                    type: 'POST',
-                    data: {
-                        'action': 'paynocchio_ajax_registration',
-                        'ajax-registration-nonce': $('#ajax-registration-nonce').val(),
-                        'login': $('#user_login').val(),
-                        'email': $('#user_email').val(),
-                    },
-                    success: function(data){
-                        console.log(data)
-                        if(data.success) {
-                            $('#register_messages').text('Please check your email to confirm registration.')
-                        } else {
-                            if(data.data.message === "Sorry, that email address is already used!") {
-                                $('#register_messages').html("<p>Sorry, this email address is already registered.</p>" +
-                                    "<p>Please <a style='color:#0c88b4' href='/account'>log in</a> or <a style='color:#0c88b4' href='/account'>restore password</a>.</p>" +
-                                    "<p>For any case please <a style='color:#0c88b4' href='mailto:support@kopybara.com'>contact support</a>.</p>" + ""
-                                );
-                            } else {
-                                $('#register_messages').text(data.data.message);
-                            }
-                        }
-                    },
-                    error: (error) => console.log(error),
-                })
-
-            });
+            $('#wp-submit-registration').click((evt) => register(evt));
 
 
             const paynocchio_auth_block = $('#paynocchio_auth_block').length

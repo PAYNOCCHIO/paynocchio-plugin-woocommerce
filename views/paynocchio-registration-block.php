@@ -68,11 +68,11 @@ if (!defined('ABSPATH')) {
                     <div class="row">
                         <div class="col">
                             <label for="user_login" class="for_input">Username</label>
-                            <input type="text" name="user_login" id="user_login" class="paynocchio_input" value="" autocapitalize="off" autocomplete="username" required="required">
+                            <input type="text" name="user_login" id="user_login" class="paynocchio_input" value="" autocapitalize="off" autocomplete="username" required>
                         </div>
                         <div class="col">
                             <label for="user_email" class="for_input">Email</label>
-                            <input type="email" name="user_email" id="user_email" class="paynocchio_input" value="" autocomplete="email" required="required">
+                            <input type="email" name="user_email" id="user_email" class="paynocchio_input" value="" autocomplete="email" required>
                         </div>
                     </div>
                     <p id="reg_passmail">
@@ -80,7 +80,9 @@ if (!defined('ABSPATH')) {
                     </p>
                     <input type="hidden" name="redirect_to" value="<?php bloginfo('url') ?><?php echo $attr['register_redirect'] ?? ''; ?>">
                     <p class="submit">
-                        <input type="submit" name="wp-submit" id="wp-submit" class="paynocchio_button paynocchio_colored" value="Register">
+                        <button id="wp-submit-registration" class="paynocchio_button cfps-w-full cfps-cursor-pointer paynocchio_colored">
+                            Register
+                        </button>
                     </p>
                 </form>
             </div>
