@@ -293,6 +293,10 @@ class Woocommerce_Paynocchio {
         $this->loader->add_action( 'wp_ajax_nopriv_paynocchio_ajax_activation', $this, 'paynocchio_ajax_activation');
         $this->loader->add_action( 'wp_ajax_paynocchio_ajax_registration', $this,'paynocchio_ajax_registration');
         $this->loader->add_action( 'wp_ajax_nopriv_paynocchio_ajax_registration', $this, 'paynocchio_ajax_registration');
+
+        $this->loader->add_action( 'wp_ajax_paynocchio_ajax_login', $this,'paynocchio_ajax_login');
+        $this->loader->add_action( 'wp_ajax_nopriv_paynocchio_ajax_login', $this, 'paynocchio_ajax_login');
+
         $this->loader->add_action( 'wp_ajax_paynocchio_ajax_top_up', $this,'paynocchio_ajax_top_up');
         $this->loader->add_action( 'wp_ajax_nopriv_paynocchio_ajax_top_up', $this,'paynocchio_ajax_top_up');
         $this->loader->add_action( 'wp_ajax_paynocchio_ajax_set_status', $this, 'paynocchio_ajax_set_status');
@@ -438,6 +442,25 @@ class Woocommerce_Paynocchio {
         }
 
         wp_die();
+    }
+
+    public function paynocchio_ajax_login() {
+        check_ajax_referer( 'paynocchio-ajax-login-nonce', 'nonce' );
+
+        // Nonce is checked, get the POST data and sign user on
+        $info = array();
+        $info['user_login'] = $_POST['username'];
+        $info['user_password'] = $_POST['password'];
+        $info['remember'] = $_POST['remember'];
+
+        $user_signon = wp_signon( $info, false );
+        if ( is_wp_error($user_signon) ){
+            echo json_encode(array('loggedin'=>false, 'message'=>__('Wrong username or password.')));
+        } else {
+            echo json_encode(array('loggedin'=>true, 'message'=>__('Login successful, redirecting...')));
+        }
+
+        die();
     }
 
     /**

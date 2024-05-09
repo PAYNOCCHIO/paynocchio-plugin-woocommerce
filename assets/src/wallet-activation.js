@@ -20,7 +20,7 @@ import './public.css';
     const register = (evt) => {
         evt.preventDefault();
         if(!$('#user_login').val() && !$('#user_email').val()) {
-            $('#register_messages').text('Email and login are required');
+            $('#register_messages').text('<p>Email and login are required</p>');
         } else {
             $.ajax({
                 url: paynocchio_object.ajaxurl,
@@ -34,16 +34,41 @@ import './public.css';
                 success: function(data){
                     console.log(data)
                     if(data.success) {
-                        $('#register_messages').text('Please check your email to confirm registration.')
+                        $('#register_messages').show().html("Please check your email to confirm registration.");
                     } else {
                         if(data.data.message === "Sorry, that email address is already used!") {
-                            $('#register_messages').html("<p>Sorry, this email address is already registered.</p>" +
-                                "<p>Please <a style='color:#0c88b4' href='/account'>log in</a> or <a style='color:#0c88b4' href='/account'>restore password</a>.</p>" +
-                                "<p>For any case please <a style='color:#0c88b4' href='mailto:support@kopybara.com'>contact support</a>.</p>" + ""
-                            );
+                            $('#register_messages').show().html("Sorry, this email address is already registered. Please <a style='color:#0c88b4' href='/account'>log in</a> or <a style='color:#0c88b4' href='/account'>restore password</a>. For any case please <a style='color:#0c88b4' href='mailto:support@kopybara.com'>contact support</a>.</p>");
                         } else {
-                            $('#register_messages').text(data.data.message);
+                            $('#register_messages').show().text(data.data.message);
                         }
+                    }
+                },
+                error: (error) => console.log(error),
+            })
+        }
+    }
+
+    const loginaction = (evt) => {
+        evt.preventDefault();
+        if(!$('#user_login').val() && !$('#user_pass').val()) {
+            $('#login_messages').text('<p>Login and password are required</p>');
+        } else {
+            $.ajax({
+                url: paynocchio_object.ajaxurl,
+                type: 'POST',
+                data: {
+                    'action': 'paynocchio_ajax_login',
+                    'nonce': $('#loginsecurity').val(),
+                    'password': $('#user_pass').val(),
+                    'username': $('#user_name').val(),
+                    'remember': $('#paynocchio_rememberme').val(),
+                },
+                success: function(data){
+                    data = JSON.parse(data);
+                    console.log(data);
+                    $('#login_messages').show().text(data.message);
+                    if (data.loggedin == true){
+                        document.location.href = '/checkout/?step=2';
                     }
                 },
                 error: (error) => console.log(error),
@@ -98,6 +123,7 @@ import './public.css';
         //READY START
 
         $('#wp-submit-registration').click((evt) => register(evt));
+        $('#paynocchio_wp-submit').click((evt) => loginaction(evt));
 
         const checkout = window.location.pathname === '/checkout/?activated=1';
 
@@ -119,7 +145,7 @@ import './public.css';
         $(document).on( "updated_checkout", function() {
 
             $('#wp-submit-registration').click((evt) => register(evt));
-
+            $('#paynocchio_wp-submit').click((evt) => loginaction(evt));
 
             const paynocchio_auth_block = $('#paynocchio_auth_block').length
             const place_orderButton = $('#place_order');
@@ -140,7 +166,7 @@ import './public.css';
 
             const activationButton = $("#paynocchio_activation_button");
 
-            activationButton.click((evt) => activateWallet(evt))
+            activationButton.click((evt) => activateWallet(evt, '/checkout/?step=2'))
 
             $('.form-toggle-a').click(() => toggleVisibility('#login-signup-forms'));
 
@@ -154,6 +180,43 @@ import './public.css';
         });
         // WOOCOMMERCE CHECKOUT SCRIPT END
         //READY END
+    });
+
+    jQuery(document).ready(function($) {
+
+        // Show the login dialog box on click
+        $('a#show_login').on('click', function(e){
+            $('body').prepend('<div class="login_overlay"></div>');
+            $('form#login').fadeIn(500);
+            $('div.login_overlay, form#login a.close').on('click', function(){
+                $('div.login_overlay').remove();
+                $('form#login').hide();
+            });
+            e.preventDefault();
+        });
+
+        // Perform AJAX login on form submit
+        $('form#login').on('submit', function(e){
+            $('form#login p.status').show().text(ajax_login_object.loadingmessage);
+            $.ajax({
+                type: 'POST',
+                dataType: 'json',
+                url: ajax_login_object.ajaxurl,
+                data: {
+                    'action': 'ajaxlogin', //calls wp_ajax_nopriv_ajaxlogin
+                    'username': $('form#login #username').val(),
+                    'password': $('form#login #password').val(),
+                    'security': $('form#login #security').val() },
+                success: function(data){
+                    $('form#login p.status').text(data.message);
+                    if (data.loggedin == true){
+                        document.location.href = ajax_login_object.redirecturl;
+                    }
+                }
+            });
+            e.preventDefault();
+        });
+
     });
 
 })(jQuery);

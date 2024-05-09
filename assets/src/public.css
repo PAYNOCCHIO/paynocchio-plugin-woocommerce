@@ -822,3 +822,11 @@ input[type=range].styled-slider.slider-progress:active::-ms-fill-lower {
 .congratz {
     @apply cfps-bg-gray-100 cfps-text-black cfps-p-4 cfps-text-center cfps-rounded-lg cfps-font-bold cfps-flex cfps-items-center cfps-flex-row cfps-justify-start cfps-gap-4;
 }
+
+#register_messages, #login_messages {
+    @apply cfps-text-center cfps-rounded cfps-bg-red-100 cfps-p-2;
+}
+
+.totals {
+    @apply cfps-p-4 cfps-rounded-lg cfps-bg-white cfps-drop-shadow cfps-flex cfps-flex-row cfps-items-start cfps-gap-8;
+}
