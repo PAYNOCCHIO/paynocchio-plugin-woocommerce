@@ -44,7 +44,7 @@
     }
 
     .paynocchio_input {
-        @apply cfps-border-0 cfps-drop-shadow;
+        @apply cfps-border-0 cfps-drop-shadow !cfps-m-0;
     }
 
     .form-toggle-a {
@@ -57,6 +57,10 @@
 
     h2 {
         @apply cfps-text-2xl cfps-font-bold cfps-mb-4 cfps-text-center;
+    }
+
+    input[type="submit"] {
+        @apply cfps-cursor-pointer;
     }
 }
 
@@ -824,7 +828,11 @@ input[type=range].styled-slider.slider-progress:active::-ms-fill-lower {
 }
 
 #register_messages, #login_messages {
-    @apply cfps-text-center cfps-rounded cfps-bg-red-100 cfps-p-2;
+    @apply cfps-text-center cfps-rounded cfps-bg-red-100 cfps-p-2 cfps-mt-4;
+}
+
+#register_messages.success, #login_messages.success {
+    @apply cfps-bg-green-100;
 }
 
 .totals {

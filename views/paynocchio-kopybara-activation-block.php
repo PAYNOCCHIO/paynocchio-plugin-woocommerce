@@ -65,40 +65,40 @@ $wallet_bal = 0;
                 </div>
             </div>
             <div class="cfps-grid cfps-grid-cols-[1fr_1fr] cfps-gap-x-6 cfps-gap-y-12 cfps-mb-10 cfps-p-8 cfps-items-top">
-                <?php /*<div class="cfps-grid cfps-grid-cols-[50px_1fr] cfps-gap-6 cfps-items-top">
-                    <div>
-                        <img src="<?php echo plugin_dir_url( WOOCOMMERCE_PAYNOCCHIO_BASENAME ) . 'assets/img/icon_welcome.svg' ?>" alt="" />
-                    </div>
-                    <div>
-                        <h2 class="cfps-h2 cfps-mb-0">Welcome bonus</h2>
-                        <p class="cfps-text-base">Earn 75 bonuses for signing up.</p>
-                    </div>
-                </div>*/ ?>
                 <div class="cfps-grid cfps-grid-cols-[50px_1fr] cfps-gap-6 cfps-items-top">
                     <div>
-                        <img src="<?php echo plugin_dir_url( WOOCOMMERCE_PAYNOCCHIO_BASENAME ) . 'assets/img/icon_buy.svg' ?>" alt="" />
+                        <img src="<?php echo plugin_dir_url( WOOCOMMERCE_PAYNOCCHIO_BASENAME ) . 'assets/img/icon_1.svg' ?>" alt="" />
                     </div>
                     <div>
-                        <h2 class="cfps-h2 cfps-mb-0">Purchase bonus</h2>
-                        <p class="cfps-text-base">Earn 1 bonus for every 1$ purchase.</p>
+                        <h2 class="cfps-h2 !cfps-mb-0">Be a member</h2>
+                        <p class="cfps-text-base">Login or register</p>
                     </div>
                 </div>
-                <?php /*<div class="cfps-grid cfps-grid-cols-[50px_1fr] cfps-gap-6 cfps-items-top">
-                    <div>
-                        <img src="<?php echo plugin_dir_url( WOOCOMMERCE_PAYNOCCHIO_BASENAME ) . 'assets/img/icon_birthday.svg' ?>" alt="" />
-                    </div>
-                    <div>
-                        <h2 class="cfps-h2 cfps-mb-0">Birthday bonus</h2>
-                        <p class="cfps-text-base">Earn bonuses to celebrate your birthday.</p>
-                    </div>
-                </div>*/ ?>
                 <div class="cfps-grid cfps-grid-cols-[50px_1fr] cfps-gap-6 cfps-items-top">
                     <div>
-                        <img src="<?php echo plugin_dir_url( WOOCOMMERCE_PAYNOCCHIO_BASENAME ) . 'assets/img/icon_topup.svg' ?>" alt="" />
+                        <img src="<?php echo plugin_dir_url( WOOCOMMERCE_PAYNOCCHIO_BASENAME ) . 'assets/img/icon_2.svg' ?>" alt="" />
                     </div>
                     <div>
-                        <h2 class="cfps-h2 cfps-mb-0">Add money</h2>
-                        <p class="cfps-text-base">Earn an additional bonuses for each adding a money to wallet.</p>
+                        <h2 class="cfps-h2 !cfps-mb-0">Register your wallet</h2>
+                        <p class="cfps-text-base">to get the rewards</p>
+                    </div>
+                </div>
+                <div class="cfps-grid cfps-grid-cols-[50px_1fr] cfps-gap-6 cfps-items-top">
+                    <div>
+                        <img src="<?php echo plugin_dir_url( WOOCOMMERCE_PAYNOCCHIO_BASENAME ) . 'assets/img/icon_3.svg' ?>" alt="" />
+                    </div>
+                    <div>
+                        <h2 class="cfps-h2 !cfps-mb-0">Earn bonuses</h2>
+                        <p class="cfps-text-base">for purchases and topups</p>
+                    </div>
+                </div>
+                <div class="cfps-grid cfps-grid-cols-[50px_1fr] cfps-gap-6 cfps-items-top">
+                    <div>
+                        <img src="<?php echo plugin_dir_url( WOOCOMMERCE_PAYNOCCHIO_BASENAME ) . 'assets/img/icon_4.svg' ?>" alt="" />
+                    </div>
+                    <div>
+                        <h2 class="cfps-h2 !cfps-mb-0">Buy profitable</h2>
+                        <p class="cfps-text-base">spending bonuses for purchases</p>
                     </div>
                 </div>
             </div>
