@@ -115,9 +115,12 @@ if (is_user_logged_in()) {
                         }
                         ?>
                         <div class="paynocchio-conversion-rate cfps-flex cfps-flex-row cfps-flex-wrap cfps-items-center cfps-gap-4 cfps-justify-between">
-                            <h3>
-                                Apply available bonuses
-                            </h3>
+                            <div>
+                                <h3>
+                                    Apply available bonuses
+                                </h3>
+                                <div>Your order will be partially covered by bonuses.</div>
+                            </div>
 
                             <div class="cfps-flex cfps-flex-row cfps-items-center cfps-gap-4">
                                 <input id="bonuses-input" type="range" min="0" max="<?php echo $max_bonus; ?>" step="1" value="0" class="styled-slider slider-progress" />
