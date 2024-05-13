@@ -66,9 +66,11 @@ import './public.css';
                 success: function(data){
                     data = JSON.parse(data);
                     console.log(data);
-                    $('#login_messages').show().addClass('success').text(data.message);
                     if (data.loggedin == true){
+                        $('#login_messages').show().addClass('success').text(data.message);
                         document.location.href = '/checkout/?step=2';
+                    } else {
+                        $('#login_messages').show().text(data.message);
                     }
                 },
                 error: (error) => console.log(error),
