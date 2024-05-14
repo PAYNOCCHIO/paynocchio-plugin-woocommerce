@@ -29,11 +29,52 @@ if (!defined('ABSPATH')) {
     </style>
 
     <section class="paynocchio <?php echo $paynocchio_classes; ?>">
-        <div id="paynocchio_auth_block" class="cfps-max-w-[340px] cfps-mx-auto cfps-mb-4">
-            <div id="login-signup-forms">
+        <div id="paynocchio_auth_block" class="cfps-mx-auto cfps-p-4 cfps-mb-4 cfps-flex cfps-flex-row cfps-flex-gap-8 cfps-items-center cfps-justify-between">
+
+            <div class="cfps-flex cfps-flex-col cfps-gap-8 cfps-items-top cfps-p-8 cfps-pl-4 cfps-w-1/2">
+                <h2 class="!cfps-text-3xl">How to earn bonuses</h2>
+                <div class="cfps-grid cfps-grid-cols-[50px_1fr] cfps-gap-6 cfps-items-top">
+                    <div>
+                        <img src="<?php echo plugin_dir_url( WOOCOMMERCE_PAYNOCCHIO_BASENAME ) . 'assets/img/icon_1.svg' ?>" alt="" />
+                    </div>
+                    <div>
+                        <h3 class="!cfps-mb-0 !cfps-text-left">Be a member</h3>
+                        <p class="cfps-text-base">Login or register</p>
+                    </div>
+                </div>
+                <div class="cfps-grid cfps-grid-cols-[50px_1fr] cfps-gap-6 cfps-items-top">
+                    <div>
+                        <img src="<?php echo plugin_dir_url( WOOCOMMERCE_PAYNOCCHIO_BASENAME ) . 'assets/img/icon_2.svg' ?>" alt="" />
+                    </div>
+                    <div>
+                        <h3 class="!cfps-mb-0 !cfps-text-left">Activate your wallet</h3>
+                        <p class="cfps-text-base">to get the rewards</p>
+                    </div>
+                </div>
+                <div class="cfps-grid cfps-grid-cols-[50px_1fr] cfps-gap-6 cfps-items-top">
+                    <div>
+                        <img src="<?php echo plugin_dir_url( WOOCOMMERCE_PAYNOCCHIO_BASENAME ) . 'assets/img/icon_3.svg' ?>" alt="" />
+                    </div>
+                    <div>
+                        <h3 class="!cfps-mb-0 !cfps-text-left">Earn bonuses</h3>
+                        <p class="cfps-text-base">for purchases and topups</p>
+                    </div>
+                </div>
+                <div class="cfps-grid cfps-grid-cols-[50px_1fr] cfps-gap-6 cfps-items-top">
+                    <div>
+                        <img src="<?php echo plugin_dir_url( WOOCOMMERCE_PAYNOCCHIO_BASENAME ) . 'assets/img/icon_4.svg' ?>" alt="" />
+                    </div>
+                    <div>
+                        <h3 class="!cfps-mb-0 !cfps-text-left">Buy profitable</h3>
+                        <p class="cfps-text-base">spending bonuses for purchases</p>
+                    </div>
+                </div>
+            </div>
+
+            <div id="login-signup-forms" class="cfps-w-1/2 cfps-bg-gray-100 cfps-rounded-lg">
                 <div class="paynocchio_form paynocchio_login_form visible">
                     <h2 class="paynocchio_form_title">Log In</h2>
-                    <p class="cfps-mb-8 cfps-text-center">Enter your email address and password to log in.</p>
+                    <p class="cfps-mb-8 cfps-text-center cfps-text-balance">Enter your email address and password to log in.</p>
                     <form name="loginform" id="paynocchio_loginform"  method="post">
                         <div class="row">
                             <div class="col">

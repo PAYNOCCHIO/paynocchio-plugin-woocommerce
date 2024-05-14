@@ -114,7 +114,7 @@ if (is_user_logged_in()) {
                             $max_bonus = $cart_total;
                         }
                         ?>
-                        <div class="paynocchio-conversion-rate cfps-flex cfps-flex-row cfps-flex-wrap cfps-items-center cfps-gap-4 cfps-justify-between">
+                        <div class="paynocchio-conversion-rate cfps-flex cfps-flex-row cfps-flex-wrap cfps-items-center cfps-gap-4 cfps-justify-between cfps-border-2 cfps-border-gray-100 cfps-p-4 cfps-rounded-lg">
                             <div>
                                 <h3>
                                     Apply available bonuses

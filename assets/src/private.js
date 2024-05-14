@@ -59,6 +59,7 @@ import setTopUpBonuses from "./js/setTopUpBonuses";
                 i++;
                 if (i == 250) {
                     clearInterval(timer);
+                    elem.html(end);
                 }
             }, stepTime);
         }
@@ -288,7 +289,7 @@ import setTopUpBonuses from "./js/setTopUpBonuses";
                 setBalance(data.response.balance, data.response.bonuses)
             }
         })
-            .error((error) => console.log(error))
+        .error((error) => console.log(error))
     }
 
     /**
