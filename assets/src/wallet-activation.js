@@ -115,13 +115,10 @@ import './public.css';
 
     function togglePwd (evt) {
         let field = $('#user_pass');
-        console.log('click');
         if (field.hasClass('shown')){
-            console.log('1');
             $('#user_pass').attr('type', 'password').removeClass('shown');
             $('#show_password').attr('title', 'Show Password').find('span').removeClass('dashicons-hidden').addClass('dashicons-visibility');
         } else {
-            console.log('2');
             $('#user_pass').attr('type', 'text').addClass('shown');
             $('#show_password').attr('title', 'Hide Password').find('span').addClass('dashicons-hidden').removeClass('dashicons-visibility');
         }
