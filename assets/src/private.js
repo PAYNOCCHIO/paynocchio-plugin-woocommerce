@@ -378,17 +378,6 @@ import setTopUpBonuses from "./js/setTopUpBonuses";
 
             updateWalletBalance();
 
-            /*jQuery('#show_password').click(function(evt){
-                let field = jQuery(this).siblings('#user_pass');
-                if (field.hasClass('shown')){
-                    jQuery('#user_pass').attr('type', 'password').removeClass('shown');
-                    jQuery(this).find('span').removeClass('dashicons-hidden').addClass('dashicons-visibility');
-                } else {
-                    jQuery('#user_pass').attr('type', 'text').addClass('shown');
-                    jQuery(this).find('span').addClass('dashicons-hidden').removeClass('dashicons-visibility');
-                }
-            });*/
-
             const ans = getParameterByName('ans');
 
             if (ans) {
