@@ -838,3 +838,15 @@ input[type=range].styled-slider.slider-progress:active::-ms-fill-lower {
 .totals {
     @apply cfps-p-4 cfps-rounded-lg cfps-bg-white cfps-drop-shadow cfps-flex cfps-flex-row cfps-items-start cfps-gap-8;
 }
+
+.paynocchio_pwd {
+    @apply cfps-relative;
+}
+
+.paynocchio_pwd input {
+    @apply cfps-w-full;
+}
+
+#show_password {
+    @apply cfps-absolute cfps-top-2 cfps-right-2;
+}

@@ -83,7 +83,12 @@ if (!defined('ABSPATH')) {
                             </div>
                             <div class="col">
                                 <label for="pwd">Password</label>
-                                <input type="password" name="pwd" class="paynocchio_input" id="user_pass" />
+                                <div class="paynocchio_pwd">
+                                    <input type="password" name="pwd" class="paynocchio_input" id="user_pass"  value="" autocomplete="current-password" spellcheck="false" required="required" />
+                                    <button type="button" class="" id="show_password" data-toggle="0" aria-label="Show password">
+                                        <span class="dashicons dashicons-visibility" aria-hidden="true"></span>
+                                    </button>
+                                </div>
                             </div>
                         </div>
                         <p>

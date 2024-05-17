@@ -351,6 +351,8 @@ import setTopUpBonuses from "./js/setTopUpBonuses";
             }
         });*/
 
+        console.log('foo');
+
         $('a.card-toggle').click(() => toggleVisibility('.paynocchio-card-container'));
 
         /**
@@ -364,8 +366,6 @@ import setTopUpBonuses from "./js/setTopUpBonuses";
             setTopUpBonuses(env.target.value, PERCENT)
         })
 
-
-
         // WOOCOMMERCE CHECKOUT SCRIPT
         $(document).on( "updated_checkout", function() {
             Modal.initElements();
@@ -377,6 +377,17 @@ import setTopUpBonuses from "./js/setTopUpBonuses";
             withdrawButton.click((evt) => withdrawWallet(evt))
 
             updateWalletBalance();
+
+            /*jQuery('#show_password').click(function(evt){
+                let field = jQuery(this).siblings('#user_pass');
+                if (field.hasClass('shown')){
+                    jQuery('#user_pass').attr('type', 'password').removeClass('shown');
+                    jQuery(this).find('span').removeClass('dashicons-hidden').addClass('dashicons-visibility');
+                } else {
+                    jQuery('#user_pass').attr('type', 'text').addClass('shown');
+                    jQuery(this).find('span').addClass('dashicons-hidden').removeClass('dashicons-visibility');
+                }
+            });*/
 
             const ans = getParameterByName('ans');
 

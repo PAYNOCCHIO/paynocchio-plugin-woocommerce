@@ -20,8 +20,9 @@ import './public.css';
     const register = (evt) => {
         evt.preventDefault();
         if(!$('#user_login').val() && !$('#user_email').val()) {
-            $('#register_messages').text('<p>Email and login are required</p>');
+            $('#register_messages').show().removeClass('success').text('Email and login are required');
         } else {
+            $('#login_messages').hide();
             $.ajax({
                 url: paynocchio_object.ajaxurl,
                 type: 'POST',
@@ -51,8 +52,9 @@ import './public.css';
     const loginaction = (evt) => {
         evt.preventDefault();
         if(!$('#user_login').val() && !$('#user_pass').val()) {
-            $('#login_messages').text('<p>Login and password are required</p>');
+            $('#login_messages').show().text('Login and password are required');
         } else {
+            $('#login_messages').hide();
             $.ajax({
                 url: paynocchio_object.ajaxurl,
                 type: 'POST',
@@ -111,6 +113,16 @@ import './public.css';
             .error(error => console.log(error.response));
     }
 
+    function togglePwd (evt) {
+        let field = $(this).siblings('#user_pass');
+        if (field.hasClass('shown')){
+            $('#user_pass').attr('type', 'password').removeClass('shown');
+            $(this).find('span').removeClass('dashicons-hidden').addClass('dashicons-visibility');
+        } else {
+            $('#user_pass').attr('type', 'text').addClass('shown');
+            $(this).find('span').addClass('dashicons-hidden').removeClass('dashicons-visibility');
+        }
+    }
 
     function getParameterByName(name, url = window.location.href) {
         name = name.replace(/[\[\]]/g, '\\$&');
@@ -126,6 +138,7 @@ import './public.css';
 
         $('#wp-submit-registration').click((evt) => register(evt));
         $('#paynocchio_wp-submit').click((evt) => loginaction(evt));
+        $('#show_password').click((evt) => togglePwd(evt));
 
         const checkout = window.location.pathname === '/checkout/?activated=1';
 
@@ -148,6 +161,7 @@ import './public.css';
 
             $('#wp-submit-registration').click((evt) => register(evt));
             $('#paynocchio_wp-submit').click((evt) => loginaction(evt));
+            $('#show_password').click((evt) => togglePwd(evt));
 
             const paynocchio_auth_block = $('#paynocchio_auth_block').length
             const place_orderButton = $('#place_order');
