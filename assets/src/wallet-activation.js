@@ -38,7 +38,7 @@ import './public.css';
                         $('#register_messages').show().addClass('success').html("Please check your email to confirm registration.");
                     } else {
                         if(data.data.message === "Sorry, that email address is already used!") {
-                            $('#register_messages').show().removeClass('success').html("Sorry, this email address is already registered. Please <a style='color:#0c88b4' href='/account'>log in</a> or <a style='color:#0c88b4' href='/account'>restore password</a>. For any case please <a style='color:#0c88b4' href='mailto:support@kopybara.com'>contact support</a>.</p>");
+                            $('#register_messages').show().removeClass('success').html("Sorry, this email address is already registered. Please <a style='color:#0c88b4' href='/account'>log in</a> or <a style='color:#0c88b4' href='/account'>restore password</a>. For any case please <a style='color:#0c88b4' href='mailto:support@airticket-demo.com'>contact support</a>.</p>");
                         } else {
                             $('#register_messages').show().removeClass('success').text(data.data.message);
                         }
