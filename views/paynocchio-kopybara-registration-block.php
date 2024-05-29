@@ -102,12 +102,12 @@ if (!defined('ABSPATH')) {
                     </form>
                     <div id="login_messages" style="display: none;"></div>
                     <p class="cfps-mt-8 cfps-text-center">Forgot your password? <a class="cfps-underline" href="<?php echo wc_get_account_endpoint_url('dashboard'); ?>lost-password/">Recover</a></p>
-                    <p class="cfps-mt-4 cfps-text-center">First time here? <a class="form-toggle-a">Registration</a></p>
+                    <p class="cfps-mt-4 cfps-text-center">First time here? <a class="form-toggle-a">Sign Up</a></p>
                 </div>
 
                 <div class="paynocchio_form paynocchio_register_form">
-                    <h2 class="cfps-text-center">Registration</h2>
-                    <p class="cfps-mb-8 cfps-text-center">Enter your email username and address to sign up.</p>
+                    <h2 class="cfps-text-center">Sign Up</h2>
+                    <p class="cfps-mb-8 cfps-text-center">Enter your username and <br>email address to sign up.</p>
                     <form name="registerform" id="registerform" novalidate="novalidate">
                         <div class="row">
                             <div class="col">
@@ -125,7 +125,7 @@ if (!defined('ABSPATH')) {
                         <input type="hidden" name="redirect_to" value="<?php bloginfo('url') ?><?php echo $attr['register_redirect'] ?? ''; ?>">
                         <p class="submit">
                             <button type="button" id="wp-submit-registration" class="paynocchio_button cfps-w-full cfps-cursor-pointer paynocchio_colored">
-                                Register
+                                Sign Up
                             </button>
                         </p>
                     </form>

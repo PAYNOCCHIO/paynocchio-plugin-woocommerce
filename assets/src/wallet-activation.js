@@ -22,7 +22,7 @@ import './public.css';
         if(!$('#user_login').val() && !$('#user_email').val()) {
             $('#register_messages').show().removeClass('success').text('Email and login are required');
         } else {
-            $('#login_messages').hide();
+            $('#register_messages').hide();
             $.ajax({
                 url: paynocchio_object.ajaxurl,
                 type: 'POST',
@@ -40,7 +40,11 @@ import './public.css';
                         if(data.data.message === "Sorry, that email address is already used!") {
                             $('#register_messages').show().removeClass('success').html("Sorry, this email address is already registered. Please <a style='color:#0c88b4' href='/account'>log in</a> or <a style='color:#0c88b4' href='/account'>restore password</a>. For any case please <a style='color:#0c88b4' href='mailto:support@airticket-demo.com'>contact support</a>.</p>");
                         } else {
-                            $('#register_messages').show().removeClass('success').text(data.data.message);
+                            if (data.data.message === "Sorry, that username already exists!") {
+                                $('#register_messages').show().removeClass('success').html("Sorry, that username already exists! Please <a style='color:#0c88b4' href='/account'>log in</a> or <a style='color:#0c88b4' href='/account'>restore password</a>. For any case please <a style='color:#0c88b4' href='mailto:support@airticket-demo.com'>contact support</a>.</p>");
+                            } else {
+                                $('#register_messages').show().removeClass('success').text(data.data.message);
+                            }
                         }
                     }
                 },
