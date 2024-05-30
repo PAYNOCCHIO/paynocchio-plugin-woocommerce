@@ -108,6 +108,7 @@ import setTopUpBonuses from "./js/setTopUpBonuses";
                     }
                 } else {
                     $('.topUpModal .message').text('An error occurred. Please reload page and try again!');
+                    alert('An error occurred. Please reload page and try again!');
                 }
             }
         })
