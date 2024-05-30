@@ -107,8 +107,7 @@ import setTopUpBonuses from "./js/setTopUpBonuses";
                         $('.topUpModal').remove();
                     }
                 } else {
-                    $('.topUpModal .message').text('An error occurred. Please reload page and try again!');
-                    alert('An error occurred. Please reload page and try again!');
+                    $('.topUpModal .message').html('An error occurred. Please reload page and try again!');
                 }
             }
         })
@@ -116,7 +115,6 @@ import setTopUpBonuses from "./js/setTopUpBonuses";
             .always(function() {
                 $(`#${evt.target.id} .cfps-spinner`).addClass('cfps-hidden');
                 $(evt.target).removeClass('cfps-disabled')
-                $('.topUpModal .message').text('');
             });
     }
 
