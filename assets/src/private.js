@@ -5,7 +5,6 @@ import './topUpFormProcess'
 import setTopUpBonuses from "./js/setTopUpBonuses";
 
 (( $ ) => {
-
     const PERCENT = 0.1;
 
     const createWebSocket = (wallet) => {
@@ -107,6 +106,8 @@ import setTopUpBonuses from "./js/setTopUpBonuses";
                     if($('body').hasClass('woocommerce-checkout')){
                         $('.topUpModal').remove();
                     }
+                } else {
+                    $('.topUpModal .message').text('An error occurred. Please reload page and try again!');
                 }
             }
         })
@@ -246,6 +247,8 @@ import setTopUpBonuses from "./js/setTopUpBonuses";
                         updateOrderButtonState();
                         $('.withdrawModal').delay(1000).fadeOut('fast')
                         $('body').removeClass('paynocchio-modal-open');
+                    } else {
+                        $('.withdrawModal .message').text('An error occurred. Please reload page and try again!');
                     }
                 }
             })
@@ -351,8 +354,6 @@ import setTopUpBonuses from "./js/setTopUpBonuses";
             }
         });*/
 
-        console.log('foo');
-
         $('a.card-toggle').click(() => toggleVisibility('.paynocchio-card-container'));
 
         /**
@@ -366,12 +367,19 @@ import setTopUpBonuses from "./js/setTopUpBonuses";
             setTopUpBonuses(env.target.value, PERCENT)
         })
 
-        // WOOCOMMERCE CHECKOUT SCRIPT
+        /**
+         * WOOCOMMERCE CHECKOUT SCRIPT
+         */
+
         $(document).on( "updated_checkout", function() {
+
+
+
             Modal.initElements();
 
             const topUpButton = $("#top_up_button");
             const withdrawButton = $("#withdraw_button");
+
 
             topUpButton.click((evt) => topUpWallet(evt))
             withdrawButton.click((evt) => withdrawWallet(evt))
