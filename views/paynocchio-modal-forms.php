@@ -67,6 +67,7 @@ if (is_user_logged_in()) {
                     <span class="cfps-text-3xl">$</span>
                     <input type="number" step="0.01" class="cfps-max-w-32 !cfps-bg-transparent !cfps-border-0 !cfps-shadow-none cfps-text-3xl !cfps-p-0 focus:!cfps-outline-none"
                            name="amount" id="top_up_amount" placeholder="0" />
+                    <input type="hidden" name="redirect_url" value="" />
                     <?php wp_nonce_field( 'paynocchio_ajax_top_up', 'ajax-top-up-nonce' ); ?>
                 </div>
                 <div class="cfps-p-2 cfps-bg-gray-100 cfps-drop-shadow <?php echo $paynocchio_rounded_class; ?>">You earn <span class="cfps-font-black" id="bonusesCounter">0</span> bonuses for top up</div>

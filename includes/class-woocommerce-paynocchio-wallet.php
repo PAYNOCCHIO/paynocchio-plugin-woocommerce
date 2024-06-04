@@ -149,13 +149,14 @@ class Woocommerce_Paynocchio_Wallet {
     /**
      *  TopUp Wallet
      */
-    public function topUpWallet(string $walletId, float $amount): array {
+    public function topUpWallet(string $walletId, float $amount, string $redirect_url): array {
         $data = [
             PAYNOCCHIO_ENV_KEY => $this->envId,
             PAYNOCCHIO_USER_UUID_KEY => $this->userId,
             PAYNOCCHIO_WALLET_KEY => $walletId,
             "currency" => "USD",
             'amount' => $amount,
+            'redirect_url' => $redirect_url,
         ];
 
         $response = $this->sendRequest('POST', '/operation/topup', json_encode($data));

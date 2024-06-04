@@ -84,6 +84,11 @@ import setTopUpBonuses from "./js/setTopUpBonuses";
      * @param path
      */
     const topUpWallet = (evt) => {
+
+        if(!$('#top_up_amount').val()) {
+            $('.topUpModal .message').html('Please enter amount!');
+            return;
+        }
         $(evt.target).addClass('cfps-disabled')
 
         $(`#${evt.target.id} .cfps-spinner`).removeClass('cfps-hidden');
@@ -95,17 +100,11 @@ import setTopUpBonuses from "./js/setTopUpBonuses";
                 'action': 'paynocchio_ajax_top_up',
                 'ajax-top-up-nonce': $('#ajax-top-up-nonce').val(),
                 'amount': $('#top_up_amount').val(),
+                'redirect_url': window.location.href,
             },
             success: function(data){
                 if (data.response.status_code === 200){
-                    $('.topUpModal .message').text('Success!');
-                    updateWalletBalance();
-                    updateOrderButtonState();
-                    $('.topUpModal').delay(1000).fadeOut('fast')
-                    $('body').removeClass('paynocchio-modal-open');
-                    if($('body').hasClass('woocommerce-checkout')){
-                        $('.topUpModal').remove();
-                    }
+                    window.location.replace(JSON.parse(data.response.response).url)
                 } else {
                     $('.topUpModal .message').html('An error occurred. Please reload page and try again!');
                 }
@@ -297,7 +296,7 @@ import setTopUpBonuses from "./js/setTopUpBonuses";
     /**
      * Balance polling
      */
-    setInterval(() => updateWalletBalance(), 1000)
+    //setInterval(() => updateWalletBalance(), 1000)
 
     function updateOrderButtonState() {
         const place_orderButton = $('#place_order');
