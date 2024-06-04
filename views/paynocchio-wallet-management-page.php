@@ -75,29 +75,16 @@
                     <div class="paynocchio-card-number">
                         <div><?php echo chunk_split(strval($wallet['card_number']), 4, '</div><div>'); ?></div>
                     </div>
-                </div>
-            </div>
-            <div class="paynocchio-actions-btns cfps-mt-8">
-                <div class="autodeposit cfps-flex cfps-flex-row cfps-items-center cfps-gap-x-2">
-                    <!-- <img src="<?php /*echo plugin_dir_url( WOOCOMMERCE_PAYNOCCHIO_BASENAME ) . 'assets/img/i-gr.png' */?>"
-                             class="cfps-h-[18px] cfps-w-[16px] cfps-mr-1 cfps-inline-block" />
-                        Autodeposit
-                        <div class="toggle-autodeposit">
-                            <p>ON</p>
-                            <div class="toggler"></div>
-                            <p>OFF</p>
-                        </div>
-                        <input type="hidden" value="0" name="autodeposit" id="autodeposit" />-->
-                </div>
-                <div class="paynocchio-actions-btns">
-                    <a href="#" class="paynocchio_button paynocchio_colored <?php echo $paynocchio_rounded_class; ?>" data-modal=".topUpModal">
-                        <img src="<?php echo plugin_dir_url( WOOCOMMERCE_PAYNOCCHIO_BASENAME ) . 'assets/img/plus.png' ?>"
-                             class="cfps-h-[24px] cfps-w-[24px] cfps-mr-1 cfps-inline-block" />
-                        Add money
-                    </a>
-                    <a href="#" class="paynocchio_button btn-gray <?php echo $paynocchio_rounded_class; ?>" data-modal=".withdrawModal">
-                        Withdraw
-                    </a>
+                    <div class="paynocchio_payment_card_button">
+                        <a href="#" class="<?php echo $paynocchio_rounded_class; ?> paynocchio_button cfps-flex cfps-flex-row cfps-items-center" data-modal=".topUpModal" style="color:<?php echo $accent_color; ?>; background:<?php echo $accent_text_color; ?>">
+                            <svg class="cfps-h-[20px] cfps-w-[20px] cfps-mr-1 cfps-inline-block" enable-background="new 0 0 50 50" version="1.1" viewBox="0 0 50 50" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                                        <rect fill="none" height="50" width="50"/>
+                                <line fill="none" stroke="#1a85f9" stroke-miterlimit="10" stroke-width="4" x1="9" x2="41" y1="25" y2="25"/>
+                                <line fill="none" stroke="#1a85f9" stroke-miterlimit="10" stroke-width="4" x1="25" x2="25" y1="9" y2="41"/>
+                                    </svg>
+                            Add money
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>

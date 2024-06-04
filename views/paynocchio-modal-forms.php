@@ -35,33 +35,9 @@ if (is_user_logged_in()) {
             <button class="close">&times;</button>
         </div>
         <div class="content">
-            <p class="cfps-text-gray-500">
-                From
-            </p>
-            <div class="card-variants">
-                <div class="card-var current-card" data-pan="<?php echo $wallet['card_number']; ?>">
-                    <div class="cfps-flex cfps-flex-row cfps-gap-x-4 cfps-items-center">
-                        <img src="<?php echo plugin_dir_url( WOOCOMMERCE_PAYNOCCHIO_BASENAME ) . 'assets/img/mc.png' ?>" class="cfps-h-[30px] cfps-w-[30px] cfps-mr-1 cfps-inline-block" />
-                        <div>1356 5674 2352 2373</div>
-                    </div>
-                    <img src="<?php echo plugin_dir_url( WOOCOMMERCE_PAYNOCCHIO_BASENAME ) . 'assets/img/arr_d.png' ?>" class="cfps-h-[30px] cfps-w-[30px] cfps-inline-block" />
-                </div>
-                <div class="card-var" data-pan="3727844328348156">
-                    <div class="cfps-flex cfps-flex-row cfps-gap-x-4 cfps-items-center">
-                        <img src="<?php echo plugin_dir_url( WOOCOMMERCE_PAYNOCCHIO_BASENAME ) . 'assets/img/vs.png' ?>" class="cfps-h-[30px] cfps-w-[30px] cfps-mr-1 cfps-inline-block" />
-                        <div>3727 8443 2834 8156</div>
-                    </div>
-                    <img src="<?php echo plugin_dir_url( WOOCOMMERCE_PAYNOCCHIO_BASENAME ) . 'assets/img/arr_d.png' ?>" class="cfps-h-[30px] cfps-w-[30px] cfps-inline-block" />
-                </div>
-                <div class="card-var" data-pan="">
-                    <div class="cfps-flex cfps-flex-row cfps-gap-x-4 cfps-items-center">
-                        <img data-modal=".paymentMethodModal" src="<?php echo plugin_dir_url( WOOCOMMERCE_PAYNOCCHIO_BASENAME ) . 'assets/img/plus_b.png' ?>" class="cfps-h-[30px] cfps-w-[30px] cfps-mr-1 cfps-inline-block" />
-                        <div data-modal=".paymentMethodModal">Add new payment method</div>
-                    </div>
-                </div>
+            <div class="cfps-mb-4">
+                Please top up your wallet and receive <span class="cfps-font-black" id="bonusesCounter">0</span> bonuses for this deposit.
             </div>
-            <input type="hidden" id="source-card" name="source-card" value="" />
-
             <div class="top-up-amount-container cfps-mt-8 lg:cfps-mt-12 cfps-flex cfps-flex-row cfps-justify-between">
                 <div>
                     <span class="cfps-text-3xl">$</span>
@@ -70,7 +46,6 @@ if (is_user_logged_in()) {
                     <input type="hidden" name="redirect_url" value="" />
                     <?php wp_nonce_field( 'paynocchio_ajax_top_up', 'ajax-top-up-nonce' ); ?>
                 </div>
-                <div class="cfps-p-2 cfps-bg-gray-100 cfps-drop-shadow <?php echo $paynocchio_rounded_class; ?>">You earn <span class="cfps-font-black" id="bonusesCounter">0</span> bonuses for top up</div>
             </div>
 
             <div class="top-up-variants">
@@ -123,7 +98,7 @@ if (is_user_logged_in()) {
     </form>
 </div>
 
-<div class="modal paymentMethodModal <?php echo $paynocchio_classes; ?>">
+<!--<div class="modal paymentMethodModal <?php /*echo $paynocchio_classes; */?>">
     <div class="close-modal close"></div>
     <div class="container">
         <div class="header">
@@ -200,7 +175,7 @@ if (is_user_logged_in()) {
             </div>
         </div>
     </div>
-</div>
+</div>-->
 
 <div class="modal withdrawModal <?php echo $paynocchio_classes; ?>">
     <div class="close-modal close"></div>
