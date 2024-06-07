@@ -35,9 +35,10 @@ if (is_user_logged_in()) {
             <button class="close">&times;</button>
         </div>
         <div class="content">
-            <div class="cfps-mb-4">
+            <div class="cfps-mb-4 cfps-text-lg">
                 Please top up your wallet and receive <span class="cfps-font-black" id="bonusesCounter">0</span> bonuses for this deposit.
             </div>
+
             <div class="top-up-amount-container cfps-mt-8 lg:cfps-mt-12 cfps-flex cfps-flex-row cfps-justify-between">
                 <div>
                     <span class="cfps-text-3xl">$</span>
@@ -80,6 +81,7 @@ if (is_user_logged_in()) {
                 </div>
                 <input type="hidden" value="0" name="autodeposit" id="autodeposit" />
             </div>-->
+
         </div>
         <div class="footer">
             <div>
@@ -91,91 +93,12 @@ if (is_user_logged_in()) {
                         <path class="cfps-opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                     </svg>
                 </button>
-                <div class="message"></div>
+                <div class="message cfps-text-balance"><span class="cfps-text-sm !cfps-leading-none">After clicking "Add money" you will be redirected to Stripe.com to complete a secure money transfer.</span></div>
             </div>
         </div>
     </div>
     </form>
 </div>
-
-<!--<div class="modal paymentMethodModal <?php /*echo $paynocchio_classes; */?>">
-    <div class="close-modal close"></div>
-    <div class="container">
-        <div class="header">
-            <h3>Please add your card</h3>
-            <button class="close">&times;</button>
-        </div>
-        <div class="content modal-add-card">
-            <div class="cfps-flex cfps-flex-col cfps-gap-y-4">
-                <div class="cfps-grid cfps-grid-cols-[1fr_1fr] cfps-gap-4">
-                    <div class="">
-                        <label for="card-country">Country<span class="cfps-text-red-500">*</span></label>
-                        <select name="card-country">
-                            <option value="USA">United States</option>
-                            <option value="GBR">United Kingdom</option>
-                        </select>
-                    </div>
-                    <div class="">
-                        <label for="card-city">City<span class="cfps-text-red-500">*</span></label>
-                        <input type="text" class="" name="card-city" />
-                    </div>
-                </div>
-                <div class="cfps-grid cfps-gap-4">
-                    <div class="cfps-w-auto">
-                        <label for="card-address">Address<span class="cfps-text-red-500">*</span></label>
-                        <input type="text" class="" name="card-address" />
-                    </div>
-                </div>
-                <div class="cfps-grid cfps-gap-4">
-                    <div class="cfps-w-auto">
-                        <label for="card-address1">Address line 1<span class="cfps-text-red-500">*</span></label>
-                        <input type="text" class="" name="card-address1" />
-                    </div>
-                </div>
-                <div class="cfps-grid cfps-grid-cols-[1fr_1fr] cfps-gap-4">
-                    <div class="">
-                        <label for="card-state">State<span class="cfps-text-red-500">*</span></label>
-                        <input type="text" class="" name="card-state" />
-                    </div>
-                    <div class="">
-                        <label for="card-zip">ZIP code<span class="cfps-text-red-500">*</span></label>
-                        <input type="text" class="" name="card-zip" />
-                    </div>
-                </div>
-                <div class="cfps-grid cfps-gap-4">
-                    <div class="cfps-w-auto">
-                        <label for="card-pan">Bank Card Number<span class="cfps-text-red-500">*</span></label>
-                        <input type="text" class="" name="card-pan" />
-                    </div>
-                </div>
-                <div class="cfps-grid cfps-grid-cols-[1fr_1fr] cfps-gap-4">
-                    <div class="">
-                        <label for="card-expire">Card expiration date<span class="cfps-text-red-500">*</span></label>
-                        <input type="text" class="" name="card-expire" />
-                    </div>
-                    <div class="">
-                        <label for="card-cvv">CVV code<span class="cfps-text-red-500">*</span></label>
-                        <input type="text" class="" name="card-cvv" />
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="footer">
-            <div>
-                <button id="payment_method_button"
-                        type="button"
-                        class="cfps-btn-primary paynocchio_button paynocchio_colored close">
-                    Contunue
-                    <svg class="cfps-spinner cfps-hidden cfps-animate-spin cfps-ml-4 cfps-h-5 cfps-w-5 cfps-text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                        <circle class="cfps-opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                        <path class="cfps-opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                    </svg>
-                </button>
-                <div class="message"></div>
-            </div>
-        </div>
-    </div>
-</div>-->
 
 <div class="modal withdrawModal <?php echo $paynocchio_classes; ?>">
     <div class="close-modal close"></div>
@@ -192,33 +115,6 @@ if (is_user_logged_in()) {
                        name="amount" id="withdraw_amount" placeholder="0" value="0" />
                 <?php wp_nonce_field( 'paynocchio_ajax_withdraw', 'ajax-withdraw-nonce' ); ?>
             </div>
-
-            <p class="cfps-text-gray-500">
-                To
-            </p>
-            <div class="card-variants">
-                <div class="card-var current-card" data-pan="1356567423522373">
-                    <div class="cfps-flex cfps-flex-row cfps-gap-x-4 cfps-items-center">
-                        <img src="<?php echo plugin_dir_url( WOOCOMMERCE_PAYNOCCHIO_BASENAME ) . 'assets/img/mc.png' ?>" class="cfps-h-[30px] cfps-w-[30px] cfps-mr-1 cfps-inline-block" />
-                        <p>1356 5674 2352 2373</p>
-                    </div>
-                    <img src="<?php echo plugin_dir_url( WOOCOMMERCE_PAYNOCCHIO_BASENAME ) . 'assets/img/arr_d.png' ?>" class="cfps-h-[30px] cfps-w-[30px] cfps-inline-block" />
-                </div>
-                <div class="card-var" data-pan="3727844328348156">
-                    <div class="cfps-flex cfps-flex-row cfps-gap-x-4 cfps-items-center">
-                        <img src="<?php echo plugin_dir_url( WOOCOMMERCE_PAYNOCCHIO_BASENAME ) . 'assets/img/vs.png' ?>" class="cfps-h-[30px] cfps-w-[30px] cfps-mr-1 cfps-inline-block" />
-                        <p>3727 8443 2834 8156</p>
-                    </div>
-                    <img src="<?php echo plugin_dir_url( WOOCOMMERCE_PAYNOCCHIO_BASENAME ) . 'assets/img/arr_d.png' ?>" class="cfps-h-[30px] cfps-w-[30px] cfps-inline-block" />
-                </div>
-                <div class="card-var" data-pan="">
-                    <div class="cfps-flex cfps-flex-row cfps-gap-x-4 cfps-items-center">
-                        <img data-modal=".paymentMethodModal" src="<?php echo plugin_dir_url( WOOCOMMERCE_PAYNOCCHIO_BASENAME ) . 'assets/img/plus_b.png' ?>" class="cfps-h-[30px] cfps-w-[30px] cfps-mr-1 cfps-inline-block" />
-                        <p data-modal=".paymentMethodModal">Add new payment method</p>
-                    </div>
-                </div>
-            </div>
-            <input type="hidden" id="source-card2" name="source-card2" value="" />
         </div>
         <div class="footer">
             <div>
