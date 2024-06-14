@@ -118,12 +118,7 @@ class Woocommerce_Paynocchio_Add_RESTapi_Routes {
                 if($parameters['status_type'] === 'complete') {
                     $customer_order->update_status('completed');
 
-                    $args = array(
-                        'meta_key'      => 'wallet_uuid',
-                        'meta_value'    => $parameters['wallet_uuid'],
-                    );
-
-                    $user = get_user_by('id', $customer_order->get_id());
+                    $user = get_user_by('id', $customer_order->get_customer_id());
 
                     $headers = "MIME-Version: 1.0" . "\r\n";
                     $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
@@ -160,14 +155,15 @@ class Woocommerce_Paynocchio_Add_RESTapi_Routes {
                 'meta_value'    => $parameters['wallet_uuid'],
             );
 
-            $user = get_users($args);
+            $users = get_users($args);
 
             $headers = "MIME-Version: 1.0" . "\r\n";
             $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
 
-            $message = "<b>Dear! ".$user->name."</b>,<br/><br/> Your wallet has been topped up for $".$parameters['amount']." successfuly.<br>this is an automated mail.pls  don't reply to this mail. ";
-
-            wp_mail( $user->user_email, "Top up is complete!", $message, $headers );
+            foreach ($users as $user) {
+                $message = "<b>Dear! ".$user->name."</b>,<br/><br/> Your wallet has been topped up for $".$parameters['amount']." successfuly.<br>this is an automated mail.pls  don't reply to this mail. ";
+                wp_mail( $user->user_email, "Top up is complete!", $message, $headers );
+            }
 
             return new WP_REST_Response( true, 200 );
         }
