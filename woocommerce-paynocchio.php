@@ -52,7 +52,7 @@ const PAYNOCCHIO_CURRENCY_KEY = 'currency_uuid';
 const PAYNOCCHIO_WALLET_KEY = 'wallet_uuid';
 const PAYNOCCHIO_TYPE_KEY = 'type_uuid';
 const PAYNOCCHIO_STATUS_KEY = 'status_uuid';
-const PAYNOCCHIO_SECRET_KEY = 'secret_uuid';
+const PAYNOCCHIO_SECRET_KEY = 'secret_key';
 
 if ( ! defined( 'WOOCOMMERCE_PAYNOCCHIO_PAGE_FILE' ) ) {
     define( 'WOOCOMMERCE_PAYNOCCHIO_PAGE_FILE', __FILE__ );

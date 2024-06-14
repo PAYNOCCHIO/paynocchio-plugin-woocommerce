@@ -126,13 +126,32 @@ class Woocommerce_Paynocchio_Wallet {
     /**
      *  Create Wallet
      */
+    public function healthCheck() {
+        $data = [
+            PAYNOCCHIO_ENV_KEY => $this->envId,
+            PAYNOCCHIO_SECRET_KEY => $this->secret,
+        ];
+
+        $response = $this->sendRequest('POST', '/healthcheck/', json_encode($data, JSON_UNESCAPED_SLASHES));
+
+        if($response['status_code'] === 200) {
+            $json = json_decode($response['response']);
+            return json_encode(['status'=> 'success', 'message' => $json->message,]);
+        } else {
+            return json_encode(['status'=> 'error', 'message' => $response['status_code'],]);
+        }
+    }
+
+    /**
+     *  Create Wallet
+     */
     public function createWallet() {
         $data = [
             PAYNOCCHIO_ENV_KEY => $this->envId,
             PAYNOCCHIO_USER_UUID_KEY => $this->userId,
-            PAYNOCCHIO_CURRENCY_KEY => get_option( 'woocommerce_paynocchio_settings')[PAYNOCCHIO_CURRENCY_KEY],
-            PAYNOCCHIO_TYPE_KEY => get_option( 'woocommerce_paynocchio_settings')[PAYNOCCHIO_TYPE_KEY],
-            PAYNOCCHIO_STATUS_KEY => get_option( 'woocommerce_paynocchio_settings')[PAYNOCCHIO_STATUS_KEY],
+            PAYNOCCHIO_CURRENCY_KEY => '970d83de-1dce-47bd-a45b-bb92bf6df964',
+            PAYNOCCHIO_TYPE_KEY => '93ac9017-4960-41bf-be6d-aa123884451d',
+            PAYNOCCHIO_STATUS_KEY => 'ef8da49e-a9e3-4726-8c26-f8d2bfd6a093',
         ];
 
         $response = $this->sendRequest('POST', '/wallet/', json_encode($data, JSON_UNESCAPED_SLASHES));

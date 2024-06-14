@@ -111,7 +111,6 @@ class Woocommerce_Paynocchio {
                 $this->user_id = $this->get_user_id();
             }
         });
-
     }
 
 	/**
@@ -741,7 +740,7 @@ class Woocommerce_Paynocchio {
                     $wallet['card_number'] = $wallet_bal_bon['number'];
                     $wallet['status'] = $wallet_bal_bon['status'];
                     $wallet['code'] = $wallet_bal_bon['code'];
-                    //$wallet['structure'] = $wallet_structure;
+                    $wallet['structure'] = $wallet_structure;
                 }
             }
 
@@ -749,5 +748,12 @@ class Woocommerce_Paynocchio {
         }
 
         return false;
+    }
+    /**
+     * Check if woocommerce_paynocchio_approved is true
+     */
+    public function is_approved()
+    {
+        return get_option('woocommerce_paynocchio_approved');
     }
 }

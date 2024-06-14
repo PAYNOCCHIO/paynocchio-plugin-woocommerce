@@ -25,6 +25,7 @@ class Woocommerce_Paynocchio_Add_RESTapi_Routes {
         $testing = 'testing';
         $current_user_route = 'wallet/current_user';
         $update_order_status_route = 'order/update';
+        $wallet_topup = 'wallet/topup';
         //$route     = 'wallet_balance/(?P<wallet_id>[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12})';
         //$route     = 'wallet_balance/(?P<id>\d+)';
 
@@ -37,6 +38,12 @@ class Woocommerce_Paynocchio_Add_RESTapi_Routes {
         register_rest_route($namespace, $update_order_status_route, [
             'methods'   => 'POST',
             'callback'  => [$this, 'update_order_status'],
+            'permission_callback' => '__return_true',
+        ]);
+
+        register_rest_route($namespace, $wallet_topup, [
+            'methods'   => 'POST',
+            'callback'  => [$this, 'wallet_topup'],
             'permission_callback' => '__return_true',
         ]);
 
@@ -110,10 +117,57 @@ class Woocommerce_Paynocchio_Add_RESTapi_Routes {
             if($parameters['status_type']) {
                 if($parameters['status_type'] === 'complete') {
                     $customer_order->update_status('completed');
+
+                    $args = array(
+                        'meta_key'      => 'wallet_uuid',
+                        'meta_value'    => $parameters['wallet_uuid'],
+                    );
+
+                    $user = get_user_by('id', $customer_order->get_id());
+
+                    $headers = "MIME-Version: 1.0" . "\r\n";
+                    $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
+
+                    $message = "<b>Dear! ".$user->name."</b>,<br/><br/> Your ORDER has been completed<br>this is an automated mail.pls  don't reply to this mail. ";
+
+                    wp_mail( $user->user_email, "Top up is complete!", $message, $headers );
                 }
             } else {
                 return new WP_Error( 'no_status', 'Invalid Status value', array( 'status' => 404 ) );
             }
+
+            return new WP_REST_Response( true, 200 );
+        }
+
+    }
+
+    /**
+     * wallet top up webhook
+     * @return WP_REST_Response
+     */
+    public function wallet_topup($request)
+    {
+        $parameters = $request->get_params();
+
+        if(!$parameters) {
+            return new WP_Error( 'no_params', 'Invalid parameters', array( 'status' => 404 ) );
+        }
+
+        if($parameters['wallet_uuid'] && $parameters['amount']) {
+
+            $args = array(
+                'meta_key'      => 'wallet_uuid',
+                'meta_value'    => $parameters['wallet_uuid'],
+            );
+
+            $user = get_users($args);
+
+            $headers = "MIME-Version: 1.0" . "\r\n";
+            $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
+
+            $message = "<b>Dear! ".$user->name."</b>,<br/><br/> Your wallet has been topped up for $".$parameters['amount']." successfuly.<br>this is an automated mail.pls  don't reply to this mail. ";
+
+            wp_mail( $user->user_email, "Top up is complete!", $message, $headers );
 
             return new WP_REST_Response( true, 200 );
         }

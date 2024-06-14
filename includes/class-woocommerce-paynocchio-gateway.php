@@ -44,7 +44,8 @@ class Woocommerce_Paynocchio_Payment_Gateway extends WC_Payment_Gateway {
             add_action( 'woocommerce_update_options_payment_gateways_' . $this->id, array( $this, 'process_admin_options' ) );
         }
 
-        add_action( 'woocommerce_api_paynocchio', array( $this, 'webhook' ) );
+        add_action( 'woocommerce_api_paynocchio', array( $this, 'webhook' ));
+        add_action( 'update_option', array( $this,	'do_health_check' ), 10, 3 );
 
     } // Here is the  End __construct()
 
@@ -91,21 +92,6 @@ class Woocommerce_Paynocchio_Payment_Gateway extends WC_Payment_Gateway {
                 'title'		=> __( 'Paynocchio Secret UUID', 'paynocchio' ),
                 'type'		=> 'text',
                 'desc_tip'	=> __( 'This is the Secret UUID provided by Paynocchio when you signed up for an account.', 'paynocchio' ),
-            ),
-            PAYNOCCHIO_CURRENCY_KEY => array(
-                'title'		=> __( 'Paynocchio Currency UUID', 'paynocchio' ),
-                'type'		=> 'text',
-                'desc_tip'	=> __( 'This is the currency UUID provided by Paynocchio when you signed up for an account.', 'paynocchio' ),
-            ),
-            PAYNOCCHIO_TYPE_KEY => array(
-                'title'		=> __( 'Paynocchio Type UUID', 'paynocchio' ),
-                'type'		=> 'text',
-                'desc_tip'	=> __( 'This is the Type UUID provided by Paynocchio when you signed up for an account.', 'paynocchio' ),
-            ),
-            PAYNOCCHIO_STATUS_KEY => array(
-                'title'		=> __( 'Paynocchio Status UUID', 'paynocchio' ),
-                'type'		=> 'text',
-                'desc_tip'	=> __( 'This is the Status UUID provided by Paynocchio when you signed up for an account.', 'paynocchio' ),
             ),
             'testmode' => array(
                 'title'		=> __( 'Paynocchio Test Mode', 'paynocchio' ),
@@ -258,17 +244,6 @@ class Woocommerce_Paynocchio_Payment_Gateway extends WC_Payment_Gateway {
 
         $wallet_response = $user_paynocchio_wallet->chargeBack($order_uuid, $user_wallet_id, $amount);
 
-        /*print_r([
-            'order' => $order_uuid,
-            'wallet' => $user_wallet_id,
-            '$user_uuid' => $user_uuid,
-            '$amount' => $amount,
-            '$wallet_response' => $wallet_response,
-        ]);*/
-
-        /*$customer_order->add_order_note( __( 'Paynocchio complete refund.', 'paynocchio' ) );
-        return true;*/
-
         if ( $wallet_response['status_code'] === 200) {
             // Refund successful
             $customer_order->add_order_note( __( 'Paynocchio complete refund.', 'paynocchio' ) );
@@ -282,7 +257,8 @@ class Woocommerce_Paynocchio_Payment_Gateway extends WC_Payment_Gateway {
 
     // Validate fields
     public function validate_fields() {
-        return false;
+
+        return true;
     }
 
     /**
@@ -331,12 +307,39 @@ class Woocommerce_Paynocchio_Payment_Gateway extends WC_Payment_Gateway {
             }
     }
 
-    /*public function do_ssl_check() {
-        if( $this->enabled == "yes" ) {
-            if( get_option( 'woocommerce_force_ssl_checkout' ) == "no" ) {
-                echo "<div class=\"error\"><p>". sprintf( __( "<strong>%s</strong> is enabled and WooCommerce is not forcing the SSL certificate on your checkout page. Please ensure that you have a valid SSL certificate and that you are <a href=\"%s\">forcing the checkout pages to be secured.</a>" ), $this->method_title, admin_url( 'admin.php?page=wc-settings&tab=checkout' ) ) ."</p></div>";
+    public function do_health_check($option_name, $old_value, $new_value) {
+
+        if($option_name === 'woocommerce_paynocchio_settings') {
+            if(!wp_is_uuid($new_value[PAYNOCCHIO_ENV_KEY])) {
+                add_action( 'admin_notices', function(){
+                    echo '<div class="notice notice-error"><p>Please check if Environment ID is correct</p></div>';
+                } );
+
+                return;
             }
+            if(!$new_value[PAYNOCCHIO_SECRET_KEY]) {
+                add_action( 'admin_notices', function(){
+                    echo '<div class="notice notice-error"><p>Please check if Secret Key is correct</p></div>';
+                } );
+            }
+
+            add_action( 'admin_notices', array( $this,	'make_notice') );
         }
-    }*/
+    }
+
+    public function make_notice() {
+        $fake_uuid = wp_generate_uuid4();
+        $wallet = new Woocommerce_Paynocchio_Wallet($fake_uuid);
+        $response = $wallet->healthCheck();
+        $json_response = json_decode($response);
+
+        if($json_response->status === 'success') {
+            update_option('woocommerce_paynocchio_approved', true);
+            echo "<div class=\"notice notice-success is-dismissible\"><p>". sprintf( __( "Integration with Paynocchio succeeded. Response is <strong>%s</strong> and status code is <strong>%s</strong>" ), $json_response->status, $json_response->message) ."</p></div>";
+        } else {
+            update_option('woocommerce_paynocchio_approved', false);
+            echo "<div class=\"notice notice-error is-dismissible\"><p>". sprintf( __( "Integration with Paynocchio failed. Response is <strong>%s</strong> " ), $json_response->message) ."</p></div>";
+        }
+    }
 
 }
