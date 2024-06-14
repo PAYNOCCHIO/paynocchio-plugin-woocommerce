@@ -117,15 +117,6 @@ class Woocommerce_Paynocchio_Add_RESTapi_Routes {
             if($parameters['status_type']) {
                 if($parameters['status_type'] === 'complete') {
                     $customer_order->update_status('completed');
-
-                    $user = get_user_by('id', $customer_order->get_customer_id());
-
-                    $headers = "MIME-Version: 1.0" . "\r\n";
-                    $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
-
-                    $message = "<b>Dear! ".$user->name."</b>,<br/><br/> Your ORDER has been completed<br>this is an automated mail.pls  don't reply to this mail. ";
-
-                    wp_mail( $user->user_email, "Order is complete!", $message, $headers );
                 }
             } else {
                 return new WP_Error( 'no_status', 'Invalid Status value', array( 'status' => 404 ) );
