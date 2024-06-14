@@ -371,6 +371,14 @@ class Woocommerce_Paynocchio {
              $json_response = json_decode($wallet_response);
              if($json_response->status === 'success') {
                  add_user_meta($this->user_id, PAYNOCCHIO_WALLET_KEY, $json_response->wallet, true);
+                 $user = get_user_by('id', $this->user_id);
+
+                 $headers = "MIME-Version: 1.0" . "\r\n";
+                 $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
+
+                 $message = "<b>Dear! ".$user->name."</b>,<br/><br/> Congratulations! <br/>Your new Wallet has been successfully activated!<br>this is an automated mail.pls  don't reply to this mail. ";
+
+                 wp_mail( $user->user_email, "Wallet Activation!", $message, $headers );
              } else {
                  wp_send_json([
                      'response' => $json_response,

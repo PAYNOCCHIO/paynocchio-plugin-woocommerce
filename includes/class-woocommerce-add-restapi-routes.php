@@ -130,7 +130,7 @@ class Woocommerce_Paynocchio_Add_RESTapi_Routes {
 
                     $message = "<b>Dear! ".$user->name."</b>,<br/><br/> Your ORDER has been completed<br>this is an automated mail.pls  don't reply to this mail. ";
 
-                    wp_mail( $user->user_email, "Top up is complete!", $message, $headers );
+                    wp_mail( $user->user_email, "Order is complete!", $message, $headers );
                 }
             } else {
                 return new WP_Error( 'no_status', 'Invalid Status value', array( 'status' => 404 ) );
