@@ -5,7 +5,95 @@ import './topUpFormProcess'
 import setTopUpBonuses from "./js/setTopUpBonuses";
 
 (( $ ) => {
+
     const PERCENT = 0.1;
+    let rewardingRules;
+
+    $.ajax({
+        async: false,
+        url: paynocchio_object.ajaxurl,
+        global: false,
+        type: 'GET',
+        data: {
+            'action': 'paynocchio_ajax_get_env_structure',
+        },
+        success: function (wallet_info) {
+            rewardingRules = wallet_info.response.structure.rewarding_group.rewarding_rules;
+        }
+    });
+
+    /**
+     * Adapt rewarding rules to sum values of the same rules
+     * @param {array} data
+     * @return {*[]}
+     */
+    const transformRewardingRules = (data) => {
+        const result = [];
+
+        if(data) {
+            data.forEach(item => {
+                let existing = result.find(el =>
+                    el.operation_type === item.operation_type &&
+                    el.min_amount === item.min_amount &&
+                    el.max_amount === item.max_amount
+                );
+
+                if (existing) {
+                    existing.value += item.value;
+                } else {
+                    result.push({ ...item });
+                }
+            });
+            return result;
+        }
+        return null;
+    };
+
+    /**
+     * Find eligible Operations
+     * @param {object} obj
+     * @param {number} num
+     * @param {string} operationType
+     * @return {*}
+     */
+    const getCurrentRewardRule = (obj, num, operationType) => {
+        let totalValue = 0;
+        let minAmount = Infinity;
+        let maxAmount = -Infinity;
+        let value_type;
+        let conversion_rate = 1;
+
+        if(obj) {
+            obj.forEach(item => {
+                if (item.operation_type === operationType && num >= item.min_amount && num <= item.max_amount) {
+                    totalValue += item.value;
+                    value_type = item.value_type;
+                    conversion_rate = item.conversion_rate;
+                    if (item.min_amount < minAmount) {
+                        minAmount = item.min_amount;
+                    }
+                    if (item.max_amount > maxAmount) {
+                        maxAmount = item.max_amount;
+                    }
+                }
+            });
+        }
+        return {
+            totalValue: value_type === 'percentage' ? totalValue / conversion_rate : totalValue,
+            minAmount,
+            maxAmount,
+            value_type,
+            conversion_rate,
+        };
+    };
+
+    const reducedRules = transformRewardingRules(rewardingRules);
+
+    const calculateReward = (amount, rules, type) => {
+        const total_value = getCurrentRewardRule(rules, amount, type).totalValue;
+        const value_type = getCurrentRewardRule(rules, amount, type).value_type;
+        return value_type === 'percentage' ? Math.floor(amount * (total_value / 100)) : total_value;
+    };
 
     const createWebSocket = (wallet) => {
         let ws = new WebSocket(`wss://wallet.stage.paynocchio.com/ws/wallet-socket/${wallet}`);
@@ -104,7 +192,7 @@ import setTopUpBonuses from "./js/setTopUpBonuses";
             },
             success: function(data){
                 if (data.response.status_code === 200){
-                    window.location.replace(JSON.parse(data.response.response).url)
+                    window.location.replace(JSON.parse(data.response.response).schemas.url)
                 } else {
                     $('.topUpModal .message').html('An error occurred. Please reload page and try again!');
                 }
@@ -139,16 +227,7 @@ import setTopUpBonuses from "./js/setTopUpBonuses";
             },
             success: function(data){
                 if (data.response.status_code === 200) {
-                    /*$(`.topup_mini_form .cfps-check`).removeClass('cfps-hidden');
-                    updateWalletBalance();
-                    updateOrderButtonState();
-                    $('.topup_mini_form').delay(2000).fadeOut('fast', function() {
-                        $('#show_mini_modal').css('transform','rotate(0deg)');
-                        $('#top_up_amount_mini_form').val('');
-                        $(`.topup_mini_form .cfps-check`).addClass('cfps-hidden');
-                        $(evt.target).removeClass('cfps-disabled')
-                    });*/
-                    window.location.replace(JSON.parse(data.response.response).url)
+                    window.location.replace(JSON.parse(data.response.response).schemas.url)
                 } else {
                     alert(data.response.response)
                 }
@@ -361,8 +440,32 @@ import setTopUpBonuses from "./js/setTopUpBonuses";
             $(document.body).trigger('update_checkout');
         });
 
-        $('#top_up_amount').keyup((env) => {
-            setTopUpBonuses(env.target.value, PERCENT)
+        $('#top_up_amount').on('keyup change', (evt) => {
+            let reward = 0;
+            let value = parseFloat(evt.target.value);
+            if (calculateReward(value, reducedRules, 'payment_operation_add_money') > 0) {
+                reward = calculateReward(value, reducedRules, 'payment_operation_add_money');
+            }
+            //setTopUpBonuses(evt.target.value, reward);
+
+            let card_balance_limit = parseFloat($('#card_balance_limit').text());
+            let balance = parseFloat($('.paynocchio-balance-value').first().text());
+
+            if (parseFloat(evt.target.value) + balance > card_balance_limit) {
+                $('#topup_message').html('When replenishing the amount $' + value + ' the balance limit will exceed the set value $' + card_balance_limit);
+            } else {
+                if (evt.target.value < parseFloat($('#top_up_amount').attr('min'))) {
+                    $('#top_up_button').attr('disabled','true').addClass('disabled');
+                    $('#topup_message').html('Please enter amount more than minimum replenishment amount.');
+                } else {
+                    $('#top_up_button').removeAttr('disabled').removeClass('disabled');
+                    if (reward > 0) {
+                        $('#topup_message').html('You will get <span id="bonusesCounter">' + reward + '</span> bonuses.');
+                    } else {
+                        $('#topup_message').html('');
+                    }
+                }
+            }
         })
 
         /**
@@ -371,13 +474,10 @@ import setTopUpBonuses from "./js/setTopUpBonuses";
 
         $(document).on( "updated_checkout", function() {
 
-
-
             Modal.initElements();
 
             const topUpButton = $("#top_up_button");
             const withdrawButton = $("#withdraw_button");
-
 
             topUpButton.click((evt) => topUpWallet(evt))
             withdrawButton.click((evt) => withdrawWallet(evt))

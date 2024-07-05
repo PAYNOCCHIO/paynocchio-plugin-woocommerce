@@ -285,7 +285,7 @@ class Woocommerce_Paynocchio_Wallet {
             $json_response = json_decode($user_paynocchio_wallet['response']);
             return [
                 'balance' => $json_response->balance->current,
-                'bonuses' => $json_response->rewarding_balance,
+                'bonuses' => intval($json_response->rewarding_balance),
                 'number' => $json_response->number,
                 'status' => $json_response->status->code,
                 'code' => $json_response->status->code,
@@ -343,6 +343,120 @@ class Woocommerce_Paynocchio_Wallet {
     {
         $url = '/wallet/environment-structure/?user_uuid=' . $this->userId . '&environment_uuid=' . $this->envId;
 
-        return $this->sendRequest('GET', $url);
+        $response = $this->sendRequest('GET', $url);
+        $json_response = json_decode($response['response']);
+        if($response['status_code'] === 200) {
+            $filtered_rewards = self::filterEnvRewardingGroups($json_response->rewarding_groups);
+            return [
+                'card_balance_limit' => $json_response->card_balance_limit,
+                'daily_transaction_limit' => $json_response->daily_transaction_limit,
+                'multiple_accounts_limit' => $json_response->multiple_accounts_limit,
+                'minimum_topup_amount' => $json_response->minimum_topup_amount,
+                'bonus_conversion_rate' => $json_response->bonus_conversion_rate,
+                'allow_withdraw' => $json_response->allow_withdraw,
+               // 'full_structure' => $json_response,
+                'rewarding_group' => end($filtered_rewards),
+            ];
+        }
     }
+
+    /**
+     * Transform and merge identical rules
+     * @param $data
+     * @return array|null
+     */
+    public function transformRewardingRules($data)
+    {
+        $result = [];
+
+        if ($data) {
+            foreach ($data as $item) {
+                $existing = null;
+
+                foreach ($result as &$el) {
+                    if ($el->operation_type === $item->operation_type &&
+                        $el->min_amount === $item->min_amount &&
+                        $el->max_amount === $item->max_amount) {
+                        $existing = &$el;
+                        break;
+                    }
+                }
+
+                if ($existing) {
+                    $existing['value'] += $item->value;
+                } else {
+                    $result[] = $item;
+                }
+            }
+
+            return $result;
+        }
+
+        return null;
+    }
+
+    /**
+     * Calculate Rewarding rule for static data
+     * @param $num
+     * @param $operationType
+     * @return array
+     */
+    public function getCurrentRewardRule($num, $operationType) {
+        $obj = $this->transformRewardingRules($this->getEnvironmentStructure()['rewarding_group']->rewarding_rules);
+        $totalValue = 0;
+        $minAmount = INF;
+        $maxAmount = -INF;
+        $value_type = null;
+        $conversion_rate = 1;
+
+        if ($obj) {
+            foreach ($obj as $item) {
+                $conversion_rate = $item->conversion_rate;
+                $value_type = $item->value_type;
+                if ($item->operation_type === $operationType && $num >= $item->min_amount && $num <= $item->max_amount) {
+                    $totalValue += $item->value;
+                    if ($item->min_amount < $minAmount) {
+                        $minAmount = $item->min_amount;
+                    }
+                    if ($item->max_amount > $maxAmount) {
+                        $maxAmount = $item->max_amount;
+                    }
+                }
+            }
+        }
+        return [
+            'totalValue' => $value_type === 'percentage' ? $totalValue / $conversion_rate / 100 : $totalValue,
+            'minAmount' => $minAmount,
+            'maxAmount' => $maxAmount,
+            'value_type' => $value_type,
+            'conversion_rate' => $conversion_rate,
+            'operationType' => $operationType,
+        ];
+    }
+
+    /**
+     * Filter the rewarding groups array to return only active and not expired campaigns
+     * @param $groups
+     * @return array
+     */
+
+    static function filterEnvRewardingGroups($groups): array
+    {
+        return array_values(array_filter($groups, [__CLASS__, 'checkFilter']));
+    }
+
+    /**
+     * Filter rule for campaign filtering
+     * @param $group
+     * @return bool
+     */
+    static function checkFilter($group): bool
+    {
+        return $group->active && strtotime($group->date_from) <= time() && strtotime($group->date_to) >= time();
+    }
+
+    /**
+     * Get Transaction History
+     * This needed to check wallet Limit
+     */
 }

@@ -309,6 +309,9 @@ class Woocommerce_Paynocchio {
         $this->loader->add_action( 'wp_ajax_paynocchio_ajax_withdraw', $this, 'paynocchio_ajax_withdraw');
         $this->loader->add_action( 'wp_ajax_nopriv_paynocchio_ajax_withdraw', $this, 'paynocchio_ajax_withdraw');
 
+        $this->loader->add_action( 'wp_ajax_paynocchio_ajax_get_env_structure', $this, 'ajax_paynocchio_wallet_info');
+        $this->loader->add_action( 'wp_ajax_nopriv_paynocchio_ajax_get_env_structure', $this, 'ajax_paynocchio_wallet_info');
+
         //TODO Do we need redirect to Checkout?
         //$this->loader->add_action( 'woocommerce_add_to_cart_redirect', $plugin_public, 'redirect_checkout_add_cart' );
 
@@ -736,7 +739,7 @@ class Woocommerce_Paynocchio {
             //$wallet['x-company-signature'] = $user_paynocchio_wallet->getSignature(true);
             //$wallet['secret'] = $user_paynocchio_wallet->get_secret();
             //$wallet['env'] = $user_paynocchio_wallet->get_env();
-           // $wallet['wallet_uuid'] = $user_paynocchio_wallet->wallet_uuid();
+            //$wallet['wallet_uuid'] = $user_paynocchio_wallet->wallet_uuid();
             //$wallet['user_uuid'] = $this->get_uuid();
 
             if($user_paynocchio_wallet_id) {
@@ -751,12 +754,19 @@ class Woocommerce_Paynocchio {
                     $wallet['structure'] = $wallet_structure;
                 }
             }
-
             return $wallet;
         }
 
-        return false;
     }
+
+    public function ajax_paynocchio_wallet_info() {
+        $wallet_info = $this->get_paynocchio_wallet_info();
+        wp_send_json([
+            'response' => $wallet_info
+        ]);
+        wp_die();
+    }
+
     /**
      * Check if woocommerce_paynocchio_approved is true
      */

@@ -4,6 +4,6 @@ export default function setTopUpBonuses(value, percent) {
     const bonusesCounter = document.getElementById('bonusesCounter');
     if(top_up_amount) {
         top_up_amount.setAttribute('data-value', value);
-        bonusesCounter.innerText = (value * percent).toFixed();
+        bonusesCounter.innerText = percent.toFixed();
     }
 }

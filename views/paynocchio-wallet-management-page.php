@@ -1,25 +1,46 @@
 <?php
+
+    $user_id = get_current_user_id();
+    if (!$user_id) {
+        return new WP_Error( 'no_user', 'Invalid user', array( 'status' => 404 ) );
+    }
+    $user_uuid = get_user_meta($user_id, PAYNOCCHIO_USER_UUID_KEY, true);
+    $wallet_uuid = get_user_meta($user_id, PAYNOCCHIO_WALLET_KEY, true);
+
     $paynocchio = new Woocommerce_Paynocchio();
-    $wallet = $paynocchio->get_paynocchio_wallet_info();
+    $wallet_info = $paynocchio->get_paynocchio_wallet_info();
+
+    $wallet_structure = $wallet_info['structure'];
+    $wallet_balance = $wallet_info['balance'];
+    $wallet_bonuses = $wallet_info['bonuses'];
+    $minimum_topup_amount = $wallet_structure['minimum_topup_amount'];
+    $card_balance_limit = $wallet_structure['card_balance_limit'];
+    $rewarding_rules = $wallet_structure['rewarding_group']->rewarding_rules;
+
+   /* echo '<pre>';
+    print_r($wallet_info);
+    echo '123';
+    print_r($rewarding_rules);
+    echo '</pre>';*/
 
     $paynocchio_classes = '';
     $accent_color = '#3b82f6';
     $accent_text_color = '#ffffff';
 
-    $settigns = get_option( 'woocommerce_paynocchio_settings');
+    $settings = get_option( 'woocommerce_paynocchio_settings');
 
-    if($settigns) {
-        $paynocchio_classes .= array_key_exists('darkmode', $settigns) && $settigns['darkmode'] == 'yes' ? 'paynocchio_dark_mode ' : '';
-        $paynocchio_classes .= array_key_exists('rounded', $settigns) && $settigns['rounded'] == 'yes' ? 'paynocchio_rounded ' : '';
-        $paynocchio_rounded_class = array_key_exists('rounded', $settigns) && $settigns['rounded'] == 'yes' ? 'cfps-rounded-lg' : '';
-        $paynocchio_darkmode_class = array_key_exists('rounded', $settigns) && $settigns['darkmode'] == 'yes' ? 'paynocchio_dark_mode' : '';
-        $paynocchio_embleme_url = array_key_exists('embleme_url', $settigns) && $settigns['embleme_url'] ? $settigns['embleme_url'] : '';
+    if($settings) {
+        $paynocchio_classes .= array_key_exists('darkmode', $settings) && $settings['darkmode'] == 'yes' ? 'paynocchio_dark_mode ' : '';
+        $paynocchio_classes .= array_key_exists('rounded', $settings) && $settings['rounded'] == 'yes' ? 'paynocchio_rounded ' : '';
+        $paynocchio_rounded_class = array_key_exists('rounded', $settings) && $settings['rounded'] == 'yes' ? 'cfps-rounded-lg' : '';
+        $paynocchio_darkmode_class = array_key_exists('rounded', $settings) && $settings['darkmode'] == 'yes' ? 'paynocchio_dark_mode' : '';
+        $paynocchio_embleme_url = array_key_exists('embleme_url', $settings) && $settings['embleme_url'] ? $settings['embleme_url'] : '';
 
-        if (array_key_exists('accent_color', $settigns)) {
+        if (array_key_exists('accent_color', $settings)) {
             $accent_color = get_option( 'woocommerce_paynocchio_settings')['accent_color'];
         }
 
-        if (array_key_exists('accent_text_color', $settigns)) {
+        if (array_key_exists('accent_text_color', $settings)) {
             $accent_text_color = get_option( 'woocommerce_paynocchio_settings')['accent_text_color'];
         }
     }
@@ -39,8 +60,8 @@
         <?php echo do_shortcode('[paynocchio_activation_block]'); ?>
     </div>
 <?php } else { ?>
-    <?php if ($wallet['code'] !== 500) { ?>
-        <div class="paynocchio-profile-block <?php echo $paynocchio_rounded_class; ?> <?php echo $paynocchio_darkmode_class; ?> <?php if ($wallet['status'] !== 'ACTIVE') { ?>cfps-disabled<?php } ?>">
+    <?php if ($wallet_info['code'] !== 500) { ?>
+        <div class="paynocchio-profile-block <?php echo $paynocchio_rounded_class; ?> <?php echo $paynocchio_darkmode_class; ?> <?php if ($wallet_info['status'] !== 'ACTIVE') { ?>cfps-disabled<?php } ?>">
             <?php if(get_transient('first_time_active')) { ?>
                 <div class="congratz">
                     <img src="<?php echo plugin_dir_url( WOOCOMMERCE_PAYNOCCHIO_BASENAME ) . 'assets/img/star.webp' ?>" class="!cfps-h-[25px] !cfps-ml-0"/>
@@ -52,9 +73,9 @@
                     <?php if ($paynocchio_embleme_url) { ?>
                         <img src="<?php echo $paynocchio_embleme_url; ?>" class="on_card_embleme" />
                     <?php }
-                    if ($wallet['status'] == 'SUSPEND') {
+                    if ($wallet_info['status'] == 'SUSPEND') {
                         echo '<div class="wallet_status">SUSPENDED</div>';
-                    } elseif ($wallet['status'] == 'BLOCKED') {
+                    } elseif ($wallet_info['status'] == 'BLOCKED') {
                         echo '<div class="wallet_status">BLOCKED</div>';
                     }
                     ?>
@@ -64,7 +85,7 @@
                                 Balance
                             </div>
                             <div class="amount">
-                                $<span class="paynocchio-numbers paynocchio-balance-value" data-balance="<?php echo $wallet['balance'] ?>"><?php echo $wallet['balance'] ?></span>
+                                $<span class="paynocchio-numbers paynocchio-balance-value" data-balance="<?php echo $wallet_info['balance'] ?>"><?php echo $wallet_info['balance'] ?></span>
                             </div>
                         </div>
                         <div class="paynocchio-bonuses">
@@ -72,12 +93,12 @@
                                 Bonuses
                             </div>
                             <div class="amount">
-                                <span class="paynocchio-numbers paynocchio-bonus-value" data-bonus="<?php echo $wallet['bonuses'] ?>"><?php echo $wallet['bonuses'] ?></span>
+                                <span class="paynocchio-numbers paynocchio-bonus-value" data-bonus="<?php echo $wallet_info['bonuses'] ?>"><?php echo $wallet_info['bonuses'] ?></span>
                             </div>
                         </div>
                     </div>
                     <div class="paynocchio-card-number">
-                        <div><?php echo chunk_split(strval($wallet['card_number']), 4, '</div><div>'); ?></div>
+                        <div><?php echo chunk_split(strval($wallet_info['card_number']), 4, '</div><div>'); ?></div>
                     </div>
                     <div class="paynocchio_payment_card_button">
                         <a href="#" class="<?php echo $paynocchio_rounded_class; ?> paynocchio_button cfps-flex cfps-flex-row cfps-items-center" data-modal=".topUpModal" style="color:<?php echo $accent_color; ?>; background:<?php echo $accent_text_color; ?>">
@@ -92,7 +113,7 @@
                 </div>
             </div>
         </div>
-        <?php if(isset($wallet['status'])) { ?>
+        <?php if(isset($wallet_info['status'])) { ?>
             <div class="paynocchio-profile-block <?php echo $paynocchio_rounded_class; ?> <?php echo $paynocchio_darkmode_class; ?>">
                 <div class="paynocchio-profile-actions">
                     <div class="cfps-mb-4 cfps-flex cfps-flex-row cfps-gap-2">
@@ -101,13 +122,13 @@
                             <circle class="cfps-opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                             <path class="cfps-opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                         </svg>
-                        <span id="wallet_status" class="cfps-font-bold"><?php echo $wallet['status'] ?></span>
+                        <span id="wallet_status" class="cfps-font-bold"><?php echo $wallet_info['status'] ?></span>
                     </div>
-                    <?php if ($wallet['status'] !== 'BLOCKED') { ?>
+                    <?php if ($wallet_info['status'] !== 'BLOCKED') { ?>
                         <div class="paynocchio-actions-btns !cfps-justify-start">
-                            <?php if($wallet['status'] === "ACTIVE") { ?>
+                            <?php if($wallet_info['status'] === "ACTIVE") { ?>
                                 <a href="#" class="paynocchio_button btn-blue paynocchio_colored <?php echo $paynocchio_rounded_class; ?>" data-modal=".suspendModal">Suspend wallet</a>
-                            <?php } elseif ($wallet['status'] === "SUSPEND") { ?>
+                            <?php } elseif ($wallet_info['status'] === "SUSPEND") { ?>
                                 <a href="#" class="paynocchio_button btn-blue paynocchio_colored <?php echo $paynocchio_rounded_class; ?>" data-modal=".reactivateModal">Reactivate wallet</a>
                             <?php } ?>
                             <a href="#" class="paynocchio_button btn-gray <?php echo $paynocchio_rounded_class; ?>" data-modal=".blockModal">
@@ -115,7 +136,7 @@
                             </a>
                         </div>
                     <?php } ?>
-                    <?php if($wallet['status'] === 'BLOCKED') { ?>
+                    <?php if($wallet_info['status'] === 'BLOCKED') { ?>
                         <div class="cfps-flex cfps-flex-row cfps-gap-8 cfps-items-center">
                             <button data-modal=".deleteModal" class="cfps-btn-primary cfps-whitespace-nowrap <?php echo $paynocchio_rounded_class; ?>">Delete Wallet</button>
                             <div class="">If you have blocked your wallet by accident, please contact <a href="mailto:support@kopybara.com" class="cfps-text-blue-500">technical support</a> before deleting your wallet!</div>
@@ -131,7 +152,7 @@
                     <path d="M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10-4.477 10-10 10zm-1-7v2h2v-2h-2zm0-8v6h2V7h-2z" fill="#d4d4d4" class="fill-000000"></path>
                 </svg>
                 <div class="cfps-mb-4">
-                    If you see this page, our wallet service issues an error "<span id="wallet_status" class="cfps-font-bold"><?php echo $wallet['status'] ?></span>"
+                    If you see this page, our wallet service issues an error "<span id="wallet_status" class="cfps-font-bold"><?php echo $wallet_info['status'] ?></span>"
                 </div>
                 <div>To solve the problem, please contact <b><?php echo get_bloginfo('name') ?></b> support</div>
             </div>

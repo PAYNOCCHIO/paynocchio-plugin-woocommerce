@@ -850,3 +850,11 @@ input[type=range].styled-slider.slider-progress:active::-ms-fill-lower {
 #show_password {
     @apply cfps-absolute cfps-top-2 cfps-right-2;
 }
+
+#top_up_amount {
+    @apply cfps-max-w-32 !cfps-bg-transparent !cfps-border-0 !cfps-shadow-none cfps-text-3xl !cfps-p-0 focus:!cfps-outline-none;
+}
+
+#top_up_button.disabled {
+    @apply cfps-opacity-80;
+}

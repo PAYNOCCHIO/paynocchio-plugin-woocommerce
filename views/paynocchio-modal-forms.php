@@ -6,26 +6,40 @@ if (!defined('ABSPATH')) {
 
 <?php
 if (is_user_logged_in()) {
-    $paynocchio = new Woocommerce_Paynocchio();
-    $wallet = $paynocchio->get_paynocchio_wallet_info();
 
+    $user_id = get_current_user_id();
+    if (!$user_id) {
+        return new WP_Error( 'no_user', 'Invalid user', array( 'status' => 404 ) );
+    }
+    $user_uuid = get_user_meta($user_id, PAYNOCCHIO_USER_UUID_KEY, true);
+    $wallet_uuid = get_user_meta($user_id, PAYNOCCHIO_WALLET_KEY, true);
+
+    $paynocchio = new Woocommerce_Paynocchio();
+    $wallet_info = $paynocchio->get_paynocchio_wallet_info();
+
+    $wallet_structure = $wallet_info['structure'];
+    $wallet_balance = $wallet_info['balance'];
+    $wallet_bonuses = $wallet_info['bonuses'];
+    $minimum_topup_amount = $wallet_structure['minimum_topup_amount'];
+    $card_balance_limit = $wallet_structure['card_balance_limit'];
+    $rewarding_rules = $wallet_structure['rewarding_group']->rewarding_rules;
+
+    // STYLING OPTIONS //
     $paynocchio_classes = '';
     $accent_color = '#3b82f6';
     $accent_text_color = '#ffffff';
+    $settings = get_option( 'woocommerce_paynocchio_settings');
+    if($settings) {
+        $paynocchio_classes .= array_key_exists('darkmode', $settings) && $settings['darkmode'] == 'yes' ? 'paynocchio_dark_mode ' : '';
+        $paynocchio_classes .= array_key_exists('rounded', $settings) && $settings['rounded'] == 'yes' ? 'paynocchio_rounded ' : '';
+        $paynocchio_rounded_class = array_key_exists('rounded', $settings) && $settings['rounded'] == 'yes' ? 'cfps-rounded-lg' : '';
+        $paynocchio_embleme_url = array_key_exists('embleme_url', $settings) && $settings['embleme_url'] ? $settings['embleme_url'] : '';
 
-
-    $settigns = get_option( 'woocommerce_paynocchio_settings');
-    if($settigns) {
-        $paynocchio_classes .= array_key_exists('darkmode', $settigns) && $settigns['darkmode'] == 'yes' ? 'paynocchio_dark_mode ' : '';
-        $paynocchio_classes .= array_key_exists('rounded', $settigns) && $settigns['rounded'] == 'yes' ? 'paynocchio_rounded ' : '';
-        $paynocchio_rounded_class = array_key_exists('rounded', $settigns) && $settigns['rounded'] == 'yes' ? 'cfps-rounded-lg' : '';
-        $paynocchio_embleme_url = array_key_exists('embleme_url', $settigns) && $settigns['embleme_url'] ? $settigns['embleme_url'] : '';
-
-        if (array_key_exists('accent_color', $settigns)) {
+        if (array_key_exists('accent_color', $settings)) {
             $accent_color = get_option( 'woocommerce_paynocchio_settings')['accent_color'];
         }
 
-        if (array_key_exists('accent_text_color', $settigns)) {
+        if (array_key_exists('accent_text_color', $settings)) {
             $accent_text_color = get_option( 'woocommerce_paynocchio_settings')['accent_text_color'];
         }
     }
@@ -40,14 +54,18 @@ if (is_user_logged_in()) {
         </div>
         <div class="content">
             <div class="cfps-mb-4 cfps-text-lg">
-                Please top up your wallet and receive <span class="cfps-font-black" id="bonusesCounter">0</span> bonuses for this deposit.
+                Please enter amount you want to add to you wallet. After clicking "Add money" you will be redirected to Stripe for secure money transfer.
             </div>
-
+            <div class="cfps-mb-4">The minimum replenishment amount for this card is $<span id="minimum_topup_amount"><?php echo $minimum_topup_amount; ?></span>.</div>
+            <div class="cfps-mb-6">Card limit is $<span id="card_balance_limit"><?php echo $card_balance_limit; ?></span>.</div>
             <div class="top-up-amount-container cfps-mt-8 lg:cfps-mt-12 cfps-flex cfps-flex-row cfps-justify-between">
                 <div>
                     <span class="cfps-text-3xl">$</span>
-                    <input type="number" step="0.01" class="cfps-max-w-32 !cfps-bg-transparent !cfps-border-0 !cfps-shadow-none cfps-text-3xl !cfps-p-0 focus:!cfps-outline-none"
-                           name="amount" id="top_up_amount" placeholder="0" />
+                    <input type="number" name="amount" id="top_up_amount"
+                           min="<?php echo $minimum_topup_amount; ?>"
+                           value="<?php echo $minimum_topup_amount; ?>"
+                           step="0.01" placeholder="<?php echo $minimum_topup_amount; ?>"
+                    />
                     <input type="hidden" name="redirect_url" value="" />
                     <?php wp_nonce_field( 'paynocchio_ajax_top_up', 'ajax-top-up-nonce' ); ?>
                 </div>
@@ -97,7 +115,7 @@ if (is_user_logged_in()) {
                         <path class="cfps-opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                     </svg>
                 </button>
-                <div class="message cfps-text-balance"><span class="cfps-text-sm !cfps-leading-none">After clicking "Add money" you will be redirected to Stripe.com to complete a secure money transfer.</span></div>
+                <div class="message cfps-text-balance" id="topup_message">You will get <span id="bonusesCounter">2</span> bonuses.</div>
             </div>
         </div>
     </div>
@@ -112,7 +130,7 @@ if (is_user_logged_in()) {
             <button class="close">&times;</button>
         </div>
         <div id="witdrawForm" class="content">
-            <div class="cfps-mb-8 cfps-text-xl">Current balance: <span class="cfps-font-semibold">$<span class="paynocchio-numbers paynocchio-balance-value" data-balance="<?php echo $wallet['balance'] ;?>"><?php echo $wallet['balance'] ;?></span></span></div>
+            <div class="cfps-mb-8 cfps-text-xl">Current balance: <span class="cfps-font-semibold">$<span class="paynocchio-numbers paynocchio-balance-value" data-balance="<?php echo $wallet_balance; ?>"><?php echo $wallet_balance; ?></span></span></div>
             <div class="withdraw-amount-container cfps-mb-8 cfps-flex">
                 <p class="cfps-text-3xl">$</p>
                 <input type="number" step="0.01" class="!cfps-bg-transparent !cfps-border-0 !cfps-shadow-none cfps-text-3xl !cfps-p-0 focus:!cfps-outline-none"
@@ -138,7 +156,7 @@ if (is_user_logged_in()) {
 </div>
 
     <?php
-    /** Suspension and Deletion modals */
+    /** Suspension and Deletion modals *
     ?>
     <div class="modal suspendModal <?php echo $paynocchio_classes; ?>">
         <div class="close-modal close"></div>
@@ -239,7 +257,7 @@ if (is_user_logged_in()) {
                 </div>
             </div>
         </div>
-    </div>
+    </div> */ ?>
 
     <div class="modal deleteModal <?php echo $paynocchio_classes; ?>">
         <div class="close-modal close"></div>
