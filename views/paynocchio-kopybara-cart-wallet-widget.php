@@ -9,10 +9,10 @@ if (!defined('ABSPATH')) {
     $amount = WC()->cart->cart_contents_total;
 
     $paynocchio_classes = '';
-    $settigns = get_option( 'woocommerce_paynocchio_settings');
-    if($settigns) {
-        $paynocchio_classes .= array_key_exists('darkmode', $settigns) && $settigns['darkmode'] == 'yes' ? 'paynocchio_dark_mode ' : '';
-        $paynocchio_classes .= array_key_exists('rounded', $settigns) && $settigns['rounded'] == 'yes' ? 'paynocchio_rounded ' : '';
+    $settings = get_option( 'woocommerce_paynocchio_settings');
+    if($settings) {
+        $paynocchio_classes .= array_key_exists('darkmode', $settings) && $settings['darkmode'] == 'yes' ? 'paynocchio_dark_mode ' : '';
+        $paynocchio_classes .= array_key_exists('rounded', $settings) && $settings['rounded'] == 'yes' ? 'paynocchio_rounded ' : '';
     }
 ?>
 

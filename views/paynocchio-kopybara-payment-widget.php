@@ -11,8 +11,22 @@ $cart = $woocommerce->cart;
 $cart_total = floatval($woocommerce->cart->total);
 
 if (is_user_logged_in()) {
+    $user_id = get_current_user_id();
+    if (!$user_id) {
+        return new WP_Error( 'no_user', 'Invalid user', array( 'status' => 404 ) );
+    }
+    $user_uuid = get_user_meta($user_id, PAYNOCCHIO_USER_UUID_KEY, true);
+    $wallet_uuid = get_user_meta($user_id, PAYNOCCHIO_WALLET_KEY, true);
+
     $paynocchio = new Woocommerce_Paynocchio();
-    $wallet = $paynocchio->get_paynocchio_wallet_info();
+    $wallet_info = $paynocchio->get_paynocchio_wallet_info();
+
+    $wallet_structure = $wallet_info['structure'];
+    $wallet_balance = $wallet_info['balance'];
+    $wallet_bonuses = $wallet_info['bonuses'];
+    $minimum_topup_amount = $wallet_structure['minimum_topup_amount'];
+    $card_balance_limit = $wallet_structure['card_balance_limit'];
+    $rewarding_rules = $wallet_structure['rewarding_group']->rewarding_rules;
 ?>
 
 <?php
@@ -20,18 +34,18 @@ if (is_user_logged_in()) {
     $accent_color = '#3b82f6';
     $accent_text_color = '#ffffff';
 
-    $settigns = get_option( 'woocommerce_paynocchio_settings');
-    if($settigns) {
-        $paynocchio_classes .= array_key_exists('darkmode', $settigns) && $settigns['darkmode'] == 'yes' ? 'paynocchio_dark_mode ' : '';
-        $paynocchio_classes .= array_key_exists('rounded', $settigns) && $settigns['rounded'] == 'yes' ? 'paynocchio_rounded ' : '';
-        $paynocchio_rounded_class = array_key_exists('rounded', $settigns) && $settigns['rounded'] == 'yes' ? 'cfps-rounded-lg' : '';
-        $paynocchio_embleme_url = array_key_exists('embleme_url', $settigns) && $settigns['embleme_url'] ? $settigns['embleme_url'] : '';
+    $settings = get_option( 'woocommerce_paynocchio_settings');
+    if ($settings) {
+        $paynocchio_classes .= array_key_exists('darkmode', $settings) && $settings['darkmode'] == 'yes' ? 'paynocchio_dark_mode ' : '';
+        $paynocchio_classes .= array_key_exists('rounded', $settings) && $settings['rounded'] == 'yes' ? 'paynocchio_rounded ' : '';
+        $paynocchio_rounded_class = array_key_exists('rounded', $settings) && $settings['rounded'] == 'yes' ? 'cfps-rounded-lg' : '';
+        $paynocchio_embleme_url = array_key_exists('embleme_url', $settings) && $settings['embleme_url'] ? $settings['embleme_url'] : '';
 
-        if (array_key_exists('accent_color', $settigns)) {
-            $accent_color = get_option( 'woocommerce_paynocchio_settings')['accent_color'];
+        if (array_key_exists('accent_color', $settings)) {
+            $accent_color = $settings['accent_color'];
         }
-        if (array_key_exists('accent_text_color', $settigns)) {
-            $accent_text_color = get_option( 'woocommerce_paynocchio_settings')['accent_text_color'];
+        if (array_key_exists('accent_text_color', $settings)) {
+            $accent_text_color = $settings['accent_text_color'];
         }
     }
 ?>
@@ -43,20 +57,17 @@ if (is_user_logged_in()) {
         }
     </style>
 
-   <?php if($wallet['code'] !== 500) { ?>
-        <?php if ($wallet['status'] !== 'ACTIVE') { ?>
+   <?php if($wallet_info['code'] !== 500) { ?>
+        <?php if ($wallet_info['status'] != 'ACTIVE') { ?>
             <div>
-                <p>Current Wallet is <?php echo $wallet['status'] ?></p>
-                <?php if ($wallet['status'] !== 'BLOCKED') { ?>
+                <p>Current Wallet is <?php echo $wallet_info['status'] ?></p>
+                <?php if ($wallet_info['status'] != 'BLOCKED') { ?>
                     <p>You can manage it at your wallet <a href="/<?php echo WOOCOMMERCE_PAYNOCCHIO_ACCOUNT_PAGE_SLUG ?>">account page</a>.</p>
                 <?php } ?>
             </div>
 
         <?php } else { ?>
-            <!-- <div class="cfps-text-lg cfps-mb-4 cfps-flex cfps-flex-row cfps-items-center cfps-gap-4">
-            <img src="<?php /*echo plugin_dir_url( WOOCOMMERCE_PAYNOCCHIO_BASENAME ) . 'assets/img/star.webp' */?>" class="!cfps-h-[25px] !cfps-ml-0"/>
-            <div>Earn <strong><?php /*echo WC()->cart->cart_contents_total * 0.1; */?> Bonuses</strong> with this purchase!</div>
-        </div>-->
+
             <section class="paynocchio <?php echo $paynocchio_classes; ?>">
                 <div class="paynocchio-payment-block">
                     <?php if(get_transient('first_time_active')) { ?>
@@ -70,9 +81,9 @@ if (is_user_logged_in()) {
                                 <img src="<?php echo $paynocchio_embleme_url; ?>" class="on_card_embleme" />
                             <?php } ?>
                             <?php
-                            if ($wallet['status'] == 'SUSPEND') {
+                            if ($wallet_info['status'] == 'SUSPEND') {
                                 echo '<div class="wallet_status">SUSPENDED</div>';
-                            } elseif ($wallet['status'] == 'BLOCKED') {
+                            } elseif ($wallet_info['status'] == 'BLOCKED') {
                                 echo '<div class="wallet_status">BLOCKED</div>';
                             }
                             ?>
@@ -82,7 +93,7 @@ if (is_user_logged_in()) {
                                         Balance
                                     </div>
                                     <div class="amount">
-                                        $<span class="paynocchio-numbers paynocchio-balance-value" data-balance="<?php echo $wallet['balance'] ?>"><?php echo $wallet['balance'] ?></span>
+                                        $<span class="paynocchio-numbers paynocchio-balance-value" data-balance="<?php echo $wallet_info['balance'] ?>"><?php echo $wallet_info['balance'] ?></span>
                                     </div>
                                 </div>
                                 <div class="paynocchio-bonuses">
@@ -90,12 +101,12 @@ if (is_user_logged_in()) {
                                         Bonuses
                                     </div>
                                     <div class="amount">
-                                        <span class="paynocchio-numbers paynocchio-bonus-value" data-bonus="<?php echo $wallet['bonuses'] ?>"><?php echo $wallet['bonuses'] ?></span>
+                                        <span class="paynocchio-numbers paynocchio-bonus-value" data-bonus="<?php echo $wallet_info['bonuses'] ?>"><?php echo $wallet_info['bonuses'] ?></span>
                                     </div>
                                 </div>
                             </div>
                             <div class="paynocchio-card-number">
-                                <div><?php echo chunk_split(strval($wallet['card_number']), 4, '</div><div>'); ?></div>
+                                <div><?php echo chunk_split(strval($wallet_info['card_number']), 4, '</div><div>'); ?></div>
                             </div>
                             <div class="paynocchio_payment_card_button">
                                 <a href="#" class="paynocchio_button cfps-flex cfps-flex-row cfps-items-center" data-modal=".topUpModal" style="color:<?php echo $accent_color; ?>; background:<?php echo $accent_text_color; ?>">
@@ -109,9 +120,9 @@ if (is_user_logged_in()) {
                             </div>
                         </div>
                     </div>
-                    <?php if($wallet['bonuses']) {
-                        if($wallet['bonuses'] < $cart_total) {
-                            $max_bonus = $wallet['bonuses'];
+                    <?php if($wallet_info['bonuses']) {
+                        if($wallet_info['bonuses'] < $cart_total) {
+                            $max_bonus = $wallet_info['bonuses'];
                         } else {
                             $max_bonus = $cart_total;
                         }
@@ -149,7 +160,7 @@ if (is_user_logged_in()) {
         <?php }  ?>
         <?php } else { ?>
         <div class="paynocchio_error_notification <?php echo $paynocchio_rounded_class; ?>">
-            <svg class="cfps-max-w-[100px] cfps-mx-auto cfps-mb-4" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <svg class="cfps-max-w-24 cfps-mx-auto cfps-mb-4" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                 <path d="M0 0h24v24H0z" fill="none"></path>
                 <path d="M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10-4.477 10-10 10zm-1-7v2h2v-2h-2zm0-8v6h2V7h-2z" fill="#d4d4d4" class="fill-000000"></path>
             </svg>

@@ -481,7 +481,7 @@ class Woocommerce_Paynocchio {
     public function paynocchio_ajax_top_up()
     {
         $nonce = isset( $_POST['ajax-top-up-nonce'] ) ? sanitize_text_field( $_POST['ajax-top-up-nonce'] ) : '';
-        $amount = isset( $_POST['amount'] ) ? sanitize_text_field( $_POST['amount'] ) : '';
+        $amount = isset( $_POST['amount'] ) ? floatval(sanitize_text_field( $_POST['amount'] )) : '';
         $redirect_url = isset( $_POST['redirect_url'] ) ? sanitize_text_field( $_POST['redirect_url'] ) : '';
 
         if ( ! wp_verify_nonce( $nonce, 'paynocchio_ajax_top_up' ) ) {

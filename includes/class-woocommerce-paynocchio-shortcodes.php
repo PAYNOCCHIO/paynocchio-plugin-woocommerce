@@ -43,6 +43,7 @@ class Woocommerce_Paynocchio_Shortcodes {
         } else {
             require(WOOCOMMERCE_PAYNOCCHIO_PATH . 'views/paynocchio-unapproved.php');
         }
+        return ob_get_clean();
     }
 
     static function paynocchio_modal_forms() {
@@ -53,6 +54,7 @@ class Woocommerce_Paynocchio_Shortcodes {
         } else {
             require(WOOCOMMERCE_PAYNOCCHIO_PATH . 'views/paynocchio-unapproved.php');
         }
+        return ob_get_clean();
     }
 
     static function paynocchio_cart_wallet_widget() {
@@ -63,6 +65,7 @@ class Woocommerce_Paynocchio_Shortcodes {
         } else {
             require(WOOCOMMERCE_PAYNOCCHIO_PATH . 'views/paynocchio-unapproved.php');
         }
+        return ob_get_clean();
     }
 
     static function paynocchio_kopybara_cart_wallet_widget() {
@@ -73,6 +76,7 @@ class Woocommerce_Paynocchio_Shortcodes {
         } else {
             require(WOOCOMMERCE_PAYNOCCHIO_PATH . 'views/paynocchio-unapproved.php');
         }
+        return ob_get_clean();
     }
 
     static function paynocchio_wallet_management_page () {

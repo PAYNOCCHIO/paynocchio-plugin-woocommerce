@@ -354,7 +354,6 @@ class Woocommerce_Paynocchio_Wallet {
                 'minimum_topup_amount' => $json_response->minimum_topup_amount,
                 'bonus_conversion_rate' => $json_response->bonus_conversion_rate,
                 'allow_withdraw' => $json_response->allow_withdraw,
-               // 'full_structure' => $json_response,
                 'rewarding_group' => end($filtered_rewards),
             ];
         }

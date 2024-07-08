@@ -117,7 +117,7 @@ import setTopUpBonuses from "./js/setTopUpBonuses";
     }
 
     function setBalance (balance, bonus) {
-
+        console.log(balance, bonus);
         $('.paynocchio-balance-value').attr('data-balance', balance);
         $('.paynocchio-bonus-value').attr('data-bonus', bonus);
 
@@ -394,6 +394,10 @@ import setTopUpBonuses from "./js/setTopUpBonuses";
         return decodeURIComponent(results[2].replace(/\+/g, ' '));
     }
 
+    function test () {
+        $(document.body).trigger('update_checkout');
+    }
+
     $(document).ready(function() {
         //READY START
         Modal.initElements();
@@ -429,9 +433,9 @@ import setTopUpBonuses from "./js/setTopUpBonuses";
                     elem.fadeIn('fast').addClass('visible');
                 });
             }
-        });*/
+        });
 
-        $('a.card-toggle').click(() => toggleVisibility('.paynocchio-card-container'));
+        $('a.card-toggle').click(() => toggleVisibility('.paynocchio-card-container'));*/
 
         /**
          * Trigger update checkout when payment method changed
@@ -440,13 +444,21 @@ import setTopUpBonuses from "./js/setTopUpBonuses";
             $(document.body).trigger('update_checkout');
         });
 
+        let reward = 0;
+        let value = parseFloat($('#top_up_amount').val());
+        if (calculateReward(value, reducedRules, 'payment_operation_add_money') > 0) {
+            reward = calculateReward(value, reducedRules, 'payment_operation_add_money');
+        }
+        setTopUpBonuses($('#top_up_amount').val(), reward);
+
         $('#top_up_amount').on('keyup change', (evt) => {
+
             let reward = 0;
             let value = parseFloat(evt.target.value);
             if (calculateReward(value, reducedRules, 'payment_operation_add_money') > 0) {
                 reward = calculateReward(value, reducedRules, 'payment_operation_add_money');
             }
-            //setTopUpBonuses(evt.target.value, reward);
+           // setTopUpBonuses(evt.target.value, reward);
 
             let card_balance_limit = parseFloat($('#card_balance_limit').text());
             let balance = parseFloat($('.paynocchio-balance-value').first().text());
@@ -578,8 +590,32 @@ import setTopUpBonuses from "./js/setTopUpBonuses";
             });
 
 
-            $('#top_up_amount').keyup((env) => {
-                setTopUpBonuses(env.target.value, PERCENT)
+            $('#top_up_amount').on('keyup change', (evt) => {
+                let reward = 0;
+                let value = parseFloat(evt.target.value);
+                if (calculateReward(value, reducedRules, 'payment_operation_add_money') > 0) {
+                    reward = calculateReward(value, reducedRules, 'payment_operation_add_money');
+                }
+                setTopUpBonuses(evt.target.value, reward);
+
+                let card_balance_limit = parseFloat($('#card_balance_limit').text());
+                let balance = parseFloat($('.paynocchio-balance-value').first().text());
+
+                if (parseFloat(evt.target.value) + balance > card_balance_limit) {
+                    $('#topup_message').html('When replenishing the amount $' + value + ' the balance limit will exceed the set value $' + card_balance_limit);
+                } else {
+                    if (evt.target.value < parseFloat($('#top_up_amount').attr('min'))) {
+                        $('#top_up_button').attr('disabled','true').addClass('disabled');
+                        $('#topup_message').html('Please enter amount more than minimum replenishment amount.');
+                    } else {
+                        $('#top_up_button').removeAttr('disabled').removeClass('disabled');
+                        if (reward > 0) {
+                            $('#topup_message').html('You will get <span id="bonusesCounter">' + reward + '</span> bonuses.');
+                        } else {
+                            $('#topup_message').html('');
+                        }
+                    }
+                }
             })
 
         });

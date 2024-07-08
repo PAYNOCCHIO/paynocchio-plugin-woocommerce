@@ -10,20 +10,20 @@ if (!defined('ABSPATH')) {
 ?>
 
 <?php
-    $settigns = get_option( 'woocommerce_paynocchio_settings');
+    $settings = get_option( 'woocommerce_paynocchio_settings');
     $accent_color = '#3b82f6';
     $accent_text_color = '#ffffff';
 
     $paynocchio_classes = '';
-    if($settigns) {
-        $paynocchio_classes .= array_key_exists('darkmode', $settigns) && $settigns['darkmode'] == 'yes' ? 'paynocchio_dark_mode ' : '';
-        $paynocchio_classes .= array_key_exists('rounded', $settigns) && $settigns['rounded'] == 'yes' ? 'paynocchio_rounded ' : '';
+    if($settings) {
+        $paynocchio_classes .= array_key_exists('darkmode', $settings) && $settings['darkmode'] == 'yes' ? 'paynocchio_dark_mode ' : '';
+        $paynocchio_classes .= array_key_exists('rounded', $settings) && $settings['rounded'] == 'yes' ? 'paynocchio_rounded ' : '';
 
-        if (array_key_exists('accent_color', $settigns)) {
+        if (array_key_exists('accent_color', $settings)) {
             $accent_color = get_option( 'woocommerce_paynocchio_settings')['accent_color'];
         }
 
-        if (array_key_exists('accent_text_color', $settigns)) {
+        if (array_key_exists('accent_text_color', $settings)) {
             $accent_text_color = get_option( 'woocommerce_paynocchio_settings')['accent_text_color'];
         }
     }
