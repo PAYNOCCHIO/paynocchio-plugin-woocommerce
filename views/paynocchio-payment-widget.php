@@ -95,7 +95,7 @@ if (is_user_logged_in()) {
              if($wallet['bonuses'] < $cart_total) {
                  $max_bonus = $wallet['bonuses'];
              } else {
-                 $max_bonus = $cart_total;
+                 $max_bonus = $cart_total / $wallet['structure']['bonus_conversion_rate'];
              }
             ?>
         <div class="paynocchio-conversion-rate">
