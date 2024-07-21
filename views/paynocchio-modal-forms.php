@@ -116,6 +116,7 @@ if (is_user_logged_in()) {
                     </svg>
                 </button>
                 <div class="message cfps-text-balance" id="topup_message">You will get <span id="bonusesCounter">2</span> bonuses.</div>
+                <div id="commission_message"></div>
             </div>
         </div>
     </div>

@@ -752,6 +752,8 @@ class Woocommerce_Paynocchio {
                     $wallet['status'] = $wallet_bal_bon['status'];
                     $wallet['code'] = $wallet_bal_bon['code'];
                     $wallet['structure'] = $wallet_structure;
+                    $wallet['wallet_percentage_commission'] = 2.9;
+                    $wallet['wallet_fixed_commission'] = 0.3;
                 }
             }
             return $wallet;

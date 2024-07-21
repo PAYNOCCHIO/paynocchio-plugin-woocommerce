@@ -154,6 +154,9 @@ class Woocommerce_Paynocchio_Payment_Gateway extends WC_Payment_Gateway {
         $paynocchio = new Woocommerce_Paynocchio();
         $wallet = $paynocchio->get_paynocchio_wallet_info();
 
+        $wallet_structure = $wallet['structure'];
+        $bonuses_conversion_rate = (float) $wallet_structure['bonus_conversion_rate'];
+
         $fullAmount = $customer_order->total;
         $amount = $customer_order->total;
 
@@ -164,7 +167,7 @@ class Woocommerce_Paynocchio_Payment_Gateway extends WC_Payment_Gateway {
         if(!$bonusAmount) {
             $fullAmount = null;
         } else {
-            $amount = $fullAmount - $bonusAmount;
+            $amount = $fullAmount - $bonusAmount * $bonuses_conversion_rate;
         }
 
         $wallet_response = $user_paynocchio_wallet->getWalletBalance(get_user_meta($customer_order->user_id, PAYNOCCHIO_WALLET_KEY, true));

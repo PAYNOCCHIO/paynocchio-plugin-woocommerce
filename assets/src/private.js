@@ -6,8 +6,12 @@ import setTopUpBonuses from "./js/setTopUpBonuses";
 
 (( $ ) => {
 
-    const PERCENT = 0.1;
+    //const PERCENT = 0.1;
     let rewardingRules;
+    let commissionPercentage;
+    let commissionCoefficient;
+    let commissionFixed;
+    let conversionRate;
 
     $.ajax({
         async: false,
@@ -18,6 +22,10 @@ import setTopUpBonuses from "./js/setTopUpBonuses";
             'action': 'paynocchio_ajax_get_env_structure',
         },
         success: function (wallet_info) {
+            commissionFixed = wallet_info.response.wallet_fixed_commission;
+            commissionPercentage = wallet_info.response.wallet_percentage_commission / 100;
+            commissionCoefficient = 1 - commissionPercentage;
+            conversionRate = wallet_info.response.structure.bonus_conversion_rate;
             rewardingRules = wallet_info.response.structure.rewarding_group.rewarding_rules;
         }
     });
@@ -94,6 +102,22 @@ import setTopUpBonuses from "./js/setTopUpBonuses";
         const value_type = getCurrentRewardRule(rules, amount, type).value_type;
         return value_type === 'percentage' ? Math.floor(amount * (total_value / 100)) : total_value;
     };
+
+    const calculateSumWithCommission = (sum) => {
+        let sumWithCommission = ( sum * parseFloat(commissionCoefficient) - parseFloat(commissionFixed) );
+        //console.log(sumWithCommission);
+        sumWithCommission = (Math.round(sumWithCommission * 100) / 100);
+        //console.log(sumWithCommission);
+        return sumWithCommission;
+    }
+
+    const calculateCommission = (sum) => {
+        let commission = ( sum * parseFloat(commissionPercentage) + parseFloat(commissionFixed) );
+        //console.log(commission);
+        commission = (Math.round(commission * 100) / 100);
+        //console.log(commission);
+        return commission;
+    }
 
     const createWebSocket = (wallet) => {
         let ws = new WebSocket(`wss://wallet.stage.paynocchio.com/ws/wallet-socket/${wallet}`);
@@ -446,25 +470,35 @@ import setTopUpBonuses from "./js/setTopUpBonuses";
 
         let reward = 0;
         let value = parseFloat($('#top_up_amount').val());
-        if (calculateReward(value, reducedRules, 'payment_operation_add_money') > 0) {
-            reward = calculateReward(value, reducedRules, 'payment_operation_add_money');
+        let replenishAmount = calculateSumWithCommission(value);
+        let commissionAmount = calculateCommission(value);
+        if (calculateReward(replenishAmount, reducedRules, 'payment_operation_add_money') > 0) {
+            reward = calculateReward(replenishAmount, reducedRules, 'payment_operation_add_money');
         }
-        setTopUpBonuses($('#top_up_amount').val(), reward);
+        setTopUpBonuses(value, reward, replenishAmount, commissionAmount);
 
         $('#top_up_amount').on('keyup change', (evt) => {
 
             let reward = 0;
             let value = parseFloat(evt.target.value);
-            if (calculateReward(value, reducedRules, 'payment_operation_add_money') > 0) {
-                reward = calculateReward(value, reducedRules, 'payment_operation_add_money');
-            }
+
            // setTopUpBonuses(evt.target.value, reward);
+
+            let replenishAmount = calculateSumWithCommission(value);
+            let commissionAmount = calculateCommission(value);
+
+            console.log(commissionAmount);
+
+            if (calculateReward(replenishAmount, reducedRules, 'payment_operation_add_money') > 0) {
+                reward = calculateReward(replenishAmount, reducedRules, 'payment_operation_add_money');
+            }
 
             let card_balance_limit = parseFloat($('#card_balance_limit').text());
             let balance = parseFloat($('.paynocchio-balance-value').first().text());
 
             if (parseFloat(evt.target.value) + balance > card_balance_limit) {
                 $('#topup_message').html('When replenishing the amount $' + value + ' the balance limit will exceed the set value $' + card_balance_limit);
+                $('#top_up_button').attr('disabled','true').addClass('disabled');
             } else {
                 if (evt.target.value < parseFloat($('#top_up_amount').attr('min'))) {
                     $('#top_up_button').attr('disabled','true').addClass('disabled');
@@ -472,13 +506,24 @@ import setTopUpBonuses from "./js/setTopUpBonuses";
                 } else {
                     $('#top_up_button').removeAttr('disabled').removeClass('disabled');
                     if (reward > 0) {
-                        $('#topup_message').html('You will get <span id="bonusesCounter">' + reward + '</span> bonuses.');
+                        $('#topup_message').html('Your balance will be replenished by $<span id="replenishAmount">' + replenishAmount + '</span>, commission is $<span id="commissionAmount">' + commissionAmount + '</span>. You will get <span id="bonusesCounter">' + reward + '</span> bonuses.');
                     } else {
-                        $('#topup_message').html('');
+                        $('#topup_message').html('Your balance will be replenished by $<span id="replenishAmount">' + replenishAmount + '</span>, commission is $<span id="commissionAmount">' + commissionAmount + '</span>.');
                     }
                 }
             }
         })
+
+        $('.top-up-variants > a').click(function() {
+            let amount = $(this).get(0).id.replace('variant_','');
+            $('#top_up_amount').val(amount);
+            let replenishAmount = calculateSumWithCommission(amount);
+            let commissionAmount = calculateCommission(amount);
+            if (calculateReward(replenishAmount, reducedRules, 'payment_operation_add_money') > 0) {
+                reward = calculateReward(replenishAmount, reducedRules, 'payment_operation_add_money');
+            }
+            setTopUpBonuses(amount, reward, replenishAmount, commissionAmount);
+        });
 
         /**
          * WOOCOMMERCE CHECKOUT SCRIPT
@@ -502,17 +547,74 @@ import setTopUpBonuses from "./js/setTopUpBonuses";
                 $('.woocommerce-notices-wrapper:first-child').prepend('<div class="woocommerce-message" role="alert">Registration complete. Please check your email, then visit this page again.</div>')
             }
 
+            function changeDiscountAmounts (total, bonuses, conversion_rate) {
+                let max_bonuses;
+                let max_bonuses_in_money;
+                let discount;
+                let newprice;
+                let newpricefield = $('#paynocchio_after_discount');
+                let discountfield = $('#paynocchio_discount');
+
+                let paynocchio_payment_bonuses = $('#paynocchio_payment_bonuses');
+
+                if(bonuses * conversion_rate < total) {
+                    max_bonuses = bonuses;
+                    max_bonuses_in_money = bonuses * conversion_rate;
+                } else {
+                    max_bonuses = total / conversion_rate;
+                    max_bonuses_in_money = total;
+                }
+
+                discount = (max_bonuses * conversion_rate * 100 / total).toFixed(2);
+                newprice = (total - max_bonuses_in_money).toFixed(2);
+
+                //console.log(newprice);
+
+                newpricefield.html(newprice);
+                discountfield.html(discount);
+
+                let paymentreward = 0;
+                if (calculateReward(newprice, reducedRules, 'payment_operation_for_services') > 0) {
+                    paymentreward = calculateReward(newprice, reducedRules, 'payment_operation_for_services');
+                    console.log(paymentreward);
+                    paynocchio_payment_bonuses.html((paymentreward).toFixed(0));
+                }
+
+                setTopUpBonuses(value, reward, replenishAmount, commissionAmount);
+
+                if (newprice == total) {
+                    $('.paynocchio_before_discount').hide();
+                    $('.paynocchio_discount').hide();
+                } else {
+                    $('.paynocchio_before_discount').show();
+                    $('.paynocchio_discount').show();
+                }
+
+                if (newprice == 0) {
+                    $('.paynocchio_payment_bonuses').hide();
+                } else {
+                    $('.paynocchio_payment_bonuses').show();
+                }
+            }
+
             // Conversion rate value picker
             const value = $('#bonuses-value');
             const input = $('#bonuses-input');
+            const order_total = parseFloat($('.woocommerce-Price-amount').text().replace('$', ''));
             value.val(input.val());
             input.on('change', function() {
                 value.val(input.val());
+
+                changeDiscountAmounts(parseFloat(order_total), input.val(), parseFloat(conversionRate));
+
                 /* let perc = (input.val()-input.attr('min')/(input.attr('max')-input.attr('min'))*100;
                  input.css('background','linear-gradient(to right, #3b82f6 ' + perc + '%, #f3f4f6 ' + perc + '%)');*/
             })
             value.on('change', function() {
                 input.val(value.val());
+
+                changeDiscountAmounts(parseFloat(order_total), value.val(), parseFloat(conversionRate));
+
                 /* let perc = (input.val()-input.attr('min')/(input.attr('max')-input.attr('min'))*100;
                  input.css('background','linear-gradient(to right, #3b82f6 ' + perc + '%, #f3f4f6 ' + perc + '%)');*/
             })
@@ -520,10 +622,24 @@ import setTopUpBonuses from "./js/setTopUpBonuses";
                 $(this).trigger('change');
             });
 
+            let reward = 0;
+            let topupvalue = parseFloat($('#top_up_amount').val());
+            let replenishAmount = calculateSumWithCommission(topupvalue);
+            let commissionAmount = calculateCommission(topupvalue);
+            if (calculateReward(replenishAmount, reducedRules, 'payment_operation_add_money') > 0) {
+                reward = calculateReward(replenishAmount, reducedRules, 'payment_operation_add_money');
+            }
+            setTopUpBonuses(topupvalue, reward, replenishAmount, commissionAmount);
+
             $('.top-up-variants > a').click(function() {
                 let amount = $(this).get(0).id.replace('variant_','');
                 $('#top_up_amount').val(amount);
-                setTopUpBonuses(amount, PERCENT)
+                let replenishAmount = calculateSumWithCommission(amount);
+                let commissionAmount = calculateCommission(amount);
+                if (calculateReward(replenishAmount, reducedRules, 'payment_operation_add_money') > 0) {
+                    reward = calculateReward(replenishAmount, reducedRules, 'payment_operation_add_money');
+                }
+                setTopUpBonuses(amount, reward, replenishAmount, commissionAmount);
             });
 
             $('.toggle-autodeposit').click(function () {
@@ -557,7 +673,7 @@ import setTopUpBonuses from "./js/setTopUpBonuses";
                 if(place_orderButton && !hidden) {
                     const balance_value = parseFloat($('.paynocchio-balance-value').first().attr('data-balance'));
                     const bonus_value = parseFloat($('.paynocchio-bonus-value').first().attr('data-bonus'));
-                    const order_total = parseFloat($('.woocommerce-Price-amount').text().replace('$', ''))
+                    const order_total = parseFloat($('.woocommerce-Price-amount').text().replace('$', ''));
                     const inputed_bonuses_value = parseFloat($('#bonuses-value').val());
 
                     if( (balance_value + bonus_value) < order_total) {
@@ -589,20 +705,22 @@ import setTopUpBonuses from "./js/setTopUpBonuses";
                 });
             });
 
-
             $('#top_up_amount').on('keyup change', (evt) => {
                 let reward = 0;
                 let value = parseFloat(evt.target.value);
                 if (calculateReward(value, reducedRules, 'payment_operation_add_money') > 0) {
                     reward = calculateReward(value, reducedRules, 'payment_operation_add_money');
                 }
-                setTopUpBonuses(evt.target.value, reward);
+                let replenishAmount = calculateSumWithCommission(value);
+                let commissionAmount = calculateCommission(value);
+                setTopUpBonuses(evt.target.value, reward, replenishAmount, commissionAmount);
 
                 let card_balance_limit = parseFloat($('#card_balance_limit').text());
                 let balance = parseFloat($('.paynocchio-balance-value').first().text());
 
                 if (parseFloat(evt.target.value) + balance > card_balance_limit) {
                     $('#topup_message').html('When replenishing the amount $' + value + ' the balance limit will exceed the set value $' + card_balance_limit);
+                    $('#top_up_button').attr('disabled','true').addClass('disabled');
                 } else {
                     if (evt.target.value < parseFloat($('#top_up_amount').attr('min'))) {
                         $('#top_up_button').attr('disabled','true').addClass('disabled');
@@ -610,9 +728,9 @@ import setTopUpBonuses from "./js/setTopUpBonuses";
                     } else {
                         $('#top_up_button').removeAttr('disabled').removeClass('disabled');
                         if (reward > 0) {
-                            $('#topup_message').html('You will get <span id="bonusesCounter">' + reward + '</span> bonuses.');
+                            $('#topup_message').html('Your balance will be replenished by $<span id="replenishAmount">' + replenishAmount + '</span>, commission is $<span id="commissionAmount">' + commissionAmount + '</span>. You will get <span id="bonusesCounter">' + reward + '</span> bonuses.');
                         } else {
-                            $('#topup_message').html('');
+                            $('#topup_message').html('Your balance will be replenished by $<span id="replenishAmount">' + replenishAmount + '</span>, commission is $<span id="commissionAmount">' + commissionAmount + '</span>.');
                         }
                     }
                 }
