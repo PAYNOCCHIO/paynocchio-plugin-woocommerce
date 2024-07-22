@@ -178,7 +178,7 @@ if (is_user_logged_in()) {
                                     ] );
                                     ?>
                                 </div>
-                                <p class="paynocchio_payment_bonuses">You will get <span id="paynocchio_payment_bonuses"><?php echo round($new_price * 0.1, 2); ?></span> additional bonuses for this purchase.</p>
+                                <p class="paynocchio_payment_bonuses">You will get <span id="paynocchio_payment_bonuses"></span> additional bonuses for this purchase.</p>
                             </div>
                         <?php } ?>
                     </div>

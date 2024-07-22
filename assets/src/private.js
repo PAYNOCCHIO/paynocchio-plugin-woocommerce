@@ -568,15 +568,12 @@ import setTopUpBonuses from "./js/setTopUpBonuses";
                 discount = (max_bonuses * conversion_rate * 100 / total).toFixed(2);
                 newprice = (total - max_bonuses_in_money).toFixed(2);
 
-                //console.log(newprice);
-
                 newpricefield.html(newprice);
                 discountfield.html(discount);
 
                 let paymentreward = 0;
                 if (calculateReward(newprice, reducedRules, 'payment_operation_for_services') > 0) {
                     paymentreward = calculateReward(newprice, reducedRules, 'payment_operation_for_services');
-                    console.log(paymentreward);
                     paynocchio_payment_bonuses.html((paymentreward).toFixed(0));
                 }
 
@@ -602,6 +599,11 @@ import setTopUpBonuses from "./js/setTopUpBonuses";
             const input = $('#bonuses-input');
             const order_total = parseFloat($('.woocommerce-Price-amount').text().replace('$', ''));
             value.val(input.val());
+
+            $(document).ready(function () {
+                changeDiscountAmounts(parseFloat(order_total), input.val(), parseFloat(conversionRate));
+            });
+
             input.on('change', function() {
                 value.val(input.val());
 
