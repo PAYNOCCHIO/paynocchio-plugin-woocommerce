@@ -118,9 +118,13 @@ class Woocommerce_Paynocchio_Wallet {
      *  Get Wallet by ID
      */
     public function getWalletById(string $walletId): array {
-        $url = '/wallet/' . $walletId . '?environment_uuid=' . $this->envId;
+        $data = [
+            PAYNOCCHIO_SECRET_KEY => $this->secret,
+        ];
 
-        return $this->sendRequest('GET', $url);
+        $url = '/wallet/' . $walletId . '?environment_uuid=' . $this->envId . '&user_uuid='. $this->userId;
+
+        return $this->sendRequest('GET', $url, json_encode($data, JSON_UNESCAPED_SLASHES));
     }
 
     /**
