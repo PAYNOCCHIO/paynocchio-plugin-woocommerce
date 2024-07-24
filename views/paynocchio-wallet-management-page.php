@@ -16,12 +16,15 @@
     $minimum_topup_amount = $wallet_structure['minimum_topup_amount'];
     $card_balance_limit = $wallet_structure['card_balance_limit'];
     $rewarding_rules = $wallet_structure['rewarding_group']->rewarding_rules;
+    $allow_withdrawal = $wallet_structure['allow_withdraw'];
 
-   /* echo '<pre>';
+    echo '<pre>';
     print_r($wallet_info);
     echo '123';
-    print_r($rewarding_rules);
-    echo '</pre>';*/
+    //print_r($rewarding_rules);
+    echo '123';
+    print_r($allow_withdrawal);
+    echo '</pre>';
 
     $paynocchio_classes = '';
     $accent_color = '#3b82f6';
@@ -63,7 +66,7 @@
     <?php if ($wallet_info['code'] !== 500) { ?>
         <div class="paynocchio-profile-block <?php echo $paynocchio_rounded_class; ?> <?php echo $paynocchio_darkmode_class; ?> <?php if ($wallet_info['status'] !== 'ACTIVE') { ?>cfps-disabled<?php } ?>">
             <?php if(get_transient('first_time_active')) { ?>
-                <div class="congratz">
+                <div class="congratz cfps-mb-4">
                     <img src="<?php echo plugin_dir_url( WOOCOMMERCE_PAYNOCCHIO_BASENAME ) . 'assets/img/star.webp' ?>" class="!cfps-h-[25px] !cfps-ml-0"/>
                     <div>Congratulations! Now you have the Wallet with which you can return up to 10% in rewards!</div>
                 </div>
@@ -100,17 +103,22 @@
                     <div class="paynocchio-card-number">
                         <div><?php echo chunk_split(strval($wallet_info['card_number']), 4, '</div><div>'); ?></div>
                     </div>
-                    <div class="paynocchio_payment_card_button">
-                        <a href="#" class="<?php echo $paynocchio_rounded_class; ?> paynocchio_button cfps-flex cfps-flex-row cfps-items-center" data-modal=".topUpModal" style="color:<?php echo $accent_color; ?>; background:<?php echo $accent_text_color; ?>">
-                            <svg class="cfps-h-[20px] cfps-w-[20px] cfps-mr-1 cfps-inline-block" enable-background="new 0 0 50 50" version="1.1" viewBox="0 0 50 50" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-                                        <rect fill="none" height="50" width="50"/>
-                                <line fill="none" stroke="#1a85f9" stroke-miterlimit="10" stroke-width="4" x1="9" x2="41" y1="25" y2="25"/>
-                                <line fill="none" stroke="#1a85f9" stroke-miterlimit="10" stroke-width="4" x1="25" x2="25" y1="9" y2="41"/>
-                                    </svg>
-                            Add money
-                        </a>
-                    </div>
                 </div>
+            </div>
+            <div class="paynocchio_account_page_buttons">
+                <a href="#" class="<?php echo $paynocchio_rounded_class; ?> paynocchio_topup cfps-flex cfps-flex-row cfps-items-center" data-modal=".topUpModal" style="background:<?php echo $accent_color; ?>; color:<?php echo $accent_text_color; ?>; border-color:<?php echo $accent_color; ?>;">
+                    <svg class="cfps-h-[20px] cfps-w-[20px] cfps-mr-1 cfps-inline-block" enable-background="new 0 0 50 50" version="1.1" viewBox="0 0 50 50" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                        <rect fill="none" height="50" width="50"/>
+                        <line fill="none" stroke="<?php echo $accent_text_color; ?>" stroke-miterlimit="10" stroke-width="4" x1="9" x2="41" y1="25" y2="25"/>
+                        <line fill="none" stroke="<?php echo $accent_text_color; ?>" stroke-miterlimit="10" stroke-width="4" x1="25" x2="25" y1="9" y2="41"/>
+                    </svg>
+                    Add money
+                </a>
+                <?php if ($allow_withdrawal && $wallet_balance > 0) { ?>
+                <a href="#" class="<?php echo $paynocchio_rounded_class; ?> paynocchio_withdrawal cfps-flex cfps-flex-row cfps-items-center" data-modal=".withdrawModal" style="border-color:<?php echo $accent_color; ?>; color:<?php echo $accent_color; ?>">
+                    Withdraw money
+                </a>
+                <?php } ?>
             </div>
         </div>
         <?php if(isset($wallet_info['status'])) { ?>

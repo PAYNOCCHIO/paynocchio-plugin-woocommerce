@@ -29,12 +29,12 @@ if (is_user_logged_in()) {
     $rewarding_rules = $wallet_structure['rewarding_group']->rewarding_rules;
     $bonuses_conversion_rate = (float) $wallet_structure['bonus_conversion_rate'];
 
-    echo '<pre>';
+   /* echo '<pre>';
     print_r($wallet_info);
     print_r($user_uuid);
     echo '<br />';
     print_r($wallet_uuid);
-    echo '</pre>';
+    echo '</pre>';*/
 ?>
 
 <?php
@@ -79,7 +79,7 @@ if (is_user_logged_in()) {
             <section class="paynocchio <?php echo $paynocchio_classes; ?>">
                 <div class="paynocchio-payment-block">
                     <?php if(get_transient('first_time_active')) { ?>
-                        <div class="congratz !cfps-justify-center">
+                        <div class="congratz cfps-mb-4 !cfps-justify-center">
                             <div>Congratulations! Your Wallet has been activated!</div>
                         </div>
                     <?php } ?>

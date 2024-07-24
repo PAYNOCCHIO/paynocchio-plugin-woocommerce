@@ -116,7 +116,6 @@ if (is_user_logged_in()) {
                     </svg>
                 </button>
                 <div class="message cfps-text-balance" id="topup_message">You will get <span id="bonusesCounter">2</span> bonuses.</div>
-                <div id="commission_message"></div>
             </div>
         </div>
     </div>
@@ -150,7 +149,7 @@ if (is_user_logged_in()) {
                         <path class="cfps-opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                     </svg>
                 </button>
-                <div class="message"></div>
+                <div class="message cfps-text-balance" id="withdraw_message">You will receive a withdrawal for $<span id="withdrawal_amount">0</span>, commission is $<span id="withdrawal_commission_amount">0</span>.</div>
             </div>
         </div>
     </div>

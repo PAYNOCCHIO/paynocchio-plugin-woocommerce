@@ -814,6 +814,18 @@ input[type=range].styled-slider.slider-progress:active::-ms-fill-lower {
     }
 }
 
+.paynocchio_account_page_buttons {
+    @apply cfps-flex cfps-flex-row cfps-flex-wrap cfps-gap-4 cfps-items-center cfps-mt-4 cfps-justify-center;
+
+    .paynocchio_topup {
+        @apply cfps-flex cfps-flex-row cfps-items-center cfps-rounded-lg cfps-inline-block cfps-relative cfps-pr-6 cfps-pl-3 cfps-py-1 cfps-cursor-pointer cfps-text-nowrap cfps-border-2;
+    }
+
+    .paynocchio_withdrawal {
+        @apply cfps-flex cfps-flex-row cfps-items-center cfps-rounded-lg cfps-border-2 cfps-inline-block cfps-relative cfps-pr-4 cfps-pl-4 cfps-py-1 cfps-cursor-pointer cfps-text-nowrap;
+    }
+}
+
 .paynocchio_error_notification {
     @apply cfps-bg-gray-100 cfps-text-black cfps-p-8 cfps-text-center;
 }
