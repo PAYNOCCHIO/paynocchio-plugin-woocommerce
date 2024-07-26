@@ -11,20 +11,20 @@
     $wallet_info = $paynocchio->get_paynocchio_wallet_info();
 
     $wallet_structure = $wallet_info['structure'];
-    $wallet_balance = $wallet_info['balance'];
+    $wallet_balance = round($wallet_info['balance'], 2);
     $wallet_bonuses = $wallet_info['bonuses'];
     $minimum_topup_amount = $wallet_structure['minimum_topup_amount'];
     $card_balance_limit = $wallet_structure['card_balance_limit'];
     $rewarding_rules = $wallet_structure['rewarding_group']->rewarding_rules;
     $allow_withdrawal = $wallet_structure['allow_withdraw'];
 
-    echo '<pre>';
+    /*echo '<pre>';
     print_r($wallet_info);
     echo '123';
     //print_r($rewarding_rules);
     echo '123';
     print_r($allow_withdrawal);
-    echo '</pre>';
+    echo '</pre>';*/
 
     $paynocchio_classes = '';
     $accent_color = '#3b82f6';
@@ -88,7 +88,7 @@
                                 Balance
                             </div>
                             <div class="amount">
-                                $<span class="paynocchio-numbers paynocchio-balance-value" data-balance="<?php echo $wallet_info['balance'] ?>"><?php echo $wallet_info['balance'] ?></span>
+                                $<span class="paynocchio-numbers paynocchio-balance-value" data-balance="<?php echo $wallet_info['balance'] ?>"><?php echo $wallet_balance ?></span>
                             </div>
                         </div>
                         <div class="paynocchio-bonuses">
@@ -96,7 +96,7 @@
                                 Bonuses
                             </div>
                             <div class="amount">
-                                <span class="paynocchio-numbers paynocchio-bonus-value" data-bonus="<?php echo $wallet_info['bonuses'] ?>"><?php echo $wallet_info['bonuses'] ?></span>
+                                <span class="paynocchio-numbers paynocchio-bonus-value" data-bonus="<?php echo $wallet_info['bonuses'] ?>"><?php echo $wallet_bonuses ?></span>
                             </div>
                         </div>
                     </div>

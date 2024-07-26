@@ -28,8 +28,9 @@ class Woocommerce_Paynocchio_Wallet {
 
     private function sendRequest(string $method, string $url, string $body = "", bool $simple = false): array {
         $headers = [
-            'X-API-KEY: X-API-KEY',
+            //'X-API-KEY: X-API-KEY',
             'Content-Type: application/json'
+
         ];
 
         $WPPPG = new Woocommerce_Paynocchio_Payment_Gateway;
@@ -208,15 +209,16 @@ class Woocommerce_Paynocchio_Wallet {
     /**
      *  Make Payment
      */
-    public function makePayment(string $walletId, $fullAmount, $amount, string $orderId, $bonusAmount = null): array {
+    public function makePayment(string $walletId, $fullAmount, $amount, string $orderId, $bonusAmount = null): array
+    {
         $data = [
             PAYNOCCHIO_ENV_KEY => $this->envId,
             PAYNOCCHIO_USER_UUID_KEY => $this->userId,
             PAYNOCCHIO_WALLET_KEY => $walletId,
             "currency" => "USD",
-            'full_amount' => $fullAmount,
-            'amount' => $amount,
-            'external_order_id' => $orderId,
+            "full_amount" => $fullAmount,
+            "amount" => $amount,
+            "external_order_id" => $orderId,
         ];
 
         if ($bonusAmount !== null) {

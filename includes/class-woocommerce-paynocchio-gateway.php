@@ -142,8 +142,6 @@ class Woocommerce_Paynocchio_Payment_Gateway extends WC_Payment_Gateway {
 
         $customer_order = new WC_Order($order_id);
 
-        //$order_id = $customer_order->get_order_number();
-
         $order_uuid = wp_generate_uuid4();
         $customer_order->update_meta_data('order_uuid', $order_uuid);
 
@@ -164,15 +162,13 @@ class Woocommerce_Paynocchio_Payment_Gateway extends WC_Payment_Gateway {
 
         $customer_order->update_meta_data('bonuses_value', $bonusAmount);
 
-        if(!$bonusAmount) {
-            $fullAmount = null;
-        } else {
+        if($bonusAmount) {
             $amount = $fullAmount - $bonusAmount * $bonuses_conversion_rate;
         }
 
         $wallet_response = $user_paynocchio_wallet->getWalletBalance(get_user_meta($customer_order->user_id, PAYNOCCHIO_WALLET_KEY, true));
         $response = $user_paynocchio_wallet->makePayment($user_wallet_id, $fullAmount, $amount, $order_uuid, $bonusAmount);
-
+        print_r($response);
         /*wp_send_json([
             'balance' => $wallet_response['balance'],
             'bonuses' => $wallet_response['bonuses'],
@@ -180,13 +176,13 @@ class Woocommerce_Paynocchio_Payment_Gateway extends WC_Payment_Gateway {
 
         if ($wallet['code'] !== 500) {
 
-            if ($wallet_response['balance'] + $wallet_response['bonuses'] < $customer_order->total) {
+            if ($wallet_response['balance'] + $wallet_response['bonuses'] * $bonuses_conversion_rate < $customer_order->total) {
                 wc_add_notice('You balance is lack for $' . $customer_order->total - $wallet_response['balance'] . '. Please top up your wallet.', 'error');
                 $customer_order->add_order_note('Error: insufficient funds');
                 return;
             }
 
-            if ($wallet_response['balance'] + $wallet_response['bonuses'] >= $customer_order->total && ($wallet_response['balance'] + $bonusAmount) < $customer_order->total) {
+            if ($wallet_response['balance'] + $wallet_response['bonuses'] * $bonuses_conversion_rate >= $customer_order->total && ($wallet_response['balance'] + $bonusAmount * $bonuses_conversion_rate) < $customer_order->total) {
                 wc_add_notice('Please TopUp or use your Bonuses.', 'error');
                 $customer_order->add_order_note('Error: insufficient funds');
                 return;
@@ -214,7 +210,7 @@ class Woocommerce_Paynocchio_Payment_Gateway extends WC_Payment_Gateway {
                     'redirect' => $this->get_return_url($customer_order),
                 );
             } else {
-                //transiction fail
+                //transaction fail
                 wc_add_notice('Please try again.', 'error');
                 $customer_order->add_order_note('Error: ' . json_decode($response['detail'])->msg);
             }

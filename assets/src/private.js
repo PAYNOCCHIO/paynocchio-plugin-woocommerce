@@ -165,12 +165,11 @@ import setTopUpBonuses from "./js/setTopUpBonuses";
             var timer = setInterval(function() {
                 current += increment;
                 let echo = parseFloat(current).toFixed(2);
-                //echo = parseFloat(echo); // remove trailing zero
                 elem.html(echo);
                 i++;
                 if (i == 250) {
                     clearInterval(timer);
-                    elem.html(end);
+                    elem.html(end.toFixed(2));
                 }
             }, stepTime);
         }
@@ -606,19 +605,13 @@ import setTopUpBonuses from "./js/setTopUpBonuses";
 
             input.on('change', function() {
                 value.val(input.val());
-
                 changeDiscountAmounts(parseFloat(order_total), input.val(), parseFloat(conversionRate));
-
-                /* let perc = (input.val()-input.attr('min')/(input.attr('max')-input.attr('min'))*100;
-                 input.css('background','linear-gradient(to right, #3b82f6 ' + perc + '%, #f3f4f6 ' + perc + '%)');*/
+                checkBalance();
             })
             value.on('change', function() {
                 input.val(value.val());
-
                 changeDiscountAmounts(parseFloat(order_total), value.val(), parseFloat(conversionRate));
-
-                /* let perc = (input.val()-input.attr('min')/(input.attr('max')-input.attr('min'))*100;
-                 input.css('background','linear-gradient(to right, #3b82f6 ' + perc + '%, #f3f4f6 ' + perc + '%)');*/
+                checkBalance();
             })
             $('input[type=range]').on('input', function () {
                 $(this).trigger('change');
@@ -678,10 +671,10 @@ import setTopUpBonuses from "./js/setTopUpBonuses";
                     const order_total = parseFloat($('.woocommerce-Price-amount').text().replace('$', ''));
                     const inputed_bonuses_value = parseFloat($('#bonuses-value').val());
 
-                    if( (balance_value + bonus_value) < order_total) {
+                    if ((balance_value + bonus_value * conversionRate) < order_total) {
                         place_orderButton.addClass('cfps-disabled')
                         place_orderButton.text('Please TopUp your Wallet')
-                    } else if ((balance_value + bonus_value) >= order_total && (inputed_bonuses_value + balance_value) < order_total) {
+                    } else if ((balance_value + bonus_value * conversionRate) >= order_total && (inputed_bonuses_value * conversionRate + balance_value) < order_total) {
                         place_orderButton.addClass('cfps-disabled')
                         place_orderButton.text('Please TopUp your Wallet or use your Bonuses')
                     } else {
