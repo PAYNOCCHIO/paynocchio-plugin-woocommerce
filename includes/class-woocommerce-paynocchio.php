@@ -754,6 +754,8 @@ class Woocommerce_Paynocchio {
                     $wallet['structure'] = $wallet_structure;
                     $wallet['wallet_percentage_commission'] = 2.9;
                     $wallet['wallet_fixed_commission'] = 0.3;
+                    $wallet['x-wallet-signature'] = $user_paynocchio_wallet->getSignature();
+                    $wallet['x-company-signature'] = $user_paynocchio_wallet->getSignature(true);
                 }
             }
             return $wallet;

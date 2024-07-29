@@ -103,19 +103,23 @@ import setTopUpBonuses from "./js/setTopUpBonuses";
         return value_type === 'percentage' ? Math.floor(amount * (total_value / 100)) : total_value;
     };
 
+    /*Calculating sum for topup with commission*/
     const calculateSumWithCommission = (sum) => {
         let sumWithCommission = ( sum * parseFloat(commissionCoefficient) - parseFloat(commissionFixed) );
-        //console.log(sumWithCommission);
         sumWithCommission = (Math.round(sumWithCommission * 100) / 100);
-        //console.log(sumWithCommission);
         return sumWithCommission;
+    }
+
+    /*Calculating sum for withdrawal with commission*/
+    const calculateWithdrawalWithCommission = (sum) => {
+        let withdrawalWithCommission = sum - (sum * parseFloat(commissionPercentage)) - parseFloat(commissionFixed);
+        withdrawalWithCommission = (Math.round(withdrawalWithCommission * 100) / 100);
+        return withdrawalWithCommission;
     }
 
     const calculateCommission = (sum) => {
         let commission = ( sum * parseFloat(commissionPercentage) + parseFloat(commissionFixed) );
-        //console.log(commission);
         commission = (Math.round(commission * 100) / 100);
-        //console.log(commission);
         return commission;
     }
 
@@ -141,7 +145,6 @@ import setTopUpBonuses from "./js/setTopUpBonuses";
     }
 
     function setBalance (balance, bonus) {
-        console.log(balance, bonus);
         $('.paynocchio-balance-value').attr('data-balance', balance);
         $('.paynocchio-bonus-value').attr('data-bonus', bonus);
 
@@ -325,11 +328,9 @@ import setTopUpBonuses from "./js/setTopUpBonuses";
         const current_balance = parseFloat($('#witdrawForm .paynocchio-balance-value').text());
 
         if (current_balance < amount) {
-            $('.withdrawModal .message').text('Sorry, can\'t do ;)');
+            $('#withdraw_message').text('Sorry, can\'t do ;)');
             $(evt.target).removeClass('cfps-disabled')
             $(`#${evt.target.id} .cfps-spinner`).addClass('cfps-hidden');
-            /*$('.withdrawModal').hide('fast');
-            $('body').removeClass('paynocchio-modal-open');*/
         } else {
             $.ajax({
                 url: paynocchio_object.ajaxurl,
@@ -443,23 +444,6 @@ import setTopUpBonuses from "./js/setTopUpBonuses";
         blockButton.click((evt) => setWalletStatus(evt, 'BLOCKED'))
         deleteButton.click((evt) => deleteWallet(evt))
 
-        /*$('a.tab-switcher').click(function() {
-            let link = $(this);
-            let id = link.get(0).id;
-            id = id.replace('_toggle','');
-
-            let elem = $('#paynocchio_' + id + '_body');
-            if (!elem.hasClass('visible')) {
-                $('.paynocchio_tab_switchers a').removeClass('choosen');
-                link.addClass('choosen');
-                elem.siblings('.paynocchio-tab-body').removeClass('visible').fadeOut('fast', function () {
-                    elem.fadeIn('fast').addClass('visible');
-                });
-            }
-        });
-
-        $('a.card-toggle').click(() => toggleVisibility('.paynocchio-card-container'));*/
-
         /**
          * Trigger update checkout when payment method changed
          */
@@ -485,8 +469,6 @@ import setTopUpBonuses from "./js/setTopUpBonuses";
 
             let replenishAmount = calculateSumWithCommission(value);
             let commissionAmount = calculateCommission(value);
-
-            console.log(commissionAmount);
 
             if (calculateReward(replenishAmount, reducedRules, 'payment_operation_add_money') > 0) {
                 reward = calculateReward(replenishAmount, reducedRules, 'payment_operation_add_money');
@@ -523,6 +505,31 @@ import setTopUpBonuses from "./js/setTopUpBonuses";
             }
             setTopUpBonuses(amount, reward, replenishAmount, commissionAmount);
         });
+
+        $('#withdraw_amount').on('keyup change', (evt) => {
+
+            let reward = 0;
+            let value = parseFloat(evt.target.value);
+
+            let withdrawAmount = calculateWithdrawalWithCommission(value);
+            let commissionAmount = calculateCommission(value);
+            let minWithdrawAmount = 1;
+
+            let balance = parseFloat($('.paynocchio-balance-value').first().text());
+
+            if (parseFloat(evt.target.value) > balance) {
+                $('#withdraw_message').html('Insufficient funds. Please check the wallet balance.');
+                $('#withdraw_button').attr('disabled','true').addClass('disabled');
+            } else {
+                if (evt.target.value < minWithdrawAmount) {
+                    $('#withdraw_button').attr('disabled','true').addClass('disabled');
+                    $('#withdraw_message').html('Please enter amount more than minimum withdrawal amount.');
+                } else {
+                    $('#withdraw_button').removeAttr('disabled').removeClass('disabled');
+                    $('#withdraw_message').html('You will receive a withdrawal for $<span id="withdrawal_amount">' + withdrawAmount + '</span>, commission is $<span id="withdrawal_commission_amount">' + commissionAmount + '</span>.');
+                }
+            }
+        })
 
         /**
          * WOOCOMMERCE CHECKOUT SCRIPT

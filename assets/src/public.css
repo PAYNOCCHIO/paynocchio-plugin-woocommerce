@@ -776,8 +776,6 @@ input[type=range].styled-slider.slider-progress:active::-ms-fill-lower {
         @apply cfps-rounded-xl cfps-drop-shadow-sm;
     }
 
-
-
     .history_table {
         @apply cfps-rounded-lg cfps-border-[1px] cfps-border-gray-200 cfps-w-full;
 
@@ -862,6 +860,7 @@ input[type=range].styled-slider.slider-progress:active::-ms-fill-lower {
     @apply cfps-max-w-32 !cfps-bg-transparent !cfps-border-0 !cfps-shadow-none cfps-text-3xl !cfps-p-0 focus:!cfps-outline-none;
 }
 
-#top_up_button.disabled {
+#top_up_button.disabled,
+#withdraw_button.disabled{
     @apply cfps-opacity-80;
 }

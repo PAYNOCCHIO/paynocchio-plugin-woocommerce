@@ -21,6 +21,7 @@ if (is_user_logged_in()) {
     $wallet_balance = $wallet_info['balance'];
     $wallet_bonuses = $wallet_info['bonuses'];
     $minimum_topup_amount = $wallet_structure['minimum_topup_amount'];
+    $minimum_withdraw_amount = 1; //TODO: Minimum withdraw amount is not set
     $card_balance_limit = $wallet_structure['card_balance_limit'];
     $rewarding_rules = $wallet_structure['rewarding_group']->rewarding_rules;
 
@@ -130,11 +131,15 @@ if (is_user_logged_in()) {
             <button class="close">&times;</button>
         </div>
         <div id="witdrawForm" class="content">
+            <div class="cfps-mb-4 cfps-text-lg">
+                Please enter the amount you want to withdraw from your wallet. After clicking the "Withdraw" button, the funds will be credited to your Stripe account.
+            </div>
+            <div class="cfps-mb-4">The minimum withdraw amount for this card is $<span id="minimum_topup_amount"><?php echo $minimum_withdraw_amount; ?></span>.</div>
             <div class="cfps-mb-8 cfps-text-xl">Current balance: <span class="cfps-font-semibold">$<span class="paynocchio-numbers paynocchio-balance-value" data-balance="<?php echo $wallet_balance; ?>"><?php echo $wallet_balance; ?></span></span></div>
             <div class="withdraw-amount-container cfps-mb-8 cfps-flex">
                 <p class="cfps-text-3xl">$</p>
                 <input type="number" step="0.01" class="!cfps-bg-transparent !cfps-border-0 !cfps-shadow-none cfps-text-3xl !cfps-p-0 focus:!cfps-outline-none"
-                       name="amount" id="withdraw_amount" placeholder="0" value="0" />
+                       name="amount" id="withdraw_amount" placeholder="0" value="" />
                 <?php wp_nonce_field( 'paynocchio_ajax_withdraw', 'ajax-withdraw-nonce' ); ?>
             </div>
         </div>
@@ -142,14 +147,14 @@ if (is_user_logged_in()) {
             <div>
                 <button id="withdraw_button"
                         type="button"
-                        class="cfps-btn-primary paynocchio_button paynocchio_colored">
+                        class="cfps-btn-primary paynocchio_button paynocchio_colored disabled" disabled="disabled">
                     Withdraw
                     <svg class="cfps-spinner cfps-hidden cfps-animate-spin cfps-ml-4 cfps-h-5 cfps-w-5 cfps-text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                         <circle class="cfps-opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                         <path class="cfps-opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                     </svg>
                 </button>
-                <div class="message cfps-text-balance" id="withdraw_message">You will receive a withdrawal for $<span id="withdrawal_amount">0</span>, commission is $<span id="withdrawal_commission_amount">0</span>.</div>
+                <div class="message cfps-text-balance" id="withdraw_message">Please enter the amount to withdraw.</div>
             </div>
         </div>
     </div>
