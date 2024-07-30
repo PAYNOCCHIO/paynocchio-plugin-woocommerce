@@ -270,6 +270,28 @@ import setTopUpBonuses from "./js/setTopUpBonuses";
     }
 
     /**
+     * Get Structure Calculation
+     * @param evt
+     * @param path
+     */
+    const getStructureCalculation = (amount, operation_type) => {
+        $.ajax({
+            url: paynocchio_object.ajaxurl,
+            type: 'GET',
+            data: {
+                'action': 'paynocchio_ajax_get_structure_calculation',
+                'amount': amount,
+                'operation_type': operation_type,
+            },
+            success: function(data) {
+                console.log(data);
+            }
+        })
+            .error((error) => console.log(error));
+            //.always(() => $(`.paynocchio-profile-actions .cfps-spinner`).addClass('cfps-hidden'));
+    }
+
+    /**
      * Set Wallet Status
      * @param evt
      * @param path
@@ -427,6 +449,8 @@ import setTopUpBonuses from "./js/setTopUpBonuses";
         Modal.initElements();
 
         //initiateWebSocket();
+
+        getStructureCalculation(33, 'payment_operation_add_money');
 
         const topUpButton = $("#top_up_button");
         const topUpButtonMiniForm = $("#top_up_mini_form_button");

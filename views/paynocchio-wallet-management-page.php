@@ -10,8 +10,6 @@
     $paynocchio = new Woocommerce_Paynocchio();
     $wallet_info = $paynocchio->get_paynocchio_wallet_info();
 
-
-
     $wallet_structure = $wallet_info['structure'];
     $wallet_balance = round($wallet_info['balance'], 2);
     $wallet_bonuses = $wallet_info['bonuses'];

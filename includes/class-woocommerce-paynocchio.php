@@ -311,6 +311,8 @@ class Woocommerce_Paynocchio {
 
         $this->loader->add_action( 'wp_ajax_paynocchio_ajax_get_env_structure', $this, 'ajax_paynocchio_wallet_info');
         $this->loader->add_action( 'wp_ajax_nopriv_paynocchio_ajax_get_env_structure', $this, 'ajax_paynocchio_wallet_info');
+        $this->loader->add_action( 'wp_ajax_paynocchio_ajax_get_structure_calculation', $this, 'paynocchio_ajax_structure_calculation');
+        $this->loader->add_action( 'wp_ajax_nopriv_paynocchio_ajax_get_structure_calculation', $this, 'ajax_ajax_paynocchio_structure_calculation');
 
         //TODO Do we need redirect to Checkout?
         //$this->loader->add_action( 'woocommerce_add_to_cart_redirect', $plugin_public, 'redirect_checkout_add_cart' );
@@ -493,14 +495,30 @@ class Woocommerce_Paynocchio {
             wp_die();
         }
 
-         if(get_user_meta($this->user_id, PAYNOCCHIO_WALLET_KEY)) {
-             $wallet = new Woocommerce_Paynocchio_Wallet($this->get_uuid());
-             $wallet_response = $wallet->topUpWallet(get_user_meta($this->user_id, PAYNOCCHIO_WALLET_KEY, true), $amount, $redirect_url);
-         }
+        if(get_user_meta($this->user_id, PAYNOCCHIO_WALLET_KEY)) {
+            $wallet = new Woocommerce_Paynocchio_Wallet($this->get_uuid());
+            $wallet_response = $wallet->topUpWallet(get_user_meta($this->user_id, PAYNOCCHIO_WALLET_KEY, true), $amount, $redirect_url);
+        }
 
         wp_send_json([
             'response' => $wallet_response,
             'amount' => $amount,
+        ]);
+        wp_die();
+    }
+
+    /**
+     * Structure Calculation
+     *
+     * @since    1.0.0
+     */
+    public function paynocchio_ajax_structure_calculation() {
+        $amount = isset( $_POST['amount'] ) ? floatval(sanitize_text_field( $_POST['amount'] )) : '';
+        $redirect_url = isset( $_POST['operation_type'] ) ? sanitize_text_field( $_POST['operation_type'] ) : '';
+
+        $response = $this->get_paynocchio_structure_calculation($amount, $redirect_url);
+        wp_send_json([
+            'response' => $response,
         ]);
         wp_die();
     }
@@ -587,11 +605,10 @@ class Woocommerce_Paynocchio {
             wp_die();
         }
 
-
-         if(get_user_meta($this->user_id, PAYNOCCHIO_WALLET_KEY)) {
-             $wallet = new Woocommerce_Paynocchio_Wallet($this->get_uuid());
-             $wallet_response = $wallet->withdrawFromWallet(get_user_meta($this->user_id, PAYNOCCHIO_WALLET_KEY, true), $amount);
-         }
+        if(get_user_meta($this->user_id, PAYNOCCHIO_WALLET_KEY)) {
+            $wallet = new Woocommerce_Paynocchio_Wallet($this->get_uuid());
+            $wallet_response = $wallet->withdrawFromWallet(get_user_meta($this->user_id, PAYNOCCHIO_WALLET_KEY, true), $amount);
+        }
 
         wp_send_json([
             'response' => $wallet_response
@@ -760,7 +777,16 @@ class Woocommerce_Paynocchio {
             }
             return $wallet;
         }
+    }
 
+    public function get_paynocchio_structure_calculation($amount, $operation_type) {
+        $current_user = wp_get_current_user();
+        /*$user_paynocchio_wallet_id = get_user_meta($current_user->ID, PAYNOCCHIO_WALLET_KEY, true);*/
+        $user_uuid = get_user_meta($current_user->ID, PAYNOCCHIO_USER_UUID_KEY, true);
+
+        $wallet = new Woocommerce_Paynocchio_Wallet($user_uuid);
+        $structure_calculation = $wallet->getStructureCalculation($amount, $operation_type);
+        return $structure_calculation;
     }
 
     public function ajax_paynocchio_wallet_info() {

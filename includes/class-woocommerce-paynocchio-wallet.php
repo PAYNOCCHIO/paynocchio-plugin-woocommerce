@@ -30,7 +30,6 @@ class Woocommerce_Paynocchio_Wallet {
         $headers = [
             //'X-API-KEY: X-API-KEY',
             'Content-Type: application/json'
-
         ];
 
         $WPPPG = new Woocommerce_Paynocchio_Payment_Gateway;
@@ -363,6 +362,29 @@ class Woocommerce_Paynocchio_Wallet {
                 'rewarding_group' => end($filtered_rewards),
             ];
         }
+    }
+
+    public function getStructureCalculation($amount = 33, $operation_type): array
+    {
+        $amount = (float) $amount;
+        $url = '/wallet/structure_calculation?environment_uuid='.$this->envId.'&user_uuid='.$this->userId.'&wallet_uuid='.$this->wallet_uuid().'&amount='.$amount;
+        $response = $this->sendRequest('GET', $url);
+
+        $json_response = json_decode($response['response']);
+
+        if($response['status_code'] === 200) {
+            return [
+                //'response' => $json_response,
+                'conversion_rate' => $json_response['conversion_rate'],
+                'operations_data' => $json_response['operations_data'],
+            ];
+        } else {
+            return [
+                'response' => '404',
+            ];
+        }
+
+        //return $json_response;
     }
 
     /**
