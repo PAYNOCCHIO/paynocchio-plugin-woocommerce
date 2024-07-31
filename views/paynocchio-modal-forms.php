@@ -64,8 +64,8 @@ if (is_user_logged_in()) {
                     <span class="cfps-text-3xl">$</span>
                     <input type="number" name="amount" id="top_up_amount"
                            min="<?php echo $minimum_topup_amount; ?>"
-                           value="<?php echo $minimum_topup_amount; ?>"
-                           step="0.01" placeholder="<?php echo $minimum_topup_amount; ?>"
+                           value="" step="0.01"
+                           placeholder="<?php echo $minimum_topup_amount; ?>"
                     />
                     <input type="hidden" name="redirect_url" value="" />
                     <?php wp_nonce_field( 'paynocchio_ajax_top_up', 'ajax-top-up-nonce' ); ?>
@@ -116,7 +116,7 @@ if (is_user_logged_in()) {
                         <path class="cfps-opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                     </svg>
                 </button>
-                <div class="message cfps-text-balance" id="topup_message">You will get <span id="bonusesCounter">2</span> bonuses.</div>
+                <div class="message cfps-text-balance" id="topup_message">Please enter the amount to top up your wallet.</div>
             </div>
         </div>
     </div>

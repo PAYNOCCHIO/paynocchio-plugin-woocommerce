@@ -364,27 +364,32 @@ class Woocommerce_Paynocchio_Wallet {
         }
     }
 
-    public function getStructureCalculation($amount = 33, $operation_type): array
+    /**
+     * Calculate Commission and bonuses for operations
+     */
+    public function getStructureCalculation($amount, $operation_type): array
     {
-        $amount = (float) $amount;
-        $url = '/wallet/structure_calculation?environment_uuid='.$this->envId.'&user_uuid='.$this->userId.'&wallet_uuid='.$this->wallet_uuid().'&amount='.$amount;
+        $url = '/wallet/structure_calculation?environment_uuid='.$this->envId.'&user_uuid='.$this->userId.'&wallet_uuid='.$this->wallet_uuid().'&amount='.(float) $amount .'&operation_type='. $operation_type;
+
         $response = $this->sendRequest('GET', $url);
-
         $json_response = json_decode($response['response']);
-
         if($response['status_code'] === 200) {
             return [
-                //'response' => $json_response,
                 'conversion_rate' => $json_response->conversion_rate,
                 'operations_data' => $json_response->operations_data,
             ];
+        } elseif ($response['detail'] == 'Not enough balance') {
+            return [
+                'error' => 'Not enough balance',
+                'status' => '400',
+            ];
         } else {
             return [
-                'response' => '404',
+                'error' => 'API Error',
+                'status' => '500',
+                'url' => $url,
             ];
         }
-
-        //return $json_response;
     }
 
     /**

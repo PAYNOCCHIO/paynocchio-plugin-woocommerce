@@ -309,8 +309,8 @@ class Woocommerce_Paynocchio {
         $this->loader->add_action( 'wp_ajax_paynocchio_ajax_withdraw', $this, 'paynocchio_ajax_withdraw');
         $this->loader->add_action( 'wp_ajax_nopriv_paynocchio_ajax_withdraw', $this, 'paynocchio_ajax_withdraw');
 
-        $this->loader->add_action( 'wp_ajax_paynocchio_ajax_get_env_structure', $this, 'ajax_paynocchio_wallet_info');
-        $this->loader->add_action( 'wp_ajax_nopriv_paynocchio_ajax_get_env_structure', $this, 'ajax_paynocchio_wallet_info');
+        $this->loader->add_action( 'wp_ajax_paynocchio_ajax_get_env_structure', $this, 'paynocchio_ajax_wallet_info');
+        $this->loader->add_action( 'wp_ajax_nopriv_paynocchio_ajax_get_env_structure', $this, 'paynocchio_ajax_wallet_info');
         $this->loader->add_action( 'wp_ajax_paynocchio_ajax_get_structure_calculation', $this, 'paynocchio_ajax_structure_calculation');
         $this->loader->add_action( 'wp_ajax_nopriv_paynocchio_ajax_get_structure_calculation', $this, 'ajax_ajax_paynocchio_structure_calculation');
 
@@ -513,8 +513,8 @@ class Woocommerce_Paynocchio {
      * @since    1.0.0
      */
     public function paynocchio_ajax_structure_calculation() {
-        $amount = isset( $_POST['amount'] ) ? floatval(sanitize_text_field( $_POST['amount'] )) : '';
-        $redirect_url = isset( $_POST['operation_type'] ) ? sanitize_text_field( $_POST['operation_type'] ) : '';
+        $amount = isset( $_GET['amount'] ) ? floatval(sanitize_text_field( $_GET['amount'] )) : 0;
+        $redirect_url = isset( $_GET['operation_type'] ) ? sanitize_text_field( $_GET['operation_type'] ) : '';
 
         $response = $this->get_paynocchio_structure_calculation($amount, $redirect_url);
         wp_send_json([
@@ -646,11 +646,17 @@ class Woocommerce_Paynocchio {
              $wallet = new Woocommerce_Paynocchio_Wallet($this->get_uuid());
              $wallet_response = $wallet->getWalletBalance(get_user_meta($this->user_id, PAYNOCCHIO_WALLET_KEY, true));
          }
-
         wp_send_json([
             'response' => $wallet_response
         ]);
+        wp_die();
+    }
 
+    public function paynocchio_ajax_wallet_info() {
+        $wallet_info = $this->get_paynocchio_wallet_info();
+        wp_send_json([
+            'response' => $wallet_info
+        ]);
         wp_die();
     }
 
@@ -741,16 +747,14 @@ class Woocommerce_Paynocchio {
             ];
 
             $current_user = wp_get_current_user();
+            $user_paynocchio_wallet_id = get_user_meta($current_user->ID, PAYNOCCHIO_WALLET_KEY, true);
 
             $wallet['user'] = [
                 'first_name' => $current_user->first_name,
                 'last_name' => $current_user->last_name,
             ];
 
-            $user_paynocchio_wallet_id = get_user_meta($current_user->ID, PAYNOCCHIO_WALLET_KEY, true);
-            $user_uuid = get_user_meta($current_user->ID, PAYNOCCHIO_USER_UUID_KEY, true);
-
-            $user_paynocchio_wallet = new Woocommerce_Paynocchio_Wallet($user_uuid);
+            $user_paynocchio_wallet = new Woocommerce_Paynocchio_Wallet($this->get_uuid());
 
             //$wallet['x-wallet-signature'] = $user_paynocchio_wallet->getSignature();
             //$wallet['x-company-signature'] = $user_paynocchio_wallet->getSignature(true);
@@ -780,21 +784,8 @@ class Woocommerce_Paynocchio {
     }
 
     public function get_paynocchio_structure_calculation($amount, $operation_type) {
-        $current_user = wp_get_current_user();
-        /*$user_paynocchio_wallet_id = get_user_meta($current_user->ID, PAYNOCCHIO_WALLET_KEY, true);*/
-        $user_uuid = get_user_meta($current_user->ID, PAYNOCCHIO_USER_UUID_KEY, true);
-
-        $wallet = new Woocommerce_Paynocchio_Wallet($user_uuid);
-        $structure_calculation = $wallet->getStructureCalculation($amount, $operation_type);
-        return $structure_calculation;
-    }
-
-    public function ajax_paynocchio_wallet_info() {
-        $wallet_info = $this->get_paynocchio_wallet_info();
-        wp_send_json([
-            'response' => $wallet_info
-        ]);
-        wp_die();
+        $wallet = new Woocommerce_Paynocchio_Wallet($this->get_uuid());
+        return $wallet->getStructureCalculation($amount, $operation_type);
     }
 
     /**

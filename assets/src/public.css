@@ -338,7 +338,7 @@
     @apply cfps-flex cfps-justify-start cfps-p-4;
 }
 .modal .container .footer > div {
-    @apply cfps-flex cfps-flex-row cfps-justify-start cfps-items-center cfps-gap-4;
+    @apply cfps-flex cfps-flex-row cfps-justify-start cfps-items-center cfps-gap-4 cfps-w-full;
 }
 .modal .container .footer button {
     @apply paynocchio_button cfps-text-base;
@@ -687,26 +687,6 @@ input[type=range].styled-slider.slider-progress:active::-ms-fill-lower {
     .wallet .bonuses {
         @apply cfps-flex cfps-flex-row cfps-items-center cfps-gap-x-2;
     }
-
-    .wallet .add_money_button {
-        @apply cfps-bg-zinc-300 cfps-rounded-3xl cfps-w-6 cfps-h-6 cfps-leading-6 cfps-text-center cfps-block cfps-ml-2 cfps-cursor-pointer;
-    }
-
-    .topup_mini_form {
-        @apply cfps-hidden cfps-absolute cfps-top-[110%] cfps-right-0;
-    }
-
-    .topup_mini_form input {
-        @apply !cfps-p-0 !cfps-bg-transparent !cfps-shadow-none;
-    }
-
-    .mini_form_top_up_button {
-        @apply cfps-border-0 cfps-py-2 cfps-px-4 cfps-bg-blue-500 cfps-text-white cfps-flex cfps-flex-row;
-    }
-
-    .top_up_mini_form_wrapper {
-        @apply cfps-p-4 cfps-bg-white cfps-drop-shadow cfps-flex cfps-flex-row cfps-items-center cfps-gap-x-2 cfps-justify-between cfps-bg-zinc-100;
-    }
 }
 
 .paynocchio-profile-actions {
@@ -856,11 +836,41 @@ input[type=range].styled-slider.slider-progress:active::-ms-fill-lower {
     @apply cfps-absolute cfps-top-2 cfps-right-2;
 }
 
-#top_up_amount {
+#top_up_amount, #withdraw_amount {
     @apply cfps-max-w-32 !cfps-bg-transparent !cfps-border-0 !cfps-shadow-none cfps-text-3xl !cfps-p-0 focus:!cfps-outline-none;
 }
 
 #top_up_button.disabled,
 #withdraw_button.disabled{
     @apply cfps-opacity-80;
+}
+
+.message {
+    @apply cfps-leading-tight;
+}
+
+.loading {
+    @apply cfps-h-10 cfps-overflow-hidden cfps-indent-[9999px] cfps-text-nowrap cfps-relative;
+}
+
+.loading:before {
+    @apply cfps-content-[''] cfps-bg-gray-200 cfps-h-4 cfps-absolute cfps-top-0 cfps-w-2/3 cfps-rounded cfps-left-0;
+    animation: loading_pulse 1.5s linear infinite;
+}
+
+.loading:after {
+    @apply cfps-content-[''] cfps-bg-gray-200 cfps-h-4 cfps-absolute cfps-bottom-0 cfps-w-1/2 cfps-rounded cfps-left-0;
+    animation: loading_pulse 1.5s linear infinite;
+}
+
+@keyframes loading_pulse {
+    0% {
+        opacity: .2;
+    }
+    50% {
+        opacity: 1;
+    }
+    100% {
+        opacity: .2;
+    }
 }

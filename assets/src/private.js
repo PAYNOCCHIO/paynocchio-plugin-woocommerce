@@ -3,6 +3,7 @@ import './public.css';
 import Modal from './modal'
 import './topUpFormProcess'
 import setTopUpBonuses from "./js/setTopUpBonuses";
+import debounce from "./js/debounce";
 
 (( $ ) => {
 
@@ -27,6 +28,7 @@ import setTopUpBonuses from "./js/setTopUpBonuses";
             commissionCoefficient = 1 - commissionPercentage;
             conversionRate = wallet_info.response.structure.bonus_conversion_rate;
             rewardingRules = wallet_info.response.structure.rewarding_group.rewarding_rules;
+            console.log(wallet_info);
         }
     });
 
@@ -103,11 +105,31 @@ import setTopUpBonuses from "./js/setTopUpBonuses";
         return value_type === 'percentage' ? Math.floor(amount * (total_value / 100)) : total_value;
     };
 
+    /* Calculating commission amount and bonuses for topup with commission */
+    const calculateCommissionAndBonuses = (amount, serv_calculation, operation_type) => {
+        if (serv_calculation && serv_calculation === true && operation_type) {
+            getStructureCalculation(amount, operation_type);
+        } else {
+            let sumWithCommission = ( amount * parseFloat(commissionCoefficient) - parseFloat(commissionFixed) );
+            sumWithCommission = (Math.round(sumWithCommission * 100) / 100);
+            let commission = ( amount * parseFloat(commissionPercentage) + parseFloat(commissionFixed) );
+            commission = (Math.round(commission * 100) / 100);
+            let withdrawalWithCommission = amount - (amount * parseFloat(commissionPercentage)) - parseFloat(commissionFixed);
+            withdrawalWithCommission = (Math.round(withdrawalWithCommission * 100) / 100);
+        }
+    }
+
+
+
     /*Calculating sum for topup with commission*/
-    const calculateSumWithCommission = (sum) => {
-        let sumWithCommission = ( sum * parseFloat(commissionCoefficient) - parseFloat(commissionFixed) );
-        sumWithCommission = (Math.round(sumWithCommission * 100) / 100);
-        return sumWithCommission;
+    const calculateSumWithCommission = (sum, api, type) => {
+        if (api && api === true && type) {
+            getStructureCalculation(sum, type);
+        } else {
+            let sumWithCommission = ( sum * parseFloat(commissionCoefficient) - parseFloat(commissionFixed) );
+            sumWithCommission = (Math.round(sumWithCommission * 100) / 100);
+            return sumWithCommission;
+        }
     }
 
     /*Calculating sum for withdrawal with commission*/
@@ -232,41 +254,54 @@ import setTopUpBonuses from "./js/setTopUpBonuses";
     }
 
     /**
-     * Wallet TopUp function for MiniForm in Widget
-     * @param evt
-     * @param path
+     * Withdraw from Wallet
      */
-    const topUpWalletMiniForm = (evt) => {
-        $(`.topup_mini_form .cfps-spinner`).removeClass('cfps-hidden');
-        $(`.topup_mini_form .cfps-check`).addClass('cfps-hidden');
-        $(`.topup_mini_form .cfps-cross`).addClass('cfps-hidden');
+
+    const withdrawWallet = (evt) => {
+
+        if(!$('#withdraw_amount').val()) {
+            $('.withdrawModal .message').html('Please enter amount!');
+            return;
+        }
         $(evt.target).addClass('cfps-disabled')
 
-        $.ajax({
-            url: paynocchio_object.ajaxurl,
-            type: 'POST',
-            data: {
-                'action': 'paynocchio_ajax_top_up',
-                'ajax-top-up-nonce': $('#ajax-top-up-nonce-mini-form').val(),
-                'amount': $('#top_up_amount_mini_form').val(),
-                'redirect_url': window.location.href,
-            },
-            success: function(data){
-                if (data.response.status_code === 200) {
-                    window.location.replace(JSON.parse(data.response.response).schemas.url)
-                } else {
-                    alert(data.response.response)
-                }
-            }
-        })
-        .error(function () {
-            (error) => console.log(error);
-            $(`.topup_mini_form .cfps-cross`).removeClass('cfps-hidden');
-        })
-        .always(function() {
-            $(`.topup_mini_form .cfps-spinner`).addClass('cfps-hidden');
+        $(`#${evt.target.id} .cfps-spinner`).removeClass('cfps-hidden');
+
+        const amount = parseFloat($('#withdraw_amount').val());
+        const current_balance = parseFloat($('#witdrawForm .paynocchio-balance-value').text());
+
+        if (current_balance < amount) {
+            $('#withdraw_message').text('Sorry, can\'t do ;)');
             $(evt.target).removeClass('cfps-disabled')
-        });
+            $(`#${evt.target.id} .cfps-spinner`).addClass('cfps-hidden');
+        } else {
+            $.ajax({
+                url: paynocchio_object.ajaxurl,
+                type: 'POST',
+                data: {
+                    'action': 'paynocchio_ajax_withdraw',
+                    'ajax-withdraw-nonce': $('#ajax-withdraw-nonce').val(),
+                    'amount' : parseFloat($('#withdraw_amount').val()),
+                },
+                success: function(data){
+                    if (data.response.status_code === 200){
+                        $('#withdraw_amount').val('');
+                        $('.withdrawModal .message').text('Success!');
+                        updateWalletBalance();
+                        updateOrderButtonState();
+                        $('.withdrawModal').delay(1000).fadeOut('fast')
+                        $('body').removeClass('paynocchio-modal-open');
+                    } else {
+                        $('.withdrawModal .message').text('An error occurred. Please reload page and try again!');
+                    }
+                }
+            })
+                .error((error) => console.log(error))
+                .always(function() {
+                    $(`#${evt.target.id} .cfps-spinner`).addClass('cfps-hidden');
+                    $(evt.target).removeClass('cfps-disabled')
+                });
+        }
     }
 
     /**
@@ -280,15 +315,37 @@ import setTopUpBonuses from "./js/setTopUpBonuses";
             type: 'GET',
             data: {
                 'action': 'paynocchio_ajax_get_structure_calculation',
-                'amount': amount,
+                'amount': parseFloat(amount),
                 'operation_type': operation_type,
             },
             success: function(data) {
                 console.log(data);
+                if (!data.response.error) {
+                    let commission = data.response.operations_data[0].commission_amount;
+                    let sumWithCommission = data.response.operations_data[0].full_amount;
+                    let bonusesToAdd = data.response.operations_data[0].bonuses_amount;
+
+                    if (operation_type == "payment_operation_add_money") {
+                        if (bonusesToAdd > 0) {
+                            $('#topup_message').html('Your balance will be replenished by $<span id="replenishAmount">' + sumWithCommission + '</span>, commission is $<span id="commissionAmount">' + commission + '</span>. You will get <span id="bonusesCounter">' + bonusesToAdd + '</span> bonuses.');
+                        } else {
+                            $('#topup_message').html('Your balance will be replenished by $<span id="replenishAmount">' + sumWithCommission + '</span>, commission is $<span id="commissionAmount">' + commission + '</span>.');
+                        }
+                        $('#topup_message').removeClass('loading');
+                    } else if (operation_type == "payment_operation_withdraw") {
+                        $('#withdraw_message').html('You will receive a withdrawal for $<span id="withdrawal_amount">' + sumWithCommission + '</span>, commission is $<span id="withdrawal_commission_amount">' + commission + '</span>.');
+                        $('#withdraw_message').removeClass('loading');
+                    } else if (operation_type == "payment_operation_for_services") {
+                        console.log(data.response);
+                        $('#paynocchio_payment_bonuses').html('You will get additional ' + bonusesToAdd + ' bonuses for this purchase.');
+                        $('#paynocchio_payment_bonuses').removeClass('loading');
+                    }
+                } else {
+
+                }
             }
         })
             .error((error) => console.log(error));
-            //.always(() => $(`.paynocchio-profile-actions .cfps-spinner`).addClass('cfps-hidden'));
     }
 
     /**
@@ -335,52 +392,6 @@ import setTopUpBonuses from "./js/setTopUpBonuses";
             success: (data) => $(window.location.reload())
         })
             .error((error) => console.log(error));
-    }
-
-    /**
-     * Withdraw from Wallet
-     */
-
-    const withdrawWallet = (evt) => {
-        $(evt.target).addClass('cfps-disabled')
-
-        $(`#${evt.target.id} .cfps-spinner`).removeClass('cfps-hidden');
-
-        const amount = parseFloat($('#withdraw_amount').val());
-        const current_balance = parseFloat($('#witdrawForm .paynocchio-balance-value').text());
-
-        if (current_balance < amount) {
-            $('#withdraw_message').text('Sorry, can\'t do ;)');
-            $(evt.target).removeClass('cfps-disabled')
-            $(`#${evt.target.id} .cfps-spinner`).addClass('cfps-hidden');
-        } else {
-            $.ajax({
-                url: paynocchio_object.ajaxurl,
-                type: 'POST',
-                data: {
-                    'action': 'paynocchio_ajax_withdraw',
-                    'ajax-withdraw-nonce': $('#ajax-withdraw-nonce').val(),
-                    'amount' : parseFloat($('#withdraw_amount').val()),
-                },
-                success: function(data){
-                    if (data.response.status_code === 200){
-                        $('#withdraw_amount').val('');
-                        $('.withdrawModal .message').text('Success!');
-                        updateWalletBalance();
-                        updateOrderButtonState();
-                        $('.withdrawModal').delay(1000).fadeOut('fast')
-                        $('body').removeClass('paynocchio-modal-open');
-                    } else {
-                        $('.withdrawModal .message').text('An error occurred. Please reload page and try again!');
-                    }
-                }
-            })
-                .error((error) => console.log(error))
-                .always(function() {
-                    $(`#${evt.target.id} .cfps-spinner`).addClass('cfps-hidden');
-                    $(evt.target).removeClass('cfps-disabled')
-                });
-        }
     }
 
     /**
@@ -440,20 +451,97 @@ import setTopUpBonuses from "./js/setTopUpBonuses";
         return decodeURIComponent(results[2].replace(/\+/g, ' '));
     }
 
-    function test () {
-        $(document.body).trigger('update_checkout');
+    function debounce(func, debounseTime) {
+        let timeout;
+        return function (...args) {
+            clearTimeout(timeout);
+            timeout = setTimeout(() => func.apply(this, args), debounseTime);
+        };
     }
 
+    const debounceTime = 500;
+    const debouncedTopupFunction = debounce((value,balance,card_balance_limit) => {
+        if (parseFloat(value) + balance > card_balance_limit) {
+            $('#topup_message').html('When replenishing the amount $' + value + ' the balance limit will exceed the set value $' + card_balance_limit);
+            $('#top_up_button').attr('disabled','true').addClass('disabled');
+            $('#topup_message').removeClass('loading');
+        } else {
+            if (value < parseFloat($('#top_up_amount').attr('min'))) {
+                $('#top_up_button').attr('disabled','true').addClass('disabled');
+                $('#topup_message').html('Please enter amount more than minimum replenishment amount.');
+                $('#topup_message').removeClass('loading');
+            } else {
+                $('#top_up_button').removeAttr('disabled').removeClass('disabled');
+                calculateCommissionAndBonuses(value, true, 'payment_operation_add_money');
+            }
+        }
+    }, debounceTime);
+
+    const debouncedWithdrawFunction = debounce((value,balance,minWithdrawAmount) => {
+        if (parseFloat(value) > balance) {
+            $('#withdraw_message').html('Insufficient funds. Please check the wallet balance.');
+            $('#withdraw_button').attr('disabled','true').addClass('disabled');
+            $('#withdraw_message').removeClass('loading');
+        } else {
+            if (value < minWithdrawAmount) {
+                $('#withdraw_button').attr('disabled','true').addClass('disabled');
+                $('#withdraw_message').html('Please enter amount more than minimum withdrawal amount.');
+                $('#withdraw_message').removeClass('loading');
+            } else {
+                $('#withdraw_button').removeAttr('disabled').removeClass('disabled');
+                calculateCommissionAndBonuses(value, true, 'payment_operation_withdraw');
+            }
+        }
+    }, debounceTime);
+
+    // Payment calculations
+    const debouncedPaymentCalculation = debounce((total, bonuses, conversion_rate) => {
+        let max_bonuses;
+        let max_bonuses_in_money;
+        let discount;
+        let newprice;
+        let newpricefield = $('#paynocchio_after_discount');
+        let discountfield = $('#paynocchio_discount');
+
+        let paynocchio_payment_bonuses = $('#paynocchio_payment_bonuses');
+
+        if(bonuses * conversion_rate < total) {
+            max_bonuses = bonuses;
+            max_bonuses_in_money = bonuses * conversion_rate;
+        } else {
+            max_bonuses = total / conversion_rate;
+            max_bonuses_in_money = total;
+        }
+
+        discount = (max_bonuses * conversion_rate * 100 / total).toFixed(2);
+        newprice = (total - max_bonuses_in_money).toFixed(2);
+
+        newpricefield.html(newprice);
+        discountfield.html(discount);
+
+        calculateCommissionAndBonuses(newprice, true, 'payment_operation_for_services');
+
+        if (newprice != 0) {
+            $('.paynocchio_payment_bonuses').show();
+        } else {
+            $('.paynocchio_payment_bonuses').hide();
+        }
+
+        if (newprice == total) {
+            $('.paynocchio_before_discount').hide();
+            $('.paynocchio_discount').hide();
+        } else {
+            $('.paynocchio_before_discount').show();
+            $('.paynocchio_discount').show();
+        }
+    }, debounceTime);
+
     $(document).ready(function() {
-        //READY START
         Modal.initElements();
 
         //initiateWebSocket();
 
-        getStructureCalculation(33, 'payment_operation_add_money');
-
         const topUpButton = $("#top_up_button");
-        const topUpButtonMiniForm = $("#top_up_mini_form_button");
         const withdrawButton = $("#withdraw_button");
         const suspendButton = $("#suspend_button");
         const activateButton = $("#reactivate_button");
@@ -461,7 +549,6 @@ import setTopUpBonuses from "./js/setTopUpBonuses";
         const deleteButton = $("#delete_button");
 
         topUpButton.click((evt) => topUpWallet(evt))
-        topUpButtonMiniForm.click((evt) => topUpWalletMiniForm(evt))
         withdrawButton.click((evt) => withdrawWallet(evt))
         suspendButton.click((evt) => setWalletStatus(evt, 'SUSPEND'))
         activateButton.click((evt) => setWalletStatus(evt, 'ACTIVE'))
@@ -475,84 +562,27 @@ import setTopUpBonuses from "./js/setTopUpBonuses";
             $(document.body).trigger('update_checkout');
         });
 
-        let reward = 0;
-        let value = parseFloat($('#top_up_amount').val());
-        let replenishAmount = calculateSumWithCommission(value);
-        let commissionAmount = calculateCommission(value);
-        if (calculateReward(replenishAmount, reducedRules, 'payment_operation_add_money') > 0) {
-            reward = calculateReward(replenishAmount, reducedRules, 'payment_operation_add_money');
-        }
-        setTopUpBonuses(value, reward, replenishAmount, commissionAmount);
-
         $('#top_up_amount').on('keyup change', (evt) => {
-
-            let reward = 0;
-            let value = parseFloat(evt.target.value);
-
-           // setTopUpBonuses(evt.target.value, reward);
-
-            let replenishAmount = calculateSumWithCommission(value);
-            let commissionAmount = calculateCommission(value);
-
-            if (calculateReward(replenishAmount, reducedRules, 'payment_operation_add_money') > 0) {
-                reward = calculateReward(replenishAmount, reducedRules, 'payment_operation_add_money');
-            }
-
             let card_balance_limit = parseFloat($('#card_balance_limit').text());
             let balance = parseFloat($('.paynocchio-balance-value').first().text());
-
-            if (parseFloat(evt.target.value) + balance > card_balance_limit) {
-                $('#topup_message').html('When replenishing the amount $' + value + ' the balance limit will exceed the set value $' + card_balance_limit);
-                $('#top_up_button').attr('disabled','true').addClass('disabled');
-            } else {
-                if (evt.target.value < parseFloat($('#top_up_amount').attr('min'))) {
-                    $('#top_up_button').attr('disabled','true').addClass('disabled');
-                    $('#topup_message').html('Please enter amount more than minimum replenishment amount.');
-                } else {
-                    $('#top_up_button').removeAttr('disabled').removeClass('disabled');
-                    if (reward > 0) {
-                        $('#topup_message').html('Your balance will be replenished by $<span id="replenishAmount">' + replenishAmount + '</span>, commission is $<span id="commissionAmount">' + commissionAmount + '</span>. You will get <span id="bonusesCounter">' + reward + '</span> bonuses.');
-                    } else {
-                        $('#topup_message').html('Your balance will be replenished by $<span id="replenishAmount">' + replenishAmount + '</span>, commission is $<span id="commissionAmount">' + commissionAmount + '</span>.');
-                    }
-                }
-            }
+            let value = parseFloat(evt.target.value);
+            $('#topup_message').addClass('loading');
+            debouncedTopupFunction(value,balance,card_balance_limit);
         })
 
         $('.top-up-variants > a').click(function() {
             let amount = $(this).get(0).id.replace('variant_','');
             $('#top_up_amount').val(amount);
-            let replenishAmount = calculateSumWithCommission(amount);
-            let commissionAmount = calculateCommission(amount);
-            if (calculateReward(replenishAmount, reducedRules, 'payment_operation_add_money') > 0) {
-                reward = calculateReward(replenishAmount, reducedRules, 'payment_operation_add_money');
-            }
-            setTopUpBonuses(amount, reward, replenishAmount, commissionAmount);
+            $('#topup_message').addClass('loading');
+            calculateCommissionAndBonuses(amount, true, 'payment_operation_add_money');
         });
 
         $('#withdraw_amount').on('keyup change', (evt) => {
-
-            let reward = 0;
-            let value = parseFloat(evt.target.value);
-
-            let withdrawAmount = calculateWithdrawalWithCommission(value);
-            let commissionAmount = calculateCommission(value);
             let minWithdrawAmount = 1;
-
             let balance = parseFloat($('.paynocchio-balance-value').first().text());
-
-            if (parseFloat(evt.target.value) > balance) {
-                $('#withdraw_message').html('Insufficient funds. Please check the wallet balance.');
-                $('#withdraw_button').attr('disabled','true').addClass('disabled');
-            } else {
-                if (evt.target.value < minWithdrawAmount) {
-                    $('#withdraw_button').attr('disabled','true').addClass('disabled');
-                    $('#withdraw_message').html('Please enter amount more than minimum withdrawal amount.');
-                } else {
-                    $('#withdraw_button').removeAttr('disabled').removeClass('disabled');
-                    $('#withdraw_message').html('You will receive a withdrawal for $<span id="withdrawal_amount">' + withdrawAmount + '</span>, commission is $<span id="withdrawal_commission_amount">' + commissionAmount + '</span>.');
-                }
-            }
+            let value = parseFloat(evt.target.value);
+            $('#withdraw_message').addClass('loading');
+            debouncedWithdrawFunction(value,balance,minWithdrawAmount);
         })
 
         /**
@@ -564,65 +594,33 @@ import setTopUpBonuses from "./js/setTopUpBonuses";
             Modal.initElements();
 
             const topUpButton = $("#top_up_button");
-            const withdrawButton = $("#withdraw_button");
+            //const withdrawButton = $("#withdraw_button");
 
             topUpButton.click((evt) => topUpWallet(evt))
-            withdrawButton.click((evt) => withdrawWallet(evt))
+            //withdrawButton.click((evt) => withdrawWallet(evt))
 
             updateWalletBalance();
 
+            // Registration complete congratz //
             const ans = getParameterByName('ans');
-
             if (ans) {
                 $('.woocommerce-notices-wrapper:first-child').prepend('<div class="woocommerce-message" role="alert">Registration complete. Please check your email, then visit this page again.</div>')
             }
 
-            function changeDiscountAmounts (total, bonuses, conversion_rate) {
-                let max_bonuses;
-                let max_bonuses_in_money;
-                let discount;
-                let newprice;
-                let newpricefield = $('#paynocchio_after_discount');
-                let discountfield = $('#paynocchio_discount');
-
-                let paynocchio_payment_bonuses = $('#paynocchio_payment_bonuses');
-
-                if(bonuses * conversion_rate < total) {
-                    max_bonuses = bonuses;
-                    max_bonuses_in_money = bonuses * conversion_rate;
-                } else {
-                    max_bonuses = total / conversion_rate;
-                    max_bonuses_in_money = total;
-                }
-
-                discount = (max_bonuses * conversion_rate * 100 / total).toFixed(2);
-                newprice = (total - max_bonuses_in_money).toFixed(2);
-
-                newpricefield.html(newprice);
-                discountfield.html(discount);
-
-                let paymentreward = 0;
-                if (calculateReward(newprice, reducedRules, 'payment_operation_for_services') > 0) {
-                    paymentreward = calculateReward(newprice, reducedRules, 'payment_operation_for_services');
-                    paynocchio_payment_bonuses.html((paymentreward).toFixed(0));
-                }
-
-                setTopUpBonuses(value, reward, replenishAmount, commissionAmount);
-
-                if (newprice == total) {
-                    $('.paynocchio_before_discount').hide();
-                    $('.paynocchio_discount').hide();
-                } else {
-                    $('.paynocchio_before_discount').show();
-                    $('.paynocchio_discount').show();
-                }
-
-                if (newprice == 0) {
-                    $('.paynocchio_payment_bonuses').hide();
-                } else {
-                    $('.paynocchio_payment_bonuses').show();
-                }
-            }
+            // Topup calculations //
+            $('#top_up_amount').on('keyup change', (evt) => {
+                let card_balance_limit = parseFloat($('#card_balance_limit').text());
+                let balance = parseFloat($('.paynocchio-balance-value').first().text());
+                let value = parseFloat(evt.target.value);
+                $('#topup_message').addClass('loading');
+                debouncedTopupFunction(value,balance,card_balance_limit);
+            })
+            $('.top-up-variants > a').click(function() {
+                let amount = $(this).get(0).id.replace('variant_','');
+                $('#top_up_amount').val(amount);
+                $('#topup_message').addClass('loading');
+                calculateCommissionAndBonuses(amount, true, 'payment_operation_add_money');
+            });
 
             // Conversion rate value picker
             const value = $('#bonuses-value');
@@ -631,41 +629,24 @@ import setTopUpBonuses from "./js/setTopUpBonuses";
             value.val(input.val());
 
             $(document).ready(function () {
-                changeDiscountAmounts(parseFloat(order_total), input.val(), parseFloat(conversionRate));
+                $('#paynocchio_payment_bonuses').addClass('loading');
+                debouncedPaymentCalculation(parseFloat(order_total), input.val(), parseFloat(conversionRate));
             });
 
             input.on('change', function() {
                 value.val(input.val());
-                changeDiscountAmounts(parseFloat(order_total), input.val(), parseFloat(conversionRate));
+                $('#paynocchio_payment_bonuses').addClass('loading');
+                debouncedPaymentCalculation(parseFloat(order_total), input.val(), parseFloat(conversionRate));
                 checkBalance();
             })
             value.on('change', function() {
                 input.val(value.val());
-                changeDiscountAmounts(parseFloat(order_total), value.val(), parseFloat(conversionRate));
+                $('#paynocchio_payment_bonuses').addClass('loading');
+                debouncedPaymentCalculation(parseFloat(order_total), input.val(), parseFloat(conversionRate));
                 checkBalance();
             })
             $('input[type=range]').on('input', function () {
                 $(this).trigger('change');
-            });
-
-            let reward = 0;
-            let topupvalue = parseFloat($('#top_up_amount').val());
-            let replenishAmount = calculateSumWithCommission(topupvalue);
-            let commissionAmount = calculateCommission(topupvalue);
-            if (calculateReward(replenishAmount, reducedRules, 'payment_operation_add_money') > 0) {
-                reward = calculateReward(replenishAmount, reducedRules, 'payment_operation_add_money');
-            }
-            setTopUpBonuses(topupvalue, reward, replenishAmount, commissionAmount);
-
-            $('.top-up-variants > a').click(function() {
-                let amount = $(this).get(0).id.replace('variant_','');
-                $('#top_up_amount').val(amount);
-                let replenishAmount = calculateSumWithCommission(amount);
-                let commissionAmount = calculateCommission(amount);
-                if (calculateReward(replenishAmount, reducedRules, 'payment_operation_add_money') > 0) {
-                    reward = calculateReward(replenishAmount, reducedRules, 'payment_operation_add_money');
-                }
-                setTopUpBonuses(amount, reward, replenishAmount, commissionAmount);
             });
 
             $('.toggle-autodeposit').click(function () {
