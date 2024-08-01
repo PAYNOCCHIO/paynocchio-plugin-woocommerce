@@ -28,7 +28,7 @@ import debounce from "./js/debounce";
             commissionCoefficient = 1 - commissionPercentage;
             conversionRate = wallet_info.response.structure.bonus_conversion_rate;
             rewardingRules = wallet_info.response.structure.rewarding_group.rewarding_rules;
-            console.log(wallet_info);
+            //console.log(wallet_info);
         }
     });
 
@@ -522,9 +522,9 @@ import debounce from "./js/debounce";
         calculateCommissionAndBonuses(newprice, true, 'payment_operation_for_services');
 
         if (newprice != 0) {
-            $('.paynocchio_payment_bonuses').show();
+            paynocchio_payment_bonuses.show();
         } else {
-            $('.paynocchio_payment_bonuses').hide();
+            paynocchio_payment_bonuses.hide();
         }
 
         if (newprice == total) {

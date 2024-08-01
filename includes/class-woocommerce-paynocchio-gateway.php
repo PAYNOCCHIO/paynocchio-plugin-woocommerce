@@ -188,7 +188,7 @@ class Woocommerce_Paynocchio_Payment_Gateway extends WC_Payment_Gateway {
                 return;
             }
 
-            if ($response['status_code'] === 200) {
+            if ($response['status_code'] === 200 && json_decode($response['response'])->type_interactions == 'success.interaction') {
 
                 // Payment successful
                 $customer_order->add_order_note(__('Paynocchio complete payment.', 'paynocchio'));
@@ -204,7 +204,7 @@ class Woocommerce_Paynocchio_Payment_Gateway extends WC_Payment_Gateway {
                 // this is important part for empty cart
                 $woocommerce->cart->empty_cart();
                 // Redirect to thank you page
-                //print_r($bonusAmount);
+                // print_r($bonusAmount);
                 return array(
                     'result' => 'success',
                     'redirect' => $this->get_return_url($customer_order),
@@ -212,7 +212,12 @@ class Woocommerce_Paynocchio_Payment_Gateway extends WC_Payment_Gateway {
             } else {
                 //transaction fail
                 wc_add_notice('Please try again.', 'error');
-                $customer_order->add_order_note('Error: ' . json_decode($response['detail'])->msg);
+                if (json_decode($response['detail'])->msg) {
+                    $customer_order->add_order_note('Error: ' . json_decode($response['detail'])->msg);
+                }
+                if (json_decode($response['response'])->type_interactions) {
+                    $customer_order->add_order_note('Error: ' . json_decode($response['response'])->type_interactions .', '.json_decode($response['response'])->schemas->message);
+                }
             }
         } else {
             wc_add_notice('An error in the operation of the wallet system. Please contact support.', 'error');
