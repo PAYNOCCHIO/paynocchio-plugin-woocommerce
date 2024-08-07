@@ -783,10 +783,99 @@ class Woocommerce_Paynocchio {
         }
     }
 
+    /**
+     * Get the current bonuses and commission calculation
+     *
+     * @since    1.0.0
+     */
     public function get_paynocchio_structure_calculation($amount, $operation_type) {
         $wallet = new Woocommerce_Paynocchio_Wallet($this->get_uuid());
         return $wallet->getStructureCalculation($amount, $operation_type);
     }
+
+    /**
+     * Get the current bonuses and commission calculation for anonymous user
+     *
+     * @since    1.0.0
+     */
+    public function get_benefits_calculation($amount, string $operation_type = null) {
+        if (!is_user_logged_in()) {
+            $user_uuid = wp_generate_uuid4();
+        } else {
+            $user_uuid = get_user_meta(get_current_user_id(), PAYNOCCHIO_USER_UUID_KEY, true) ? get_user_meta(get_current_user_id(), PAYNOCCHIO_USER_UUID_KEY, true) : wp_generate_uuid4();
+        }
+
+        $wallet_object = new Woocommerce_Paynocchio_Wallet($user_uuid);
+        $wallet_benefits = $wallet_object->getStructureCalculation($amount, $operation_type);
+
+        /*echo '<pre>';
+        print_r($wallet_benefits);
+        echo '</pre>';*/
+
+        if ($wallet_benefits['conversion_rate']) {
+            return [
+                'conversion_rate' => $wallet_benefits['conversion_rate'],
+                'operations_data' => $wallet_benefits['operations_data'],
+            ];
+        } else {
+            return [
+                'error' => '500'
+            ];
+        }
+    }
+
+    public function get_benefits_calculation_conversion_rate($amount, $operation_type) {
+        return $this->get_benefits_calculation($amount, $operation_type)['conversion_rate'];
+    }
+
+    public function get_benefits_calculation_full_amount($amount, $operation_type) {
+        return $this->get_benefits_calculation($amount, $operation_type)['operations_data'][0]->full_amount;
+    }
+
+    public function get_benefits_calculation_bonuses_amount($amount, $operation_type) {
+        return $this->get_benefits_calculation($amount, $operation_type)['operations_data'][0]->bonuses_amount;
+    }
+
+    public function get_benefits_calculation_commission_amount($amount, $operation_type) {
+        return $this->get_benefits_calculation($amount, $operation_type)['operations_data'][0]->commission_amount;
+    }
+
+    public function get_benefits_calculation_anonymous_bonuses_amount($amount): string
+    {
+        $operations_data = $this->get_benefits_calculation($amount, '')['operations_data'];
+        foreach ($operations_data as $operation) {
+            if ($operation->type_operation == 'payment_operation_for_services') {
+                return $operation->bonuses_amount;
+            }
+        }
+        return 'Something went wrong';
+    }
+
+    /*public function get_benefits_calculation_anonymous_discount_percent($amount): string
+    {
+        $calculated_data = $this->getStructureCalculation($amount);
+        $need_to_topup_sum = round(($amount + 0.3) / 0.971, 2);
+        $commission = round($need_to_topup_sum - $amount, 2);
+
+        if($calculated_data['is_error']) {
+            return null;
+        }
+
+        $bonuses = 0;
+
+        foreach ($calculated_data['operations_data'] as $data) {
+            $bonuses += $data->bonuses_amount;
+        }
+
+        $bonus_equivalent = $bonuses * $calculated_data['conversion_rate'];
+        $sale_price = round($amount - $bonus_equivalent + $commission, 2);
+
+        return [
+            'bonuses_equivalent' => $bonus_equivalent,
+            'sale_price' => $sale_price,
+            'percent' => ($sale_price * 100) / $amount,
+        ];
+    }*/
 
     /**
      * Check if woocommerce_paynocchio_approved is true

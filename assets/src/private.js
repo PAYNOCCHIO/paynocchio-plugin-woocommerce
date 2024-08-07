@@ -119,8 +119,6 @@ import debounce from "./js/debounce";
         }
     }
 
-
-
     /*Calculating sum for topup with commission*/
     const calculateSumWithCommission = (sum, api, type) => {
         if (api && api === true && type) {

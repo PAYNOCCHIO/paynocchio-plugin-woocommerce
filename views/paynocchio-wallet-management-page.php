@@ -18,7 +18,7 @@
     $rewarding_rules = $wallet_structure['rewarding_group']->rewarding_rules;
     $allow_withdrawal = $wallet_structure['allow_withdraw'];
 
-    /*echo '<pre>';
+    echo '<pre>';
     print_r($wallet_info);
     echo '<br />';
     //print_r($rewarding_rules);
@@ -28,7 +28,7 @@
     print_r($wallet_uuid);
     echo '<br />';
     print_r($allow_withdrawal);
-    echo '</pre>';*/
+    echo '</pre>';
 
     $paynocchio_classes = '';
     $accent_color = '#3b82f6';

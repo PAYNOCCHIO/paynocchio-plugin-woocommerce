@@ -1,4 +1,7 @@
 <?php
+
+use core\uuid;
+
 /**
  * PaynocchioWallet class for managing digital wallets.
  *
@@ -87,7 +90,7 @@ class Woocommerce_Paynocchio_Wallet {
 
     public function wallet_uuid()
     {
-        return get_user_meta(get_current_user_id(), PAYNOCCHIO_WALLET_KEY, true);
+        return get_user_meta(get_current_user_id(), PAYNOCCHIO_WALLET_KEY, true) ? get_user_meta(get_current_user_id(), PAYNOCCHIO_WALLET_KEY, true) : wp_generate_uuid4();
     }
 
     /**
@@ -369,7 +372,8 @@ class Woocommerce_Paynocchio_Wallet {
      */
     public function getStructureCalculation($amount, $operation_type): array
     {
-        $url = '/wallet/structure_calculation?environment_uuid='.$this->envId.'&user_uuid='.$this->userId.'&wallet_uuid='.$this->wallet_uuid().'&amount='.(float) $amount .'&operation_type='. $operation_type;
+        $operation = $operation_type ? '&operation_type=' . $operation_type : '';
+        $url = '/wallet/structure_calculation?environment_uuid='.$this->envId.'&user_uuid='.$this->userId.'&wallet_uuid='.$this->wallet_uuid().'&amount='.(float) $amount . $operation;
 
         $response = $this->sendRequest('GET', $url);
         $json_response = json_decode($response['response']);
