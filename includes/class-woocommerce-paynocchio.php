@@ -312,7 +312,7 @@ class Woocommerce_Paynocchio {
         $this->loader->add_action( 'wp_ajax_paynocchio_ajax_get_env_structure', $this, 'paynocchio_ajax_wallet_info');
         $this->loader->add_action( 'wp_ajax_nopriv_paynocchio_ajax_get_env_structure', $this, 'paynocchio_ajax_wallet_info');
         $this->loader->add_action( 'wp_ajax_paynocchio_ajax_get_structure_calculation', $this, 'paynocchio_ajax_structure_calculation');
-        $this->loader->add_action( 'wp_ajax_nopriv_paynocchio_ajax_get_structure_calculation', $this, 'ajax_ajax_paynocchio_structure_calculation');
+        $this->loader->add_action( 'wp_ajax_nopriv_paynocchio_ajax_get_structure_calculation', $this, 'paynocchio_ajax_structure_calculation');
 
         //TODO Do we need redirect to Checkout?
         //$this->loader->add_action( 'woocommerce_add_to_cart_redirect', $plugin_public, 'redirect_checkout_add_cart' );
@@ -515,8 +515,9 @@ class Woocommerce_Paynocchio {
     public function paynocchio_ajax_structure_calculation() {
         $amount = isset( $_GET['amount'] ) ? floatval(sanitize_text_field( $_GET['amount'] )) : 0;
         $redirect_url = isset( $_GET['operation_type'] ) ? sanitize_text_field( $_GET['operation_type'] ) : '';
+        $wallet_balance_check = isset( $_GET['wallet_balance_check'] ) ? sanitize_text_field( $_GET['wallet_balance_check'] ) : false;
 
-        $response = $this->get_paynocchio_structure_calculation($amount, $redirect_url);
+        $response = $this->get_paynocchio_structure_calculation($amount, $redirect_url, $wallet_balance_check);
         wp_send_json([
             'response' => $response,
         ]);
@@ -788,9 +789,10 @@ class Woocommerce_Paynocchio {
      *
      * @since    1.0.0
      */
-    public function get_paynocchio_structure_calculation($amount, $operation_type) {
+    public function get_paynocchio_structure_calculation($amount, $operation_type, $wallet_balance_check) :array
+    {
         $wallet = new Woocommerce_Paynocchio_Wallet($this->get_uuid());
-        return $wallet->getStructureCalculation($amount, $operation_type);
+        return $wallet->getStructureCalculation($amount, $operation_type, $wallet_balance_check);
     }
 
     /**
@@ -798,15 +800,16 @@ class Woocommerce_Paynocchio {
      *
      * @since    1.0.0
      */
-    public function get_benefits_calculation($amount, string $operation_type = null) {
+    public function get_benefits_calculation($amount, $operation_type, bool $wallet_balance_check = false) :array
+    {
         if (!is_user_logged_in()) {
             $user_uuid = wp_generate_uuid4();
         } else {
             $user_uuid = get_user_meta(get_current_user_id(), PAYNOCCHIO_USER_UUID_KEY, true) ? get_user_meta(get_current_user_id(), PAYNOCCHIO_USER_UUID_KEY, true) : wp_generate_uuid4();
         }
 
-        $wallet_object = new Woocommerce_Paynocchio_Wallet($user_uuid);
-        $wallet_benefits = $wallet_object->getStructureCalculation($amount, $operation_type);
+        $wallet = new Woocommerce_Paynocchio_Wallet($user_uuid);
+        $wallet_benefits = $wallet->getStructureCalculation($amount, $operation_type, $wallet_balance_check);
 
         /*echo '<pre>';
         print_r($wallet_benefits);
@@ -824,58 +827,41 @@ class Woocommerce_Paynocchio {
         }
     }
 
-    public function get_benefits_calculation_conversion_rate($amount, $operation_type) {
-        return $this->get_benefits_calculation($amount, $operation_type)['conversion_rate'];
+    /**
+     * Get conversion rate
+     *
+     * @sinse 1.0.0
+     */
+    public function get_benefits_calculation_conversion_rate($amount, $operation_type, $wallet_balance_check) {
+        return $this->get_benefits_calculation($amount, $operation_type, $wallet_balance_check)['conversion_rate'];
     }
 
-    public function get_benefits_calculation_full_amount($amount, $operation_type) {
-        return $this->get_benefits_calculation($amount, $operation_type)['operations_data'][0]->full_amount;
+    /**
+     * Get full amount without commission
+     *
+     * @sinse 1.0.0
+     */
+    public function get_benefits_calculation_full_amount($amount, $operation_type, $wallet_balance_check) {
+        return $this->get_benefits_calculation($amount, $operation_type, $wallet_balance_check)['operations_data'][0]->full_amount;
     }
 
-    public function get_benefits_calculation_bonuses_amount($amount, $operation_type) {
-        return $this->get_benefits_calculation($amount, $operation_type)['operations_data'][0]->bonuses_amount;
+    /**
+     * Get bonuses amount
+     *
+     * @sinse 1.0.0
+     */
+    public function get_benefits_calculation_bonuses_amount($amount, $operation_type, $wallet_balance_check) {
+        return $this->get_benefits_calculation($amount, $operation_type, $wallet_balance_check)['operations_data'][0]->bonuses_amount;
     }
 
-    public function get_benefits_calculation_commission_amount($amount, $operation_type) {
-        return $this->get_benefits_calculation($amount, $operation_type)['operations_data'][0]->commission_amount;
+    /**
+     * Get commission amount
+     *
+     * @sinse 1.0.0
+     */
+    public function get_benefits_calculation_commission_amount($amount, $operation_type, $wallet_balance_check) {
+        return $this->get_benefits_calculation($amount, $operation_type, $wallet_balance_check)['operations_data'][0]->commission_amount;
     }
-
-    public function get_benefits_calculation_anonymous_bonuses_amount($amount): string
-    {
-        $operations_data = $this->get_benefits_calculation($amount, '')['operations_data'];
-        foreach ($operations_data as $operation) {
-            if ($operation->type_operation == 'payment_operation_for_services') {
-                return $operation->bonuses_amount;
-            }
-        }
-        return 'Something went wrong';
-    }
-
-    /*public function get_benefits_calculation_anonymous_discount_percent($amount): string
-    {
-        $calculated_data = $this->getStructureCalculation($amount);
-        $need_to_topup_sum = round(($amount + 0.3) / 0.971, 2);
-        $commission = round($need_to_topup_sum - $amount, 2);
-
-        if($calculated_data['is_error']) {
-            return null;
-        }
-
-        $bonuses = 0;
-
-        foreach ($calculated_data['operations_data'] as $data) {
-            $bonuses += $data->bonuses_amount;
-        }
-
-        $bonus_equivalent = $bonuses * $calculated_data['conversion_rate'];
-        $sale_price = round($amount - $bonus_equivalent + $commission, 2);
-
-        return [
-            'bonuses_equivalent' => $bonus_equivalent,
-            'sale_price' => $sale_price,
-            'percent' => ($sale_price * 100) / $amount,
-        ];
-    }*/
 
     /**
      * Check if woocommerce_paynocchio_approved is true

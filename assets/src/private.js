@@ -7,7 +7,6 @@ import debounce from "./js/debounce";
 
 (( $ ) => {
 
-    //const PERCENT = 0.1;
     let rewardingRules;
     let commissionPercentage;
     let commissionCoefficient;
@@ -28,7 +27,6 @@ import debounce from "./js/debounce";
             commissionCoefficient = 1 - commissionPercentage;
             conversionRate = wallet_info.response.structure.bonus_conversion_rate;
             rewardingRules = wallet_info.response.structure.rewarding_group.rewarding_rules;
-            //console.log(wallet_info);
         }
     });
 
@@ -106,9 +104,9 @@ import debounce from "./js/debounce";
     };
 
     /* Calculating commission amount and bonuses for topup with commission */
-    const calculateCommissionAndBonuses = (amount, serv_calculation, operation_type) => {
+    const calculateCommissionAndBonuses = (amount, serv_calculation, operation_type, wallet_balance_check) => {
         if (serv_calculation && serv_calculation === true && operation_type) {
-            getStructureCalculation(amount, operation_type);
+            getStructureCalculation(amount, operation_type, wallet_balance_check);
         } else {
             let sumWithCommission = ( amount * parseFloat(commissionCoefficient) - parseFloat(commissionFixed) );
             sumWithCommission = (Math.round(sumWithCommission * 100) / 100);
@@ -116,13 +114,31 @@ import debounce from "./js/debounce";
             commission = (Math.round(commission * 100) / 100);
             let withdrawalWithCommission = amount - (amount * parseFloat(commissionPercentage)) - parseFloat(commissionFixed);
             withdrawalWithCommission = (Math.round(withdrawalWithCommission * 100) / 100);
+
+           /* let bonusesToAdd = calculateReward(amount, rules, operation_type);
+
+            if (operation_type == "payment_operation_add_money") {
+                if (bonusesToAdd > 0) {
+                    $('#topup_message').html('Your balance will be replenished by $<span id="replenishAmount">' + sumWithCommission + '</span>, commission is $<span id="commissionAmount">' + commission + '</span>. You will get <span id="bonusesCounter">' + bonusesToAdd + '</span> bonuses.');
+                } else {
+                    $('#topup_message').html('Your balance will be replenished by $<span id="replenishAmount">' + sumWithCommission + '</span>, commission is $<span id="commissionAmount">' + commission + '</span>.');
+                }
+                $('#topup_message').removeClass('loading');
+            } else if (operation_type == "payment_operation_withdraw") {
+                $('#withdraw_message').html('You will receive a withdrawal for $<span id="withdrawal_amount">' + sumWithCommission + '</span>, commission is $<span id="withdrawal_commission_amount">' + commission + '</span>.');
+                $('#withdraw_message').removeClass('loading');
+            } else if (operation_type == "payment_operation_for_services") {
+                console.log(data.response);
+                $('#paynocchio_payment_bonuses').html('You will get additional ' + bonusesToAdd + ' bonuses for this purchase.');
+                $('#paynocchio_payment_bonuses').removeClass('loading');
+            }*/
         }
     }
 
     /*Calculating sum for topup with commission*/
-    const calculateSumWithCommission = (sum, api, type) => {
-        if (api && api === true && type) {
-            getStructureCalculation(sum, type);
+    const calculateSumWithCommission = (amount, serv_calculation, operation_type, wallet_balance_check) => {
+        if (serv_calculation && serv_calculation === true && operation_type) {
+            getStructureCalculation(amount, operation_type, wallet_balance_check);
         } else {
             let sumWithCommission = ( sum * parseFloat(commissionCoefficient) - parseFloat(commissionFixed) );
             sumWithCommission = (Math.round(sumWithCommission * 100) / 100);
@@ -307,7 +323,7 @@ import debounce from "./js/debounce";
      * @param evt
      * @param path
      */
-    const getStructureCalculation = (amount, operation_type) => {
+    const getStructureCalculation = (amount, operation_type, wallet_balance_check) => {
         $.ajax({
             url: paynocchio_object.ajaxurl,
             type: 'GET',
@@ -315,9 +331,10 @@ import debounce from "./js/debounce";
                 'action': 'paynocchio_ajax_get_structure_calculation',
                 'amount': parseFloat(amount),
                 'operation_type': operation_type,
+                'wallet_balance_check': wallet_balance_check,
             },
             success: function(data) {
-                console.log(data);
+                //console.log(data);
                 if (!data.response.error) {
                     let commission = data.response.operations_data[0].commission_amount;
                     let sumWithCommission = data.response.operations_data[0].full_amount;
@@ -334,16 +351,21 @@ import debounce from "./js/debounce";
                         $('#withdraw_message').html('You will receive a withdrawal for $<span id="withdrawal_amount">' + sumWithCommission + '</span>, commission is $<span id="withdrawal_commission_amount">' + commission + '</span>.');
                         $('#withdraw_message').removeClass('loading');
                     } else if (operation_type == "payment_operation_for_services") {
-                        console.log(data.response);
+                        //console.log(data.response);
                         $('#paynocchio_payment_bonuses').html('You will get additional ' + bonusesToAdd + ' bonuses for this purchase.');
                         $('#paynocchio_payment_bonuses').removeClass('loading');
                     }
                 } else {
-
+                    if (operation_type == "payment_operation_add_money") {
+                        $('#topup_message').html('An error has occurred');
+                    } else if (operation_type == "payment_operation_withdraw") {
+                        $('#withdraw_message').html('An error has occurred');
+                    } else if (operation_type == "payment_operation_for_services") {
+                        $('#paynocchio_payment_bonuses').html('An error has occurred');
+                    }
                 }
             }
-        })
-            .error((error) => console.log(error));
+        }).error((error) => console.log(error));
     }
 
     /**
@@ -470,7 +492,7 @@ import debounce from "./js/debounce";
                 $('#topup_message').removeClass('loading');
             } else {
                 $('#top_up_button').removeAttr('disabled').removeClass('disabled');
-                calculateCommissionAndBonuses(value, true, 'payment_operation_add_money');
+                calculateCommissionAndBonuses(value, true, 'payment_operation_add_money', false);
             }
         }
     }, debounceTime);
@@ -487,7 +509,7 @@ import debounce from "./js/debounce";
                 $('#withdraw_message').removeClass('loading');
             } else {
                 $('#withdraw_button').removeAttr('disabled').removeClass('disabled');
-                calculateCommissionAndBonuses(value, true, 'payment_operation_withdraw');
+                calculateCommissionAndBonuses(value, true, 'payment_operation_withdraw', false);
             }
         }
     }, debounceTime);
@@ -517,7 +539,7 @@ import debounce from "./js/debounce";
         newpricefield.html(newprice);
         discountfield.html(discount);
 
-        calculateCommissionAndBonuses(newprice, true, 'payment_operation_for_services');
+        calculateCommissionAndBonuses(newprice, true, 'payment_operation_for_services', false);
 
         if (newprice != 0) {
             paynocchio_payment_bonuses.show();
@@ -572,7 +594,7 @@ import debounce from "./js/debounce";
             let amount = $(this).get(0).id.replace('variant_','');
             $('#top_up_amount').val(amount);
             $('#topup_message').addClass('loading');
-            calculateCommissionAndBonuses(amount, true, 'payment_operation_add_money');
+            calculateCommissionAndBonuses(amount, true, 'payment_operation_add_money', false);
         });
 
         $('#withdraw_amount').on('keyup change', (evt) => {
@@ -617,13 +639,14 @@ import debounce from "./js/debounce";
                 let amount = $(this).get(0).id.replace('variant_','');
                 $('#top_up_amount').val(amount);
                 $('#topup_message').addClass('loading');
-                calculateCommissionAndBonuses(amount, true, 'payment_operation_add_money');
+                calculateCommissionAndBonuses(amount, true, 'payment_operation_add_money', false);
             });
 
             // Conversion rate value picker
             const value = $('#bonuses-value');
             const input = $('#bonuses-input');
-            const order_total = parseFloat($('.woocommerce-Price-amount').text().replace('$', ''));
+            const order_total = parseFloat($('.woocommerce-Price-amount').last().text().replace('$', ''));
+            console.log(order_total);
             value.val(input.val());
 
             $(document).ready(function () {
@@ -678,7 +701,7 @@ import debounce from "./js/debounce";
                 if(place_orderButton && !hidden) {
                     const balance_value = parseFloat($('.paynocchio-balance-value').first().attr('data-balance'));
                     const bonus_value = parseFloat($('.paynocchio-bonus-value').first().attr('data-bonus'));
-                    const order_total = parseFloat($('.woocommerce-Price-amount').text().replace('$', ''));
+                    const order_total = parseFloat($('.woocommerce-Price-amount').last().text().replace('$', ''));
                     const inputed_bonuses_value = parseFloat($('#bonuses-value').val());
 
                     if ((balance_value + bonus_value * conversionRate) < order_total) {

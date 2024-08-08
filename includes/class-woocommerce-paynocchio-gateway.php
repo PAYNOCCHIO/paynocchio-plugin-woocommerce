@@ -151,7 +151,6 @@ class Woocommerce_Paynocchio_Payment_Gateway extends WC_Payment_Gateway {
 
         $paynocchio = new Woocommerce_Paynocchio();
         $wallet = $paynocchio->get_paynocchio_wallet_info();
-
         $wallet_structure = $wallet['structure'];
         $bonuses_conversion_rate = (float) $wallet_structure['bonus_conversion_rate'];
 

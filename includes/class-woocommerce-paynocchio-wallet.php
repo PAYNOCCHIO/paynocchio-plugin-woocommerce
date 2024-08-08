@@ -370,10 +370,11 @@ class Woocommerce_Paynocchio_Wallet {
     /**
      * Calculate Commission and bonuses for operations
      */
-    public function getStructureCalculation($amount, $operation_type): array
+    public function getStructureCalculation($amount, $operation_type, $wallet_balance_check): array
     {
-        $operation = $operation_type ? '&operation_type=' . $operation_type : '';
-        $url = '/wallet/structure_calculation?environment_uuid='.$this->envId.'&user_uuid='.$this->userId.'&wallet_uuid='.$this->wallet_uuid().'&amount='.(float) $amount . $operation;
+        $operation_query = $operation_type ? '&operation_type=' . $operation_type : '';
+        $wallet_balance_check_query = $wallet_balance_check == 'false' ? '&wallet_balance_check=false' : '';
+        $url = '/wallet/structure_calculation?environment_uuid='.$this->envId.'&user_uuid='.$this->userId.'&wallet_uuid='.$this->wallet_uuid().'&amount='.(float) $amount . $operation_query . $wallet_balance_check_query;
 
         $response = $this->sendRequest('GET', $url);
         $json_response = json_decode($response['response']);
@@ -392,6 +393,8 @@ class Woocommerce_Paynocchio_Wallet {
                 'error' => 'API Error',
                 'status' => '500',
                 'url' => $url,
+                'query' => $wallet_balance_check_query,
+                'check' => $wallet_balance_check
             ];
         }
     }
