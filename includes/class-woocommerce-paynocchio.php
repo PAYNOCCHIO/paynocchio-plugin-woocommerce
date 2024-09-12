@@ -410,7 +410,7 @@ class Woocommerce_Paynocchio {
         $user_email = isset( $_POST['email'] ) ? sanitize_text_field( $_POST['email'] ) : '';
         $user_login = isset( $_POST['login'] ) ? sanitize_text_field( $_POST['login'] ) : '';
 
-        if ( ! wp_verify_nonce( $nonce, 'paynocchio_ajax_registration' ) ) {
+        if ( ! wp_verify_nonce( $nonce, 'ajax-registration-nonce' ) ) {
             wp_send_json( array(
                 'status'  => 'error',
                 'title'   => 'Error',
@@ -708,7 +708,7 @@ class Woocommerce_Paynocchio {
 	 * @return    string    The UUID.
 	 */
 	public function get_uuid() {
-		return get_user_meta(get_current_user_id(), PAYNOCCHIO_USER_UUID_KEY, true);
+		return get_current_user_id() ? get_user_meta(get_current_user_id(), PAYNOCCHIO_USER_UUID_KEY, true) : wp_generate_uuid4();
 	}
 
     /**
@@ -742,13 +742,12 @@ class Woocommerce_Paynocchio {
      */
     public function get_paynocchio_wallet_info() {
 
-        if (is_user_logged_in()) {
             $wallet = [
                 'code' => 404,
             ];
 
             $current_user = wp_get_current_user();
-            $user_paynocchio_wallet_id = get_user_meta($current_user->ID, PAYNOCCHIO_WALLET_KEY, true);
+            $user_paynocchio_wallet_id = $current_user ? get_user_meta($current_user->ID, PAYNOCCHIO_WALLET_KEY, true) : wp_generate_uuid4();
 
             $wallet['user'] = [
                 'first_name' => $current_user->first_name,
@@ -764,24 +763,19 @@ class Woocommerce_Paynocchio {
             //$wallet['wallet_uuid'] = $user_paynocchio_wallet->wallet_uuid();
             //$wallet['user_uuid'] = $this->get_uuid();
 
-            if($user_paynocchio_wallet_id) {
-                $wallet_structure = $user_paynocchio_wallet->getEnvironmentStructure();
-                $wallet_bal_bon = $user_paynocchio_wallet->getWalletBalance($user_paynocchio_wallet_id);
-                if($wallet_bal_bon) {
-                    $wallet['balance'] = $wallet_bal_bon['balance'];
-                    $wallet['bonuses'] = $wallet_bal_bon['bonuses'];
-                    $wallet['card_number'] = $wallet_bal_bon['number'];
-                    $wallet['status'] = $wallet_bal_bon['status'];
-                    $wallet['code'] = $wallet_bal_bon['code'];
-                    $wallet['structure'] = $wallet_structure;
-                    $wallet['wallet_percentage_commission'] = 2.9;
-                    $wallet['wallet_fixed_commission'] = 0.3;
-                    $wallet['x-wallet-signature'] = $user_paynocchio_wallet->getSignature();
-                    $wallet['x-company-signature'] = $user_paynocchio_wallet->getSignature(true);
-                }
+            $wallet_structure = $user_paynocchio_wallet->getEnvironmentStructure();
+            $wallet_bal_bon = $user_paynocchio_wallet->getWalletBalance($user_paynocchio_wallet_id);
+            if($wallet_bal_bon) {
+                $wallet['balance'] = $wallet_bal_bon['balance'];
+                $wallet['bonuses'] = $wallet_bal_bon['bonuses'];
+                $wallet['card_number'] = $wallet_bal_bon['number'];
+                $wallet['status'] = $wallet_bal_bon['status'];
+                $wallet['code'] = $wallet_bal_bon['code'];
+                $wallet['structure'] = $wallet_structure;
+                $wallet['wallet_percentage_commission'] = 2.9;
+                $wallet['wallet_fixed_commission'] = 0.3;
             }
             return $wallet;
-        }
     }
 
     /**

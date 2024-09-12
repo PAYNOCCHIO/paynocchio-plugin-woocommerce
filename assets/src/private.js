@@ -369,6 +369,68 @@ import debounce from "./js/debounce";
     }
 
     /**
+     * Get Structure Calculations without mutation
+     * @param amount
+     * @param operation_type
+     * @param wallet_balance_check
+     */
+    const getImmatableStructureCalculation = (amount, operation_type, wallet_balance_check) => {
+        return $.ajax({
+            url: paynocchio_object.ajaxurl,
+            type: 'GET',
+            data: {
+                'action': 'paynocchio_ajax_get_structure_calculation',
+                'amount': parseFloat(amount),
+                'operation_type': operation_type,
+                'wallet_balance_check': wallet_balance_check,
+            }}).error((error) => console.log(error));
+    }
+
+    /**
+     * Change inner text for element with sum of rewarding bonuses
+     * @param sum
+     * @param element
+     * @return {Promise<void>}
+     */
+    async function mutateBonusesValues(sum, element) {
+        if(sum && element) {
+            let operation_type = element.data('reward') ? element.data('reward') : "payment";
+            let rewards_response;
+            let bonuses_amount = 0;
+            try {
+                 if (operation_type === "topup") {
+                    rewards_response =  await getImmatableStructureCalculation(sum, 'payment_operation_add_money', false);
+                    bonuses_amount = +rewards_response.response.operations_data[0].bonuses_amount;
+                } else if (operation_type === "sum") {
+                    rewards_response =  await getImmatableStructureCalculation(sum, 'payment_operation_add_money', false);
+                    const payment_response = await getImmatableStructureCalculation(sum, 'payment_operation_for_services', false);
+
+                     const bonuses_for_topup = +rewards_response.response.operations_data[0].bonuses_amount;
+                     const bonuses_for_payment = +payment_response.response.operations_data[0].bonuses_amount;
+                     bonuses_amount = bonuses_for_topup + bonuses_for_payment;
+                } else {
+                     rewards_response = await getImmatableStructureCalculation(sum, 'payment_operation_for_services', false);
+                     bonuses_amount = +rewards_response.response.operations_data[0].bonuses_amount;
+                 }
+                if (rewards_response.response.status === 200) {
+                    if(bonuses_amount > 0) {
+                        element.html(bonuses_amount);
+                    } else {
+                        element.closest('.paynocchio-bonuses-calculation').remove();
+                    }
+                } else {
+                    element.closest('.paynocchio-bonuses-calculation').remove();
+                }
+            } catch(err) {
+                element.closest('.paynocchio-bonuses-calculation').remove();
+                console.log(err);
+            }
+        } else {
+            element.closest('.paynocchio-bonuses-calculation').remove();
+        }
+    }
+
+    /**
      * Set Wallet Status
      * @param evt
      * @param path
@@ -764,8 +826,16 @@ import debounce from "./js/debounce";
                 }
             })
 
+            // Run recalculation again
+            triggerBonusesCalculationCheck();
+
         });
         // WOOCOMMERCE CHECKOUT SCRIPT END
+
+        // WOOCOMMERCE CARTUPDATE TRIGGER START
+        $(document).on( "updated_wc_div", function() {
+            triggerBonusesCalculationCheck();
+        });
 
         $('#show_mini_modal').on('click', function() {
             $('.topup_mini_form').toggle();
@@ -776,6 +846,19 @@ import debounce from "./js/debounce";
                 $(this).css('transform','rotate(0deg)');
             }
         });
+
+        /**
+         * Function to run the calculation of the Bonuses
+         */
+        function triggerBonusesCalculationCheck() {
+            $('.calculate_paynocchio_bonuses').each(function () {
+                mutateBonusesValues($(this).data('price'), $(this));
+            })
+        }
+
+        // Run it on Ready
+        triggerBonusesCalculationCheck();
+
     });
     // READY END
 

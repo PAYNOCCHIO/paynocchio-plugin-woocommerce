@@ -10,25 +10,25 @@
     $paynocchio = new Woocommerce_Paynocchio();
     $wallet_info = $paynocchio->get_paynocchio_wallet_info();
 
-    $wallet_structure = $wallet_info['structure'];
-    $wallet_balance = round($wallet_info['balance'], 2);
-    $wallet_bonuses = $wallet_info['bonuses'];
-    $minimum_topup_amount = $wallet_structure['minimum_topup_amount'];
-    $card_balance_limit = $wallet_structure['card_balance_limit'];
-    $rewarding_rules = $wallet_structure['rewarding_group']->rewarding_rules;
-    $allow_withdrawal = $wallet_structure['allow_withdraw'];
+    $wallet_structure = $wallet_info['structure'] ?? null;
+    $wallet_balance = isset($wallet_info['balance']) ? round($wallet_info['balance'], 2) : 0;
+    $wallet_bonuses = $wallet_info['bonuses'] ?? 0;
+    $minimum_topup_amount = $wallet_structure['minimum_topup_amount'] ?? 0;
+    $card_balance_limit = $wallet_structure['card_balance_limit'] ?? 0;
+    $rewarding_rules = $wallet_structure['rewarding_group']->rewarding_rules ?? null;
+    $allow_withdrawal = $wallet_structure['allow_withdraw'] ?? false;
 
-    echo '<pre>';
+    /*echo '<pre>';
     print_r($wallet_info);
     echo '<br />';
-    //print_r($rewarding_rules);
+    print_r($rewarding_rules);
     echo '<br />';
     print_r($user_uuid);
     echo '<br />';
     print_r($wallet_uuid);
     echo '<br />';
     print_r($allow_withdrawal);
-    echo '</pre>';
+    echo '</pre>';*/
 
     $paynocchio_classes = '';
     $accent_color = '#3b82f6';
@@ -68,6 +68,16 @@
     </div>
 <?php } else { ?>
     <?php if ($wallet_info['code'] !== 500) { ?>
+            <div>Price: 10</div>
+            <div class="paynocchio-bonuses-calculation">
+                <strong class="calculate_paynocchio_bonuses" data-price="10"><span class="paynocchio-spinner"></span></strong> bonuses for payment
+            </div>
+            <div class="paynocchio-bonuses-calculation">
+                <strong class="calculate_paynocchio_bonuses" data-reward="topup" data-price="10"><span class="paynocchio-spinner"></span></strong> bonuses for topup
+            </div>
+            <div class="paynocchio-bonuses-calculation">
+                <strong class="calculate_paynocchio_bonuses" data-reward="sum" data-price="10"><span class="paynocchio-spinner"></span></strong> bonuses in total
+            </div>
         <div class="paynocchio-profile-block <?php echo $paynocchio_rounded_class; ?> <?php echo $paynocchio_darkmode_class; ?> <?php if ($wallet_info['status'] !== 'ACTIVE') { ?>cfps-disabled<?php } ?>">
             <?php if(get_transient('first_time_active')) { ?>
                 <div class="congratz cfps-mb-4">

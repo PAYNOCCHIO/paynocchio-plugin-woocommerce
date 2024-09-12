@@ -1,6 +1,5 @@
 import './public.css';
 
-
 (( $ ) => {
 
     /**
@@ -33,19 +32,16 @@ import './public.css';
                     'email': $('#user_email').val(),
                 },
                 success: function(data){
-                    console.log(data)
                     if(data.success) {
                         $('#register_messages').show().addClass('success').html("Please check your email to confirm registration.");
                     } else {
-                        if(data.data.message === "Sorry, that email address is already used!") {
+                        if(data.data && data.data.message === "Sorry, that email address is already used!") {
                             $('#register_messages').show().removeClass('success').html("Sorry, this email address is already registered. Please <a style='color:#0c88b4' href='/account'>log in</a> or <a style='color:#0c88b4' href='/account'>restore password</a>. For any case please <a style='color:#0c88b4' href='mailto:support@airticket-demo.com'>contact support</a>.</p>");
-                        } else {
-                            if (data.data.message === "Sorry, that username already exists!") {
+                        } else if (data.data && data.data.message === "Sorry, that username already exists!") {
                                 $('#register_messages').show().removeClass('success').html("Sorry, that username already exists! Please <a style='color:#0c88b4' href='/account'>log in</a> or <a style='color:#0c88b4' href='/account'>restore password</a>. For any case please <a style='color:#0c88b4' href='mailto:support@airticket-demo.com'>contact support</a>.</p>");
                             } else {
-                                $('#register_messages').show().removeClass('success').text(data.data.message);
+                                $('#register_messages').show().removeClass('success').text(data.message);
                             }
-                        }
                     }
                 },
                 error: (error) => console.log(error),

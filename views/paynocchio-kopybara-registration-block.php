@@ -33,9 +33,9 @@ if (!defined('ABSPATH')) {
     </style>
 
     <section class="paynocchio <?php echo $paynocchio_classes; ?>">
-        <div id="paynocchio_auth_block" class="cfps-mx-auto cfps-p-4 cfps-mb-4 cfps-flex cfps-flex-row cfps-flex-gap-8 cfps-items-center cfps-justify-between">
+        <div id="paynocchio_auth_block" class="cfps-mx-auto cfps-p-4 cfps-mb-4 cfps-flex cfps-flex-col cfps-flex-gap-8 cfps-items-center cfps-justify-between">
 
-            <div class="cfps-flex cfps-flex-col cfps-gap-8 cfps-items-top cfps-p-8 cfps-pl-4 cfps-w-1/2">
+            <div class="cfps-flex cfps-flex-col cfps-gap-8 cfps-items-top cfps-p-8 cfps-w-full">
                 <h2 class="!cfps-text-3xl">How to earn bonuses</h2>
                 <div class="cfps-grid cfps-grid-cols-[50px_1fr] cfps-gap-6 cfps-items-top">
                     <div>
@@ -75,7 +75,7 @@ if (!defined('ABSPATH')) {
                 </div>
             </div>
 
-            <div id="login-signup-forms" class="cfps-w-1/2 cfps-bg-gray-100 cfps-rounded-lg">
+            <div id="login-signup-forms" class="cfps-w-full cfps-bg-gray-100 cfps-rounded-lg">
                 <div class="paynocchio_form paynocchio_login_form visible">
                     <h2 class="paynocchio_form_title">Log In</h2>
                     <p class="cfps-mb-8 cfps-text-center cfps-text-balance">Enter your email address and password to log in.</p>
@@ -83,7 +83,7 @@ if (!defined('ABSPATH')) {
                         <div class="row">
                             <div class="col">
                                 <label for="log">Login</label>
-                                <input type="text" name="log" class="paynocchio_input" id="user_name" />
+                                <input type="text" name="log" class="paynocchio_input border" id="user_name" />
                             </div>
                             <div class="col">
                                 <label for="pwd">Password</label>
@@ -127,6 +127,7 @@ if (!defined('ABSPATH')) {
                             Registration confirmation will be emailed to you. By clicking Sign Up, You agree to the <a href="/privacy-policy" class="cfps-text-blue-500">privacy policy and the processing of personal data</a>.
                         </p>
                         <input type="hidden" name="redirect_to" value="<?php bloginfo('url') ?><?php echo $attr['register_redirect'] ?? ''; ?>">
+                        <?php wp_nonce_field( 'ajax-registration-nonce', 'ajax-registration-nonce' ); ?>
                         <p class="submit">
                             <button type="button" id="wp-submit-registration" class="paynocchio_button cfps-w-full cfps-cursor-pointer paynocchio_colored">
                                 Sign Up

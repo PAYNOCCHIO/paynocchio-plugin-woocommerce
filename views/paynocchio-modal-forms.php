@@ -17,13 +17,13 @@ if (is_user_logged_in()) {
     $paynocchio = new Woocommerce_Paynocchio();
     $wallet_info = $paynocchio->get_paynocchio_wallet_info();
 
-    $wallet_structure = $wallet_info['structure'];
-    $wallet_balance = $wallet_info['balance'];
-    $wallet_bonuses = $wallet_info['bonuses'];
-    $minimum_topup_amount = $wallet_structure['minimum_topup_amount'];
+    $wallet_structure = $wallet_info['structure'] ?? null;
+    $wallet_balance = $wallet_info['balance'] ?? 0;
+    $wallet_bonuses = $wallet_info['bonuses'] ?? 0;
+    $minimum_topup_amount = $wallet_structure['minimum_topup_amount'] ?? 0;
     $minimum_withdraw_amount = 1; //TODO: Minimum withdraw amount is not set
-    $card_balance_limit = $wallet_structure['card_balance_limit'];
-    $rewarding_rules = $wallet_structure['rewarding_group']->rewarding_rules;
+    $card_balance_limit = $wallet_structure['card_balance_limit'] ?? 0;
+    $rewarding_rules = $wallet_structure['rewarding_group']->rewarding_rules ?? null;
 
     // STYLING OPTIONS //
     $paynocchio_classes = '';

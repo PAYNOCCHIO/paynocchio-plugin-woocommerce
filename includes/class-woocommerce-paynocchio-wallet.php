@@ -380,6 +380,7 @@ class Woocommerce_Paynocchio_Wallet {
         $json_response = json_decode($response['response']);
         if($response['status_code'] === 200) {
             return [
+                'status' => 200,
                 'conversion_rate' => $json_response->conversion_rate,
                 'operations_data' => $json_response->operations_data,
             ];
@@ -391,7 +392,7 @@ class Woocommerce_Paynocchio_Wallet {
         } else {
             return [
                 'error' => 'API Error',
-                'status' => '500',
+                'status' => $response['status_code'],
                 'url' => $url,
                 'query' => $wallet_balance_check_query,
                 'check' => $wallet_balance_check
