@@ -68,16 +68,6 @@
     </div>
 <?php } else { ?>
     <?php if ($wallet_info['code'] !== 500) { ?>
-            <div>Price: 10</div>
-            <div class="paynocchio-bonuses-calculation">
-                <strong class="calculate_paynocchio_bonuses" data-price="10"><span class="paynocchio-spinner"></span></strong> bonuses for payment
-            </div>
-            <div class="paynocchio-bonuses-calculation">
-                <strong class="calculate_paynocchio_bonuses" data-reward="topup" data-price="10"><span class="paynocchio-spinner"></span></strong> bonuses for topup
-            </div>
-            <div class="paynocchio-bonuses-calculation">
-                <strong class="calculate_paynocchio_bonuses" data-reward="sum" data-price="10"><span class="paynocchio-spinner"></span></strong> bonuses in total
-            </div>
         <div class="paynocchio-profile-block <?php echo $paynocchio_rounded_class; ?> <?php echo $paynocchio_darkmode_class; ?> <?php if ($wallet_info['status'] !== 'ACTIVE') { ?>cfps-disabled<?php } ?>">
             <?php if(get_transient('first_time_active')) { ?>
                 <div class="congratz cfps-mb-4">
