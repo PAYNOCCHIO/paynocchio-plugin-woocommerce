@@ -143,7 +143,11 @@ class Woocommerce_Paynocchio_Wallet {
 
         if($response['status_code'] === 200) {
             $json = json_decode($response['response']);
-            return json_encode(['status'=> 'success', 'message' => $json->message,]);
+            if($json->status_code === 200) {
+                return json_encode(['status'=> 'success', 'message' => $json->message,]);
+            } else {
+                return json_encode(['status'=> 'error', 'message' => $json->message,]);
+            }
         } else {
             return json_encode(['status'=> 'error', 'message' => $response['status_code'],]);
         }
