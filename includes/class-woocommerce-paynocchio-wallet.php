@@ -160,7 +160,6 @@ class Woocommerce_Paynocchio_Wallet {
         $data = [
             PAYNOCCHIO_ENV_KEY => $this->envId,
             PAYNOCCHIO_USER_UUID_KEY => $this->userId,
-            PAYNOCCHIO_CURRENCY_KEY => '970d83de-1dce-47bd-a45b-bb92bf6df964',
             PAYNOCCHIO_TYPE_KEY => '93ac9017-4960-41bf-be6d-aa123884451d',
             PAYNOCCHIO_STATUS_KEY => 'ef8da49e-a9e3-4726-8c26-f8d2bfd6a093',
         ];
@@ -184,7 +183,6 @@ class Woocommerce_Paynocchio_Wallet {
             PAYNOCCHIO_ENV_KEY => $this->envId,
             PAYNOCCHIO_USER_UUID_KEY => $this->userId,
             PAYNOCCHIO_WALLET_KEY => $walletId,
-            "currency" => "USD",
             'amount' => $amount,
             'redirect_url' => $redirect_url,
         ];
@@ -202,7 +200,6 @@ class Woocommerce_Paynocchio_Wallet {
             PAYNOCCHIO_ENV_KEY => $this->envId,
             PAYNOCCHIO_USER_UUID_KEY => $this->userId,
             PAYNOCCHIO_WALLET_KEY => $walletId,
-            "currency" => "USD",
             'amount' => $amount,
             'status_type' => 'ae1b841f-2e56-4fb9-a935-2064304f8639', // TODO Check if it's needed
         ];
@@ -221,7 +218,6 @@ class Woocommerce_Paynocchio_Wallet {
             PAYNOCCHIO_ENV_KEY => $this->envId,
             PAYNOCCHIO_USER_UUID_KEY => $this->userId,
             PAYNOCCHIO_WALLET_KEY => $walletId,
-            "currency" => "USD",
             "full_amount" => $fullAmount,
             "amount" => $amount,
             "external_order_id" => $orderId,
@@ -269,7 +265,6 @@ class Woocommerce_Paynocchio_Wallet {
             PAYNOCCHIO_ENV_KEY => $this->envId,
             PAYNOCCHIO_USER_UUID_KEY => $this->userId,
             PAYNOCCHIO_WALLET_KEY => $walletId,
-            "currency" => "USD",
             'amount' => $amount,
             'external_order_id' => $orderId,
         ];
@@ -343,7 +338,7 @@ class Woocommerce_Paynocchio_Wallet {
             PAYNOCCHIO_STATUS_KEY => $status,
         ];
 
-        return $this->sendRequest('PATCH', '/wallet/', json_encode($data), true);
+        return $this->sendRequest('PATCH', '/wallet/', json_encode($data));
     }
 
     /**
