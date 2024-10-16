@@ -333,8 +333,9 @@ class Woocommerce_Paynocchio_Wallet {
     public function updateWalletStatus(string $wallet_id, string $status)
     {
         $data = [
-            PAYNOCCHIO_ENV_KEY => $this->envId,
             'uuid' => $wallet_id,
+            PAYNOCCHIO_ENV_KEY => $this->envId,
+            'user_uuid' => $this->userId,
             PAYNOCCHIO_STATUS_KEY => $status,
         ];
 

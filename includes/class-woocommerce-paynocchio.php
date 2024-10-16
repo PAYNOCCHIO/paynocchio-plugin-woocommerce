@@ -756,12 +756,12 @@ class Woocommerce_Paynocchio {
 
             $user_paynocchio_wallet = new Woocommerce_Paynocchio_Wallet($this->get_uuid());
 
-            //$wallet['x-wallet-signature'] = $user_paynocchio_wallet->getSignature();
-            //$wallet['x-company-signature'] = $user_paynocchio_wallet->getSignature(true);
-            //$wallet['secret'] = $user_paynocchio_wallet->get_secret();
-            //$wallet['env'] = $user_paynocchio_wallet->get_env();
-            //$wallet['wallet_uuid'] = $user_paynocchio_wallet->wallet_uuid();
-            //$wallet['user_uuid'] = $this->get_uuid();
+            $wallet['x-wallet-signature'] = $user_paynocchio_wallet->getSignature();
+            $wallet['x-company-signature'] = $user_paynocchio_wallet->getSignature(true);
+            $wallet['secret'] = $user_paynocchio_wallet->get_secret();
+            $wallet['env'] = $user_paynocchio_wallet->get_env();
+            $wallet['wallet_uuid'] = $user_paynocchio_wallet->wallet_uuid();
+            $wallet['user_uuid'] = $this->get_uuid();
 
             $wallet_structure = $user_paynocchio_wallet->getEnvironmentStructure();
             $wallet_bal_bon = $user_paynocchio_wallet->getWalletBalance($user_paynocchio_wallet_id);
